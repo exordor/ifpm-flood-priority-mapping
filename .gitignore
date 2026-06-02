@@ -1,0 +1,17 @@
+.DS_Store
+._*
+Thumbs.db
+
+# Temporary working files
+tmp/
+*.tmp
+*.temp
+
+# Office lock files
+~$*
+
+# Local editor files
+.vscode/
+.idea/
+*.swp
+*.swo
