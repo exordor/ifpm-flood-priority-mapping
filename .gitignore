@@ -10,6 +10,11 @@ tmp/
 # Office lock files
 ~$*
 
+# Document exports and binary source files
+*.pdf
+*.doc
+*.docx
+
 # Local editor files
 .vscode/
 .idea/
