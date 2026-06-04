@@ -2,10 +2,27 @@
 ._*
 Thumbs.db
 
+# Local credentials and project-specific tool state
+.env
+.env.*
+!.env.example
+.lark-cli/
+.feishu-cli/
+
+# Independent deliverable code repository.
+# The code repo manages itself with its own .git.
+/ifpm-flood-pipeline/
+
 # Temporary working files
 tmp/
+.tmp/
 *.tmp
 *.temp
+
+# Local data, model outputs, and release archives are not part of the private context repo.
+/data/
+/outputs/
+/exports/
 
 # Office lock files
 ~$*
@@ -14,6 +31,34 @@ tmp/
 *.pdf
 *.doc
 *.docx
+*.ppt
+*.pptx
+*.xlsx
+*.xls
+
+# Geospatial, raster, and large modelling artifacts.
+*.tif
+*.tiff
+*.geotiff
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.gpkg
+*.geojson
+*.kml
+*.kmz
+*.nc
+*.grib
+*.grb
+*.hdf
+*.h5
+*.parquet
+*.zip
+*.tar
+*.tar.gz
+*.7z
 
 # Local editor files
 .vscode/

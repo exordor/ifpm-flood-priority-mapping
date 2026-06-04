@@ -1,6 +1,11 @@
-# IFPM Flood Risk Modelling Documents
+# IFPM Flood Risk Modelling Workspace
 
-This repository organizes documents and supporting assets for the comparative flood risk modelling study focused on:
+This workspace uses a split boundary:
+
+- the root Git repository is the private context/document repository;
+- `ifpm-flood-pipeline/` is an independent future deliverable code repository.
+
+The project focuses on comparative flood risk modelling for:
 
 - Upper Mzingwane Catchment, Zimbabwe
 - Arequipa-Moquegua-Tacna Region, Peru
@@ -8,27 +13,57 @@ This repository organizes documents and supporting assets for the comparative fl
 ## Directory Structure
 
 ```text
-docs/
-  original/             Original dataset inventory files.
-  research-review/      Reviewed and expanded research inventory with dataset links and methodology notes.
-  deep-research/        Deep research fact-check report on mentor requirements and review quality.
-  project-analysis/     IFPM HiWi project analysis notes and PDF.
-  mentor-explanation/   Simple explanation guide for mentor discussion.
-assets/
-  images/               Supporting generated images.
+context/
+  docs/
+    original/             Original dataset inventory files.
+    research-review/      Reviewed and expanded research inventory with dataset links and methodology notes.
+    deep-research/        Deep research fact-check report on mentor requirements and review quality.
+    project-analysis/     IFPM HiWi project analysis notes and workflow retrospectives.
+    mentor-explanation/   Chinese and English oral explanation guides for mentor discussion.
+  assets/
+    images/               Supporting generated images.
+
+ifpm-flood-pipeline/
+  src/                     Future deliverable code.
+  tests/                   Tests for the code repository.
+  configs/                 Public-safe sample configs.
+  examples/                Synthetic or approved public examples.
+  docs_public/             Client/mentor-facing technical docs.
 ```
 
-## Main Files
+## Context Documents
 
-- `docs/original/Detailed_Dataset_Inventory_Zimbabwe_Peru.md`
-- `docs/research-review/Detailed_Dataset_Inventory_Zimbabwe_Peru_research_review.md`
-- `docs/deep-research/Deep_Research_Fact_Check_Mentor_Requirements.md`
-- `docs/mentor-explanation/Mentor_Explanation_Guide_Zimbabwe_Peru_Flood_Risk.md`
-- `docs/project-analysis/IFPM_HiWi_Project_Analysis.md`
+- `context/docs/original/Detailed_Dataset_Inventory_Zimbabwe_Peru.md`
+- `context/docs/research-review/Detailed_Dataset_Inventory_Zimbabwe_Peru_research_review.md`
+- `context/docs/deep-research/Deep_Research_Fact_Check_Mentor_Requirements.md`
+- `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_en.md`
+- `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_zh.md`
+- `context/docs/project-analysis/IFPM_HiWi_Project_Analysis.md`
+- `context/docs/project-analysis/AI_Research_Document_Generation_Lessons_Learned.md`
+
+## Boundary Rules
+
+- Keep exploratory notes, mentor-meeting preparation, dataset review, open modelling questions, and generated images under `context/`.
+- Put future reusable code only under `ifpm-flood-pipeline/`.
+- Do not make code depend on files in `context/`.
+- Do not put private notes, mentor strategy, raw/derived GIS data, local paths, or unresolved assumptions into the deliverable code repository.
+- Store raw data, processing outputs, and export packages under ignored local directories such as `data/`, `outputs/`, and `exports/`.
+
+## Existing Document Families
+
+- `context/docs/original/`
+  original dataset inventory files.
+- `context/docs/research-review/`
+  reviewed and expanded research inventory with dataset links and methodology notes.
+- `context/docs/deep-research/`
+  fact-checking of mentor requirements and review quality.
+- `context/docs/mentor-explanation/`
+  English and Chinese oral explanation guides for mentor discussion.
+- `context/docs/project-analysis/`
+  project analysis notes and workflow retrospectives.
 
 ## Notes
 
-- The original inventory is preserved under `docs/original/`.
-- The reviewed version is kept separately under `docs/research-review/`.
-- The deep research fact-check report is kept under `docs/deep-research/`.
-- Generated binary formats such as `.docx` and `.pdf` are tracked because they are project deliverables.
+- Markdown files are the version-managed source documents.
+- Generated binary formats such as `.docx` and `.pdf` are ignored and can be exported again when the Markdown source is stable.
+- The root repository should remain private. Release packages should come only from `ifpm-flood-pipeline/` after public-safe review.
