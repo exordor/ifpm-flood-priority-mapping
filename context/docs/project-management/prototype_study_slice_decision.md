@@ -28,8 +28,9 @@ that the project can:
 
 - Study side: Zimbabwe.
 - Working study area: Upper Mzingwane Catchment.
-- Boundary rule: use a catchment or sub-catchment boundary, preferably HydroBASINS-compatible,
-  until a more authoritative local boundary is supplied.
+- Boundary rule: use a catchment or sub-catchment boundary after the intended definition is
+  confirmed. Current unresolved candidates are Geoportal `Upper Mzingwane`, HydroBASINS level 7
+  `HYBAS_ID=1071528840`, or a narrower boundary matching the untraced `~2138 km2` reference.
 - First output grain: raster diagnostics at source-compatible resolution, then optional
   aggregation to sub-basin units.
 - Initial terrain working resolution: 30 m for SRTM-derived terrain layers when feasible.

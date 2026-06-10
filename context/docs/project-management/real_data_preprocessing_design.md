@@ -1,16 +1,17 @@
 # Real-Data Raster Preprocessing Design
 
-Status: internal design draft. HydroBASINS boundary discovery has been executed for one
-authorized artifact, but no SRTM, CHIRPS, overlay input, or interpretation dataset has been
-downloaded or processed.
+Status: internal design draft. HydroBASINS boundary discovery and Zimbabwe Geoportal
+Sub-Catchments boundary comparison have been executed as narrow boundary-only exceptions, but no
+SRTM, CHIRPS, overlay input, or interpretation dataset has been downloaded or processed.
 
 ## Purpose
 
 This note defines the first real-data preprocessing rules for the Zimbabwe / Upper Mzingwane
 prototype slice. It is a gate before any additional real GIS, raster, vector, validation, or
-sample data is downloaded beyond the narrow HydroBASINS boundary-discovery exception. The goal is
-to prevent a synthetic-tested pipeline from being applied to real data with unclear grid, CRS,
-NoData, aggregation, or resampling assumptions.
+sample data is downloaded beyond the narrow boundary-only exceptions already recorded for
+HydroBASINS and Zimbabwe Geoportal Sub-Catchments. The goal is to prevent a synthetic-tested
+pipeline from being applied to real data with unclear grid, CRS, NoData, aggregation, or
+resampling assumptions.
 
 ## Scope Boundary
 

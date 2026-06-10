@@ -1,7 +1,8 @@
 # Mentor Next-Step Summary: IFPM Prototype Scope
 
-Status: internal draft for mentor-facing discussion. HydroBASINS boundary discovery has been
-executed for one authorized artifact; no SRTM, CHIRPS, overlay, or interpretation has been run.
+Status: internal draft for mentor-facing discussion. HydroBASINS boundary discovery and Zimbabwe
+Geoportal Sub-Catchments boundary comparison have been executed as boundary-only checks; no SRTM,
+CHIRPS, overlay, or interpretation has been run.
 
 ## One-Minute Message
 
@@ -10,14 +11,15 @@ step is to use the Zimbabwe / Upper Mzingwane Catchment side as the first workfl
 the study area is already framed as a catchment. The purpose is not to claim a validated flood
 risk model yet. The purpose is to prove that data registration, preprocessing diagnostics,
 standardization, AHP weighting, and weighted overlay can run in a traceable way before real data
-work expands beyond the narrow HydroBASINS boundary-discovery step.
+work expands beyond the narrow boundary-discovery and boundary-comparison steps.
 
 ## Current Prototype Scope
 
 - First study side: Zimbabwe.
 - Working study area: Upper Mzingwane Catchment.
-- Boundary rule: catchment or HydroBASINS-compatible sub-catchment boundary, pending mentor
-  confirmation, local boundary evidence, or a documented HydroBASINS waiver.
+- Boundary rule: catchment or sub-catchment boundary, pending mentor confirmation of the intended
+  definition. Current candidates include Geoportal `Upper Mzingwane`, HydroBASINS level 7
+  `HYBAS_ID=1071528840`, or a narrower boundary matching the untraced `~2138 km2` reference.
 - First dataset candidates: SRTM 1 Arc-Second, HydroBASINS/HydroRIVERS, and CHIRPS v3.
 - First indicators: elevation, slope, drainage-distance or flow-accumulation proxy, rainfall
   summary, and optional sub-basin id for aggregation.
@@ -31,10 +33,11 @@ work expands beyond the narrow HydroBASINS boundary-discovery step.
 
 - Data governance is defined before download.
 - Dataset registry notes exist for the three starter dataset candidates.
-- Download preflight checklists exist. HydroBASINS boundary discovery has been executed for the
-  single authorized artifact; broader real-data downloads remain blocked.
+- Download preflight checklists exist. HydroBASINS boundary discovery and Zimbabwe Geoportal
+  Sub-Catchments comparison have been executed for boundary evidence only; broader real-data
+  downloads remain blocked.
 - A dedicated Upper Mzingwane boundary decision package now records the discovered candidate
-  HYBAS/PFAF ids and the remaining decision options.
+  HYBAS/PFAF ids, the Geoportal named sub-catchment evidence, and the remaining decision options.
 - The deliverable pipeline can derive AHP weights from a pairwise matrix and check the
   consistency ratio.
 - The pipeline can standardize single-band GeoTIFF layers to a 0-1 scale while preserving
@@ -55,7 +58,8 @@ work expands beyond the narrow HydroBASINS boundary-discovery step.
 ## Decisions Needed From Mentor
 
 1. Confirm the Zimbabwe first-slice boundary using the dedicated Upper Mzingwane decision package:
-   local boundary, HydroBASINS level 7 waiver, or reviewed level 8 union.
+   Geoportal named sub-catchment, HydroBASINS level 7 waiver, narrower untraced `~2138 km2`
+   boundary, or reviewed HydroBASINS union.
 2. Confirm the modelling unit: raster pixels first, sub-basin aggregation, or a mixed workflow.
 3. Choose the first temporal window for rainfall and validation evidence.
 4. Decide which evidence can support validation: local records, satellite flood extent,

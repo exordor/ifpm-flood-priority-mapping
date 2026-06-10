@@ -2,12 +2,13 @@
 
 Updated: 2026-06-10
 
-Status: decision package prepared; boundary not accepted.
+Status: HydroBASINS and Zimbabwe Geoportal candidates compared; boundary not accepted.
 
 ## Decision State
 
-The HydroSHEDS boundary-discovery step produced candidate HydroBASINS units, but it did not
-accept a final Upper Mzingwane prototype boundary.
+The HydroSHEDS boundary-discovery step produced candidate HydroBASINS units. A follow-up
+Zimbabwe Geoportal Sub-Catchments comparison found a named `Upper Mzingwane` feature. Neither
+step accepts a final Upper Mzingwane prototype boundary.
 
 Current working verdict: `NO-GO` for SRTM download, CHIRPS download, overlay, scoring, map
 interpretation, or flood-risk claims that depend on an accepted Upper Mzingwane boundary.
@@ -20,8 +21,14 @@ interpretation, or flood-risk claims that depend on an accepted Upper Mzingwane 
   `6b331a6e89d56c3a542dcee39a7e6e8700d0cf7c94083c5946c7db0d262a48d6`
 - Extracted shapefile levels inspected from ignored `data/raw/` paths.
 - Anchor points: Mzingwane Dam, Esigodini, and downstream Gwanda contrast point.
+- Zimbabwe Geoportal Sub-Catchments artifact:
+  `data/raw/zimbabwe_geoportal_subcatchments_2025/sub_catchments-1761163234.zip`
+- Zimbabwe Geoportal SHA-256:
+  `fb5a3528ca677f420e5030f146a7699027e93c765fcebe7ef45a59611b6f0cd2`
+- Extracted Geoportal Shapefile inspected from ignored `data/raw/` paths.
 
-No new source data was downloaded for this decision package.
+No SRTM, CHIRPS, HydroRIVERS, validation data, overlay input, map output, or interpretation
+dataset has been downloaded or processed for this decision package.
 
 ## Candidate Assessment
 
@@ -40,16 +47,35 @@ No new source data was downloaded for this decision package.
 - Level 8 `HYBAS_ID=1081528170`, `PFAF_ID=12450863`:
   broader nested candidate.
 
-Primary issue: level 7 `HYBAS_ID=1071528840` has `SUB_AREA=3700.0 km2`, while the commonly
-reported Upper Mzingwane sub-catchment area is about `2138 km2`. That mismatch is enough to block
-automatic acceptance.
+Primary issue: level 7 `HYBAS_ID=1071528840` has `SUB_AREA=3700.0 km2`, while the untraced
+`~2138 km2` Upper Mzingwane reference still needs source, outlet, area-method, and
+boundary-definition checks. That mismatch is enough to block automatic acceptance.
+
+Zimbabwe Geoportal alternative:
+
+- The Sub-Catchments layer contains a named `Upper Mzingwane` polygon.
+- It contains Mzingwane Dam and Esigodini.
+- It does not contain Gwanda; Gwanda falls in the Geoportal `Shashe` feature.
+- It is valid polygon geometry in `EPSG:4326`.
+- Its geodesic area is about `7321.5 km2`.
+- HydroBASINS level 7 `HYBAS_ID=1071528840` has about `98.9%` geometric coverage by it, but
+  covers only about `49.8%` of the Geoportal `Upper Mzingwane` feature.
+
+Updated issue: the Geoportal feature is a stronger local named-boundary candidate, but it is
+larger than both the HydroBASINS level 7 candidate and the untraced `~2138 km2` reference. The
+likely problem is boundary-definition scope, not a simple download or geometry error. The overlap
+values are geometric diagnostics only; they do not prove drainage topology or modelling
+equivalence.
 
 ## Decision Options
 
 1. Mentor or local authority supplies the accepted Upper Mzingwane boundary.
-2. Mentor accepts HydroBASINS level 7 `HYBAS_ID=1071528840` with an area-mismatch waiver.
-3. Project defines a reviewed level 8 union under `PFAF_ID=1245086` and compares it to local
-   evidence.
+2. Mentor accepts Geoportal `Upper Mzingwane` as a broad local or management-style unit.
+3. Mentor accepts HydroBASINS level 7 `HYBAS_ID=1071528840` as a narrower hydrological unit,
+   with an area and coverage waiver.
+4. Project traces the source of the untraced `~2138 km2` reference and obtains or digitizes the
+   corresponding boundary.
+5. Project defines a reviewed level 8 or level 7 union and compares it to local evidence.
 
 No option has been accepted yet.
 
@@ -64,6 +90,12 @@ Generated local-only diagnostics:
   `upper_mzingwane_boundary_candidates_diagnostic_2026-06-10.png`
 - Output manifest:
   `outputs/hydrosheds_boundary_decision/upper_mzingwane_boundary_decision_outputs_2026-06-10.txt`
+- Geoportal comparison table:
+  `outputs/zimbabwe_geoportal_subcatchments_2025/`
+  `zimbabwe_geoportal_upper_mzingwane_boundary_comparison_2026-06-10.csv`
+- HydroBASINS level 7 overlap table:
+  `outputs/zimbabwe_geoportal_subcatchments_2025/`
+  `zimbabwe_geoportal_upper_mzingwane_hydrobasins_level7_overlaps_2026-06-10.csv`
 
 These outputs stay under ignored `outputs/` paths. They are not committed release assets and
 must not be copied into `context/`, `ifpm-flood-pipeline/`, public docs, or release archives
@@ -80,31 +112,42 @@ without a public-safe and redistribution review.
 
 ## Adversarial Review
 
-Review mode: local two-angle fallback. Subagent delegation was not used in this turn because the
-user did not explicitly request parallel subagents for this step.
+Review mode: subagent-assisted adversarial review plus local final pass.
 
 Correctness and domain-boundary angle:
 
-- Finding: the decision package could accidentally make the level 7 candidate look accepted.
-- Triage: kept the status as `boundary not accepted`, repeated the area mismatch, and listed
-  the three unresolved decision paths before any SRTM, CHIRPS, overlay, or interpretation.
+- Finding: the decision package could accidentally make the level 7 HydroBASINS candidate or the
+  named Geoportal feature look accepted; wording that implied stronger hydrological authority
+  overstated the Geoportal evidence.
+- Triage: kept the status as `boundary not accepted`, described Geoportal as a local named or
+  management-unit candidate, repeated both area mismatches, and listed unresolved decision paths
+  before any SRTM, CHIRPS, overlay, or interpretation.
 
 Engineering and workspace-boundary angle:
 
-- Finding: local diagnostic PNG and CSV files could be mistaken for release material.
-- Triage: kept them under ignored `outputs/`, referenced them as local-only diagnostics, and
-  documented that they must not be copied into `context/`, `ifpm-flood-pipeline/`, or release
-  archives without a public-safe and redistribution review.
+- Finding: local diagnostic PNG and CSV files, the real Shapefile, and the direct resource URL
+  could be mistaken for release material.
+- Triage: kept raw data under ignored `data/raw/`, kept diagnostics under ignored `outputs/`,
+  referenced them as local-only diagnostics, labelled the direct resource URL as internal
+  reproducibility evidence only, and documented that data or outputs must not be copied into
+  `context/`, `ifpm-flood-pipeline/`, or release archives without a public-safe and
+  redistribution review.
 
 State-consistency angle:
 
-- Finding: older planning notes still implied that no real data download had happened.
-- Triage: updated the mentor summary, preprocessing design, task board, and preflight gate to
-  distinguish the completed HydroBASINS boundary-discovery exception from still-blocked broader
-  real-data downloads.
+- Finding: older planning notes could imply that no local boundary comparison had happened.
+- Triage: updated this decision record, the task board, the real-data gate, and the
+  Geoportal-specific registry/preflight notes to distinguish the completed boundary-comparison
+  exception from still-blocked broader real-data downloads.
+
+Reproducibility angle:
+
+- Finding: area and overlap numbers needed a clear method statement.
+- Triage: recorded the WGS84 geodesic area method in the Geoportal comparison and preflight
+  notes and labelled overlaps as geometric diagnostics only.
 
 ## Next Action
 
-Use
-`context/docs/mentor-explanation/Upper_Mzingwane_Boundary_Decision_Package_2026-06-10.md`
-in the next mentor discussion and ask for one accepted boundary path.
+Trace the source of the untraced `~2138 km2` reference or use
+`context/docs/project-management/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`
+in the next mentor discussion to ask which boundary definition is intended.

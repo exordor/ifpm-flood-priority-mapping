@@ -4,9 +4,10 @@ Updated: 2026-06-10
 
 Status: internal gate record. Current verdict: `NO-GO` for general real data download.
 
-One real vector dataset has been downloaded only for HydroBASINS boundary discovery. No SRTM,
-CHIRPS, validation data, overlay input, map output, or interpretation dataset has been downloaded
-or processed for this gate.
+Two real vector artifacts have been downloaded only for boundary discovery and comparison:
+HydroBASINS Standard Africa and Zimbabwe Geoportal Sub-Catchments. No SRTM, CHIRPS, validation
+data, overlay input, map output, or interpretation dataset has been downloaded or processed for
+this gate.
 
 ## Purpose
 
@@ -31,16 +32,24 @@ Zimbabwe-Peru comparison.
 
 The project is not ready for general real data download, overlay, or interpretation yet.
 
-There is one narrow exception: the HydroBASINS boundary-discovery download was authorized and
-executed after the HydroSHEDS preflight note, expected size, and download authorization entry
-were completed. That exception supports boundary selection only. It does not authorize SRTM
-download, CHIRPS download, overlay, or map interpretation.
+There are two narrow boundary-only exceptions:
 
-Current boundary-discovery status: executed for the single authorized HydroBASINS artifact.
-Candidate HYBAS and PFAF ids were discovered, but no boundary has been accepted.
+- the HydroBASINS boundary-discovery download was authorized and executed after the HydroSHEDS
+  preflight note, expected size, and download authorization entry were completed;
+- the Zimbabwe Geoportal Sub-Catchments download was authorized and executed after its dataset
+  registry, preflight note, and authenticated page inspection were completed.
+
+These exceptions support boundary selection only. They do not authorize SRTM download, CHIRPS
+download, overlay, or map interpretation.
+
+Current boundary-discovery status: executed for the authorized HydroBASINS artifact and the
+authorized Zimbabwe Geoportal Sub-Catchments artifact. Candidate HYBAS and PFAF ids were
+discovered. The Geoportal layer added a named `Upper Mzingwane` feature, but no boundary has
+been accepted.
 
 - Boundary acceptance: blocked.
-  HydroBASINS level, basin id, and local-boundary comparison are not selected.
+  HydroBASINS level, basin id, Geoportal named sub-catchment, and the untraced `~2138 km2`
+  reference are not reconciled.
   Evidence: `real_data_preprocessing_design.md`.
 - Modelling unit: blocked.
   Raster-first, sub-basin aggregation, or mixed workflow is not selected.
@@ -49,8 +58,9 @@ Candidate HYBAS and PFAF ids were discovered, but no boundary has been accepted.
   CHIRPS temporal window, timestep, and product type are not selected.
   Evidence: CHIRPS preflight note.
 - Dataset preflight: partly closed.
-  HydroSHEDS boundary-discovery has been executed, while SRTM and CHIRPS remain blocked.
-  HydroSHEDS still needs boundary acceptance or a documented waiver.
+  HydroSHEDS boundary-discovery and Zimbabwe Geoportal Sub-Catchments comparison have been
+  executed, while SRTM and CHIRPS remain blocked. Boundary acceptance still needs a documented
+  decision or waiver.
   Evidence: `context/docs/data-management/preflight/`.
 - Storage boundary: ready.
   Raw, temporary, output, and export destinations are defined and ignored.
@@ -63,32 +73,45 @@ Candidate HYBAS and PFAF ids were discovered, but no boundary has been accepted.
 
 Required before SRTM download, CHIRPS download, overlay, or aggregation:
 
-- choose the boundary source: HydroBASINS-compatible unit or mentor-supplied local boundary;
+- choose the boundary source: Geoportal named sub-catchment, HydroBASINS-compatible unit,
+  mentor-supplied local boundary, or a traced published-study boundary;
 - record HydroBASINS level, HYBAS id, PFAF id, and version if HydroBASINS is used;
 - record whether multiple units are unioned or dissolved;
 - check geometry validity and CRS;
-- compare area and shape against any available authoritative or mentor-supplied boundary;
-- state the mismatch policy if HydroBASINS and local boundary evidence disagree;
+- compare area and shape against any available authoritative, Geoportal, HydroBASINS, or
+  mentor-supplied boundary;
+- state the mismatch policy if candidate boundary sources disagree;
 - mark the boundary as accepted, rejected, or accepted with waiver.
 
 Exit evidence:
 
 - a short boundary decision note or a completed section in this file;
-- exact raw destination remains `data/raw/hydrosheds_zimbabwe_prototype/`;
+- exact raw destination remains under `data/raw/<dataset_id>/`;
 - no boundary file is copied into `context/` or `ifpm-flood-pipeline/`.
 
-Current state: blocked.
+Current state: blocked. HydroBASINS and Geoportal boundary-only comparisons are complete, but
+their areas and modelling scopes are not reconciled.
 
-Boundary-discovery exception:
+Boundary-only exceptions already executed:
 
-- allowed only for HydroBASINS candidate inspection;
-- requires the HydroSHEDS preflight checklist to have no unchecked pre-download blocker except
-  final accepted boundary id and post-download verification fields;
-- required exact archive names, expected size, licence source, and overwrite confirmation;
-- treated candidate HYBAS and PFAF ids as discovery outputs;
-- writes only to `data/raw/hydrosheds_zimbabwe_prototype/` or
-  `data/tmp/hydrosheds_zimbabwe_prototype/`;
-- produced no public-facing output and no model claim.
+- HydroBASINS boundary discovery:
+  - allowed only for HydroBASINS candidate inspection;
+  - required the HydroSHEDS preflight checklist to have no unchecked pre-download blocker except
+    final accepted boundary id and post-download verification fields;
+  - required exact archive names, expected size, licence source, and overwrite confirmation;
+  - treated candidate HYBAS and PFAF ids as discovery outputs;
+  - wrote only to `data/raw/hydrosheds_zimbabwe_prototype/` or
+    `data/tmp/hydrosheds_zimbabwe_prototype/`;
+  - produced no public-facing output and no model claim.
+- Zimbabwe Geoportal Sub-Catchments comparison:
+  - allowed only for local named-boundary comparison;
+  - required the Geoportal registry and preflight note to be completed before download;
+  - required page-level source, version, licence, expected size, and destination evidence;
+  - treated `Upper Mzingwane` name, anchor containment, area, and HydroBASINS overlap as
+    comparison outputs;
+  - wrote raw files only to `data/raw/zimbabwe_geoportal_subcatchments_2025/` and diagnostics
+    only to `outputs/zimbabwe_geoportal_subcatchments_2025/`;
+  - produced no public-facing output and no model claim.
 
 ## Gate G2: Modelling Unit
 
@@ -138,7 +161,9 @@ Current blockers:
 
 - SRTM: boundary mask or bounding box, expected disk footprint, and overwrite confirmation.
 - HydroSHEDS: boundary-discovery download and inspection are complete. Boundary acceptance,
-  mentor/local-boundary comparison, and redistribution clearance remain open.
+  comparison against Geoportal, and redistribution clearance remain open.
+- Zimbabwe Geoportal Sub-Catchments: boundary-comparison download and inspection are complete.
+  Boundary acceptance and redistribution clearance remain open.
 - CHIRPS: temporal window, product type, timestep, expected disk footprint, and overwrite
   confirmation.
 
@@ -175,7 +200,8 @@ After download, add:
 - CRS, georeferencing, and integrity check state.
 
 Current state: ready as a required template for remaining datasets. The HydroSHEDS
-boundary-discovery exception used its own authorization record.
+boundary-discovery and Zimbabwe Geoportal Sub-Catchments exceptions used their own authorization
+records.
 
 ## Gate G6: Execution Rules After Download
 
@@ -222,8 +248,8 @@ General real-data download may proceed only when all of these are true:
 - The target dataset directory is under ignored `data/`.
 - The reviewer confirms the download is small and scoped.
 
-The completed boundary-discovery HydroSHEDS download remains a boundary-selection step, not a
-modelling run.
+The completed HydroSHEDS and Zimbabwe Geoportal downloads remain boundary-selection steps, not
+modelling runs.
 
 ## No-Go Triggers
 
@@ -243,9 +269,9 @@ Stop before download if any of these appears:
 Close the smallest useful decision set:
 
 1. use
-   `context/docs/mentor-explanation/Upper_Mzingwane_Boundary_Decision_Package_2026-06-10.md`
-   to request a mentor/local boundary, a HydroBASINS level 7 waiver for
-   `HYBAS_ID=1071528840`, or a reviewed level 8 union;
+   `context/docs/project-management/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`
+   to trace the source of the untraced `~2138 km2` reference or ask the mentor to choose the
+   intended boundary definition;
 2. choose the initial modelling branch;
 3. choose whether CHIRPS is deferred or limited to one small rainfall summary window;
 4. update the affected dataset preflight notes from `not ready` to either `ready` or

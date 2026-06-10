@@ -11,9 +11,10 @@ AHP-MCDA weighted-overlay pipeline exists, data-download governance is defined, 
 should move from method scaffolding to a controlled data/preprocessing prototype.
 
 Do not start broad data downloads yet. HydroSHEDS boundary discovery has been executed for one
-authorized artifact, and an Upper Mzingwane boundary decision package is prepared for mentor
-review. The boundary is still not accepted. SRTM, CHIRPS, overlay, and interpretation remain
-blocked until the later gates are closed.
+authorized artifact, and the Zimbabwe Geoportal Sub-Catchments alternative has been downloaded
+and compared for boundary evidence. The boundary is still not accepted because HydroBASINS,
+Geoportal, and the untraced `~2138 km2` reference point to different boundary scales. SRTM,
+CHIRPS, overlay, and interpretation remain blocked until the later gates are closed.
 
 ## Done
 
@@ -73,12 +74,12 @@ blocked until the later gates are closed.
 
 ### IFPM-013 Real-Data Execution Preflight Gate
 
-- Status: gate drafted; current verdict is `NO-GO` for general real data download, with only a
-  completed HydroSHEDS boundary-discovery exception.
+- Status: gate drafted; current verdict is `NO-GO` for general real data download, with completed
+  HydroSHEDS and Zimbabwe Geoportal boundary-only exceptions.
 - Evidence: `context/docs/project-management/real_data_execution_preflight_gate.md`.
-- Next action: use the Upper Mzingwane boundary decision package to resolve boundary acceptance
-  by mentor/local boundary comparison, a HydroBASINS level 7 waiver, or a reviewed level 8 union.
-  Keep SRTM, CHIRPS, overlay, and interpretation blocked.
+- Next action: trace the source of the untraced `~2138 km2` reference or ask the mentor to
+  choose between Geoportal named sub-catchment, HydroBASINS hydrological unit, or a narrower
+  published-study boundary. Keep SRTM, CHIRPS, overlay, and interpretation blocked.
 
 ### IFPM-014 Multi-Level Progress Review
 
@@ -115,9 +116,9 @@ blocked until the later gates are closed.
 - Priority: P1
 - Task: turn the consolidated preflight gate from `NO-GO` to a scoped `GO` for one dataset or
   one tiny prototype bundle.
-- Status: partially closed for HydroSHEDS boundary discovery; general data download remains
-  blocked by boundary acceptance, modelling-unit, rainfall-window, and engineering-readiness
-  blockers.
+- Status: partially closed for HydroSHEDS boundary discovery and Zimbabwe Geoportal boundary
+  comparison; general data download remains blocked by boundary acceptance, modelling-unit,
+  rainfall-window, and engineering-readiness blockers.
 - Completion evidence: updated gate record plus selected dataset preflight note with no
   unchecked pre-download blocking item.
 
@@ -149,6 +150,21 @@ blocked until the later gates are closed.
 - Completion evidence:
   `context/docs/mentor-explanation/Upper_Mzingwane_Boundary_Decision_Package_2026-06-10.md`
   and `context/docs/project-management/upper_mzingwane_boundary_decision_record_2026-06-10.md`.
+
+### IFPM-041 Execute Zimbabwe Geoportal Sub-Catchments Boundary Comparison
+
+- Priority: P1
+- Task: use the authenticated Zimbabwe Geoportal Sub-Catchments dataset as the first alternative
+  local named-boundary check, without downloading SRTM/CHIRPS or running overlay.
+- Status: done; boundary still not accepted.
+- Completion evidence:
+  `context/docs/project-management/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`,
+  `context/docs/data-management/registry/zimbabwe_geoportal_subcatchments_2025.md`, and
+  `context/docs/data-management/preflight/zimbabwe_geoportal_subcatchments_2025.md`.
+- Key result: the Geoportal `Upper Mzingwane` polygon contains Mzingwane Dam and Esigodini and
+  excludes Gwanda, but its area is about `7321.5 km2`. HydroBASINS level 7
+  `HYBAS_ID=1071528840` is nearly contained within it but covers only about `49.8%` of the
+  Geoportal named feature.
 
 ### IFPM-028 Close Pre-Real-Data Engineering Readiness
 
@@ -201,12 +217,13 @@ blocked until the later gates are closed.
 
 ### IFPM-D06 Upper Mzingwane Boundary Acceptance
 
-- Decision needed: mentor/local boundary, HydroBASINS level 7 candidate, or reviewed level 8
-  union.
-- Why it matters: discovered HydroBASINS candidates are plausible but not accepted, and the
-  strongest single candidate is larger than the commonly reported Upper Mzingwane area.
-- Current evidence: boundary decision package prepared; no SRTM, CHIRPS, overlay, or
-  interpretation should start before one path is accepted.
+- Decision needed: Geoportal named sub-catchment, HydroBASINS level 7 candidate, a reviewed
+  HydroBASINS union, or a narrower boundary matching the untraced `~2138 km2` reference.
+- Why it matters: the plausible candidates are not equivalent. HydroBASINS level 7 is about
+  `3700 km2`; Geoportal `Upper Mzingwane` is about `7321.5 km2`; the untraced `~2138 km2`
+  reference still needs source, outlet, area-method, and boundary-definition tracing.
+- Current evidence: HydroBASINS discovery and Geoportal boundary comparison completed; no SRTM,
+  CHIRPS, overlay, or interpretation should start before one path is accepted.
 
 ### IFPM-D02 Peru Boundary Rule
 

@@ -14,3 +14,5 @@ This folder contains internal planning artifacts for the IFPM flood-risk modelli
   and candidate HYBAS/PFAF ids.
 - `upper_mzingwane_boundary_decision_record_2026-06-10.md`: boundary-decision state, options,
   local-only diagnostic outputs, and next action for mentor review.
+- `zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`: authenticated Zimbabwe
+  Geoportal Sub-Catchments boundary comparison against HydroBASINS candidates.
