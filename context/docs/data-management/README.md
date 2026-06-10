@@ -11,5 +11,8 @@ be reused.
 - `registry/`: dataset-specific registry notes.
 - `preflight/`: dataset-specific download preflight notes.
 
+Before moving from notes to any real download, also check the cross-dataset gate in
+`context/docs/project-management/real_data_execution_preflight_gate.md`.
+
 Real downloaded data must stay outside this folder. Store it under ignored workspace paths such
 as `data/`, keep processed outputs under `outputs/`, and keep packaged bundles under `exports/`.

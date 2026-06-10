@@ -66,8 +66,16 @@ prototype slice through data registration, preprocessing checks, standardization
 - Status: design drafted; real-data execution remains blocked until mentor decisions and
   preflight blockers are closed.
 - Evidence: `context/docs/project-management/real_data_preprocessing_design.md`.
-- Next action: use the design to close boundary, modelling-unit, temporal-window, and preflight
-  decisions before downloading or processing source datasets.
+- Next action: use the execution preflight gate to close boundary, modelling-unit,
+  temporal-window, and dataset-specific blockers before downloading or processing source data.
+
+### IFPM-013 Real-Data Execution Preflight Gate
+
+- Status: gate drafted; current verdict is `NO-GO` for general real data download, with only a
+  narrow HydroSHEDS boundary-discovery exception after preflight closure.
+- Evidence: `context/docs/project-management/real_data_execution_preflight_gate.md`.
+- Next action: close the boundary acceptance, modelling-unit, CHIRPS temporal/product, and
+  dataset-specific preflight blockers.
 
 ## Current Milestones And Gates
 
@@ -91,6 +99,16 @@ prototype slice through data registration, preprocessing checks, standardization
 - Task: complete the checklist for each selected dataset.
 - Status: draft checklists created; downloads remain blocked pending unresolved items.
 - Completion evidence: three preflight notes exist under `context/docs/data-management/preflight/`.
+
+### IFPM-027 Close Real-Data Execution Gate
+
+- Priority: P1
+- Task: turn the consolidated preflight gate from `NO-GO` to a scoped `GO` for one dataset or
+  one tiny prototype bundle.
+- Status: blocked by boundary, modelling-unit, rainfall-window, and dataset-specific blockers;
+  HydroSHEDS boundary discovery can be considered first if its preflight is closed.
+- Completion evidence: updated gate record plus selected dataset preflight note with no
+  unchecked blocking item.
 
 ### IFPM-023 Implement Raster Grid Diagnostics
 
