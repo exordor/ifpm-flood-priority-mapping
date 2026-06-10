@@ -10,8 +10,9 @@ The workspace now has a clean split between private context and deliverable code
 AHP-MCDA weighted-overlay pipeline exists, data-download governance is defined, and future work
 should move from method scaffolding to a controlled data/preprocessing prototype.
 
-Do not start broad data downloads yet. The next milestone is to run one small, traceable
-prototype slice through data registration, preprocessing checks, standardization, and overlay.
+Do not start broad data downloads yet. The immediate next milestone is HydroSHEDS
+boundary-discovery execution after explicit approval. SRTM, CHIRPS, overlay, and interpretation
+remain blocked until the later gates are closed.
 
 ## Done
 
@@ -72,11 +73,10 @@ prototype slice through data registration, preprocessing checks, standardization
 ### IFPM-013 Real-Data Execution Preflight Gate
 
 - Status: gate drafted; current verdict is `NO-GO` for general real data download, with only a
-  narrow HydroSHEDS boundary-discovery exception after preflight closure.
+  narrow HydroSHEDS boundary-discovery exception after preflight closure and explicit approval.
 - Evidence: `context/docs/project-management/real_data_execution_preflight_gate.md`.
-- Next action: close the boundary acceptance, modelling-unit, CHIRPS temporal/product, and
-  dataset-specific preflight blockers, then close pre-real-data engineering readiness before
-  overlay.
+- Next action: use the prepared HydroSHEDS authorization only if the next goal explicitly permits
+  downloading; otherwise keep SRTM, CHIRPS, overlay, and interpretation blocked.
 
 ### IFPM-014 Multi-Level Progress Review
 
@@ -113,10 +113,21 @@ prototype slice through data registration, preprocessing checks, standardization
 - Priority: P1
 - Task: turn the consolidated preflight gate from `NO-GO` to a scoped `GO` for one dataset or
   one tiny prototype bundle.
-- Status: blocked by boundary, modelling-unit, rainfall-window, and dataset-specific blockers;
-  HydroSHEDS boundary discovery can be considered first if its preflight is closed.
+- Status: partially closed for HydroSHEDS boundary discovery; general data download remains
+  blocked by boundary acceptance, modelling-unit, rainfall-window, and engineering-readiness
+  blockers.
 - Completion evidence: updated gate record plus selected dataset preflight note with no
-  unchecked blocking item.
+  unchecked pre-download blocking item.
+
+### IFPM-029 Prepare HydroSHEDS Boundary Discovery
+
+- Priority: P1
+- Task: make candidate HydroBASINS ids a discovery output and prepare the non-executed download
+  authorization.
+- Status: done as a document-only preflight; no data downloaded.
+- Completion evidence:
+  `context/docs/data-management/preflight/hydrosheds_boundary_discovery_authorization_2026-06-10.md`
+  and updated HydroSHEDS registry/preflight notes.
 
 ### IFPM-028 Close Pre-Real-Data Engineering Readiness
 

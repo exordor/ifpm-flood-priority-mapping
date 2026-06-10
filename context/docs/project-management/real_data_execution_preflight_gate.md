@@ -35,6 +35,9 @@ after the HydroSHEDS preflight note is complete, expected size is accepted, and 
 authorization entry is written. That exception can support boundary selection only. It does not
 authorize SRTM download, CHIRPS download, overlay, or map interpretation.
 
+Current boundary-discovery status: prepared but not executed. Candidate HYBAS and PFAF ids are
+the expected output of the discovery step, not a pre-download prerequisite.
+
 - Boundary acceptance: blocked.
   HydroBASINS level, basin id, and local-boundary comparison are not selected.
   Evidence: `real_data_preprocessing_design.md`.
@@ -44,8 +47,9 @@ authorize SRTM download, CHIRPS download, overlay, or map interpretation.
 - Rainfall time window: blocked.
   CHIRPS temporal window, timestep, and product type are not selected.
   Evidence: CHIRPS preflight note.
-- Dataset preflight: blocked.
-  Each dataset still has unchecked blocking items.
+- Dataset preflight: partly closed.
+  HydroSHEDS boundary-discovery pre-download blockers are prepared, while SRTM and CHIRPS remain
+  blocked. HydroSHEDS still needs explicit execution approval and post-download verification.
   Evidence: `context/docs/data-management/preflight/`.
 - Storage boundary: ready.
   Raw, temporary, output, and export destinations are defined and ignored.
@@ -77,9 +81,10 @@ Current state: blocked.
 Boundary-discovery exception:
 
 - allowed only for HydroBASINS/HydroRIVERS candidate inspection;
-- requires the HydroSHEDS preflight checklist to have no unchecked blocking item except final
-  accepted boundary id;
-- requires exact archive names, expected size, licence text, and overwrite confirmation;
+- requires the HydroSHEDS preflight checklist to have no unchecked pre-download blocker except
+  final accepted boundary id and post-download verification fields;
+- requires exact archive names, expected size, licence source, and overwrite confirmation;
+- treats candidate HYBAS and PFAF ids as discovery outputs;
 - writes only to `data/raw/hydrosheds_zimbabwe_prototype/` or
   `data/tmp/hydrosheds_zimbabwe_prototype/`;
 - produces no public-facing output and no model claim.
@@ -125,19 +130,21 @@ Current state: blocked.
 
 ## Gate G4: Dataset-Specific Preflight Closure
 
-Before any individual dataset download, its preflight note must have no unchecked blocking item.
+Before any individual dataset download, its preflight note must have no unchecked pre-download
+blocking item.
 
 Current blockers:
 
 - SRTM: boundary mask or bounding box, expected disk footprint, and overwrite confirmation.
-- HydroSHEDS: HydroBASINS level or candidate basin ids, exact archive sizes, licence text, and
-  overwrite confirmation.
+- HydroSHEDS: pre-download boundary-discovery note is prepared, but future execution still needs
+  explicit approval. Accepted boundary id, checksum, extracted licence text, and integrity checks
+  are post-download outputs.
 - CHIRPS: temporal window, product type, timestep, expected disk footprint, and overwrite
   confirmation.
 
 Exit evidence:
 
-- all blocking checklist items are checked or explicitly waived;
+- all pre-download blocking checklist items are checked or explicitly waived;
 - waiver explains risk and reviewer approval;
 - command or manual workflow cannot overwrite unrelated local data.
 
@@ -208,7 +215,7 @@ General real-data download may proceed only when all of these are true:
 - Gate G1 boundary acceptance is complete.
 - Gate G2 modelling unit is selected.
 - Gate G3 CHIRPS temporal/product decision is complete, or CHIRPS is explicitly deferred.
-- Gate G4 selected dataset preflight has no unchecked blocker.
+- Gate G4 selected dataset preflight has no unchecked pre-download blocker.
 - Gate G5 authorization entry is written before download.
 - Gate G7 engineering readiness is complete before overlay or interpretation.
 - The target dataset directory is under ignored `data/`.
@@ -234,7 +241,7 @@ Stop before download if any of these appears:
 
 Close the smallest useful decision set:
 
-1. select a provisional HydroBASINS level and candidate Upper Mzingwane unit;
+1. execute the prepared HydroSHEDS boundary-discovery authorization only after explicit approval;
 2. choose the initial modelling branch;
 3. choose whether CHIRPS is deferred or limited to one small rainfall summary window;
 4. update the affected dataset preflight notes from `not ready` to either `ready` or

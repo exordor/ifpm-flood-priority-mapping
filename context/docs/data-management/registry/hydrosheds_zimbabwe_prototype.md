@@ -10,7 +10,8 @@ Status: planned; no data downloaded.
 - Reusable download: yes, if the prototype proceeds
 - Project role: hydrological boundary, river network, and possible sub-basin aggregation
 - Study area: Zimbabwe / Upper Mzingwane Catchment prototype slice
-- Spatial unit or mask: HydroBASINS-compatible catchment or sub-basin units, pending
+- Spatial unit or mask: HydroBASINS-compatible catchment or sub-basin units, to be identified by
+  boundary discovery
 - Temporal coverage: static hydrographic baseline derived from HydroSHEDS products
 
 ## Source And Access
@@ -20,10 +21,12 @@ Status: planned; no data downloaded.
   - HydroBASINS: `https://www.hydrosheds.org/products/hydrobasins`
   - HydroRIVERS: `https://www.hydrosheds.org/products/hydrorivers`
   - Product overview: `https://www.hydrosheds.org/products`
-- Product/version: HydroBASINS Africa and HydroRIVERS Africa, exact version to record at download
+- Product/version: HydroBASINS standard Africa version 1c for the first boundary-discovery
+  artifact; HydroRIVERS version 1.0 remains deferred
 - Access date: 2026-06-10
 - Access method: direct product-page download
-- Licence or terms: HydroSHEDS product licence; exact agreement text/version to record
+- Licence or terms: HydroSHEDS core product licence in the HydroSHEDS Technical Documentation;
+  exact downloaded agreement text/version to verify after future approved download
 - Citation requirement: cite HydroSHEDS and Lehner & Grill (2013) where applicable
 - Account, registration, or approval needed: none identified on product pages; recheck before use
 - Redistribution allowed: not yet confirmed; governed by HydroSHEDS licence agreement. Record
@@ -34,15 +37,19 @@ Status: planned; no data downloaded.
 - Intended destination: `data/raw/hydrosheds_zimbabwe_prototype/`
 - Expected file types: compressed archives with vector layers and sidecar files
 - Source artifact name:
-  - HydroBASINS Standard Africa archive, exact filename pending
-  - HydroRIVERS Africa archive, exact filename pending
-- Expected file count: pending product-page download details
-- Expected byte size: pending product-page download details
+  - first authorized boundary-discovery artifact: `hybas_af_lev01-12_v1c.zip`
+  - deferred HydroRIVERS options: `HydroRIVERS_v10_af.gdb.zip` and
+    `HydroRIVERS_v10_af_shp.zip`
+- Expected file count: one source archive for the first boundary-discovery attempt
+- Expected byte size: `549296874` bytes for `hybas_af_lev01-12_v1c.zip`
 - Download command or manual steps:
-  1. Open the HydroBASINS product page and select the Standard Africa download.
-  2. Open the HydroRIVERS product page and select the Africa download.
-  3. Record exact filenames, versions, terms, and archive sizes before downloading.
-  4. Download only the Africa archives needed for the Zimbabwe prototype.
+  1. Re-open the HydroBASINS product page.
+  2. Confirm the Standard Africa all-levels artifact still resolves to
+     `hybas_af_lev01-12_v1c.zip`.
+  3. Confirm source size, licence pointer, and no-authentication state.
+  4. Use the guarded command in the boundary-discovery authorization note only after explicit
+     approval.
+  5. Defer HydroRIVERS unless river-network plausibility checking is required.
 - Rate limits or quotas: unknown; check HydroSHEDS site behavior before batch download
 - Authentication handling: no credentials expected
 - Temporary path, if any: `data/tmp/hydrosheds_zimbabwe_prototype/`
@@ -56,7 +63,7 @@ Status: planned; no data downloaded.
 - Partial path, if any: none
 - Archive state: not downloaded
 - Extraction state: not started
-- Retry or resume safe: unknown until download behavior is observed
+- Retry or resume safe: use a temporary `.part` file and do not overwrite existing files
 - Cleanup/disposition: not applicable
 - Cleanup date: not applicable
 
@@ -68,9 +75,9 @@ Status: planned; no data downloaded.
 - Checksum algorithm: SHA-256 preferred for archives
 - Checksum command: `shasum -a 256 <archive>`
 - Checksum value: not available
-- Expected files or manifest: not available
+- Expected files or manifest: `hybas_af_lev01-12_v1c.zip` before extraction
 - Actual files or manifest: not available
-- Expected byte size: not available
+- Expected byte size: `549296874` bytes before extraction
 - Actual byte size: not available
 - File-count evidence: not available
 - File-size evidence: not available
@@ -83,8 +90,8 @@ Status: planned; no data downloaded.
 - Raw data path: `data/raw/hydrosheds_zimbabwe_prototype/`
 - Derived output path: `outputs/hydrosheds_zimbabwe_prototype/`
 - Scripts or commands used: none yet
-- Standardization/preprocessing notes: identify HydroBASINS level and candidate basin ids for
-  Upper Mzingwane before using boundaries for aggregation
+- Standardization/preprocessing notes: candidate HydroBASINS levels and ids are the discovery
+  output; do not use boundaries for aggregation until accepted or waived
 - Known limitations: product scale may not match local official catchment boundaries; river
   reaches are generalized and should not be treated as field-survey data
 - Replacement or update rule: replace or supplement if mentor supplies an authoritative local

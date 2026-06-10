@@ -1,22 +1,30 @@
 # Download Preflight: HydroBASINS And HydroRIVERS Zimbabwe Prototype
 
-Status: not ready to download. Exact Africa archive names and sizes are still pending.
+Status: boundary-discovery preflight prepared; no data downloaded. Future execution still needs
+explicit approval.
 
 ## Scope
 
 - [x] The dataset has a clear project purpose: hydrological framework and aggregation units.
 - [x] The required study area is known at project level: Upper Mzingwane prototype slice.
-- [ ] The exact HydroBASINS level or candidate basin ids are selected.
+- [x] Candidate HydroBASINS ids are defined as the boundary-discovery output, not as a
+      pre-download prerequisite.
+- [x] The first discovery artifact is selected: HydroBASINS standard Africa all levels 1-12.
 - [x] The temporal window is documented: static hydrographic baseline.
-- [ ] The expected disk footprint is acceptable.
+- [x] The expected source size is recorded: `549296874` bytes for
+      `hybas_af_lev01-12_v1c.zip`.
 - [x] The download is not a global mirror; intended scope is Africa archives only.
 
 ## Access And Licence
 
 - [x] Source URL or portal is recorded in the registry note.
-- [x] Product/version is recorded as pending exact archive/version confirmation.
+- [x] Product/version is recorded for the first discovery artifact: HydroBASINS standard Africa
+      version 1c.
 - [x] Product-page licence and citation pointers have been reviewed.
-- [ ] Exact HydroSHEDS licence agreement text/version and redistribution restrictions are recorded.
+- [x] Licence source is recorded for preflight: HydroSHEDS core product license in the
+      HydroSHEDS Technical Documentation.
+- [ ] Exact downloaded licence text/version and redistribution restrictions will be verified
+      after a future approved download.
 - [x] Account, registration, approval, or payment requirements are documented.
 - [x] Credentials, cookies, tokens, and private links will not be committed.
 
@@ -41,7 +49,19 @@ Status: not ready to download. Exact Africa archive names and sizes are still pe
 ## Safety Check
 
 - [x] The target path is ignored by Git.
-- [ ] The command will not overwrite unrelated local data; confirm before download.
+- [x] A non-executed future command plan includes `test ! -e` overwrite guards.
 - [x] Partial or failed downloads can be identified and cleaned.
 - [x] Partial path, attempt status, failure reason, and cleanup decision will be recorded.
 - [x] The handoff will state that no data was downloaded yet.
+
+## Boundary-Discovery Authorization
+
+- Authorization note:
+  `context/docs/data-management/preflight/hydrosheds_boundary_discovery_authorization_2026-06-10.md`
+- Authorization state: prepared, not executed.
+- Authorized future artifact:
+  `https://data.hydrosheds.org/file/hydrobasins/standard/hybas_af_lev01-12_v1c.zip`
+- Deferred artifacts: HydroBASINS customized-with-lakes, HydroRIVERS, pour points, and legacy
+  HydroSHEDS archive layers.
+- Discovery output: candidate levels, HYBAS ids, PFAF ids, dissolve/union rule, geometry/CRS,
+  outlet plausibility, area comparison, and accepted/rejected/waived boundary state.
