@@ -31,10 +31,10 @@ Zimbabwe-Peru comparison.
 
 The project is not ready for general real data download, overlay, or interpretation yet.
 
-There is one narrow exception: a boundary-discovery download for HydroBASINS may be considered
-after the HydroSHEDS preflight note is complete, expected size is accepted, and a download
-authorization entry is written. That exception can support boundary selection only. It does not
-authorize SRTM download, CHIRPS download, overlay, or map interpretation.
+There is one narrow exception: the HydroBASINS boundary-discovery download was authorized and
+executed after the HydroSHEDS preflight note, expected size, and download authorization entry
+were completed. That exception supports boundary selection only. It does not authorize SRTM
+download, CHIRPS download, overlay, or map interpretation.
 
 Current boundary-discovery status: executed for the single authorized HydroBASINS artifact.
 Candidate HYBAS and PFAF ids were discovered, but no boundary has been accepted.
@@ -174,7 +174,8 @@ After download, add:
 - partial or failed-download disposition;
 - CRS, georeferencing, and integrity check state.
 
-Current state: ready as a required template, not yet executed.
+Current state: ready as a required template for remaining datasets. The HydroSHEDS
+boundary-discovery exception used its own authorization record.
 
 ## Gate G6: Execution Rules After Download
 
@@ -241,8 +242,10 @@ Stop before download if any of these appears:
 
 Close the smallest useful decision set:
 
-1. choose whether to request a mentor/local boundary or review HydroBASINS level 7 candidate
-   `HYBAS_ID=1071528840`;
+1. use
+   `context/docs/mentor-explanation/Upper_Mzingwane_Boundary_Decision_Package_2026-06-10.md`
+   to request a mentor/local boundary, a HydroBASINS level 7 waiver for
+   `HYBAS_ID=1071528840`, or a reviewed level 8 union;
 2. choose the initial modelling branch;
 3. choose whether CHIRPS is deferred or limited to one small rainfall summary window;
 4. update the affected dataset preflight notes from `not ready` to either `ready` or

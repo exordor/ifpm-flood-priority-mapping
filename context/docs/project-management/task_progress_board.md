@@ -11,8 +11,9 @@ AHP-MCDA weighted-overlay pipeline exists, data-download governance is defined, 
 should move from method scaffolding to a controlled data/preprocessing prototype.
 
 Do not start broad data downloads yet. HydroSHEDS boundary discovery has been executed for one
-authorized artifact, but the boundary is not accepted. SRTM, CHIRPS, overlay, and interpretation
-remain blocked until the later gates are closed.
+authorized artifact, and an Upper Mzingwane boundary decision package is prepared for mentor
+review. The boundary is still not accepted. SRTM, CHIRPS, overlay, and interpretation remain
+blocked until the later gates are closed.
 
 ## Done
 
@@ -75,8 +76,9 @@ remain blocked until the later gates are closed.
 - Status: gate drafted; current verdict is `NO-GO` for general real data download, with only a
   completed HydroSHEDS boundary-discovery exception.
 - Evidence: `context/docs/project-management/real_data_execution_preflight_gate.md`.
-- Next action: resolve boundary acceptance by mentor/local boundary comparison or a documented
-  HydroBASINS waiver; keep SRTM, CHIRPS, overlay, and interpretation blocked.
+- Next action: use the Upper Mzingwane boundary decision package to resolve boundary acceptance
+  by mentor/local boundary comparison, a HydroBASINS level 7 waiver, or a reviewed level 8 union.
+  Keep SRTM, CHIRPS, overlay, and interpretation blocked.
 
 ### IFPM-014 Multi-Level Progress Review
 
@@ -138,6 +140,16 @@ remain blocked until the later gates are closed.
 - Completion evidence:
   `context/docs/project-management/hydrosheds_boundary_discovery_result_2026-06-10.md`.
 
+### IFPM-040 Prepare Upper Mzingwane Boundary Decision Package
+
+- Priority: P1
+- Task: convert HydroBASINS discovery output into a mentor-facing decision package and internal
+  decision record without accepting a boundary or running real-data overlay.
+- Status: done; waiting for mentor/local-boundary decision.
+- Completion evidence:
+  `context/docs/mentor-explanation/Upper_Mzingwane_Boundary_Decision_Package_2026-06-10.md`
+  and `context/docs/project-management/upper_mzingwane_boundary_decision_record_2026-06-10.md`.
+
 ### IFPM-028 Close Pre-Real-Data Engineering Readiness
 
 - Priority: P1
@@ -193,6 +205,8 @@ remain blocked until the later gates are closed.
   union.
 - Why it matters: discovered HydroBASINS candidates are plausible but not accepted, and the
   strongest single candidate is larger than the commonly reported Upper Mzingwane area.
+- Current evidence: boundary decision package prepared; no SRTM, CHIRPS, overlay, or
+  interpretation should start before one path is accepted.
 
 ### IFPM-D02 Peru Boundary Rule
 

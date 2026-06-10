@@ -12,3 +12,5 @@ This folder contains internal planning artifacts for the IFPM flood-risk modelli
   triage for current progress.
 - `hydrosheds_boundary_discovery_result_2026-06-10.md`: HydroBASINS boundary-discovery result
   and candidate HYBAS/PFAF ids.
+- `upper_mzingwane_boundary_decision_record_2026-06-10.md`: boundary-decision state, options,
+  local-only diagnostic outputs, and next action for mentor review.
