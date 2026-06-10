@@ -32,7 +32,9 @@ that the project can:
   until a more authoritative local boundary is supplied.
 - First output grain: raster diagnostics at source-compatible resolution, then optional
   aggregation to sub-basin units.
-- Initial working resolution: 30 m for terrain and land-cover-compatible layers when feasible.
+- Initial terrain working resolution: 30 m for SRTM-derived terrain layers when feasible.
+  Coarser sources such as CHIRPS should remain at native resolution, aggregated, or converted to
+  zonal summaries until the overlay/resampling rule is explicitly agreed.
 - Comparison scope: prototype only; do not compare against Peru until the Peru boundary rule is
   fixed.
 

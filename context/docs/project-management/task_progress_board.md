@@ -63,8 +63,10 @@ prototype slice through data registration, preprocessing checks, standardization
 
 ### IFPM-012 Raster Preprocessing Design
 
-- Status: not implemented
-- Next action: define grid alignment, CRS, NoData, and standardization checks.
+- Status: partly implemented for synthetic rasters; real-data alignment and resampling design
+  still pending.
+- Next action: define the real-data grid alignment, resampling, aggregation, CRS, and NoData
+  rules before downloading or processing source datasets.
 
 ## Next
 
@@ -93,25 +95,33 @@ prototype slice through data registration, preprocessing checks, standardization
 
 - Priority: P1
 - Task: add checks for CRS, transform, resolution, shape, band count, and NoData.
-- Completion evidence: tests and CLI/function diagnostics for valid and invalid rasters.
+- Status: done in deliverable code.
+- Completion evidence: `ifpm-flood-pipeline` commit `81c14e8` adds raster diagnostics,
+  CLI support, and tests.
 
 ### IFPM-024 Implement Standardization Rules
 
 - Priority: P1
 - Task: start with synthetic rasters before real data.
-- Completion evidence: tests proving normalized outputs and NoData preservation.
+- Status: done in deliverable code.
+- Completion evidence: `ifpm-flood-pipeline` commit `758dd10` adds min-max standardization,
+  NoData preservation, diagnostics, CLI support, and tests.
 
 ### IFPM-025 Run Synthetic Preprocessing-To-Overlay Smoke Test
 
 - Priority: P2
 - Task: run a full synthetic flow through preprocessing and overlay.
-- Completion evidence: generated ignored outputs and diagnostics from synthetic inputs.
+- Status: done in deliverable code.
+- Completion evidence: `ifpm-flood-pipeline` commit `f21fb77` adds a synthetic
+  preprocessing-to-overlay smoke test and output profile regression checks.
 
 ### IFPM-026 Prepare Mentor-Facing Next-Step Summary
 
 - Priority: P2
 - Task: summarize prototype scope, unresolved decisions, and validation plan.
-- Completion evidence: short internal note ready to turn into mentor-facing text.
+- Status: done as internal draft.
+- Completion evidence:
+  `context/docs/mentor-explanation/Mentor_Next_Step_Summary_IFPM_2026-06-10.md`.
 
 ## Blocked Or Needs Decision
 
