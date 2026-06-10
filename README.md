@@ -19,6 +19,7 @@ context/
     research-review/      Reviewed dataset inventory with dataset links and method notes.
     deep-research/        Deep research fact-check report on mentor requirements and review quality.
     data-management/      Internal dataset download registry templates and preflight checks.
+    project-management/   Internal task progress boards and planning notes.
     project-analysis/     IFPM HiWi project analysis notes and workflow retrospectives.
     mentor-explanation/   Chinese and English oral explanation guides for mentor discussion.
   assets/
@@ -39,6 +40,7 @@ ifpm-flood-pipeline/
 - `context/docs/deep-research/Deep_Research_Fact_Check_Mentor_Requirements.md`
 - `context/docs/data-management/dataset_registry_template.md`
 - `context/docs/data-management/download_preflight_checklist.md`
+- `context/docs/project-management/task_progress_board.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_en.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_zh.md`
 - `context/docs/project-analysis/IFPM_HiWi_Project_Analysis.md`
@@ -65,6 +67,8 @@ ifpm-flood-pipeline/
   fact-checking of mentor requirements and review quality.
 - `context/docs/data-management/`
   internal templates for dataset download registry notes and download preflight checks.
+- `context/docs/project-management/`
+  internal task progress boards and planning notes.
 - `context/docs/mentor-explanation/`
   English and Chinese oral explanation guides for mentor discussion.
 - `context/docs/project-analysis/`

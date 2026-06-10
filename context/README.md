@@ -11,6 +11,7 @@ It is not a deliverable code repository.
 - `docs/research-review/`: reviewed dataset inventory and methodology notes.
 - `docs/deep-research/`: fact-checking and mentor-requirement review.
 - `docs/data-management/`: dataset download registry templates and preflight checks.
+- `docs/project-management/`: internal task progress boards and planning notes.
 - `docs/mentor-explanation/`: English and Chinese oral explanation guides.
 - `docs/project-analysis/`: IFPM HiWi project analysis and workflow retrospectives.
 - `assets/images/`: generated images used in internal documents.
