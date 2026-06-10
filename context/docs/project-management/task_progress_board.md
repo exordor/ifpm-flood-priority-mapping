@@ -63,12 +63,13 @@ prototype slice through data registration, preprocessing checks, standardization
 
 ### IFPM-012 Raster Preprocessing Design
 
-- Status: partly implemented for synthetic rasters; real-data alignment and resampling design
-  still pending.
-- Next action: define the real-data grid alignment, resampling, aggregation, CRS, and NoData
-  rules before downloading or processing source datasets.
+- Status: design drafted; real-data execution remains blocked until mentor decisions and
+  preflight blockers are closed.
+- Evidence: `context/docs/project-management/real_data_preprocessing_design.md`.
+- Next action: use the design to close boundary, modelling-unit, temporal-window, and preflight
+  decisions before downloading or processing source datasets.
 
-## Next
+## Current Milestones And Gates
 
 ### IFPM-020 Select Prototype Study Slice
 
