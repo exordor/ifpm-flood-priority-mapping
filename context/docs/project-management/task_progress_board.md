@@ -58,8 +58,8 @@ prototype slice through data registration, preprocessing checks, standardization
 
 ### IFPM-011 First Controlled Data Slice
 
-- Status: not started
-- Next action: pick one study area and three starter datasets before any download.
+- Status: draft decision created
+- Next action: review `prototype_study_slice_decision.md` and confirm or revise the scope.
 
 ### IFPM-012 Raster Preprocessing Design
 
@@ -72,7 +72,8 @@ prototype slice through data registration, preprocessing checks, standardization
 
 - Priority: P1
 - Task: choose Zimbabwe or Peru, exact boundary rule, and output resolution.
-- Completion evidence: written decision note with boundary source and resolution.
+- Status: draft decision created
+- Completion evidence: accepted decision note with boundary source and resolution.
 
 ### IFPM-021 Create First Dataset Registry Notes
 
@@ -168,4 +169,3 @@ Before any public release:
 - No private context, raw/derived GIS data, credentials, local paths, or unresolved assumptions.
 - Public-safe docs do not depend on `../context`, `../data`, or `../outputs`.
 - Release package comes from `ifpm-flood-pipeline/`, not root `exports/`.
-
