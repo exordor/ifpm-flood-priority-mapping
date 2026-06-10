@@ -179,6 +179,21 @@ later gates are closed.
 - Key result: external sources support `~2138 km2`, but no checked source supplied a reusable GIS
   boundary, outlet point, projection, or area method. Boundary acceptance remains blocked.
 
+### IFPM-043 Trace Upper Mzingwane 2138 km2 Boundary Source
+
+- Priority: P1
+- Task: find whether the `~2138 km2` Upper Mzingwane value traces to a public boundary file,
+  official water-management GIS source, feasibility-study map, or author-held study-area polygon.
+- Status: done for public-source hunt; boundary still not accepted.
+- Completion evidence:
+  `context/docs/project-management/upper_mzingwane_boundary_source_hunt_2026-06-10.md`.
+- Key result: modern papers repeatedly report or use the `~2138 km2` study area but do not expose
+  reusable geometry. The strongest source leads are ZINWA's unpublished National catchment
+  database, older Bulawayo/Matabeleland-Zambezi feasibility-study maps, Surveyor General map
+  channels, or an author-requested study-area polygon.
+- Next action: request the actual polygon/source citation from authors, ZINWA, mentor, or the
+  feasibility-study/map holders before accepting any boundary or downloading SRTM/CHIRPS.
+
 ### IFPM-028 Close Pre-Real-Data Engineering Readiness
 
 - Priority: P1
@@ -237,8 +252,9 @@ later gates are closed.
   `3700 km2`; Geoportal `Upper Mzingwane` is about `7321.5 km2`; the reported but
   source/geometry-unresolved `~2138 km2` reference still needs outlet, area-method, and
   boundary-geometry tracing.
-- Current evidence: HydroBASINS discovery and Geoportal boundary comparison completed; no SRTM,
-  CHIRPS, overlay, or interpretation should start before one path is accepted.
+- Current evidence: HydroBASINS discovery, Geoportal boundary comparison, literature fact-check,
+  and public source hunt completed; no SRTM, CHIRPS, overlay, or interpretation should start
+  before one path is accepted.
 
 ### IFPM-D02 Peru Boundary Rule
 

@@ -174,12 +174,16 @@ prototype. SRTM, CHIRPS, overlay, scoring, and interpretation remain blocked.
 ## Next Verification Step
 
 Find the actual boundary geometry or authoritative definition behind the `~2138 km2` literature
-area. Priority paths:
+area. The first public-source hunt is recorded in
+`context/docs/project-management/upper_mzingwane_boundary_source_hunt_2026-06-10.md`.
+Priority paths:
 
-1. Locate LBPTC (2010) or the map data used by the WEF/Maviza/Sibanda source chain.
-2. Ask the mentor or a Zimbabwe water authority contact whether the thesis boundary should use
-   the `~2138 km2` published-study area, HydroBASINS, or Geoportal.
-3. If only a figure is available, georeference or digitize it as a provisional boundary only
+1. Request the Upper Mzingwane study-area polygon and source citation from the relevant authors.
+2. Ask ZINWA or the Mzingwane Catchment office for the `National catchment database` boundary
+   layer, or ask the mentor whether they can supply/approve the intended polygon.
+3. Locate the 1995/1996 Bulawayo-Matabeleland-Zambezi feasibility-study volumes/maps and check
+   whether they define `Upper Umzingwane`.
+4. If only a figure is available, georeference or digitize it as a provisional boundary only
    after explicit review.
 
 ## Adversarial Review
