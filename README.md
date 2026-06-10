@@ -16,8 +16,9 @@ The project focuses on comparative flood risk modelling for:
 context/
   docs/
     original/             Original dataset inventory files.
-    research-review/      Reviewed and expanded research inventory with dataset links and methodology notes.
+    research-review/      Reviewed dataset inventory with dataset links and method notes.
     deep-research/        Deep research fact-check report on mentor requirements and review quality.
+    data-management/      Internal dataset download registry templates and preflight checks.
     project-analysis/     IFPM HiWi project analysis notes and workflow retrospectives.
     mentor-explanation/   Chinese and English oral explanation guides for mentor discussion.
   assets/
@@ -36,6 +37,8 @@ ifpm-flood-pipeline/
 - `context/docs/original/Detailed_Dataset_Inventory_Zimbabwe_Peru.md`
 - `context/docs/research-review/Detailed_Dataset_Inventory_Zimbabwe_Peru_research_review.md`
 - `context/docs/deep-research/Deep_Research_Fact_Check_Mentor_Requirements.md`
+- `context/docs/data-management/dataset_registry_template.md`
+- `context/docs/data-management/download_preflight_checklist.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_en.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_zh.md`
 - `context/docs/project-analysis/IFPM_HiWi_Project_Analysis.md`
@@ -43,11 +46,14 @@ ifpm-flood-pipeline/
 
 ## Boundary Rules
 
-- Keep exploratory notes, mentor-meeting preparation, dataset review, open modelling questions, and generated images under `context/`.
+- Keep exploratory notes, mentor-meeting preparation, dataset review, open modelling questions,
+  and generated images under `context/`.
 - Put future reusable code only under `ifpm-flood-pipeline/`.
 - Do not make code depend on files in `context/`.
-- Do not put private notes, mentor strategy, raw/derived GIS data, local paths, or unresolved assumptions into the deliverable code repository.
-- Store raw data, processing outputs, and export packages under ignored local directories such as `data/`, `outputs/`, and `exports/`.
+- Do not put private notes, mentor strategy, raw/derived GIS data, local paths, or unresolved
+  assumptions into the deliverable code repository.
+- Store raw data, processing outputs, and export packages under ignored local directories such
+  as `data/`, `outputs/`, and `exports/`.
 
 ## Existing Document Families
 
@@ -57,6 +63,8 @@ ifpm-flood-pipeline/
   reviewed and expanded research inventory with dataset links and methodology notes.
 - `context/docs/deep-research/`
   fact-checking of mentor requirements and review quality.
+- `context/docs/data-management/`
+  internal templates for dataset download registry notes and download preflight checks.
 - `context/docs/mentor-explanation/`
   English and Chinese oral explanation guides for mentor discussion.
 - `context/docs/project-analysis/`
@@ -65,5 +73,7 @@ ifpm-flood-pipeline/
 ## Notes
 
 - Markdown files are the version-managed source documents.
-- Generated binary formats such as `.docx` and `.pdf` are ignored and can be exported again when the Markdown source is stable.
-- The root repository should remain private. Release packages should come only from `ifpm-flood-pipeline/` after public-safe review.
+- Generated binary formats such as `.docx` and `.pdf` are ignored and can be exported again when
+  the Markdown source is stable.
+- The root repository should remain private. Release packages should come only from
+  `ifpm-flood-pipeline/` after public-safe review.
