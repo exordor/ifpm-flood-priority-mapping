@@ -40,6 +40,8 @@ ifpm-flood-pipeline/
 - `context/docs/deep-research/Deep_Research_Fact_Check_Mentor_Requirements.md`
 - `context/docs/data-management/dataset_registry_template.md`
 - `context/docs/data-management/download_preflight_checklist.md`
+- `context/docs/data-management/registry/`
+- `context/docs/data-management/preflight/`
 - `context/docs/project-management/task_progress_board.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_en.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_zh.md`

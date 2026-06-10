@@ -79,13 +79,15 @@ prototype slice through data registration, preprocessing checks, standardization
 
 - Priority: P1
 - Task: create registry notes for the first three selected datasets.
-- Completion evidence: three notes copied from `dataset_registry_template.md`.
+- Status: done for SRTM, HydroBASINS/HydroRIVERS, and CHIRPS v3.
+- Completion evidence: three registry notes exist under `context/docs/data-management/registry/`.
 
 ### IFPM-022 Complete Download Preflight Checklists
 
 - Priority: P1
 - Task: complete the checklist for each selected dataset.
-- Completion evidence: checked notes with licence, access, destination, and verification fields.
+- Status: draft checklists created; downloads remain blocked pending unresolved items.
+- Completion evidence: three preflight notes exist under `context/docs/data-management/preflight/`.
 
 ### IFPM-023 Implement Raster Grid Diagnostics
 
