@@ -1,11 +1,11 @@
 # Boundary-Discovery Authorization: HydroSHEDS Zimbabwe Prototype
 
-Status: prepared, not executed. No data has been downloaded.
+Status: executed for the single authorized artifact. No other data has been downloaded.
 
 ## Authorization Boundary
 
-This authorization prepares one narrow future download for boundary discovery only. It does not
-authorize SRTM, CHIRPS, HydroRIVERS, overlay, scoring, maps, validation, or public release.
+This authorization covered one narrow download for boundary discovery only. It did not authorize
+SRTM, CHIRPS, HydroRIVERS, overlay, scoring, maps, validation, or public release.
 
 Candidate HydroBASINS levels, HYBAS ids, and PFAF ids are the output of this discovery step, not
 a prerequisite for starting it.
@@ -60,7 +60,7 @@ Citation target:
 
 ## Non-Executed Download Plan
 
-Do not run this command in this goal. It is a future manual plan after explicit approval.
+This was the executed command plan for the single authorized artifact.
 
 ```bash
 set -euo pipefail
@@ -86,25 +86,35 @@ mv "${tmp_file}.sha256" "${raw_file}.sha256"
 The `test ! -e` checks are part of the overwrite guard. If either check fails, stop and inspect
 the existing file before doing anything else.
 
-## Discovery Outputs To Record After Future Download
+## Execution Evidence
 
-After a future approved download, inspect HydroBASINS levels before accepting any boundary.
-Record:
+- Execution date: 2026-06-10
+- Download completed: yes
+- Actual archive size: `549296874` bytes
+- SHA-256:
+  `6b331a6e89d56c3a542dcee39a7e6e8700d0cf7c94083c5946c7db0d262a48d6`
+- Extraction completed: yes
+- Extracted file count: 85
+- Boundary result note:
+  `context/docs/project-management/hydrosheds_boundary_discovery_result_2026-06-10.md`
 
-- selected candidate level or levels;
-- candidate HYBAS ids and PFAF ids;
-- whether the candidate is a single basin or a union/dissolve of multiple units;
-- geometry validity and CRS;
-- approximate area and outlet/downstream plausibility for Upper Mzingwane;
-- comparison against any mentor-supplied or authoritative local boundary;
-- accepted, rejected, or accepted-with-waiver state;
-- checksum, actual file size, extraction state, and cleanup disposition.
+## Discovery Outputs To Record After Download
 
-Until those outputs exist, the boundary remains unaccepted.
+HydroBASINS levels were inspected before accepting any boundary. The current discovery recorded:
+
+- primary candidate level: 7;
+- primary candidate: `HYBAS_ID=1071528840`, `PFAF_ID=1245086`;
+- finer nested candidates under `PFAF_ID=1245086`;
+- CRS: EPSG:4326;
+- candidate geometries inspected were valid;
+- accepted state: not accepted.
+
+The boundary remains unaccepted until mentor or authoritative local-boundary comparison resolves
+the area and unit mismatch.
 
 ## Current No-Go Boundaries
 
-- Do not download within this goal.
+- Do not download additional data from this authorization.
 - Do not use HydroBASINS output for flood-risk interpretation.
 - Do not copy extracted vectors into `context/` or `ifpm-flood-pipeline/`.
 - Do not run SRTM, CHIRPS, overlay, or map-generation steps from this authorization.

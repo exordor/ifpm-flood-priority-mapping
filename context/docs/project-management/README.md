@@ -10,3 +10,5 @@ This folder contains internal planning artifacts for the IFPM flood-risk modelli
   real-data download.
 - `multi_level_progress_review_2026-06-10.md`: multi-layer subagent review findings and
   triage for current progress.
+- `hydrosheds_boundary_discovery_result_2026-06-10.md`: HydroBASINS boundary-discovery result
+  and candidate HYBAS/PFAF ids.

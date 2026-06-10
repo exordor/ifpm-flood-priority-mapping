@@ -4,8 +4,9 @@ Updated: 2026-06-10
 
 Status: internal gate record. Current verdict: `NO-GO` for general real data download.
 
-No real GIS, raster, vector, validation, or sample data has been downloaded or processed for
-this gate.
+One real vector dataset has been downloaded only for HydroBASINS boundary discovery. No SRTM,
+CHIRPS, validation data, overlay input, map output, or interpretation dataset has been downloaded
+or processed for this gate.
 
 ## Purpose
 
@@ -35,8 +36,8 @@ after the HydroSHEDS preflight note is complete, expected size is accepted, and 
 authorization entry is written. That exception can support boundary selection only. It does not
 authorize SRTM download, CHIRPS download, overlay, or map interpretation.
 
-Current boundary-discovery status: prepared but not executed. Candidate HYBAS and PFAF ids are
-the expected output of the discovery step, not a pre-download prerequisite.
+Current boundary-discovery status: executed for the single authorized HydroBASINS artifact.
+Candidate HYBAS and PFAF ids were discovered, but no boundary has been accepted.
 
 - Boundary acceptance: blocked.
   HydroBASINS level, basin id, and local-boundary comparison are not selected.
@@ -48,8 +49,8 @@ the expected output of the discovery step, not a pre-download prerequisite.
   CHIRPS temporal window, timestep, and product type are not selected.
   Evidence: CHIRPS preflight note.
 - Dataset preflight: partly closed.
-  HydroSHEDS boundary-discovery pre-download blockers are prepared, while SRTM and CHIRPS remain
-  blocked. HydroSHEDS still needs explicit execution approval and post-download verification.
+  HydroSHEDS boundary-discovery has been executed, while SRTM and CHIRPS remain blocked.
+  HydroSHEDS still needs boundary acceptance or a documented waiver.
   Evidence: `context/docs/data-management/preflight/`.
 - Storage boundary: ready.
   Raw, temporary, output, and export destinations are defined and ignored.
@@ -80,14 +81,14 @@ Current state: blocked.
 
 Boundary-discovery exception:
 
-- allowed only for HydroBASINS/HydroRIVERS candidate inspection;
+- allowed only for HydroBASINS candidate inspection;
 - requires the HydroSHEDS preflight checklist to have no unchecked pre-download blocker except
   final accepted boundary id and post-download verification fields;
-- requires exact archive names, expected size, licence source, and overwrite confirmation;
-- treats candidate HYBAS and PFAF ids as discovery outputs;
+- required exact archive names, expected size, licence source, and overwrite confirmation;
+- treated candidate HYBAS and PFAF ids as discovery outputs;
 - writes only to `data/raw/hydrosheds_zimbabwe_prototype/` or
   `data/tmp/hydrosheds_zimbabwe_prototype/`;
-- produces no public-facing output and no model claim.
+- produced no public-facing output and no model claim.
 
 ## Gate G2: Modelling Unit
 
@@ -136,9 +137,8 @@ blocking item.
 Current blockers:
 
 - SRTM: boundary mask or bounding box, expected disk footprint, and overwrite confirmation.
-- HydroSHEDS: pre-download boundary-discovery note is prepared, but future execution still needs
-  explicit approval. Accepted boundary id, checksum, extracted licence text, and integrity checks
-  are post-download outputs.
+- HydroSHEDS: boundary-discovery download and inspection are complete. Boundary acceptance,
+  mentor/local-boundary comparison, and redistribution clearance remain open.
 - CHIRPS: temporal window, product type, timestep, expected disk footprint, and overwrite
   confirmation.
 
@@ -221,14 +221,14 @@ General real-data download may proceed only when all of these are true:
 - The target dataset directory is under ignored `data/`.
 - The reviewer confirms the download is small and scoped.
 
-A boundary-discovery HydroSHEDS download may proceed earlier only under the exception described
-in Gate G1. It must remain a boundary-selection step, not a modelling run.
+The completed boundary-discovery HydroSHEDS download remains a boundary-selection step, not a
+modelling run.
 
 ## No-Go Triggers
 
 Stop before download if any of these appears:
 
-- boundary acceptance remains unknown, except for the narrow HydroSHEDS boundary-discovery case;
+- boundary acceptance remains unknown for SRTM, CHIRPS, overlay, or interpretation;
 - expected size is unknown or too large for a prototype;
 - licence, account, or redistribution rules are unclear for the intended use;
 - command would write outside `data/` or overwrite unrelated local files;
@@ -241,7 +241,8 @@ Stop before download if any of these appears:
 
 Close the smallest useful decision set:
 
-1. execute the prepared HydroSHEDS boundary-discovery authorization only after explicit approval;
+1. choose whether to request a mentor/local boundary or review HydroBASINS level 7 candidate
+   `HYBAS_ID=1071528840`;
 2. choose the initial modelling branch;
 3. choose whether CHIRPS is deferred or limited to one small rainfall summary window;
 4. update the affected dataset preflight notes from `not ready` to either `ready` or

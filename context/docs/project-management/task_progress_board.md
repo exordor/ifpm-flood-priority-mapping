@@ -10,8 +10,8 @@ The workspace now has a clean split between private context and deliverable code
 AHP-MCDA weighted-overlay pipeline exists, data-download governance is defined, and future work
 should move from method scaffolding to a controlled data/preprocessing prototype.
 
-Do not start broad data downloads yet. The immediate next milestone is HydroSHEDS
-boundary-discovery execution after explicit approval. SRTM, CHIRPS, overlay, and interpretation
+Do not start broad data downloads yet. HydroSHEDS boundary discovery has been executed for one
+authorized artifact, but the boundary is not accepted. SRTM, CHIRPS, overlay, and interpretation
 remain blocked until the later gates are closed.
 
 ## Done
@@ -73,10 +73,10 @@ remain blocked until the later gates are closed.
 ### IFPM-013 Real-Data Execution Preflight Gate
 
 - Status: gate drafted; current verdict is `NO-GO` for general real data download, with only a
-  narrow HydroSHEDS boundary-discovery exception after preflight closure and explicit approval.
+  completed HydroSHEDS boundary-discovery exception.
 - Evidence: `context/docs/project-management/real_data_execution_preflight_gate.md`.
-- Next action: use the prepared HydroSHEDS authorization only if the next goal explicitly permits
-  downloading; otherwise keep SRTM, CHIRPS, overlay, and interpretation blocked.
+- Next action: resolve boundary acceptance by mentor/local boundary comparison or a documented
+  HydroBASINS waiver; keep SRTM, CHIRPS, overlay, and interpretation blocked.
 
 ### IFPM-014 Multi-Level Progress Review
 
@@ -124,10 +124,19 @@ remain blocked until the later gates are closed.
 - Priority: P1
 - Task: make candidate HydroBASINS ids a discovery output and prepare the non-executed download
   authorization.
-- Status: done as a document-only preflight; no data downloaded.
+- Status: done before execution; superseded by IFPM-039.
 - Completion evidence:
   `context/docs/data-management/preflight/hydrosheds_boundary_discovery_authorization_2026-06-10.md`
   and updated HydroSHEDS registry/preflight notes.
+
+### IFPM-039 Execute HydroSHEDS Boundary Discovery
+
+- Priority: P1
+- Task: download the authorized HydroBASINS standard Africa artifact and identify candidate
+  HYBAS/PFAF ids without running SRTM, CHIRPS, overlay, or map interpretation.
+- Status: done; boundary not accepted.
+- Completion evidence:
+  `context/docs/project-management/hydrosheds_boundary_discovery_result_2026-06-10.md`.
 
 ### IFPM-028 Close Pre-Real-Data Engineering Readiness
 
@@ -177,6 +186,13 @@ remain blocked until the later gates are closed.
 
 - Decision needed: pixel, HydroBASINS/sub-basin, ANA hydrographic unit, or mixed mask.
 - Why it matters: controls normalization, aggregation, and comparability.
+
+### IFPM-D06 Upper Mzingwane Boundary Acceptance
+
+- Decision needed: mentor/local boundary, HydroBASINS level 7 candidate, or reviewed level 8
+  union.
+- Why it matters: discovered HydroBASINS candidates are plausible but not accepted, and the
+  strongest single candidate is larger than the commonly reported Upper Mzingwane area.
 
 ### IFPM-D02 Peru Boundary Rule
 

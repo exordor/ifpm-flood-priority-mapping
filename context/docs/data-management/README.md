@@ -10,8 +10,8 @@ be reused.
 - `download_preflight_checklist.md`: checklist to complete before each download.
 - `registry/`: dataset-specific registry notes.
 - `preflight/`: dataset-specific download preflight notes.
-- `preflight/hydrosheds_boundary_discovery_authorization_2026-06-10.md`: prepared but
-  non-executed HydroBASINS boundary-discovery authorization.
+- `preflight/hydrosheds_boundary_discovery_authorization_2026-06-10.md`: executed
+  HydroBASINS boundary-discovery authorization for the single approved artifact.
 
 Before moving from notes to any real download, also check the cross-dataset gate in
 `context/docs/project-management/real_data_execution_preflight_gate.md`.

@@ -1,6 +1,6 @@
 # Dataset Registry: HydroBASINS And HydroRIVERS Zimbabwe Prototype
 
-Status: planned; no data downloaded.
+Status: downloaded for boundary discovery; boundary not accepted.
 
 ## Dataset Identity
 
@@ -26,7 +26,7 @@ Status: planned; no data downloaded.
 - Access date: 2026-06-10
 - Access method: direct product-page download
 - Licence or terms: HydroSHEDS core product licence in the HydroSHEDS Technical Documentation;
-  exact downloaded agreement text/version to verify after future approved download
+  the downloaded ZIP did not include a separate licence text file
 - Citation requirement: cite HydroSHEDS and Lehner & Grill (2013) where applicable
 - Account, registration, or approval needed: none identified on product pages; recheck before use
 - Redistribution allowed: not yet confirmed; governed by HydroSHEDS licence agreement. Record
@@ -57,41 +57,46 @@ Status: planned; no data downloaded.
 
 ## Download Attempt State
 
-- Attempt status: planned
-- Attempt date: not started
+- Attempt status: complete for boundary discovery
+- Attempt date: 2026-06-10
 - Failure reason, if any: not applicable
 - Partial path, if any: none
-- Archive state: not downloaded
-- Extraction state: not started
+- Archive state: downloaded and verified
+- Extraction state: complete
 - Retry or resume safe: use a temporary `.part` file and do not overwrite existing files
-- Cleanup/disposition: not applicable
+- Cleanup/disposition: source archive, checksum, manifest, and extracted shapefiles retained
+  under ignored `data/raw/`
 - Cleanup date: not applicable
 
 ## Verification
 
-- Download completed: no
-- Verification date: not applicable
+- Download completed: yes
+- Verification date: 2026-06-10
 - Checksum scope: source archives and extracted vector sidecar manifests
 - Checksum algorithm: SHA-256 preferred for archives
 - Checksum command: `shasum -a 256 <archive>`
-- Checksum value: not available
+- Checksum value:
+  `6b331a6e89d56c3a542dcee39a7e6e8700d0cf7c94083c5946c7db0d262a48d6`
 - Expected files or manifest: `hybas_af_lev01-12_v1c.zip` before extraction
-- Actual files or manifest: not available
+- Actual files or manifest: local manifest retained under
+  `data/raw/hydrosheds_zimbabwe_prototype/hybas_af_lev01-12_v1c_manifest.txt`
 - Expected byte size: `549296874` bytes before extraction
-- Actual byte size: not available
-- File-count evidence: not available
-- File-size evidence: not available
-- CRS or georeferencing checked: no
-- Geometry/raster integrity checked: no
-- Licence/terms accepted: no
+- Actual byte size: `549296874`
+- File-count evidence: 85 extracted files
+- File-size evidence: archive size matched expected `549296874` bytes
+- CRS or georeferencing checked: yes, inspected shapefiles reported EPSG:4326
+- Geometry/raster integrity checked: candidate geometries inspected as valid
+- Licence/terms accepted: yes for internal boundary-discovery use by downloading; redistribution
+  and release remain unapproved
 
 ## Processing And Use
 
 - Raw data path: `data/raw/hydrosheds_zimbabwe_prototype/`
 - Derived output path: `outputs/hydrosheds_zimbabwe_prototype/`
-- Scripts or commands used: none yet
-- Standardization/preprocessing notes: candidate HydroBASINS levels and ids are the discovery
-  output; do not use boundaries for aggregation until accepted or waived
+- Scripts or commands used: guarded `curl`, `shasum -a 256`, `unzip`, and temporary Python
+  GeoPandas inspection
+- Standardization/preprocessing notes: candidate HydroBASINS levels and ids were discovered; do
+  not use boundaries for aggregation until accepted or waived
 - Known limitations: product scale may not match local official catchment boundaries; river
   reaches are generalized and should not be treated as field-survey data
 - Replacement or update rule: replace or supplement if mentor supplies an authoritative local

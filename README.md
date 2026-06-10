@@ -47,6 +47,7 @@ ifpm-flood-pipeline/
 - `context/docs/project-management/real_data_preprocessing_design.md`
 - `context/docs/project-management/real_data_execution_preflight_gate.md`
 - `context/docs/project-management/multi_level_progress_review_2026-06-10.md`
+- `context/docs/project-management/hydrosheds_boundary_discovery_result_2026-06-10.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_en.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_zh.md`
 - `context/docs/mentor-explanation/Mentor_Next_Step_Summary_IFPM_2026-06-10.md`
