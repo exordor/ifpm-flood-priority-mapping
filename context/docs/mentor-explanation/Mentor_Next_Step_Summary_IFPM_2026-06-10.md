@@ -19,7 +19,8 @@ work expands beyond the narrow boundary-discovery and boundary-comparison steps.
 - Working study area: Upper Mzingwane Catchment.
 - Boundary rule: catchment or sub-catchment boundary, pending mentor confirmation of the intended
   definition. Current candidates include Geoportal `Upper Mzingwane`, HydroBASINS level 7
-  `HYBAS_ID=1071528840`, or a narrower boundary matching the untraced `~2138 km2` reference.
+  `HYBAS_ID=1071528840`, or a narrower boundary matching the reported but
+  source/geometry-unresolved `~2138 km2` reference.
 - First dataset candidates: SRTM 1 Arc-Second, HydroBASINS/HydroRIVERS, and CHIRPS v3.
 - First indicators: elevation, slope, drainage-distance or flow-accumulation proxy, rainfall
   summary, and optional sub-basin id for aggregation.
@@ -58,8 +59,8 @@ work expands beyond the narrow boundary-discovery and boundary-comparison steps.
 ## Decisions Needed From Mentor
 
 1. Confirm the Zimbabwe first-slice boundary using the dedicated Upper Mzingwane decision package:
-   Geoportal named sub-catchment, HydroBASINS level 7 waiver, narrower untraced `~2138 km2`
-   boundary, or reviewed HydroBASINS union.
+   Geoportal named sub-catchment, HydroBASINS level 7 waiver, narrower reported but
+   source/geometry-unresolved `~2138 km2` boundary, or reviewed HydroBASINS union.
 2. Confirm the modelling unit: raster pixels first, sub-basin aggregation, or a mixed workflow.
 3. Choose the first temporal window for rainfall and validation evidence.
 4. Decide which evidence can support validation: local records, satellite flood extent,

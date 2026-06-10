@@ -48,8 +48,8 @@ discovered. The Geoportal layer added a named `Upper Mzingwane` feature, but no 
 been accepted.
 
 - Boundary acceptance: blocked.
-  HydroBASINS level, basin id, Geoportal named sub-catchment, and the untraced `~2138 km2`
-  reference are not reconciled.
+  HydroBASINS level, basin id, Geoportal named sub-catchment, and the reported but
+  source/geometry-unresolved `~2138 km2` reference are not reconciled.
   Evidence: `real_data_preprocessing_design.md`.
 - Modelling unit: blocked.
   Raster-first, sub-basin aggregation, or mixed workflow is not selected.
@@ -269,9 +269,11 @@ Stop before download if any of these appears:
 Close the smallest useful decision set:
 
 1. use
+   `context/docs/project-management/upper_mzingwane_boundary_fact_check_2026-06-10.md`
+   and
    `context/docs/project-management/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`
-   to trace the source of the untraced `~2138 km2` reference or ask the mentor to choose the
-   intended boundary definition;
+   to locate the boundary geometry behind the reported but source/geometry-unresolved
+   `~2138 km2` reference or ask the mentor to choose the intended boundary definition;
 2. choose the initial modelling branch;
 3. choose whether CHIRPS is deferred or limited to one small rainfall summary window;
 4. update the affected dataset preflight notes from `not ready` to either `ready` or

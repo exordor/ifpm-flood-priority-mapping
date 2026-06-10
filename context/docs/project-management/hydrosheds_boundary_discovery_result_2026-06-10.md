@@ -79,8 +79,8 @@ whether they separate from the downstream Gwanda area.
   - Geometry validity: valid
 - Discovery note: this is the strongest single HydroBASINS candidate from the anchor-point
   test, but it is not accepted as the final Upper Mzingwane boundary because its area is larger
-  than the untraced `~2138 km2` Upper Mzingwane reference that still needs source, outlet,
-  area-method, and boundary-definition checks.
+  than the reported but source/geometry-unresolved `~2138 km2` Upper Mzingwane reference
+  that still needs outlet, area-method, and boundary-geometry checks.
 
 ### Finer Nested Candidates Under PFAF 1245086
 
@@ -90,7 +90,7 @@ Level 8 units inside the level 7 candidate:
 | --- | --- | ---: | ---: | --- |
 | `1081520450` | `12450868` | `749.2` | `749.3` | contains Esigodini |
 | `1081520560` | `12450869` | `546.9` | `546.9` | contains Mzingwane Dam |
-| `1081522660` | `12450865` | `163.3` | `1885.2` | closest upstream-area candidate to untraced `~2138 km2` reference |
+| `1081522660` | `12450865` | `163.3` | `1885.2` | closest by `UP_AREA` |
 | `1081528170` | `12450863` | `1067.4` | `3418.0` | broader nested candidate |
 
 Discovery note: no single level 8 unit cleanly represents Upper Mzingwane from the current
@@ -113,10 +113,12 @@ Current state: not accepted.
 Reason:
 
 - HydroBASINS level 7 candidate `1071528840` is plausible but too broad relative to the
-  untraced `~2138 km2` Upper Mzingwane reference.
+  reported but source/geometry-unresolved `~2138 km2` Upper Mzingwane
+  reference.
 - Level 8 candidates separate the anchor points into smaller units and may require a union.
-- No authoritative local Upper Mzingwane boundary has been compared yet.
-- No mentor review has accepted the HydroBASINS candidate or a union rule.
+- A Geoportal named-feature comparison has been completed, but no mentor or local authority has
+  accepted it as the modelling boundary.
+- No mentor review has accepted the HydroBASINS candidate, Geoportal feature, or union rule.
 
 ## Next Required Decision
 
@@ -148,6 +150,7 @@ Engineering and workspace-boundary angle:
 - Triage: renamed those labels to `Discovery note` and kept all raw archive, extracted vectors,
   checksum, and manifest files under ignored `data/raw/`.
 
-Residual risk: the untraced `~2138 km2` Upper Mzingwane reference is enough to block automatic
-acceptance, but not enough to define a replacement boundary. A mentor-supplied, Geoportal,
-or otherwise authoritative local boundary decision remains the next required input.
+Residual risk: the reported but source/geometry-unresolved `~2138 km2` Upper Mzingwane
+reference is enough to block automatic acceptance, but not enough to define a replacement
+boundary. A mentor-supplied, Geoportal, or otherwise authoritative local boundary decision
+remains the next required input.

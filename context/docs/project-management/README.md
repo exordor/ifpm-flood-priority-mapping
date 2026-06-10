@@ -16,3 +16,5 @@ This folder contains internal planning artifacts for the IFPM flood-risk modelli
   local-only diagnostic outputs, and next action for mentor review.
 - `zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`: authenticated Zimbabwe
   Geoportal Sub-Catchments boundary comparison against HydroBASINS candidates.
+- `upper_mzingwane_boundary_fact_check_2026-06-10.md`: external-source and local-geometry fact
+  check for the `~2138 km2`, HydroBASINS, and Geoportal boundary evidence.

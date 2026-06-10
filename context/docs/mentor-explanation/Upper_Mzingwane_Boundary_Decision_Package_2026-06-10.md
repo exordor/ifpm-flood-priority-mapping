@@ -21,8 +21,8 @@ for the Upper Mzingwane prototype. The best single HydroBASINS candidate is leve
 points and excludes the downstream Gwanda contrast point.
 
 However, I do not think it should be accepted automatically. Its area is about `3700.0 km2`,
-which is larger than the untraced `~2138 km2` Upper Mzingwane reference that still needs source,
-outlet, area-method, and boundary-definition checks.
+which is larger than the reported but source/geometry-unresolved `~2138 km2` Upper
+Mzingwane reference that still needs outlet, area-method, and boundary-geometry checks.
 
 The Zimbabwe Geoportal layer does contain a named `Upper Mzingwane` polygon, and it also contains
 Mzingwane Dam and Esigodini while excluding Gwanda. But its area is about `7321.5 km2`, so it is
@@ -76,34 +76,36 @@ are geometric diagnostics only; they do not prove drainage topology or modelling
 
 ## Decision Options
 
-### Option A: Use Geoportal Upper Mzingwane
+### Option A: Candidate Geoportal Upper Mzingwane
 
-Use the Zimbabwe Geoportal `Upper Mzingwane` polygon as a broad local or management-style
-sub-catchment unit.
+If the mentor chooses this option, use the Zimbabwe Geoportal `Upper Mzingwane` polygon as a
+broad local or management-style sub-catchment unit.
 
-Use this if the study needs local named-boundary or management-unit consistency more than global
-HydroBASINS comparability, and if the larger `7321.5 km2` scope is acceptable after the layer's
-management or hydrological definition is confirmed.
+This option is appropriate if the study needs local named-boundary or management-unit
+consistency more than global HydroBASINS comparability, and if the larger `7321.5 km2` scope is
+acceptable after the layer's management or hydrological definition is confirmed.
 
 Implication: record that the prototype boundary is a broad Geoportal named sub-catchment, not
-the untraced `~2138 km2` study-area reference.
+the reported but source/geometry-unresolved `~2138 km2` study-area reference.
 
-### Option B: Accept HydroBASINS Level 7 With A Waiver
+### Option B: Candidate HydroBASINS Level 7 With A Waiver
 
-Accept `HYBAS_ID=1071528840`, `PFAF_ID=1245086` as the working prototype boundary even though it
-is larger than the untraced `~2138 km2` Upper Mzingwane area reference.
+If the mentor chooses this option, accept `HYBAS_ID=1071528840`, `PFAF_ID=1245086` as the
+working prototype boundary even though it is larger than the reported but
+source/geometry-unresolved `~2138 km2` Upper Mzingwane area reference.
 
-Use this if the first prototype should prioritize traceable workflow execution and HydroBASINS
-compatibility over strict local boundary matching.
+This option is appropriate if the first prototype should prioritize traceable workflow execution
+and HydroBASINS compatibility over strict local boundary matching.
 
 Implication: record an area-mismatch waiver before any SRTM, CHIRPS, overlay, or interpretation.
 
-### Option C: Trace The Untraced 2138 km2 Boundary
+### Option C: Obtain The 2138 km2 Boundary Geometry
 
-Trace the source of the untraced `~2138 km2` reference and obtain or digitize the corresponding
-boundary.
+Find, obtain, or digitize the boundary geometry behind the reported but source/geometry-unresolved
+`~2138 km2` reference.
 
-Use this if the intended thesis case study is specifically that narrower published-study area.
+This option is appropriate if the intended thesis case study is specifically that narrower
+published-study area.
 
 Implication: SRTM, CHIRPS, overlay, and model interpretation stay blocked until the boundary
 source is identified and checked.
@@ -113,7 +115,8 @@ source is identified and checked.
 Construct a candidate union from level 8 units under `PFAF_ID=1245086`, then compare its area and
 shape against local boundary evidence.
 
-Use this if level 7 is too broad but no local boundary file is immediately available.
+This option is appropriate if level 7 is too broad but no local boundary file is immediately
+available.
 
 Implication: this needs an explicit union rule and mentor review before it can become the working
 boundary.
@@ -124,7 +127,8 @@ Which boundary should define the first Zimbabwe prototype slice?
 
 1. Zimbabwe Geoportal `Upper Mzingwane` as a broad named sub-catchment, about `7321.5 km2`.
 2. HydroBASINS level 7 `HYBAS_ID=1071528840` as a narrower hydrological unit, about `3700 km2`.
-3. The narrower untraced `~2138 km2` boundary, if that is the intended published-study area.
+3. The narrower reported but source/geometry-unresolved `~2138 km2` boundary, if that is
+   the intended published-study area.
 4. A reviewed HydroBASINS union if neither single candidate is acceptable.
 
 Until this is decided, I will keep SRTM, CHIRPS, overlay, scoring, and risk interpretation

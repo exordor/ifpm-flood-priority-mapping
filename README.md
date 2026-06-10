@@ -50,6 +50,7 @@ ifpm-flood-pipeline/
 - `context/docs/project-management/hydrosheds_boundary_discovery_result_2026-06-10.md`
 - `context/docs/project-management/upper_mzingwane_boundary_decision_record_2026-06-10.md`
 - `context/docs/project-management/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`
+- `context/docs/project-management/upper_mzingwane_boundary_fact_check_2026-06-10.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_en.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_zh.md`
 - `context/docs/mentor-explanation/Mentor_Next_Step_Summary_IFPM_2026-06-10.md`

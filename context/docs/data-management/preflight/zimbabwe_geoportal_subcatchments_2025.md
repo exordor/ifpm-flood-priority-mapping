@@ -71,10 +71,11 @@ Not authorized:
   confirmed that the page listed Shapefile and GeoJSON resources.
 - Downloaded artifact:
   `data/raw/zimbabwe_geoportal_subcatchments_2025/sub_catchments-1761163234.zip`
-- Resource URL verified on page:
-  `https://pub-2e9c8e4ccd4f4a4d8b4ae8ee68fdf713.r2.dev/datasets/resources/sub_catchments-1761163234.zip`
-- Direct resource URL handling: internal reproducibility evidence only; do not treat it as a
-  public release link without licence/access review.
+- Resource verified on page: portal resource `sub-catchment_shp`; exact object URL intentionally
+  omitted from committed files.
+- Direct resource URL handling: use portal page, resource name, checksum, and file-size evidence
+  for reproducibility; do not treat the object URL as a public release link without
+  licence/access review.
 - Download command class: direct `curl` transfer of the verified resource URL.
 - Authentication handling: no credentials, cookies, tokens, or session material were recorded in
   project files or download commands.
@@ -105,4 +106,5 @@ Not authorized:
   geometrically, and areas were calculated as WGS84 geodesic areas in square kilometres.
 - Boundary decision impact: this data improves local named-boundary evidence, but it does not
   close boundary acceptance because its area is much larger than both HydroBASINS level 7
-  `HYBAS_ID=1071528840` and the untraced `~2138 km2` Upper Mzingwane reference.
+  `HYBAS_ID=1071528840` and the reported but source/geometry-unresolved `~2138 km2` Upper
+  Mzingwane reference.

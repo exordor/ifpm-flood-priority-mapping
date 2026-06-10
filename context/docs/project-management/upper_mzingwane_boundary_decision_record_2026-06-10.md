@@ -47,9 +47,10 @@ dataset has been downloaded or processed for this decision package.
 - Level 8 `HYBAS_ID=1081528170`, `PFAF_ID=12450863`:
   broader nested candidate.
 
-Primary issue: level 7 `HYBAS_ID=1071528840` has `SUB_AREA=3700.0 km2`, while the untraced
-`~2138 km2` Upper Mzingwane reference still needs source, outlet, area-method, and
-boundary-definition checks. That mismatch is enough to block automatic acceptance.
+Primary issue: level 7 `HYBAS_ID=1071528840` has `SUB_AREA=3700.0 km2`, while the
+reported but source/geometry-unresolved `~2138 km2` Upper Mzingwane reference still needs
+outlet, area-method, and boundary-geometry checks. That mismatch is enough to block automatic
+acceptance.
 
 Zimbabwe Geoportal alternative:
 
@@ -62,10 +63,10 @@ Zimbabwe Geoportal alternative:
   covers only about `49.8%` of the Geoportal `Upper Mzingwane` feature.
 
 Updated issue: the Geoportal feature is a stronger local named-boundary candidate, but it is
-larger than both the HydroBASINS level 7 candidate and the untraced `~2138 km2` reference. The
-likely problem is boundary-definition scope, not a simple download or geometry error. The overlap
-values are geometric diagnostics only; they do not prove drainage topology or modelling
-equivalence.
+larger than both the HydroBASINS level 7 candidate and the reported but
+source/geometry-unresolved `~2138 km2` reference. The likely problem is boundary-definition
+scope, not a simple download or geometry error. The overlap values are geometric diagnostics
+only; they do not prove drainage topology or modelling equivalence.
 
 ## Decision Options
 
@@ -73,8 +74,8 @@ equivalence.
 2. Mentor accepts Geoportal `Upper Mzingwane` as a broad local or management-style unit.
 3. Mentor accepts HydroBASINS level 7 `HYBAS_ID=1071528840` as a narrower hydrological unit,
    with an area and coverage waiver.
-4. Project traces the source of the untraced `~2138 km2` reference and obtains or digitizes the
-   corresponding boundary.
+4. Project obtains or digitizes the boundary geometry behind the reported but
+   source/geometry-unresolved `~2138 km2` reference.
 5. Project defines a reviewed level 8 or level 7 union and compares it to local evidence.
 
 No option has been accepted yet.
@@ -148,6 +149,9 @@ Reproducibility angle:
 
 ## Next Action
 
-Trace the source of the untraced `~2138 km2` reference or use
+Use
+`context/docs/project-management/upper_mzingwane_boundary_fact_check_2026-06-10.md`
+and
 `context/docs/project-management/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`
-in the next mentor discussion to ask which boundary definition is intended.
+in the next mentor discussion to ask which boundary definition is intended, or locate the
+boundary geometry behind the reported but source/geometry-unresolved `~2138 km2` study area.

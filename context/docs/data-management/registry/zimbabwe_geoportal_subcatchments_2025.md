@@ -19,8 +19,8 @@ Status: downloaded and verified for controlled boundary comparison.
 - Source URL or portal: `https://zimgeoportal.org.zw/datasets/sub-catchments/`
 - Product/version: Sub-Catchments, version `v1.0`
 - Access date: 2026-06-10
-- Access method: authenticated portal page inspected in the in-app browser; public resource URL
-  downloaded directly after page verification
+- Access method: authenticated portal page inspected in the in-app browser; Shapefile resource
+  link downloaded after page verification
 - Licence or terms: ODC-BY 1.0 as stated on the dataset page
 - Citation requirement: cite Zimbabwe Geoportal dataset page and licence
 - Account, registration, or approval needed: login required to download
@@ -37,13 +37,12 @@ Status: downloaded and verified for controlled boundary comparison.
   1. Open `https://zimgeoportal.org.zw/datasets/sub-catchments/` in the in-app browser.
   2. Confirm that the page is the Sub-Catchments dataset page and lists Shapefile and GeoJSON
      resources.
-  3. Use the Shapefile resource URL exposed on that page:
-     `https://pub-2e9c8e4ccd4f4a4d8b4ae8ee68fdf713.r2.dev/datasets/resources/sub_catchments-1761163234.zip`
+  3. Use the Shapefile resource link exposed on that page.
   4. Download the resource directly to
      `data/raw/zimbabwe_geoportal_subcatchments_2025/sub_catchments-1761163234.zip`.
   5. Record actual file name, byte size, checksum, extraction state, CRS, and geometry check.
-- Direct resource URL handling: internal reproducibility evidence only; do not cite it as a
-  public release link or package it in public deliverables without licence/access review
+- Direct resource URL handling: exact object URL is intentionally not recorded in committed files;
+  use portal page, resource name, checksum, and file-size evidence for reproducibility
 - Rate limits or quotas: unknown; one small manual download only
 - Authentication handling: do not store cookies, tokens, passwords, or private links in files
 - Temporary path, if any: none used for the completed download
@@ -103,7 +102,8 @@ Status: downloaded and verified for controlled boundary comparison.
   containment against HydroBASINS candidate `HYBAS_ID=1071528840`
 - Known limitations: portal lists organisation/source as unspecified; login is required to access
   the dataset page; the Geoportal `Upper Mzingwane` feature is about `7321.5 km2`, so it is a
-  broader named sub-catchment unit than the untraced `~2138 km2` Upper Mzingwane reference
+  broader named sub-catchment unit than the reported but source/geometry-unresolved
+  `~2138 km2` Upper Mzingwane reference
 - Replacement or update rule: replace if mentor supplies a more authoritative local boundary
 - Validation role: boundary decision evidence, not flood-risk validation evidence
 

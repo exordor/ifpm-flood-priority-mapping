@@ -104,10 +104,11 @@ Likely reasons:
 2. HydroBASINS level 7 `HYBAS_ID=1071528840` is a hydrologically derived unit that contains
    Mzingwane Dam and Esigodini while excluding Gwanda, but it covers only about half of the
    Geoportal `Upper Mzingwane` polygon.
-3. The untraced `~2138 km2` Upper Mzingwane reference is not reconciled with either dataset in
-   this check. It may refer to a narrower study area, a different outlet, a sub-zone within the
-   named sub-catchment, or a source-specific boundary. It should not be used as a hard acceptance
-   target until its source, outlet, area method, and geometry definition are traced.
+3. The reported but source/geometry-unresolved `~2138 km2` Upper Mzingwane reference is
+   not reconciled with either dataset in this check. It may refer to a narrower study area, a
+   different outlet, a sub-zone within the named sub-catchment, or a source-specific boundary. It
+   should not be used as a hard acceptance target until its source chain, outlet, area method,
+   and geometry definition are traced.
 
 ## Boundary Decision Impact
 
@@ -124,8 +125,8 @@ Decision paths now become:
    documented explanation that it is about `7321.5 km2`.
 2. Use HydroBASINS level 7 `HYBAS_ID=1071528840` as a narrower hydrological unit, with a waiver
    that it covers only about half of the Geoportal named unit.
-3. Trace the source of the untraced `~2138 km2` reference and obtain or digitize the
-   corresponding boundary if that is the intended study area.
+3. Obtain or digitize the boundary geometry behind the reported but source/geometry-unresolved
+   `~2138 km2` reference if that is the intended study area.
 4. Ask the mentor or a local authority to choose the intended boundary definition before SRTM,
    CHIRPS, overlay, or interpretation.
 
@@ -139,8 +140,8 @@ Correctness and domain-boundary angle:
   make Geoportal look more authoritative than the current evidence supports.
 - Triage: kept the verdict as `boundary still not accepted`, described Geoportal as a local
   named or management-unit candidate, stated the `7321.5 km2` area, documented that this is
-  broader than both HydroBASINS level 7 and the untraced `~2138 km2` reference, and labelled
-  overlaps as geometric diagnostics only.
+  broader than both HydroBASINS level 7 and the reported but source/geometry-unresolved
+  `~2138 km2` reference, and labelled overlaps as geometric diagnostics only.
 
 Engineering and workspace-boundary angle:
 
@@ -167,6 +168,7 @@ Reproducibility angle:
 
 Do not proceed to SRTM, CHIRPS, overlay, scoring, or map interpretation yet.
 
-The next useful task is to trace the source of the untraced `~2138 km2` Upper Mzingwane
-reference or ask the mentor which boundary definition is intended: Geoportal named
-sub-catchment, HydroBASINS hydrological unit, or the narrower published-study boundary.
+The next useful task is to locate the boundary geometry behind the reported but
+source/geometry-unresolved `~2138 km2` Upper Mzingwane reference or ask the mentor which
+boundary definition is intended: Geoportal named sub-catchment, HydroBASINS hydrological unit,
+or the narrower published-study boundary.
