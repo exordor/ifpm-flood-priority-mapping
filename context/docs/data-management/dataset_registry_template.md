@@ -1,7 +1,9 @@
 # Dataset Registry Template
 
-Copy this template into a dataset-specific note before or immediately after a reusable
-download. Keep confidential access details out of committed files.
+Copy this template into a dataset-specific note before any real download, including exploratory
+or non-reusable downloads. Registry identity, source, destination, licence/access notes, and
+download authorization must exist before download. Complete verification and checksum evidence
+after the attempt. Keep confidential access details out of committed files.
 
 ## Dataset Identity
 

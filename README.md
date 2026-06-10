@@ -3,7 +3,8 @@
 This workspace uses a split boundary:
 
 - the root Git repository is the private context/document repository;
-- `ifpm-flood-pipeline/` is an independent future deliverable code repository.
+- `ifpm-flood-pipeline/` is an independent deliverable code repository with a minimal
+  synthetic-tested pipeline. Real-data use remains gated.
 
 The project focuses on comparative flood risk modelling for:
 
@@ -26,7 +27,7 @@ context/
     images/               Supporting generated images.
 
 ifpm-flood-pipeline/
-  src/                     Future deliverable code.
+  src/                     Minimal deliverable pipeline code.
   tests/                   Tests for the code repository.
   configs/                 Public-safe sample configs.
   examples/                Synthetic or approved public examples.
@@ -45,6 +46,7 @@ ifpm-flood-pipeline/
 - `context/docs/project-management/task_progress_board.md`
 - `context/docs/project-management/real_data_preprocessing_design.md`
 - `context/docs/project-management/real_data_execution_preflight_gate.md`
+- `context/docs/project-management/multi_level_progress_review_2026-06-10.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_en.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_zh.md`
 - `context/docs/mentor-explanation/Mentor_Next_Step_Summary_IFPM_2026-06-10.md`

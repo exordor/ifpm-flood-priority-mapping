@@ -72,20 +72,25 @@ For each selected dataset:
 - record access/licence requirements;
 - record expected file types and expected size where available.
 
-## Code Work Required Before Real Data Use
+## Code Preconditions Before Real Data Use
 
-Before running real downloaded data through the overlay pipeline, implement raster/grid
-diagnostics in `ifpm-flood-pipeline`:
+Completed scaffolding in `ifpm-flood-pipeline`:
 
-- single-band check;
-- CRS presence and CRS comparison;
-- transform and resolution comparison;
-- shape comparison;
-- NoData detection;
-- basic finite-value summary;
-- output diagnostics as JSON.
+- raster metadata diagnostics for band count, CRS, transform, resolution, shape, and NoData;
+- standardization CLI and diagnostics for controlled synthetic GeoTIFF inputs;
+- weighted overlay CLI with AHP consistency checks;
+- synthetic preprocessing-to-overlay smoke test.
 
-Use synthetic fixtures first. Real data should only be used after the diagnostics are tested.
+Remaining blockers before a real-data overlay or interpretation run:
+
+- geospatial verification must run with the geospatial extra installed, not only with skipped
+  raster tests;
+- diagnostics need finite-value and mask summaries, or an explicit waiver for the first real
+  diagnostic-only run;
+- overlay should enforce standardized 0-1 inputs by default, or require an explicit override;
+- overlay diagnostics should report per-layer valid fractions and intersection mask loss;
+- the selected model-unit branch must be executable, especially if CHIRPS is aggregated rather
+  than raster-overlaid.
 
 ## Validation Boundary
 
@@ -115,4 +120,3 @@ The prototype slice is ready to move to controlled download when:
 - three preflight checklists are complete;
 - raster/grid diagnostics are implemented and tested on synthetic data;
 - the parent workspace boundary check passes.
-

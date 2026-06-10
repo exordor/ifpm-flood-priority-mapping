@@ -75,7 +75,15 @@ prototype slice through data registration, preprocessing checks, standardization
   narrow HydroSHEDS boundary-discovery exception after preflight closure.
 - Evidence: `context/docs/project-management/real_data_execution_preflight_gate.md`.
 - Next action: close the boundary acceptance, modelling-unit, CHIRPS temporal/product, and
-  dataset-specific preflight blockers.
+  dataset-specific preflight blockers, then close pre-real-data engineering readiness before
+  overlay.
+
+### IFPM-014 Multi-Level Progress Review
+
+- Status: done; no P1 was found, but P2 gates remain before real-data overlay.
+- Evidence: `context/docs/project-management/multi_level_progress_review_2026-06-10.md`.
+- Next action: fix the boundary-discovery and engineering-readiness blockers recorded in the
+  review report.
 
 ## Current Milestones And Gates
 
@@ -109,6 +117,16 @@ prototype slice through data registration, preprocessing checks, standardization
   HydroSHEDS boundary discovery can be considered first if its preflight is closed.
 - Completion evidence: updated gate record plus selected dataset preflight note with no
   unchecked blocking item.
+
+### IFPM-028 Close Pre-Real-Data Engineering Readiness
+
+- Priority: P1
+- Task: make the synthetic-tested pipeline safe enough for controlled real-data overlay.
+- Status: blocked by a durable geospatial verification target, finite-value diagnostics, 0-1
+  overlay input enforcement, mask-loss reporting, and model-unit branch executability.
+- Completion evidence: geospatial verification is documented as a required pre-real-data command
+  with no required GeoTIFF tests skipped, overlay enforces standardized inputs, and diagnostics
+  expose value/mask readiness.
 
 ### IFPM-023 Implement Raster Grid Diagnostics
 
@@ -178,6 +196,8 @@ prototype slice through data registration, preprocessing checks, standardization
 - IFPM-034: add sensitivity-analysis utilities for AHP weights.
 - IFPM-035: add public-safe technical docs for the minimal pipeline.
 - IFPM-036: build a small dashboard or report view after approved sample data exists.
+- IFPM-037: add fixed-threshold class configuration for comparison-safe maps.
+- IFPM-038: add a first-slice AHP weighting protocol and sensitivity plan.
 
 ## Verification Gates
 

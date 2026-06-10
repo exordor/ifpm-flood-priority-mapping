@@ -183,6 +183,24 @@ After a controlled download succeeds:
 
 Current state: ready as a draft rule set.
 
+## Gate G7: Pre-Real-Data Engineering Readiness
+
+Before any real-data overlay, scoring, or interpretation:
+
+- run deliverable tests with geospatial dependencies installed and record whether GeoTIFF tests
+  were executed or skipped;
+- require raster diagnostics to expose finite-value and mask summaries, or record a waiver for a
+  diagnostic-only run;
+- require overlay inputs to be standardized 0-1 rasters by default, or record an explicit
+  experimental override;
+- report per-layer valid-cell fractions and intersection mask loss before interpreting an
+  overlay output;
+- confirm the selected model-unit branch is executable in code. A sub-basin CHIRPS branch needs a
+  zonal or tabular scoring path, not only same-grid raster overlay.
+
+Current state: blocked for real-data overlay. Boundary discovery and metadata-only inspection can
+proceed only under their own gate rules.
+
 ## Go Criteria
 
 General real-data download may proceed only when all of these are true:
@@ -192,6 +210,7 @@ General real-data download may proceed only when all of these are true:
 - Gate G3 CHIRPS temporal/product decision is complete, or CHIRPS is explicitly deferred.
 - Gate G4 selected dataset preflight has no unchecked blocker.
 - Gate G5 authorization entry is written before download.
+- Gate G7 engineering readiness is complete before overlay or interpretation.
 - The target dataset directory is under ignored `data/`.
 - The reviewer confirms the download is small and scoped.
 
@@ -208,6 +227,7 @@ Stop before download if any of these appears:
 - command would write outside `data/` or overwrite unrelated local files;
 - selected artifact names are not recorded;
 - the workflow would imply CHIRPS has 30 m spatial detail;
+- real-data overlay would run without the Gate G7 engineering readiness checks;
 - credentials, cookies, tokens, or private cloud links would be written to a committed file.
 
 ## Immediate Next Action

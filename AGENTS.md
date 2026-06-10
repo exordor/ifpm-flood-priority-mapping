@@ -10,7 +10,8 @@ Current migration state: `POST_MIGRATION`.
 - Root repository: private context and document repository.
 - `context/`: internal documents, review notes, meeting support, generated images, and
   background material.
-- `ifpm-flood-pipeline/`: independent future deliverable code repository.
+- `ifpm-flood-pipeline/`: independent deliverable code repository with a minimal
+  synthetic-tested pipeline; real-data use remains gated.
 
 ## Write Classification
 
