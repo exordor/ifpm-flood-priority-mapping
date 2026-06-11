@@ -1,6 +1,6 @@
 # IFPM Task Progress And Plan Board
 
-Updated: 2026-06-10
+Updated: 2026-06-11
 
 Scope: private project planning for the IFPM comparative flood-risk modelling workspace.
 
@@ -12,10 +12,10 @@ should move from method scaffolding to a controlled data/preprocessing prototype
 
 Do not start broad data downloads yet. HydroSHEDS boundary discovery has been executed for one
 authorized artifact, and the Zimbabwe Geoportal Sub-Catchments alternative has been downloaded
-and compared for boundary evidence. The boundary is still not accepted because HydroBASINS,
-Geoportal, and the reported but source/geometry-unresolved `~2138 km2` reference point to
-different boundary scales. SRTM, CHIRPS, overlay, and interpretation remain blocked until the
-later gates are closed.
+and compared for boundary evidence. Mentor feedback now reframes the next step: define the study
+catchment from the flood/mining-relevant outlet instead of choosing only between existing named
+boundaries. SRTM, CHIRPS, overlay, and interpretation remain blocked until the outlet and
+catchment boundary are accepted or explicitly waived.
 
 ## Done
 
@@ -62,26 +62,26 @@ later gates are closed.
 
 ### IFPM-011 First Controlled Data Slice
 
-- Status: draft decision created
-- Next action: review `prototype_study_slice_decision.md` and confirm or revise the scope.
+- Status: draft decision revised for outlet-based catchment framing.
+- Next action: get a rough mentor-approved outlet, downstream impact point, mine-related river
+  reach, dam, confluence, town, or map point.
 
 ### IFPM-012 Raster Preprocessing Design
 
 - Status: design drafted; real-data execution remains blocked until mentor decisions and
   preflight blockers are closed.
 - Evidence: `context/docs/project-management/real_data_preprocessing_design.md`.
-- Next action: use the execution preflight gate to close boundary, modelling-unit,
+- Next action: use the execution preflight gate to close outlet, boundary, modelling-unit,
   temporal-window, and dataset-specific blockers before downloading or processing source data.
 
 ### IFPM-013 Real-Data Execution Preflight Gate
 
-- Status: gate drafted; current verdict is `NO-GO` for general real data download, with completed
+- Status: gate revised; current verdict is `NO-GO` for general real data download, with completed
   HydroSHEDS and Zimbabwe Geoportal boundary-only exceptions.
 - Evidence: `context/docs/project-management/real_data_execution_preflight_gate.md`.
-- Next action: locate the boundary geometry behind the reported but source/geometry-unresolved
-  `~2138 km2` reference or ask the mentor to choose between Geoportal named sub-catchment,
-  HydroBASINS hydrological unit, or a narrower published-study boundary. Keep SRTM, CHIRPS,
-  overlay, and interpretation blocked.
+- Next action: ask the mentor for the rough outlet / downstream impact point and choose the
+  outlet-based catchment delineation branch. Keep SRTM, CHIRPS, overlay, and interpretation
+  blocked.
 
 ### IFPM-014 Multi-Level Progress Review
 
@@ -148,7 +148,8 @@ later gates are closed.
 - Priority: P1
 - Task: convert HydroBASINS discovery output into a mentor-facing decision package and internal
   decision record without accepting a boundary or running real-data overlay.
-- Status: done; waiting for mentor/local-boundary decision.
+- Status: done; superseded as the active next-step framing by IFPM-044 outlet-based catchment
+  planning after mentor feedback.
 - Completion evidence:
   `context/docs/mentor-explanation/Upper_Mzingwane_Boundary_Decision_Package_2026-06-10.md`
   and `context/docs/project-management/upper_mzingwane_boundary_decision_record_2026-06-10.md`.
@@ -193,6 +194,22 @@ later gates are closed.
   channels, or an author-requested study-area polygon.
 - Next action: request the actual polygon/source citation from authors, ZINWA, mentor, or the
   feasibility-study/map holders before accepting any boundary or downloading SRTM/CHIRPS.
+
+### IFPM-044 Reframe Prototype As Outlet-Based Catchment
+
+- Priority: P1
+- Task: revise the research plan after mentor feedback so the first prototype uses an
+  outlet-based catchment definition instead of choosing only between existing named boundaries.
+- Status: done as planning update; outlet still needed.
+- Completion evidence:
+  `context/docs/project-management/outlet_based_catchment_research_plan_2026-06-11.md`,
+  revised `context/docs/project-management/prototype_study_slice_decision.md`, and revised
+  `context/docs/project-management/real_data_execution_preflight_gate.md`.
+- Key result: `Upper Mzingwane` is now treated as the regional context, while the operational
+  prototype boundary should be the upstream catchment of a mentor-selected or mentor-provisional
+  flood/mining-relevant outlet.
+- Next action: obtain a rough outlet, nearby mine/flood impact point, dam, confluence, town, or
+  map mark from the mentor before any SRTM/CHIRPS download or overlay.
 
 ### IFPM-028 Close Pre-Real-Data Engineering Readiness
 
@@ -245,16 +262,16 @@ later gates are closed.
 
 ### IFPM-D06 Upper Mzingwane Boundary Acceptance
 
-- Decision needed: Geoportal named sub-catchment, HydroBASINS level 7 candidate, a reviewed
-  HydroBASINS union, or a narrower boundary matching the reported but source/geometry-unresolved
-  `~2138 km2` reference.
-- Why it matters: the plausible candidates are not equivalent. HydroBASINS level 7 is about
-  `3700 km2`; Geoportal `Upper Mzingwane` is about `7321.5 km2`; the reported but
-  source/geometry-unresolved `~2138 km2` reference still needs outlet, area-method, and
-  boundary-geometry tracing.
+- Decision needed: a flood/mining-relevant outlet and an outlet-based catchment delineation
+  branch. Geoportal named sub-catchment, HydroBASINS level 7 candidate, a reviewed HydroBASINS
+  union, or the narrower `~2138 km2` literature boundary are now comparison/proxy options.
+- Why it matters: the outlet controls the operational catchment. The plausible comparison
+  boundaries are not equivalent: HydroBASINS level 7 is about `3700 km2`; Geoportal `Upper
+  Mzingwane` is about `7321.5 km2`; the reported but source/geometry-unresolved `~2138 km2`
+  reference still needs outlet, area-method, and boundary-geometry tracing.
 - Current evidence: HydroBASINS discovery, Geoportal boundary comparison, literature fact-check,
-  and public source hunt completed; no SRTM, CHIRPS, overlay, or interpretation should start
-  before one path is accepted.
+  public source hunt, and mentor feedback completed; no SRTM, CHIRPS, overlay, or interpretation
+  should start before the outlet-based path is accepted or waived.
 
 ### IFPM-D02 Peru Boundary Rule
 

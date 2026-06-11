@@ -1,6 +1,6 @@
 # Real-Data Execution Preflight Gate
 
-Updated: 2026-06-10
+Updated: 2026-06-11
 
 Status: internal gate record. Current verdict: `NO-GO` for general real data download.
 
@@ -22,7 +22,8 @@ Zimbabwe-Peru comparison.
 ## Scope Controlled By This Gate
 
 - Study side: Zimbabwe.
-- Working study area: Upper Mzingwane Catchment or an approved sub-catchment.
+- Working study area: outlet-based catchment within the Upper Mzingwane context, or an approved
+  proxy boundary if the outlet cannot yet be fixed.
 - Candidate datasets: SRTM 1 Arc-Second, HydroBASINS/HydroRIVERS, and CHIRPS v3.
 - First output: workflow diagnostics and, only if later approved, preliminary susceptibility.
 - Excluded for this gate: mining pressure, socioeconomic vulnerability, rehabilitation
@@ -47,9 +48,10 @@ authorized Zimbabwe Geoportal Sub-Catchments artifact. Candidate HYBAS and PFAF 
 discovered. The Geoportal layer added a named `Upper Mzingwane` feature, but no boundary has
 been accepted.
 
-- Boundary acceptance: blocked.
-  HydroBASINS level, basin id, Geoportal named sub-catchment, and the reported but
-  source/geometry-unresolved `~2138 km2` reference are not reconciled.
+- Outlet and boundary acceptance: blocked.
+  Mentor feedback reframed the boundary decision around the catchment near a flood/mining-relevant
+  outlet. HydroBASINS, Geoportal, and the reported but source/geometry-unresolved `~2138 km2`
+  reference are now comparison layers until the outlet-based catchment is defined.
   Evidence: `real_data_preprocessing_design.md`.
 - Modelling unit: blocked.
   Raster-first, sub-basin aggregation, or mixed workflow is not selected.
@@ -69,12 +71,15 @@ been accepted.
   Grid, CRS, aggregation, NoData, and diagnostics rules are drafted.
   Evidence: `real_data_preprocessing_design.md`.
 
-## Gate G1: Boundary Acceptance
+## Gate G1: Outlet And Boundary Acceptance
 
 Required before SRTM download, CHIRPS download, overlay, or aggregation:
 
-- choose the boundary source: Geoportal named sub-catchment, HydroBASINS-compatible unit,
-  mentor-supplied local boundary, or a traced published-study boundary;
+- record the selected or provisional outlet / pour point;
+- document why the outlet is relevant to flood impact and mining pressure;
+- choose the boundary source or delineation method: outlet-based catchment, Geoportal named
+  sub-catchment, HydroBASINS-compatible unit, mentor-supplied local boundary, or a traced
+  published-study boundary;
 - record HydroBASINS level, HYBAS id, PFAF id, and version if HydroBASINS is used;
 - record whether multiple units are unioned or dissolved;
 - check geometry validity and CRS;
@@ -86,11 +91,12 @@ Required before SRTM download, CHIRPS download, overlay, or aggregation:
 Exit evidence:
 
 - a short boundary decision note or a completed section in this file;
+- a candidate outlet table with source/rationale;
 - exact raw destination remains under `data/raw/<dataset_id>/`;
 - no boundary file is copied into `context/` or `ifpm-flood-pipeline/`.
 
 Current state: blocked. HydroBASINS and Geoportal boundary-only comparisons are complete, but
-their areas and modelling scopes are not reconciled.
+the outlet has not been selected and their areas/modelling scopes are not reconciled.
 
 Boundary-only exceptions already executed:
 
@@ -268,15 +274,16 @@ Stop before download if any of these appears:
 
 Close the smallest useful decision set:
 
-1. use
+1. ask the mentor for the rough flood/mining-relevant outlet location or downstream impact point;
+2. record candidate outlet evidence and select an outlet-based delineation branch;
+3. use
    `context/docs/project-management/upper_mzingwane_boundary_fact_check_2026-06-10.md`
    and
    `context/docs/project-management/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`
-   to locate the boundary geometry behind the reported but source/geometry-unresolved
-   `~2138 km2` reference or ask the mentor to choose the intended boundary definition;
-2. choose the initial modelling branch;
-3. choose whether CHIRPS is deferred or limited to one small rainfall summary window;
-4. update the affected dataset preflight notes from `not ready` to either `ready` or
+   as comparison context, not as automatic boundary choices;
+4. choose the initial modelling branch;
+5. choose whether CHIRPS is deferred or limited to one small rainfall summary window;
+6. update the affected dataset preflight notes from `not ready` to either `ready` or
    `blocked with waiver`.
 
 Until those steps are complete, the correct state remains `NO-GO`.

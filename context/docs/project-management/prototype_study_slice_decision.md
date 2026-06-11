@@ -1,16 +1,18 @@
 # Prototype Study Slice Decision
 
-Updated: 2026-06-10
+Updated: 2026-06-11
 
-Status: draft decision for the first controlled IFPM prototype slice.
+Status: draft decision revised after mentor feedback.
 
 ## Decision
 
-Use the Zimbabwe / Upper Mzingwane Catchment side as the first prototype slice.
+Use the Zimbabwe / Upper Mzingwane side as the first prototype context, but define the operational
+study boundary from a flood/mining-relevant outlet when the outlet is supplied or approved.
 
-This is a conservative starting point because the study area is already framed as a catchment.
-It avoids the immediate Peru ambiguity between administrative regions, ANA hydrographic units,
-and hydrological units clipped by administrative regions.
+This follows the mentor's guidance that the relevant catchment area should probably be linked to
+the outlet where flood impact is strongest and where mining influence matters. It also avoids
+forcing equivalence between the literature `~2138 km2` area, HydroBASINS, and the Zimbabwe
+Geoportal named boundary.
 
 ## Prototype Purpose
 
@@ -27,11 +29,13 @@ that the project can:
 ## Initial Study Slice
 
 - Study side: Zimbabwe.
-- Working study area: Upper Mzingwane Catchment.
-- Boundary rule: use a catchment or sub-catchment boundary after the intended definition is
-  confirmed. Current unresolved candidates are Geoportal `Upper Mzingwane`, HydroBASINS level 7
-  `HYBAS_ID=1071528840`, or a narrower boundary matching the reported but
-  source/geometry-unresolved `~2138 km2` reference.
+- Regional context: Upper Mzingwane.
+- Operational study area: upstream catchment of a selected outlet or pour point.
+- Boundary rule: first identify the outlet relevant to flood impact and mining influence, then
+  delineate the upstream catchment. Current Geoportal, HydroBASINS, and literature boundaries are
+  comparison layers, not automatic selections.
+- Current unresolved outlet decision: mentor needs to indicate a rough outlet, downstream impact
+  point, mine-related river reach, dam, confluence, town, or map point.
 - First output grain: raster diagnostics at source-compatible resolution, then optional
   aggregation to sub-basin units.
 - Initial terrain working resolution: 30 m for SRTM-derived terrain layers when feasible.
@@ -85,6 +89,8 @@ Completed scaffolding in `ifpm-flood-pipeline`:
 
 Remaining blockers before a real-data overlay or interpretation run:
 
+- mentor-approved or mentor-provisional outlet location;
+- selected outlet-based catchment delineation branch;
 - geospatial verification must run with the geospatial extra installed, not only with skipped
   raster tests;
 - diagnostics need finite-value and mask summaries, or an explicit waiver for the first real
@@ -118,6 +124,8 @@ It must not claim:
 The prototype slice is ready to move to controlled download when:
 
 - this decision note is accepted as the working scope;
+- a candidate outlet and outlet rationale are recorded;
+- an outlet-based catchment delineation branch is selected;
 - three dataset registry notes exist;
 - three preflight checklists are complete;
 - raster/grid diagnostics are implemented and tested on synthetic data;

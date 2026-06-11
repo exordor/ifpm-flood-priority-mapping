@@ -44,6 +44,7 @@ ifpm-flood-pipeline/
 - `context/docs/data-management/registry/`
 - `context/docs/data-management/preflight/`
 - `context/docs/project-management/task_progress_board.md`
+- `context/docs/project-management/outlet_based_catchment_research_plan_2026-06-11.md`
 - `context/docs/project-management/real_data_preprocessing_design.md`
 - `context/docs/project-management/real_data_execution_preflight_gate.md`
 - `context/docs/project-management/multi_level_progress_review_2026-06-10.md`

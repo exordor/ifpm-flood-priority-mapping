@@ -1,8 +1,9 @@
 # Real-Data Raster Preprocessing Design
 
-Status: internal design draft. HydroBASINS boundary discovery and Zimbabwe Geoportal
-Sub-Catchments boundary comparison have been executed as narrow boundary-only exceptions, but no
-SRTM, CHIRPS, overlay input, or interpretation dataset has been downloaded or processed.
+Status: internal design draft, revised after mentor feedback. HydroBASINS boundary discovery and
+Zimbabwe Geoportal Sub-Catchments boundary comparison have been executed as narrow boundary-only
+exceptions, but no SRTM, CHIRPS, overlay input, or interpretation dataset has been downloaded or
+processed.
 
 ## Purpose
 
@@ -16,7 +17,9 @@ resampling assumptions.
 ## Scope Boundary
 
 - Study side: Zimbabwe.
-- Working area: Upper Mzingwane Catchment or an approved sub-catchment boundary.
+- Regional context: Upper Mzingwane.
+- Working area: an outlet-based upstream catchment after the outlet is supplied or approved, or
+  an explicitly waived proxy boundary.
 - First data candidates: SRTM 1 Arc-Second, HydroBASINS/HydroRIVERS, and CHIRPS v3.
 - First indicator family: terrain, drainage proxy, rainfall summary, and optional sub-basin id.
 - Not included in the first real-data slice: mining pressure, socioeconomic vulnerability, and
@@ -30,29 +33,37 @@ comparison claims.
 
 Do not download additional real data or run preprocessing until all of these are true:
 
-1. The working boundary is selected and documented.
-2. The modelling unit is selected: raster-first, sub-basin aggregation, or mixed workflow.
-3. The temporal window for rainfall and validation evidence is selected.
-4. The relevant dataset preflight checklist has no unchecked blocking item.
-5. The intended raw destination is under `data/raw/<dataset_id>/`.
-6. The intended output destination is under `outputs/<dataset_id>/` or a prototype-specific
+1. The outlet or provisional pour point is selected and documented.
+2. The outlet's flood/mining relevance is recorded.
+3. The outlet-based catchment boundary or approved proxy boundary is selected and documented.
+4. The modelling unit is selected: raster-first, sub-basin aggregation, or mixed workflow.
+5. The temporal window for rainfall and validation evidence is selected.
+6. The relevant dataset preflight checklist has no unchecked blocking item.
+7. The intended raw destination is under `data/raw/<dataset_id>/`.
+8. The intended output destination is under `outputs/<dataset_id>/` or a prototype-specific
    ignored output directory.
 
 ## Boundary And CRS Rules
 
-- Use a catchment or sub-catchment boundary for the Zimbabwe prototype.
+- Use an outlet-based upstream catchment for the Zimbabwe prototype when the outlet is known.
 - Prefer a HydroBASINS-compatible unit only if the selected level and basin id are recorded.
 - If a mentor supplies an authoritative local catchment boundary, record its source and replace
   or supplement HydroBASINS.
+- Treat Geoportal, HydroBASINS, and the literature `~2138 km2` boundary as comparison layers
+  unless one is explicitly accepted as a proxy.
 - Keep source CRS information in the dataset registry and preprocessing diagnostics.
 - Reproject only derived working rasters or analysis copies, never the raw source files.
 - Record the target CRS and transform before producing overlay inputs.
 
 ## Boundary Acceptance Gate
 
-A HydroBASINS or local boundary is not accepted only because it can be loaded. Before it becomes
-the prototype mask or aggregation geometry, record:
+An outlet-based, HydroBASINS, or local boundary is not accepted only because it can be loaded.
+Before it becomes the prototype mask or aggregation geometry, record:
 
+- outlet name, coordinates, or provisional map description;
+- why the outlet is relevant to the flood-affected and mining-influenced area;
+- whether the outlet is mentor-selected, mentor-provisional, author/authority supplied, or a
+  technical proxy;
 - selected HydroBASINS level, HYBAS id, PFAF id, and version, or the local boundary source;
 - whether multiple units are unioned or dissolved, and the rule used to do so;
 - geometry validity and CRS;
@@ -107,6 +118,7 @@ explicitly labelled as a coarse-summary overlay and the limitation is documented
 
 - Use HydroBASINS or another approved boundary as mask and aggregation geometry.
 - Record selected HydroBASINS level, basin id, and version before processing.
+- If using an outlet-based catchment, record the outlet and delineation branch before processing.
 - HydroRIVERS may support drainage-distance indicators, but it is not field-survey evidence.
 
 ## Resampling And Aggregation Rules
@@ -180,7 +192,7 @@ Overlay is blocked unless:
 
 The smallest defensible first run should include:
 
-1. one approved boundary or mask;
+1. one approved outlet-based boundary or approved proxy mask;
 2. one SRTM-derived terrain layer;
 3. one rainfall summary handled through the selected model-unit branch;
 4. raster diagnostics for every produced raster input;
@@ -189,7 +201,7 @@ The smallest defensible first run should include:
 
 ## Open Decisions
 
-- Exact boundary source and HydroBASINS level or local catchment source.
+- Exact outlet location/rationale and boundary source or HydroBASINS level/local catchment source.
 - Raster-first versus sub-basin aggregation as the first interpretation unit.
 - CHIRPS temporal window, timestep, and aggregation method.
 - Whether the first real output should remain diagnostics only or include preliminary
