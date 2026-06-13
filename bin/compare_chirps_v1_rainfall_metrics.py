@@ -162,7 +162,18 @@ def metric_rows(manifest: list[dict[str, str]], geometry: list[dict]) -> tuple[l
         out_path = RASTER_DIR / f"{metric_id}.tif"
         write_raster(out_path, array.astype("float32"), profile)
         outputs[metric_id] = out_path
-        rows.append(stats(metric_id, array, {"product_timestep": timestep, "time_window": window, "unit": unit, "interpretation": interpretation}, out_path))
+        # daily_rnl is the only CHIRPS Real-time/Near-real-time (preliminary) product here;
+        # annual/monthly/pentad Africa TIFs are final products. Do not treat the RNL peak as
+        # commensurate with the final-product peaks in cross-metric interpretation.
+        is_provisional = timestep == "daily_rnl"
+        rows.append(stats(metric_id, array, {
+            "product_timestep": timestep,
+            "time_window": window,
+            "unit": unit,
+            "interpretation": interpretation,
+            "product_provisional": "yes" if is_provisional else "no",
+            "product_provisional_note": "CHIRPS RNL is preliminary real-time/near-real-time data" if is_provisional else "CHIRPS final product (Africa TIF)",
+        }, out_path))
     return rows, outputs
 
 
@@ -180,6 +191,9 @@ def correlations(outputs: dict[str, Path]) -> list[dict[str, str]]:
         with rasterio.open(path) as src:
             data = src.read(1).astype("float32")
             arrays[metric_id] = np.where(data == src.nodata, np.nan, data).ravel()
+    # daily_rnl is preliminary (RNL) data; flag any correlation pair that includes it so the
+    # reader does not treat a provisional-vs-final correlation as methodologically commensurate.
+    provisional = {"daily_rnl_peak_2023_2024"}
     rows: list[dict[str, str]] = []
     for left, a in arrays.items():
         for right, b in arrays.items():
@@ -188,7 +202,8 @@ def correlations(outputs: dict[str, Path]) -> list[dict[str, str]]:
                 corr = ""
             else:
                 corr = f"{float(np.corrcoef(a[valid], b[valid])[0, 1]):.6f}"
-            rows.append({"metric_a": left, "metric_b": right, "common_cell_count": str(int(valid.sum())), "pearson_r": corr})
+            pair_note = "includes_provisional_RNL_metric" if (left in provisional or right in provisional) else ""
+            rows.append({"metric_a": left, "metric_b": right, "common_cell_count": str(int(valid.sum())), "pearson_r": corr, "provisional_pair_note": pair_note})
     return rows
 
 

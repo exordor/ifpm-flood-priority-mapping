@@ -12,8 +12,8 @@ import numpy as np
 import rasterio
 from rasterio.features import geometry_mask
 from rasterio.merge import merge
-from rasterio.vrt import WarpedVRT
-from rasterio.warp import Resampling
+from rasterio.transform import from_origin
+from rasterio.warp import Resampling, reproject
 from rasterio.windows import Window, transform as window_transform
 
 
@@ -92,38 +92,55 @@ def write_raster(path: Path, data: np.ndarray, transform, crs: str) -> None:
         dst.write(data, 1)
 
 
+def _output_grid(bounds: tuple, res: float) -> tuple[object, int, int]:
+    """Target grid matching rasterio.merge's ``bounds``+``res`` layout.
+
+    Origin sits at the exact buffer west/north edge with exact ``res`` pixels
+    (``Affine.translation(west, north) * Affine.scale(res, -res)``). Replicating
+    the previous ``merge(bounds=..., res=...)`` grid keeps downstream rasters
+    (slope, the multicriteria board) on the same reference grid.
+    """
+    west, south, east, north = bounds
+    width = int(round((east - west) / res))
+    height = int(round((north - south) / res))
+    return from_origin(west, north, res, res), width, height
+
+
 def build_buffered_mosaic(v1: gpd.GeoDataFrame) -> tuple[np.ndarray, object]:
     buffered = v1.geometry.iloc[0].buffer(BUFFER_M)
     bounds = buffered.bounds
+    dst_transform, dst_width, dst_height = _output_grid(bounds, RES_M)
+
+    # Mosaic the six SRTM tiles in their NATIVE EPSG:4326 grid. The tiles abut
+    # exactly (shared 1-arcsec resolution, partitioned into 1x1 degree cells),
+    # so this step performs NO resampling. The previous implementation wrapped
+    # each tile in a WarpedVRT then called merge() on the VRTs; merge() defaults
+    # to Resampling.nearest and each VRT carried its own default target grid, so
+    # that second read risked nearest-neighbour step artefacts at tile seams.
+    # One explicit bilinear reproject below removes that ambiguity.
     with ExitStack() as stack:
         sources = [stack.enter_context(rasterio.open(raster_uri(archive_for_tile(tile)))) for tile in EXPECTED_TILES]
         for src in sources:
             if src.count != 1 or str(src.crs) != "EPSG:4326":
                 raise ValueError(f"Unexpected SRTM source profile: {src.name}")
-        vrts = [
-            stack.enter_context(
-                WarpedVRT(
-                    src,
-                    crs=DST_CRS,
-                    resampling=Resampling.bilinear,
-                    src_nodata=SRC_NODATA,
-                    nodata=DST_NODATA,
-                    dtype="float32",
-                )
-            )
-            for src in sources
-        ]
-        mosaic, transform = merge(
-            vrts,
-            bounds=bounds,
-            res=(RES_M, RES_M),
-            nodata=DST_NODATA,
-            dtype="float32",
-        )
-    data = mosaic[0].astype("float32")
-    buffer_mask = geometry_mask([buffered], out_shape=data.shape, transform=transform, invert=True)
+        src_mosaic, src_transform = merge(sources)
+
+    data = np.full((dst_height, dst_width), DST_NODATA, dtype="float32")
+    reproject(
+        source=src_mosaic[0],
+        destination=data,
+        src_transform=src_transform,
+        src_crs="EPSG:4326",
+        src_nodata=SRC_NODATA,
+        dst_transform=dst_transform,
+        dst_crs=DST_CRS,
+        dst_nodata=DST_NODATA,
+        resampling=Resampling.bilinear,
+    )
+
+    buffer_mask = geometry_mask([buffered], out_shape=data.shape, transform=dst_transform, invert=True)
     data[~buffer_mask] = DST_NODATA
-    return data, transform
+    return data, dst_transform
 
 
 def main() -> None:

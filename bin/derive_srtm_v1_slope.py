@@ -8,6 +8,7 @@ from pathlib import Path
 import geopandas as gpd
 import numpy as np
 import rasterio
+from rasterio.fill import fillnodata
 from rasterio.features import geometry_mask
 from rasterio.windows import Window, transform as window_transform
 
@@ -45,10 +46,30 @@ def crop_to_geometry(data: np.ndarray, transform, geometry) -> tuple[np.ndarray,
 
 
 def derive_slope(dem: np.ndarray, res_x: float, res_y: float) -> np.ndarray:
+    """Slope in degrees via central finite differences (numpy gradient).
+
+    NoData cells (the out-of-buffer apron AND any real SRTM voids) are filled with
+    inverse-distance interpolation *before* differencing so that a single void cannot
+    widen into a 3x3 NaN halo: np.gradient needs both neighbours of every cell, so an
+    unfilled void forces NaN at itself and its 8 neighbours. Originally-NoData cells
+    are returned to NoData in the output (we claim no slope for filled cells); only
+    their valid neighbours benefit from the fill.
+
+    NOTE: this is a central-difference slope, NOT GDAL's Horn algorithm (gdaldem slope).
+    For a 30 m SRTM cell the two are close but not bit-identical. The V1 AOI sits ~1 km
+    (33 cells) inside the buffered DEM edge, so filling the out-of-buffer apron never
+    alters any cell that reaches the final (V1-cropped) slope -- it only prevents edge
+    halos. Real voids *within* V1, if present, are counted separately in main().
+    """
     values = dem.astype("float64")
-    values[values == NODATA] = np.nan
+    nodata_mask = values == NODATA
+    values[nodata_mask] = np.nan
+    if nodata_mask.any():
+        filled = fillnodata(values, mask=(~nodata_mask).astype("uint8"))
+        values = np.where(nodata_mask, filled, values)
     grad_y, grad_x = np.gradient(values, abs(res_y), abs(res_x))
     slope = np.degrees(np.arctan(np.sqrt(grad_x**2 + grad_y**2)))
+    slope[nodata_mask] = NODATA  # do not claim slope for interpolated void cells
     slope[~np.isfinite(slope)] = NODATA
     return slope.astype("float32")
 
@@ -86,11 +107,22 @@ def main() -> None:
         if str(src.crs) != DST_CRS:
             raise ValueError(f"Expected {DST_CRS}, got {src.crs}")
         dem = src.read(1).astype("float32")
+        nodata_total = int((dem == NODATA).sum())
+        # How many NoData cells fall *inside* the V1 AOI? Those are real source
+        # voids that would otherwise create 3x3 NaN halos in the final slope. The
+        # remainder of the NoData is the out-of-buffer apron, which is discarded.
+        v1_mask = geometry_mask([geometry], out_shape=dem.shape, transform=src.transform, invert=True)
+        nodata_in_v1 = int(((dem == NODATA) & v1_mask).sum())
         slope_buffered = derive_slope(dem, src.res[0], src.res[1])
         slope_v1, slope_transform = crop_to_geometry(slope_buffered, src.transform, geometry)
         write_slope(slope_v1, slope_transform, src.profile)
     assert_matches_dem()
     print(f"wrote {SLOPE.relative_to(ROOT)}")
+    print(
+        f"buffered-DEM NoData filled before slope: {nodata_total} total "
+        f"(inside V1 AOI: {nodata_in_v1}; remainder is the out-of-buffer apron). "
+        f"Real SRTM voids in V1 = {nodata_in_v1}."
+    )
 
 
 if __name__ == "__main__":

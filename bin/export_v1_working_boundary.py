@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import sys
 from datetime import date
 from pathlib import Path
 from textwrap import fill
@@ -10,10 +11,20 @@ from textwrap import fill
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import pandas as pd
+import pyogrio.errors
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 from pyproj import Geod
 from shapely.geometry import Point
+
+# pyogrio (the geopandas default backend) raises DataLayerError for a layer that is
+# absent from a *present* file; a missing file or a corrupt layer raises
+# DataSourceError and is left to propagate. fiona signals a missing layer with a
+# plain ValueError, which is too broad to catch safely, so there is no portable
+# cross-backend tuple -- we rely on the pyogrio backend. (geopandas >= 1.0 defaults
+# to pyogrio; if a non-pyogrio backend is ever forced, an absent optional layer will
+# raise loudly instead of being skipped.)
+LAYER_MISSING = (pyogrio.errors.DataLayerError,)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -132,7 +143,8 @@ def write_outputs(v1_boundary: gpd.GeoDataFrame, v1_outlet: gpd.GeoDataFrame, an
 def add_optional_layer(ax, layer: str, **kwargs) -> None:
     try:
         gdf = read_layer(REVIEW_GPKG, layer)
-    except Exception:
+    except LAYER_MISSING:
+        print(f"layer '{layer}' not present in {REVIEW_GPKG.name}; skipping", file=sys.stderr)
         return
     if not gdf.empty:
         gdf.plot(ax=ax, **kwargs)

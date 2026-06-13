@@ -4,13 +4,24 @@
 from __future__ import annotations
 
 import csv
+import sys
 from pathlib import Path
 
 import geopandas as gpd
 import numpy as np
+import pyogrio.errors
 import rasterio
 from rasterio.features import rasterize
 from scipy.ndimage import distance_transform_edt
+
+# pyogrio (the geopandas default backend) raises DataLayerError for a layer that is
+# absent from a *present* file; a missing file or a corrupt layer raises
+# DataSourceError and is left to propagate. fiona signals a missing layer with a
+# plain ValueError, which is too broad to catch safely, so there is no portable
+# cross-backend tuple -- we rely on the pyogrio backend. (geopandas >= 1.0 defaults
+# to pyogrio; if a non-pyogrio backend is ever forced, an absent optional layer will
+# raise loudly instead of being skipped.)
+LAYER_MISSING = (pyogrio.errors.DataLayerError,)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,7 +62,8 @@ def boundary() -> gpd.GeoDataFrame:
 def read_layer(layer: str) -> gpd.GeoDataFrame:
     try:
         gdf = gpd.read_file(MC_GPKG, layer=layer)
-    except Exception:
+    except LAYER_MISSING:
+        print(f"layer '{layer}' not present in {MC_GPKG.name}; treating as empty", file=sys.stderr)
         return gpd.GeoDataFrame(geometry=[], crs="EPSG:4326")
     return gdf.to_crs("EPSG:4326") if not gdf.empty else gdf.set_crs(gdf.crs or "EPSG:4326")
 

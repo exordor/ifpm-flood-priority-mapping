@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import shutil
+import sys
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -14,6 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT_DIR = ROOT / "outputs/v1_full_methodology_evidence_sweep"
 MANIFEST = OUT_DIR / "source_manifest.csv"
+USER_AGENT = "IFPM-Methodology-V1/1.0 (research prototype; contact via project owner)"
 
 SOURCES = [
     {
@@ -93,23 +95,60 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def download(source: dict[str, str]) -> dict[str, str]:
+def load_prior_manifest() -> dict[str, str]:
+    """Map previously recorded local_path -> sha256 so a truncated/corrupted
+    existing file is detected and re-fetched instead of being reused forever."""
+    if not MANIFEST.exists():
+        return {}
+    with MANIFEST.open(newline="", encoding="utf-8") as handle:
+        return {
+            row["local_path"]: row.get("sha256", "")
+            for row in csv.DictReader(handle)
+            if row.get("local_path")
+        }
+
+
+def _verify_size(tmp: Path, expected: int | None, url: str) -> None:
+    """Raise if the streamed file does not match the server-declared Content-Length.
+    Servers using chunked transfer (no Content-Length) skip this check."""
+    if expected is None:
+        return
+    actual = tmp.stat().st_size
+    if actual != expected:
+        raise IOError(
+            f"download truncated: got {actual} bytes, expected {expected} from {url}"
+        )
+
+
+def download(source: dict[str, str], recorded_sha: str = "") -> dict[str, str]:
     path = ROOT / source["local_path"]
     status = "reused_existing"
-    if not path.exists() or path.stat().st_size == 0:
+    if path.exists() and path.stat().st_size > 0:
+        if recorded_sha and sha256(path) != recorded_sha:
+            print(
+                f"existing {path.name} sha mismatch with prior manifest; re-downloading",
+                file=sys.stderr,
+            )
+            status = "downloaded"
+    if not path.exists() or path.stat().st_size == 0 or status == "downloaded":
         status = "downloaded"
         path.parent.mkdir(parents=True, exist_ok=True)
         tmp = path.with_suffix(path.suffix + ".part")
         if tmp.exists():
             tmp.unlink()
+        req = urllib.request.Request(source["url"], headers={"User-Agent": USER_AGENT})
         try:
-            with urllib.request.urlopen(source["url"], timeout=180) as response, tmp.open("wb") as handle:
+            with urllib.request.urlopen(req, timeout=180) as response, tmp.open("wb") as handle:
+                declared = response.headers.get("Content-Length")
+                expected = int(declared) if declared and declared.isdigit() else None
                 shutil.copyfileobj(response, handle, length=1024 * 1024)
-            tmp.replace(path)
+                if expected is not None:
+                    _verify_size(tmp, expected, source["url"])
         except Exception:
             if tmp.exists():
                 tmp.unlink()
             raise
+        tmp.replace(path)
     return {
         **source,
         "local_path": str(path.relative_to(ROOT)),
@@ -130,7 +169,8 @@ def write_manifest(rows: list[dict[str, str]]) -> None:
 
 
 def main() -> None:
-    rows = [download(source) for source in SOURCES]
+    prior = load_prior_manifest()
+    rows = [download(source, prior.get(source["local_path"], "")) for source in SOURCES]
     write_manifest(rows)
     total = sum(int(row["bytes"]) for row in rows)
     print(f"wrote {MANIFEST.relative_to(ROOT)}")

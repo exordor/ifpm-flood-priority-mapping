@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import geopandas as gpd
@@ -10,9 +11,19 @@ import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pyogrio.errors
 import rasterio
 from matplotlib.patches import Patch
 from matplotlib.ticker import FuncFormatter
+
+# pyogrio (the geopandas default backend) raises DataLayerError for a layer that is
+# absent from a *present* file; a missing file or a corrupt layer raises
+# DataSourceError and is left to propagate. fiona signals a missing layer with a
+# plain ValueError, which is too broad to catch safely, so there is no portable
+# cross-backend tuple -- we rely on the pyogrio backend. (geopandas >= 1.0 defaults
+# to pyogrio; if a non-pyogrio backend is ever forced, an absent optional layer will
+# raise loudly instead of being skipped.)
+LAYER_MISSING = (pyogrio.errors.DataLayerError,)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -131,7 +142,8 @@ def plot_protected_areas() -> None:
     bnd = boundary("EPSG:4326")
     try:
         wdpca = gpd.read_file(GPKG, layer="wdpca_protected_polygons_v1").to_crs("EPSG:4326")
-    except Exception:
+    except LAYER_MISSING:
+        print(f"layer 'wdpca_protected_polygons_v1' not present in {GPKG.name}; treating as empty", file=sys.stderr)
         wdpca = gpd.GeoDataFrame(geometry=[], crs="EPSG:4326")
     bnd.boundary.plot(ax=ax, color="#111111", linewidth=1.1)
     if not wdpca.empty:
