@@ -3,9 +3,10 @@
 Updated: 2026-06-13
 
 Status: internal gate record. Scoped SRTM download, raw inventory, and V1 DEM/slope preprocessing
-are complete; scoped CHIRPS rainfall-sensitivity comparison is complete; current verdict remains
-`NO-GO` for 30 m CHIRPS resampling, AHP overlay, flood-risk interpretation, and intervention
-interpretation.
+are complete; scoped CHIRPS rainfall-sensitivity comparison is complete; the deliverable
+pipeline's Gate G7 engineering readiness is closed (`ifpm-flood-pipeline` commit `39f6b33`); the
+current verdict remains `NO-GO` for 30 m CHIRPS resampling, AHP overlay, flood-risk interpretation,
+and intervention interpretation.
 
 Two real vector artifacts have been downloaded only for boundary discovery and comparison:
 HydroBASINS Standard Africa and Zimbabwe Geoportal Sub-Catchments. One scoped SRTM raw-tile
@@ -279,8 +280,13 @@ Before any real-data overlay, scoring, or interpretation:
 - confirm the selected model-unit branch is executable in code. A sub-basin CHIRPS branch needs a
   zonal or tabular scoring path, not only same-grid raster overlay.
 
-Current state: blocked for real-data overlay. Boundary discovery and metadata-only inspection can
-proceed only under their own gate rules.
+Current state: the five engineering-readiness items are closed (`ifpm-flood-pipeline` commit
+`39f6b33` -- durable geospatial verification target with 0 skipped GeoTIFF tests, finite-value/mask
+diagnostics, 0-1 overlay-input enforcement with explicit override, per-layer mask-loss reporting,
+and a zonal scoring branch; 36 -> 51 tests passing, 0 skipped). Real-data overlay, scoring, and
+interpretation remain blocked pending mentor decisions on modelling unit (Gate G2), criteria, and
+final boundary; the pipeline is now executable for a controlled run once those close. Boundary
+discovery and metadata-only inspection can proceed only under their own gate rules.
 
 ## Go Criteria
 

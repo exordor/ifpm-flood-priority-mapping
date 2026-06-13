@@ -18,8 +18,9 @@ boundaries. V1 / `HB_L8_1081528840_full_l7_chain` is now
 `accepted_with_waiver_for_controlled_prototype` after the mentor gave a thumbs-up reaction to the
 evidence board. The V1 working boundary package, SRTM tile preflight, scoped SRTM raw-tile
 download/inventory, V1 DEM/slope preprocessing, raster grid gate, terrain-only standardization
-diagnostics, CHIRPS rainfall comparison, and full methodology evidence sweep are complete.
-Model overlay, flood-risk interpretation, and intervention interpretation remain blocked.
+diagnostics, CHIRPS rainfall comparison, full methodology evidence sweep, and the deliverable
+pipeline's Gate G7 engineering readiness (IFPM-060) are complete. Model overlay, flood-risk
+interpretation, and intervention interpretation remain blocked pending mentor decisions.
 
 ## Done
 
@@ -472,15 +473,37 @@ Model overlay, flood-risk interpretation, and intervention interpretation remain
   eligible for the first prototype criteria set. Keep AHP weights, overlay, flood-risk
   interpretation, and intervention-priority mapping blocked.
 
+### IFPM-060 V1 Deliverable G7 Engineering Readiness
+
+- Priority: P1
+- Task: close the five Gate G7 / IFPM-028 engineering-readiness items so the weighted-overlay
+  deliverable pipeline is safe for controlled real-data execution, without running real-data
+  overlay, AHP weighting on real data, or interpretation.
+- Status: done for engineering readiness; overlay and interpretation remain gate-blocked.
+- Completion evidence: `ifpm-flood-pipeline` commit `39f6b33` adds a durable geospatial fixture
+  pair (`tests/fixtures/score_5x5.tif`, `zones_5x5.tif`) with a stable-signature regression test
+  and `tests/GEOSPATIAL.md`; finite-value/mask summaries in `raster_diagnostics`; 0-1 overlay-input
+  enforcement with `--allow-out-of-range` override; per-layer valid fractions + intersection
+  mask-loss reporting in the overlay diagnostics; and a new `zonal.py` + `zonal-score` CLI for the
+  sub-basin/tabular scoring branch. Tests: 36 -> 51 passing, 0 skipped; ruff clean.
+- Key result: the deliverable pipeline now exposes value readiness, enforces standardized overlay
+  inputs, reports mask loss, and supports a zonal scoring path. Gate G7 engineering readiness is
+  closed; the gate stays `NO-GO` for real-data overlay pending mentor decisions.
+- Next action: keep overlay and interpretation blocked; close Gate G2 (modelling unit) and the
+  criteria/boundary decisions before any controlled real-data overlay run.
+
 ### IFPM-028 Close Pre-Real-Data Engineering Readiness
 
 - Priority: P1
 - Task: make the synthetic-tested pipeline safe enough for controlled real-data overlay.
-- Status: blocked by a durable geospatial verification target, finite-value diagnostics, 0-1
-  overlay input enforcement, mask-loss reporting, and model-unit branch executability.
-- Completion evidence: geospatial verification is documented as a required pre-real-data command
-  with no required GeoTIFF tests skipped, overlay enforces standardized inputs, and diagnostics
-  expose value/mask readiness.
+- Status: closed-scoped for engineering readiness; real-data overlay and interpretation remain
+  blocked pending mentor decisions on modelling unit, criteria, and final boundary.
+- Completion evidence: `ifpm-flood-pipeline` commit `39f6b33` closes all five G7 items (durable
+  geospatial verification target, finite-value/mask diagnostics, 0-1 overlay-input enforcement,
+  per-layer mask-loss reporting, and a zonal scoring branch). Tests run with the `geospatial`
+  extra installed: 36 -> 51 passing, 0 skipped (rasterio 1.5.0); `ruff check` + `ruff format` clean.
+- Next action: keep overlay and interpretation blocked until Gate G2 (modelling unit) and the
+  criteria/boundary decisions are closed; the pipeline is now executable for a controlled run.
 
 ### IFPM-023 Implement Raster Grid Diagnostics
 
