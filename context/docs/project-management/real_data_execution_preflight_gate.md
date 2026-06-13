@@ -1,13 +1,22 @@
 # Real-Data Execution Preflight Gate
 
-Updated: 2026-06-11
+Updated: 2026-06-13
 
-Status: internal gate record. Current verdict: `NO-GO` for general real data download.
+Status: internal gate record. Scoped SRTM download, raw inventory, and V1 DEM/slope preprocessing
+are complete; scoped CHIRPS rainfall-sensitivity comparison is complete; current verdict remains
+`NO-GO` for 30 m CHIRPS resampling, AHP overlay, flood-risk interpretation, and intervention
+interpretation.
 
 Two real vector artifacts have been downloaded only for boundary discovery and comparison:
-HydroBASINS Standard Africa and Zimbabwe Geoportal Sub-Catchments. No SRTM, CHIRPS, validation
-data, overlay input, map output, or interpretation dataset has been downloaded or processed for
-this gate.
+HydroBASINS Standard Africa and Zimbabwe Geoportal Sub-Catchments. One scoped SRTM raw-tile
+download and a DEM/slope preprocessing run have now been completed for V1 terrain diagnostics
+only. A scoped CHIRPS rainfall-sensitivity package has also been completed as native-grid/V1
+summary evidence only. No validation data, overlay input, flood-risk map, or interpretation
+dataset has been downloaded or processed for this gate.
+
+A first candidate outlet discovery run was completed on 2026-06-11 using only those existing
+local vector artifacts. It produced provisional outlet/catchment candidates but did not accept a
+boundary or authorize downstream modelling.
 
 ## Purpose
 
@@ -33,6 +42,11 @@ Zimbabwe-Peru comparison.
 
 The project is not ready for general real data download, overlay, or interpretation yet.
 
+The project has completed one narrow terrain chain: six SRTMGL1 raw tiles were downloaded,
+inventoried, mosaicked, reprojected, clipped to V1, and converted into DEM/slope diagnostics. The
+next terrain-related step must choose modelling-unit and standardization rules, not overlay or
+interpretation.
+
 There are two narrow boundary-only exceptions:
 
 - the HydroBASINS boundary-discovery download was authorized and executed after the HydroSHEDS
@@ -40,29 +54,40 @@ There are two narrow boundary-only exceptions:
 - the Zimbabwe Geoportal Sub-Catchments download was authorized and executed after its dataset
   registry, preflight note, and authenticated page inspection were completed.
 
-These exceptions support boundary selection only. They do not authorize SRTM download, CHIRPS
-download, overlay, or map interpretation.
+These exceptions support boundary selection only. The later SRTM exception supports terrain
+diagnostics only. The scoped CHIRPS comparison supports rainfall sensitivity review only. None of
+these exceptions authorize model overlay, flood-risk interpretation, or intervention-map
+interpretation.
 
 Current boundary-discovery status: executed for the authorized HydroBASINS artifact and the
 authorized Zimbabwe Geoportal Sub-Catchments artifact. Candidate HYBAS and PFAF ids were
-discovered. The Geoportal layer added a named `Upper Mzingwane` feature, but no boundary has
-been accepted.
+discovered. The Geoportal layer added a named `Upper Mzingwane` feature, but no final boundary has
+been accepted. The 2026-06-12 professional map review recommends V1 /
+`HB_L8_1081528840_full_l7_chain` because it better matches the mentor's Level-8
+downstream-to-Gwanda cue, and the mentor later gave a thumbs-up reaction to the V1 evidence board.
+Treat V1 as `accepted_with_waiver_for_controlled_prototype`. The earlier C1 /
+`HB_L8_1081522660_literature_near` is demoted to a machine-derived topology prior only.
 
-- Outlet and boundary acceptance: blocked.
+- Outlet and boundary acceptance: closed only for controlled prototype terrain diagnostics, still
+  blocked for final thesis boundary acceptance.
   Mentor feedback reframed the boundary decision around the catchment near a flood/mining-relevant
-  outlet. HydroBASINS, Geoportal, and the reported but source/geometry-unresolved `~2138 km2`
-  reference are now comparison layers until the outlet-based catchment is defined.
-  Evidence: `real_data_preprocessing_design.md`.
+  outlet. V1 is now the working candidate with prototype-only waiver. HydroBASINS, Geoportal, and
+  the reported but source/geometry-unresolved `~2138 km2` reference remain comparison layers for
+  final-boundary discussion.
+  Evidence: `v1_working_boundary_decision_2026-06-12.md`.
 - Modelling unit: blocked.
   Raster-first, sub-basin aggregation, or mixed workflow is not selected.
   Evidence: `real_data_preprocessing_design.md`.
-- Rainfall time window: blocked.
-  CHIRPS temporal window, timestep, and product type are not selected.
-  Evidence: CHIRPS preflight note.
+- Rainfall time window: closed for comparison, not final criterion selection.
+  Multiple CHIRPS temporal windows and timesteps were processed for sensitivity comparison.
+  The rainfall criterion, modelling unit, and overlay role are still unselected.
+  Evidence: CHIRPS preflight note and `chirps_v1_rainfall_comparison_2026-06-13.md`.
 - Dataset preflight: partly closed.
   HydroSHEDS boundary-discovery and Zimbabwe Geoportal Sub-Catchments comparison have been
-  executed, while SRTM and CHIRPS remain blocked. Boundary acceptance still needs a documented
-  decision or waiver.
+  executed. SRTM tile preflight, download, raw inventory, and V1 DEM/slope preprocessing are
+  complete for the V1 working boundary. CHIRPS is closed only for native-grid/V1-summary
+  rainfall comparison. The V1 direction has a prototype-only waiver, but final-boundary
+  acceptance remains open.
   Evidence: `context/docs/data-management/preflight/`.
 - Storage boundary: ready.
   Raw, temporary, output, and export destinations are defined and ignored.
@@ -95,8 +120,19 @@ Exit evidence:
 - exact raw destination remains under `data/raw/<dataset_id>/`;
 - no boundary file is copied into `context/` or `ifpm-flood-pipeline/`.
 
-Current state: blocked. HydroBASINS and Geoportal boundary-only comparisons are complete, but
-the outlet has not been selected and their areas/modelling scopes are not reconciled.
+Current state: closed with waiver for controlled prototype SRTM terrain diagnostics only.
+
+- Working boundary: V1 / `HB_L8_1081528840_full_l7_chain`.
+- Decision status: `accepted_with_waiver_for_controlled_prototype`.
+- Evidence:
+  `context/docs/project-management/v1_working_boundary_decision_2026-06-12.md`.
+- Outputs:
+  `outputs/v1_working_boundary/v1_working_boundary.gpkg`,
+  `outputs/v1_working_boundary/v1_working_boundary_manifest.csv`, and
+  `outputs/v1_working_boundary/v1_anchor_check.csv`.
+
+Final boundary acceptance remains open. The waiver does not authorize 30 m CHIRPS resampling,
+overlay, flood-risk interpretation, or intervention-priority interpretation.
 
 Boundary-only exceptions already executed:
 
@@ -137,11 +173,12 @@ Exit evidence:
 - statement of whether any pixel-level overlay is allowed;
 - statement that CHIRPS will not be treated as 30 m information.
 
-Current state: blocked.
+Current state: blocked for combining terrain and rainfall; CHIRPS comparison is available only
+as native-grid diagnostics and V1 summaries.
 
 ## Gate G3: Temporal Window And Rainfall Product
 
-Required before CHIRPS download:
+Required before CHIRPS download or processing:
 
 - choose the first rainfall window, such as one event month, one rainy season, or a multi-year
   climatology;
@@ -156,7 +193,8 @@ Exit evidence:
 - selected artifact names or manual download steps;
 - expected size judged acceptable.
 
-Current state: blocked.
+Current state: closed for the scoped rainfall-sensitivity package, not closed for final rainfall
+criterion selection or overlay.
 
 ## Gate G4: Dataset-Specific Preflight Closure
 
@@ -165,13 +203,14 @@ blocking item.
 
 Current blockers:
 
-- SRTM: boundary mask or bounding box, expected disk footprint, and overwrite confirmation.
+- SRTM: raw-tile download, inventory, and V1 DEM/slope preprocessing are complete; scoring-ready
+  terrain standardization is not started.
 - HydroSHEDS: boundary-discovery download and inspection are complete. Boundary acceptance,
   comparison against Geoportal, and redistribution clearance remain open.
 - Zimbabwe Geoportal Sub-Catchments: boundary-comparison download and inspection are complete.
   Boundary acceptance and redistribution clearance remain open.
-- CHIRPS: temporal window, product type, timestep, expected disk footprint, and overwrite
-  confirmation.
+- CHIRPS: scoped comparison download and native/zonal diagnostics complete. Final rainfall
+  criterion, modelling-unit integration, and overlay role remain blocked.
 
 Exit evidence:
 
@@ -179,7 +218,9 @@ Exit evidence:
 - waiver explains risk and reviewer approval;
 - command or manual workflow cannot overwrite unrelated local data.
 
-Current state: blocked.
+Current state: closed for the scoped SRTM raw-tile download and scoped CHIRPS comparison; still
+blocked for AHP overlay, 30 m CHIRPS resampling, flood-risk interpretation, and intervention
+interpretation.
 
 ## Gate G5: Download Authorization Record
 
@@ -205,9 +246,9 @@ After download, add:
 - partial or failed-download disposition;
 - CRS, georeferencing, and integrity check state.
 
-Current state: ready as a required template for remaining datasets. The HydroSHEDS
-boundary-discovery and Zimbabwe Geoportal Sub-Catchments exceptions used their own authorization
-records.
+Current state: used for the scoped SRTM raw-tile download and ready as a required template for
+remaining datasets. The HydroSHEDS boundary-discovery and Zimbabwe Geoportal Sub-Catchments
+exceptions used their own authorization records.
 
 ## Gate G6: Execution Rules After Download
 
@@ -272,18 +313,14 @@ Stop before download if any of these appears:
 
 ## Immediate Next Action
 
-Close the smallest useful decision set:
+Close the smallest useful terrain preprocessing decision set:
 
-1. ask the mentor for the rough flood/mining-relevant outlet location or downstream impact point;
-2. record candidate outlet evidence and select an outlet-based delineation branch;
-3. use
-   `context/docs/project-management/upper_mzingwane_boundary_fact_check_2026-06-10.md`
-   and
-   `context/docs/project-management/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`
-   as comparison context, not as automatic boundary choices;
-4. choose the initial modelling branch;
-5. choose whether CHIRPS is deferred or limited to one small rainfall summary window;
-6. update the affected dataset preflight notes from `not ready` to either `ready` or
-   `blocked with waiver`.
+1. choose whether the first model unit is terrain-only raster screening, sub-basin aggregation, or
+   mixed reporting;
+2. define terrain standardization rules for DEM/slope if either is used in scoring;
+3. decide whether CHIRPS remains deferred or gets a separate coarse rainfall-summary preflight;
+4. keep flow accumulation and drainage-distance proxies deferred until hydrological conditioning
+   assumptions are explicitly documented.
 
-Until those steps are complete, the correct state remains `NO-GO`.
+Until those steps are complete, the correct state remains `NO-GO` for overlay and
+interpretation.

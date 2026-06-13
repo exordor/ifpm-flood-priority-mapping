@@ -2,8 +2,9 @@
 
 Status: internal design draft, revised after mentor feedback. HydroBASINS boundary discovery and
 Zimbabwe Geoportal Sub-Catchments boundary comparison have been executed as narrow boundary-only
-exceptions, but no SRTM, CHIRPS, overlay input, or interpretation dataset has been downloaded or
-processed.
+exceptions. A scoped SRTM raw-tile download, inventory, and V1 DEM/slope preprocessing run has
+been completed for terrain diagnostics only, but no CHIRPS, overlay input, or interpretation
+dataset has been downloaded or processed.
 
 ## Purpose
 
@@ -76,6 +77,10 @@ Do not run a real-data overlay or aggregation if the boundary acceptance state i
 
 ## Grid And Resolution Rules
 
+For the active V1 controlled prototype terrain run, the detailed reference-grid rule is saved in
+`context/docs/data-management/v1_terrain_reference_grid_rule.md`. That file is authoritative for
+V1 terrain derivative compatibility before any standardization, scoring, or overlay.
+
 ### Terrain-Derived Raster Grid
 
 - SRTM-derived terrain layers may use an SRTM-compatible 30 m working grid when feasible.
@@ -88,6 +93,10 @@ Do not run a real-data overlay or aggregation if the boundary acceptance state i
 - Processing order: raw tile inventory, void and NoData check, mosaic or clip if needed,
   reproject an analysis copy to the metric working CRS, then derive terrain layers with units
   recorded.
+- For V1 terrain derivatives, the active reference raster is
+  `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif`.
+  Later V1 terrain layers must match its CRS, transform, resolution, shape, band count, dtype,
+  NoData value, and V1 valid-cell coverage before they can enter standardization or overlay.
 
 ### Rainfall Grid
 
@@ -97,8 +106,9 @@ Do not run a real-data overlay or aggregation if the boundary acceptance state i
   1. aggregate CHIRPS to the selected catchment or sub-basin units;
   2. compute zonal rainfall summaries for the terrain-grid mask;
   3. keep CHIRPS at native resolution for diagnostics and report scale mismatch explicitly.
-- Do not resample CHIRPS to 30 m for a pixel-level overlay unless the mentor explicitly accepts
-  the resampling rule and its limitations.
+- Do not resample CHIRPS to 30 m for pixel-level overlay. If a future coarse rainfall
+  visualization is approved, label it as a zonal or coarse-summary product, not as 30 m rainfall
+  evidence.
 
 ### Model-Unit Branches
 
@@ -159,6 +169,8 @@ Run diagnostics before a raster is allowed into overlay:
 - per-raster issue list;
 - grid compatibility against the chosen reference;
 - output path and processing command record.
+- for V1 terrain derivatives, compatibility with
+  `context/docs/data-management/v1_terrain_reference_grid_rule.md`.
 
 For the first real-data run, attach or summarize diagnostics in the internal handoff before
 interpreting any map output.
