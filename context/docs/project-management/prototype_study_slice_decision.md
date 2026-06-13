@@ -1,8 +1,8 @@
 # Prototype Study Slice Decision
 
-Updated: 2026-06-11
+Updated: 2026-06-12
 
-Status: draft decision revised after mentor feedback.
+Status: V1 accepted with waiver for controlled prototype use.
 
 ## Decision
 
@@ -34,8 +34,13 @@ that the project can:
 - Boundary rule: first identify the outlet relevant to flood impact and mining influence, then
   delineate the upstream catchment. Current Geoportal, HydroBASINS, and literature boundaries are
   comparison layers, not automatic selections.
-- Current unresolved outlet decision: mentor needs to indicate a rough outlet, downstream impact
-  point, mine-related river reach, dam, confluence, town, or map point.
+- Current outlet direction: the 2026-06-12 mentor cue and later thumbs-up reaction support a
+  Level-8 basin containing Mzingwane Dam and the main Mzingwane River channel downstream toward
+  Gwanda.
+- Current working boundary evidence: the professional map review and mentor acknowledgement support
+  V1 / `HB_L8_1081528840_full_l7_chain` as
+  `accepted_with_waiver_for_controlled_prototype`. The earlier C1 /
+  `HB_L8_1081522660_literature_near` is demoted to a machine-derived topology prior only.
 - First output grain: raster diagnostics at source-compatible resolution, then optional
   aggregation to sub-basin units.
 - Initial terrain working resolution: 30 m for SRTM-derived terrain layers when feasible.
@@ -89,7 +94,7 @@ Completed scaffolding in `ifpm-flood-pipeline`:
 
 Remaining blockers before a real-data overlay or interpretation run:
 
-- mentor-approved or mentor-provisional outlet location;
+- V1 outlet and boundary recorded as `accepted_with_waiver_for_controlled_prototype`;
 - selected outlet-based catchment delineation branch;
 - geospatial verification must run with the geospatial extra installed, not only with skipped
   raster tests;

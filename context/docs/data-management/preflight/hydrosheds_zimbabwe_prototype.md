@@ -61,10 +61,24 @@ Status: boundary-discovery artifact downloaded and inspected. Boundary not accep
 - Authorization state: executed for the single authorized artifact.
 - Authorized future artifact:
   `https://data.hydrosheds.org/file/hydrobasins/standard/hybas_af_lev01-12_v1c.zip`
-- Deferred artifacts: HydroBASINS customized-with-lakes, HydroRIVERS, pour points, and legacy
-  HydroSHEDS archive layers.
+- Deferred artifacts: HydroBASINS customized-with-lakes, HydroBASINS pour points, HydroRIVERS,
+  and legacy HydroSHEDS archive layers.
 - Discovery output: candidate levels, HYBAS ids, PFAF ids, dissolve/union rule, geometry/CRS,
   outlet plausibility, area comparison, and accepted/rejected/waived boundary state.
+
+## Candidate Outlet Follow-Up Preconditions
+
+Before downloading HydroBASINS pour points or HydroRIVERS:
+
+- [ ] Exact source artifact name and URL are recorded.
+- [ ] Expected file size and file count are recorded.
+- [ ] Licence and redistribution constraints are rechecked.
+- [ ] The download purpose is limited to outlet plausibility or river-network diagnostics.
+- [ ] The target path remains `data/raw/hydrosheds_zimbabwe_prototype/` or a reviewed
+      dataset-specific `data/raw/<dataset_id>/` path.
+- [ ] The command has overwrite guards and a temporary partial path.
+
+Current status: not downloaded for the 2026-06-11 candidate outlet first pass.
 
 ## Execution Evidence
 

@@ -22,7 +22,7 @@ Status: downloaded for boundary discovery; boundary not accepted.
   - HydroRIVERS: `https://www.hydrosheds.org/products/hydrorivers`
   - Product overview: `https://www.hydrosheds.org/products`
 - Product/version: HydroBASINS standard Africa version 1c for the first boundary-discovery
-  artifact; HydroRIVERS version 1.0 remains deferred
+  artifact; HydroBASINS pour points version 1.0 and HydroRIVERS version 1.0 remain deferred
 - Access date: 2026-06-10
 - Access method: direct product-page download
 - Licence or terms: HydroSHEDS core product licence in the HydroSHEDS Technical Documentation;
@@ -38,6 +38,8 @@ Status: downloaded for boundary discovery; boundary not accepted.
 - Expected file types: compressed archives with vector layers and sidecar files
 - Source artifact name:
   - first authorized boundary-discovery artifact: `hybas_af_lev01-12_v1c.zip`
+  - deferred HydroBASINS pour points: exact Africa or all-level artifact not yet selected; use
+    the HydroBASINS product page and pour-point technical documentation before download
   - deferred HydroRIVERS options: `HydroRIVERS_v10_af.gdb.zip` and
     `HydroRIVERS_v10_af_shp.zip`
 - Expected file count: one source archive for the first boundary-discovery attempt
@@ -102,6 +104,19 @@ Status: downloaded for boundary discovery; boundary not accepted.
 - Replacement or update rule: replace or supplement if mentor supplies an authoritative local
   catchment boundary or river network
 - Validation role: hydrological framework and aggregation units, not validation evidence
+
+## Candidate Outlet Follow-Up Sources
+
+These sources were reviewed as likely next evidence layers for candidate outlet discovery but
+were not downloaded during the 2026-06-11 first pass:
+
+- HydroBASINS pour points: official sub-basin outlet point layer. Use only after recording exact
+  artifact name, byte size, licence pointer, and checksum plan.
+- HydroRIVERS Africa: river-network plausibility layer. The HydroSHEDS product page reports an
+  Africa Shapefile option of about 108 MB; download only if river-exit checks are needed.
+
+Any future download remains subject to the same `data/raw/<dataset_id>/` destination, checksum,
+and release-boundary rules recorded above.
 
 ## Release Boundary
 
