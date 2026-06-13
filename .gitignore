@@ -6,6 +6,9 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+.venv/
+__pycache__/
+*.pyc
 .lark-cli/
 .feishu-cli/
 

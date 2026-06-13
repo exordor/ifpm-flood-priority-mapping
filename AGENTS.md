@@ -96,6 +96,38 @@ Key recurring open questions:
 
 Prefer concrete checklists, traceable dataset links, and conservative claim boundaries.
 
+## V1 Terrain Reference Grid Rule
+
+For V1 controlled prototype terrain preprocessing, follow the internal rule file:
+
+`context/docs/data-management/v1_terrain_reference_grid_rule.md`
+
+- The active terrain reference raster is
+  `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif`.
+- Future V1 terrain derivatives must match the reference raster's CRS, transform, resolution,
+  width, height, band count, dtype, NoData, and V1 valid-cell coverage before standardization,
+  scoring, or weighted overlay.
+- Incompatible rasters must be recorded as `grid-compatible=false` and blocked from overlay.
+- CHIRPS must not be resampled to the V1 `30 m` terrain grid and treated as pixel-level
+  evidence; use native-resolution diagnostics or catchment/sub-basin zonal summaries until a
+  separate modelling-unit decision is accepted.
+- This rule does not accept V1 as the final thesis boundary and does not authorize CHIRPS,
+  AHP overlay, flood-risk interpretation, or intervention-priority interpretation.
+
+## Python Environment
+
+Use a local Python environment for root-context GIS exploration and private tooling.
+
+- Preferred root environment: `.venv/` at the workspace root. It is local-only and ignored by Git.
+- Acceptable temporary environment: `/tmp/<purpose-specific-venv>` when keeping the workspace
+  untouched is useful.
+- Do not commit virtual environments, package caches, downloaded wheels, or generated dependency
+  artifacts.
+- Record any non-standard GIS/runtime dependency needed to reproduce a workflow in the relevant
+  internal project note, registry, preflight file, or handoff.
+- Keep deliverable-code dependencies inside `ifpm-flood-pipeline/` and do not make public-safe
+  examples depend on root `.venv`, `context/`, `data/`, or `outputs/`.
+
 ## Post-Implementation Adversarial Review
 
 After each non-trivial implementation in this workspace, run an adversarial review loop before
