@@ -7,6 +7,18 @@ the P1 and P2 risk decision packages into eight dependency-ordered key decisions
 three batches. This briefing does not authorize any download, boundary acceptance, AHP overlay,
 flood-risk interpretation, or intervention-priority interpretation.
 
+## Scope Note (Added 2026-06-15)
+
+The HiWi is the **data processor**, not the thesis author. The decisions below are framed for the
+mentor because they are thesis/claim-level calls: what the deliverable must achieve, what counts
+as validation, what weights are authoritative, what the final boundary is, whether Peru is
+required. None of them block the HiWi's data-processing work, which proceeds on already-authorized
+data with documented defaults (see the Scope section in `real_data_execution_preflight_gate.md`).
+
+The HiWi needs answers to these decisions only to know how to **label** outputs (diagnostic vs
+interpretable) and what additional data to request access to. Data production itself does not wait
+for these answers.
+
 ## How To Use This Briefing
 
 Present the three batches in order. Each batch has a clear purpose:
@@ -18,9 +30,12 @@ Present the three batches in order. Each batch has a clear purpose:
 - **Batch C (decisions 7-8)** is conditional refinement, needed only if Batch A triggers a
   fallback or if validation is required.
 
-If the mentor cannot answer all of Batch A in one meeting, the project should pause new work and
-wait, rather than infer answers. Each decision below states what an answer unblocks and what the
-fallback is if the answer is negative.
+If the mentor cannot answer all of Batch A in one meeting, **data processing still proceeds** on
+already-authorized data with documented defaults (hydrology derivatives, LS/R/K/C factors,
+diagnostic overlays). What waits is **interpretation and any new data access that needs mentor
+introduction** — not data production. Do not infer answers; record them as open and label
+affected outputs as diagnostic-only until the mentor decides. Each decision below states what an
+answer unblocks and what the fallback is if the answer is negative.
 
 For each decision, the HiWi recommendation is marked **(recommended)** where it exists. The
 mentor only needs to confirm or override.
@@ -29,20 +44,22 @@ mentor only needs to confirm or override.
 
 ## Batch A: Viability And Mentor Contribution
 
-### Decision 1: Minimum Viable Thesis
+### Decision 1: Minimum Viable Thesis (Mentor's Call; Does Not Block Data Processing)
 
 > If all external data access fails, is a **terrain-only, Zimbabwe-only, no-independent-validation
 > priority/suitability map** acceptable as the thesis floor? Or are validation, mining data, and
 > the Peru comparison all hard requirements?
 
-- Unblocks: the entire fallback strategy; defines what "done" means.
+- This is a **thesis-scope decision for the mentor**, not a blocker for the HiWi. The HiWi
+  produces data products regardless of this answer; the answer only determines whether those
+  products are sufficient as a thesis or must be supplemented.
+- Unblocks: the mentor's own fallback strategy; defines what "done" means for the thesis.
 - If **suitability map is acceptable**: most P1/P2 risks become scope reductions, not blockers.
-  The project can proceed to a defensible single-site deliverable on existing data.
 - If **all are hard requirements**: the project needs mentor-mediated data access (Decision 2)
   and a longer timeline; some requirements may be infeasible.
-- This is the single highest-leverage question. It replaces P1-Q (validation required?),
-  R1.2-Q4 (mining demotion acceptable?), R2.1-Q5 (sediment demotion acceptable?), and R2.3-Q1
-  (Peru required?).
+- This is the single highest-leverage question for the mentor. It replaces P1-Q (validation
+  required?), R1.2-Q4 (mining demotion acceptable?), R2.1-Q5 (sediment demotion acceptable?),
+  and R2.3-Q1 (Peru required?).
 
 ### Decision 2: Data The Mentor Can Provide Or Unlock
 

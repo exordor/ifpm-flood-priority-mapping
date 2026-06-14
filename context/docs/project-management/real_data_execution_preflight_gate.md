@@ -2,11 +2,53 @@
 
 Updated: 2026-06-13
 
-Status: internal gate record. Scoped SRTM download, raw inventory, and V1 DEM/slope preprocessing
+Status: internal gate record, revised 2026-06-15 to separate the HiWi data-processing scope from
+the mentor/thesis claim scope. Scoped SRTM download, raw inventory, and V1 DEM/slope preprocessing
 are complete; scoped CHIRPS rainfall-sensitivity comparison is complete; the deliverable
 pipeline's Gate G7 engineering readiness is closed (`ifpm-flood-pipeline` commit `39f6b33`); the
-current verdict remains `NO-GO` for 30 m CHIRPS resampling, AHP overlay, flood-risk interpretation,
-and intervention interpretation.
+deliverable pipeline's synthetic GeoTIFF fixtures are grid-compliant (`ifpm-flood-pipeline` commit
+`6269451`).
+
+## Scope: Data Production vs Interpretable Claim
+
+This gate was originally written as if data production and claim-making were the same activity.
+They are not. This section separates them so the HiWi (data processor) is not blocked by
+thesis-level decisions that are the mentor's responsibility.
+
+**Data production** (HiWi scope; proceeds with documented defaults; not blocked by this gate
+unless a dataset-specific preflight is incomplete):
+
+- downloading public datasets that have a closed registry + preflight + Gate G5 authorization;
+- preprocessing, mosaicking, reprojecting, clipping, void-filling;
+- deriving terrain, hydrology, sediment-factor, and land-use indicators from already-downloaded
+  data;
+- standardizing layers to 0-1 with a documented rule;
+- producing diagnostic overlays and sensitivity runs with documented synthetic or placeholder
+  weights, clearly labelled as non-interpretable diagnostics;
+- generating diagnostics, figures, and handoff tables.
+
+Data-production outputs must be labelled as workflow/diagnostic products and must not be
+presented as interpretable flood-risk or intervention-priority findings. They are inputs FOR the
+mentor and any future modeller, not claims.
+
+**Interpretable claim** (mentor / thesis scope; remains gated by this gate and by the P1/P2
+decision packages):
+
+- asserting that an output is a validated flood-risk map;
+- presenting priority classes as intervention priorities;
+- publishing, presenting, or comparing results as project findings;
+- treating synthetic-weight outputs as if they had expert authority;
+- making Zimbabwe-Peru comparison claims.
+
+The HiWi does not make claims. The HiWi produces defensible, documented data products and hands
+them to the mentor. Thesis-level decisions (minimum viable thesis, validation requirement,
+criteria hierarchy acceptance, boundary promotion to final, Peru scope) are the mentor's calls
+and do not block data production. Where a data-processing default is needed (for example a
+hydro-conditioning algorithm or a USLE formula), the HiWi selects a standard method, documents
+the choice and its trade-offs in the processing note, produces the output, and flags any
+methodological sensitivity for the mentor's awareness. The gates below (G1-G7) apply to
+interpretable claims and to dataset-specific download authorization, not to the production of
+diagnostic data products from already-authorized data.
 
 Two real vector artifacts have been downloaded only for boundary discovery and comparison:
 HydroBASINS Standard Africa and Zimbabwe Geoportal Sub-Catchments. One scoped SRTM raw-tile
@@ -41,7 +83,16 @@ Zimbabwe-Peru comparison.
 
 ## Current Verdict
 
-The project is not ready for general real data download, overlay, or interpretation yet.
+Per the scope split above: **data production is GO** for already-authorized public datasets and
+for deriving diagnostic products from already-downloaded data, using documented defaults.
+**Interpretable claims remain NO-GO** (validated flood-risk map, intervention priority,
+Zimbabwe-Peru comparison, public release) until the relevant mentor decisions close.
+
+The 30 m CHIRPS resampling rule is a binding data-quality rule (not a claim) and stays in force
+regardless of scope: CHIRPS must not be resampled to the V1 30 m terrain grid as pixel-level
+evidence.
+
+The project is not ready for broad bulk download or for interpretable claims yet.
 
 The project has completed one narrow terrain chain: six SRTMGL1 raw tiles were downloaded,
 inventoried, mosaicked, reprojected, clipped to V1, and converted into DEM/slope diagnostics. The
@@ -317,16 +368,25 @@ Stop before download if any of these appears:
 - real-data overlay would run without the Gate G7 engineering readiness checks;
 - credentials, cookies, tokens, or private cloud links would be written to a committed file.
 
-## Immediate Next Action
+## Immediate Next Action (Data-Processor Scope)
 
-Close the smallest useful terrain preprocessing decision set:
+Produce the next diagnostic data products from already-downloaded data, documenting the chosen
+defaults in a processing note (not a mentor decision package):
 
-1. choose whether the first model unit is terrain-only raster screening, sub-basin aggregation, or
-   mixed reporting;
-2. define terrain standardization rules for DEM/slope if either is used in scoring;
-3. decide whether CHIRPS remains deferred or gets a separate coarse rainfall-summary preflight;
-4. keep flow accumulation and drainage-distance proxies deferred until hydrological conditioning
-   assumptions are explicitly documented.
+1. derive V1 hydrology products (flow direction, flow accumulation, drainage network, stream
+   order, TWI, distance-to-drainage) from the existing V1 DEM, using documented standard
+   defaults (sink-fill method, D8, channel threshold, edge handling); record the choices and
+   their trade-offs in the processing note;
+2. derive V1 LS factor from the conditioned DEM and flow accumulation;
+3. compute V1 R-factor from existing CHIRPS using a documented modified-Fournier rule, at native
+   grid or as a V1 zonal summary (not resampled to 30 m);
+4. produce a C-factor proxy from existing ESA WorldCover using a documented lookup table;
+5. for each output, run the V1 raster grid gate and write diagnostics under `outputs/`.
 
-Until those steps are complete, the correct state remains `NO-GO` for overlay and
-interpretation.
+None of the above requires mentor sign-off, because none produces an interpretable claim. Each
+produces a labelled diagnostic data product for the mentor. Mentor-gated items (mining data
+access, expert AHP weights, boundary promotion to final thesis boundary, validation tier,
+Peru scope, publication) proceed on their own track and do not block data production.
+
+Until the relevant mentor decisions close, the correct state remains `NO-GO` for interpretable
+claims only; diagnostic data production proceeds.

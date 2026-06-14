@@ -25,6 +25,13 @@ dependency-ordered sequencing plan are complete. Several P2 items are engineerin
 existing data once their documented decisions are accepted; none authorizes overlay or
 interpretation.
 
+A 2026-06-15 scope clarification separated the HiWi data-processing role from the mentor/thesis
+claim role. Data production (authorized public downloads, preprocessing, indicator derivation,
+standardization, diagnostic overlays with documented weights) is GO and self-authorizing via
+documented defaults. Interpretable claims (validated flood-risk map, intervention priority,
+Zimbabwe-Peru comparison, publication) remain NO-GO and are the mentor's calls. The next
+data-processing work proceeds without waiting for thesis-level mentor decisions.
+
 Do not start broad data downloads yet. HydroSHEDS boundary discovery has been executed for one
 authorized artifact, and the Zimbabwe Geoportal Sub-Catchments alternative has been downloaded
 and compared for boundary evidence. Mentor feedback now reframes the next step: define the study
@@ -216,10 +223,27 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   `context/docs/mentor-explanation/Mentor_Decision_Briefing_2026-06-15.md`.
 - Key result: Batch A (3 decisions) defines project viability and mentor contribution; Batch B
   (3 decisions) locks methodology via HiWi-recommendation confirmations; Batch C (2 decisions)
-  is conditional refinement. Each decision records what it unblocks and its fallback.
+  is conditional refinement. Each decision records what it unblocks and its fallback. Revised
+  2026-06-15 to mark thesis-level decisions as the mentor's domain; data processing does not
+  pause on them.
 - Next action: present Batch A in the next mentor meeting; do not infer answers if the mentor
-  cannot respond. The project should pause new analytical work until Batch A is answered, to
-  avoid worsening the process/output imbalance.
+  cannot respond. Data production proceeds on already-authorized data regardless; only
+  interpretation and mentor-mediated data access wait.
+
+### IFPM-070 Data-Processor Scope Split In Governance
+
+- Status: complete. Separated the HiWi data-processing scope from the mentor/thesis claim scope
+  in the three governance docs that were over-gating data work.
+- Evidence: revised `real_data_execution_preflight_gate.md` (new Scope section + revised Current
+  Verdict + revised Immediate Next Action), revised `Mentor_Decision_Briefing_2026-06-15.md`
+  (Scope Note + Decision 1 reframed as mentor's call + How-To revision), this board entry.
+- Key result: data production (download of authorized public datasets, preprocessing, indicator
+  derivation, standardization, diagnostic overlays with documented weights) is now explicitly GO
+  and self-authorizing via documented defaults. Interpretable claims (validated flood-risk map,
+  intervention priority, comparison, publication) remain NO-GO and are the mentor's calls.
+- Next action: proceed with hydrology derivatives, LS/R/K/C factors from existing data, each with
+  a processing note recording the chosen defaults; do not wait for mentor sign-off on
+  preprocessing parameters.
 
 ## Current Milestones And Gates
 
