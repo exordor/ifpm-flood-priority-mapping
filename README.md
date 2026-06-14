@@ -56,6 +56,12 @@ ifpm-flood-pipeline/
 - `context/docs/project-management/p1_validation_data_decision_package_2026-06-15.md`
 - `context/docs/project-management/p1_mining_data_decision_package_2026-06-15.md`
 - `context/docs/project-management/p1_ahp_weighting_decision_package_2026-06-15.md`
+- `context/docs/project-management/p2_risk_overview_2026-06-15.md`
+- `context/docs/project-management/p2_modelling_unit_decision_package_2026-06-15.md`
+- `context/docs/project-management/p2_hydrology_derivatives_decision_package_2026-06-15.md`
+- `context/docs/project-management/p2_sediment_risk_decision_package_2026-06-15.md`
+- `context/docs/project-management/p2_peru_side_decision_package_2026-06-15.md`
+- `context/docs/project-management/p2_boundary_acceptance_decision_package_2026-06-15.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_en.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_zh.md`
 - `context/docs/mentor-explanation/Mentor_Next_Step_Summary_IFPM_2026-06-10.md`

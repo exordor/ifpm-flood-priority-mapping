@@ -17,6 +17,14 @@ template, an AHP elicitation protocol with a non-authoritative illustrative prio
 0.0406), and a consolidated claim-boundary fallback strategy are complete. All three remain
 decision-gated and do not authorize any download, overlay, or interpretation.
 
+A second 2026-06-15 pass covered the five P2 serious risks: R2.1 sediment-risk layer entirely
+missing (USLE/RUSLE factor plan), R2.2 hydrology derivatives incomplete (hydrological-conditioning
+assumptions A1-A5), R2.3 Peru side entirely blank, R2.4 modelling unit undecided (Gate G2), and
+R2.5 final boundary not accepted. Decision packages, a SoilGrids preflight draft, and a
+dependency-ordered sequencing plan are complete. Several P2 items are engineering-actionable from
+existing data once their documented decisions are accepted; none authorizes overlay or
+interpretation.
+
 Do not start broad data downloads yet. HydroSHEDS boundary discovery has been executed for one
 authorized artifact, and the Zimbabwe Geoportal Sub-Catchments alternative has been downloaded
 and compared for boundary evidence. Mentor feedback now reframes the next step: define the study
@@ -145,6 +153,60 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 - Next action: surface R1.3 mentor decision questions; if elicitation cannot be completed, apply
   the fallback (keep the pipeline runnable on synthetic data only and label all outputs as
   workflow diagnostics).
+
+### IFPM-064 P2 R2.1 Sediment Risk Decision Package
+
+- Status: decision package and SoilGrids preflight scaffolding complete; awaits R-factor formula,
+  K-factor source, and C-factor mapping decisions; LS factor blocked on R2.2.
+- Evidence:
+  `context/docs/project-management/p2_sediment_risk_decision_package_2026-06-15.md`,
+  `context/docs/data-management/registry/soilgrids_250m_sediment_candidate.md`,
+  `context/docs/data-management/preflight/soilgrids_250m_sediment_candidate.md`,
+  `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
+- Next action: surface R2.1 mentor decision questions; close R2.2 before LS-factor engineering.
+
+### IFPM-065 P2 R2.2 Hydrology Derivatives Decision Package
+
+- Status: hydrological-conditioning assumptions A1-A5 drafted; awaits mentor confirmation;
+  engineering unblocked after acceptance (no new download needed).
+- Evidence:
+  `context/docs/project-management/p2_hydrology_derivatives_decision_package_2026-06-15.md`,
+  `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
+- Next action: surface R2.2 mentor decision questions; on acceptance, implement V1 flow
+  direction, flow accumulation, drainage network, TWI, and distance-to-drainage diagnostics from
+  the existing V1 DEM.
+
+### IFPM-066 P2 R2.4 Modelling Unit Decision Package (Gate G2)
+
+- Status: trade-off matrix and Branch-1 recommendation complete; awaits mentor selection.
+- Evidence:
+  `context/docs/project-management/p2_modelling_unit_decision_package_2026-06-15.md`,
+  `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
+- Key result: recommended Branch 1 (terrain-only raster screening, rainfall as context) for the
+  first V1 prototype; Branch 2 (sub-basin aggregation) as natural upgrade once boundary and
+  sub-basin layer accepted.
+- Next action: surface R2.4 mentor decision questions; close Gate G2 by recording the selected
+  branch, rationale, and the CHIRPS-30m exclusion statement.
+
+### IFPM-067 P2 R2.3 Peru Side Decision Package
+
+- Status: scope and data-holder inventory complete; awaits mentor confirmation of comparative
+  requirement and timeline.
+- Evidence:
+  `context/docs/project-management/p2_peru_side_decision_package_2026-06-15.md`,
+  `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
+- Next action: surface R2.3 mentor decision questions; do NOT start Peru downloads until the
+  Zimbabwe methodology is locked.
+
+### IFPM-068 P2 R2.5 Final Boundary Acceptance Decision Package
+
+- Status: public-source hunt consolidated as exhausted; awaits mentor polygon or V1 promotion
+  decision.
+- Evidence:
+  `context/docs/project-management/p2_boundary_acceptance_decision_package_2026-06-15.md`,
+  `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
+- Next action: surface R2.5 mentor decision questions as a single explicit ask; promote V1 only
+  with explicit sign-off and a recorded area-discrepancy note.
 
 ## Current Milestones And Gates
 
