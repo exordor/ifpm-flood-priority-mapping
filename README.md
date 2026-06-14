@@ -52,10 +52,16 @@ ifpm-flood-pipeline/
 - `context/docs/project-management/upper_mzingwane_boundary_decision_record_2026-06-10.md`
 - `context/docs/project-management/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`
 - `context/docs/project-management/upper_mzingwane_boundary_fact_check_2026-06-10.md`
+- `context/docs/project-management/p1_risk_overview_2026-06-15.md`
+- `context/docs/project-management/p1_validation_data_decision_package_2026-06-15.md`
+- `context/docs/project-management/p1_mining_data_decision_package_2026-06-15.md`
+- `context/docs/project-management/p1_ahp_weighting_decision_package_2026-06-15.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_en.md`
 - `context/docs/mentor-explanation/Mentor_Oral_Explanation_Zimbabwe_Peru_Flood_Risk_zh.md`
 - `context/docs/mentor-explanation/Mentor_Next_Step_Summary_IFPM_2026-06-10.md`
 - `context/docs/mentor-explanation/Upper_Mzingwane_Boundary_Decision_Package_2026-06-10.md`
+- `context/docs/mentor-explanation/Mining_Data_Access_Request_Template_2026-06-15.md`
+- `context/docs/mentor-explanation/AHP_Elicitation_Protocol_And_Template_2026-06-15.md`
 - `context/docs/project-analysis/IFPM_HiWi_Project_Analysis.md`
 - `context/docs/project-analysis/AI_Research_Document_Generation_Lessons_Learned.md`
 

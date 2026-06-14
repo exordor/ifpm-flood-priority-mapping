@@ -1,6 +1,6 @@
 # IFPM Task Progress And Plan Board
 
-Updated: 2026-06-13
+Updated: 2026-06-15
 
 Scope: private project planning for the IFPM comparative flood-risk modelling workspace.
 
@@ -9,6 +9,13 @@ Scope: private project planning for the IFPM comparative flood-risk modelling wo
 The workspace now has a clean split between private context and deliverable code. The minimal
 AHP-MCDA weighted-overlay pipeline exists, data-download governance is defined, and future work
 should move from method scaffolding to a controlled data/preprocessing prototype.
+
+A 2026-06-15 project risk and data-gap review identified three P1 blocking risks: R1.1 validation
+data effectively zero, R1.2 mining/ASM data critically insufficient, and R1.3 AHP weights with no
+expert source. Decision packages, public-safe preflight scaffolding, a mentor mining-data request
+template, an AHP elicitation protocol with a non-authoritative illustrative prior (CR verified
+0.0406), and a consolidated claim-boundary fallback strategy are complete. All three remain
+decision-gated and do not authorize any download, overlay, or interpretation.
 
 Do not start broad data downloads yet. HydroSHEDS boundary discovery has been executed for one
 authorized artifact, and the Zimbabwe Geoportal Sub-Catchments alternative has been downloaded
@@ -97,6 +104,47 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 - Evidence: `context/docs/project-management/multi_level_progress_review_2026-06-10.md`.
 - Next action: fix the boundary-discovery and engineering-readiness blockers recorded in the
   review report.
+
+### IFPM-061 P1 R1.1 Validation Data Decision Package
+
+- Status: decision package and public-safe preflight scaffolding complete; awaits mentor answers;
+  Tier A downloads still gated.
+- Evidence:
+  `context/docs/project-management/p1_validation_data_decision_package_2026-06-15.md`,
+  `context/docs/project-management/p1_risk_overview_2026-06-15.md`,
+  `context/docs/data-management/registry/emdat_public_validation_candidate.md`,
+  `context/docs/data-management/preflight/emdat_public_validation_candidate.md`,
+  `context/docs/data-management/registry/glofas_public_validation_candidate.md`,
+  `context/docs/data-management/preflight/glofas_public_validation_candidate.md`.
+- Next action: surface R1.1 mentor decision questions; if validated evidence cannot be closed,
+  apply the claim-boundary fallback (reframe to priority/suitability map with acknowledged
+  validation gap).
+
+### IFPM-062 P1 R1.2 Mining Data Decision Package
+
+- Status: decision package and mentor request template complete; awaits mentor introduction or
+  fallback confirmation.
+- Evidence:
+  `context/docs/project-management/p1_mining_data_decision_package_2026-06-15.md`,
+  `context/docs/mentor-explanation/Mining_Data_Access_Request_Template_2026-06-15.md`,
+  `context/docs/project-management/p1_risk_overview_2026-06-15.md`.
+- Next action: surface R1.2 mentor decision questions; if Tier A mining access is denied or
+  delayed, apply the fallback (demote Mining and Rehabilitation to qualitative/context evidence
+  in a reduced-criteria V1 hierarchy).
+
+### IFPM-063 P1 R1.3 AHP Weighting Decision Package
+
+- Status: decision package and elicitation instrument complete; awaits expert elicitation.
+- Evidence:
+  `context/docs/project-management/p1_ahp_weighting_decision_package_2026-06-15.md`,
+  `context/docs/mentor-explanation/AHP_Elicitation_Protocol_And_Template_2026-06-15.md`,
+  `context/docs/project-management/p1_risk_overview_2026-06-15.md`.
+- Key result: the non-authoritative illustrative structural prior (derived from the methodology
+  figure's three-tier decomposition) was verified at CR 0.0406; it is a conversation starter only
+  and must not enter `configs/` or generate interpretable outputs.
+- Next action: surface R1.3 mentor decision questions; if elicitation cannot be completed, apply
+  the fallback (keep the pipeline runnable on synthetic data only and label all outputs as
+  workflow diagnostics).
 
 ## Current Milestones And Gates
 
