@@ -208,6 +208,19 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 - Next action: surface R2.5 mentor decision questions as a single explicit ask; promote V1 only
   with explicit sign-off and a recorded area-discrepancy note.
 
+### IFPM-069 Mentor Decision Briefing (Compressed)
+
+- Status: the ~35 individual mentor questions across P1/P2 packages are compressed into eight
+  dependency-ordered key decisions in three batches; complete as a mentor-facing briefing.
+- Evidence:
+  `context/docs/mentor-explanation/Mentor_Decision_Briefing_2026-06-15.md`.
+- Key result: Batch A (3 decisions) defines project viability and mentor contribution; Batch B
+  (3 decisions) locks methodology via HiWi-recommendation confirmations; Batch C (2 decisions)
+  is conditional refinement. Each decision records what it unblocks and its fallback.
+- Next action: present Batch A in the next mentor meeting; do not infer answers if the mentor
+  cannot respond. The project should pause new analytical work until Batch A is answered, to
+  avoid worsening the process/output imbalance.
+
 ## Current Milestones And Gates
 
 ### IFPM-020 Select Prototype Study Slice
