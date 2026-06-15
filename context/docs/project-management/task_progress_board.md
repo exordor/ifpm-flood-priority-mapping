@@ -245,6 +245,34 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   a processing note recording the chosen defaults; do not wait for mentor sign-off on
   preprocessing parameters.
 
+### IFPM-071 CDP Data Portal Verification
+
+- Status: complete. Verified reachability, login, and download mechanism for candidate and
+  existing portals via Chrome DevTools Protocol.
+- Evidence: `context/docs/project-management/cdp_data_portal_verification_2026-06-15.md`,
+  `bin/check_data_portals.py`, `outputs/data_portal_check/portal_check_report.json` + screenshots.
+- Key results: SoilGrids is a VRT directory listing (no login, windowed HTTP read, no bulk
+  download); EM-DAT HDX route changed to per-country profiles (Zimbabwe downloaded); GloFAS is
+  NOT on CDS and its historical reanalysis is not publicly accessible (downgraded).
+
+### IFPM-072 V1 SoilGrids K-Factor (USLE)
+
+- Status: complete as a 250 m diagnostic data product.
+- Evidence: `bin/derive_v1_soilgrids_kfactor.py`,
+  `context/docs/project-management/soilgrids_v1_kfactor_processing_2026-06-15.md`,
+  `outputs/soilgrids_250m_sediment_candidate/k_factor_0_5cm_250m.tif`,
+  `k_factor_0_30cm_avg_250m.tif`, `k_factor_diagnostics.json`.
+- Key result: V1 K-factor (0-5 cm, US units) mean 0.1695, range [0.082, 0.251]; depth-stable;
+  Williams 1995 formula. Kept at native 250 m; NOT resampled to 30 m.
+
+### IFPM-073 EM-DAT Zimbabwe Country Profile Download
+
+- Status: complete (anonymous HDX download, 8688 bytes).
+- Evidence: `data/raw/emdat_public_validation_candidate/emdat_country_profile_zwe_2026-06-13.xlsx`,
+  SHA-256 `46b76917a82f52b7849134664b75bb4d3b36e4219cf8d901c7328326e7b08884`.
+- Key result: temporal/event-magnitude context for Zimbabwe validation; route corrected from the
+  removed full-database dataset id to the per-country profile.
+
 ## Current Milestones And Gates
 
 ### IFPM-020 Select Prototype Study Slice
