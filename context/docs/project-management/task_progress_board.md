@@ -273,6 +273,36 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 - Key result: temporal/event-magnitude context for Zimbabwe validation; route corrected from the
   removed full-database dataset id to the per-country profile.
 
+### IFPM-074 V1 USLE R-Factor (CHIRPS Modified Fournier)
+
+- Status: complete as a 0.05 deg diagnostic; FLAGGED for methodological review.
+- Evidence: `bin/derive_v1_chirps_rfactor.py`,
+  `outputs/chirps_v3_zimbabwe_prototype/r_factor/r_factor_modified_fournier_0p05deg.tif`,
+  `usle_factor_batch_processing_2026-06-15.md`.
+- Key result: P_annual 583 mm/yr; R mean 408, range 45-517. STRONGLY BIMODAL (29 cells <100,
+  103 cells >400, 0 in between) due to the Renard-Freimund piecewise discontinuity at MFI=80;
+  needs mentor methodological decision before USLE use. NOT resampled to 30 m.
+
+### IFPM-075 V1 Hydrology Derivatives (whitebox)
+
+- Status: complete as 30 m diagnostic rasters; all grid_compatible.
+- Evidence: `bin/derive_v1_hydrology.py`,
+  `outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/` (filled DEM, D8 flow dir,
+  flow accumulation cells+SCA, streams at t100/500/1000/5000, distance-to-drainage, TWI),
+  `hydrology_grid_check.csv`, `usle_factor_batch_processing_2026-06-15.md`.
+- Key result: max flow accumulation 4,036,878 cells = 3633 km2 (~98.5% reaches outlet); chosen
+  threshold t500 = 0.45 km2; TWI 3.13-27.23. Float32/64 routing bug found and fixed. V1 edge
+  caveat recorded. Unblocks LS-factor.
+
+### IFPM-076 V1 USLE C-Factor (WorldCover lookup)
+
+- Status: complete as 10m + 30m V1-grid diagnostic; grid_compatible.
+- Evidence: `bin/derive_v1_worldcover_cfactor.py`,
+  `outputs/esa_worldcover_2021_v1_methodology/c_factor/c_factor_v1_30m.tif`,
+  `usle_factor_batch_processing_2026-06-15.md`.
+- Key result: V1 area-weighted mean C 0.0429 (within expected 0.03-0.06); lookup applied after
+  mode resampling (10m->30m legitimate fine->coarse aggregation).
+
 ## Current Milestones And Gates
 
 ### IFPM-020 Select Prototype Study Slice
