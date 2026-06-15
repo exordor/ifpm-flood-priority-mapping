@@ -303,6 +303,18 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 - Key result: V1 area-weighted mean C 0.0429 (within expected 0.03-0.06); lookup applied after
   mode resampling (10m->30m legitimate fine->coarse aggregation).
 
+### IFPM-077 V1 LS-Factor And USLE Annual Soil Loss Diagnostic
+
+- Status: complete as a 30 m diagnostic; A absolute values flagged (R-dependent).
+- Evidence: `bin/derive_v1_ls_factor.py`, `bin/derive_v1_usle_soil_loss.py`,
+  `outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor/`,
+  `outputs/v1_usle_soil_loss/` (a_mean / a_low_R50 / a_high_R510 / a_structure / a_mean_classes),
+  `ls_factor_and_usle_soil_loss_processing_2026-06-15.md`.
+- Key results: LS hillslope mean 1.563, p95 5.511 (Moore-Nieber, channel-masked, capped 50). USLE
+  A-mean 0.50 t/ha/yr; ~87% of V1 < 1 t/ha/yr (very low); erosion hotspots where steep slopes
+  meet cropland/bare ground. Absolute A depends on the bimodal R-factor; spatial structure
+  (LS x C x K) is trustworthy. Completes 5/5 USLE factors and the first V1 soil-loss diagnostic.
+
 ## Current Milestones And Gates
 
 ### IFPM-020 Select Prototype Study Slice
