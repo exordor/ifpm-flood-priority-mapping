@@ -1,5 +1,24 @@
 # V2 smoother R-factor candidates and hotspot survival test (2026-06-16)
 
+> **PREMISE CORRECTION (2026-06-19, READ FIRST):** A deeper pass against the Renard & Freimund
+> (1994) original PDF showed that the V1 bimodality this package was built to "resolve" was an
+> ARTIFACT. V1 applied the P-based Renard-Freimund coefficients to MFI with an INVENTED break at
+> MFI=80; the paper's F-based form (the MFI form) breaks at F=55 mm, and V1's MFI range (70-117)
+> lies entirely in that upper branch, so there is no discontinuity and no bimodality under the
+> correct formula. Therefore:
+> - The "V2 resolves the V1 bimodality" framing does NOT hold and must NOT be presented to the
+>   mentor as a real fix.
+> - The V2 hotspot-survival test remains VALID as a structure test (it uses the R-invariant
+>   K x LS x C reference and is independent of the R formula).
+> - All V1/V2 R-factor ABSOLUTE values are NOT trustworthy until the mentor chooses the correct
+>   R method for semi-arid Zimbabwe.
+> - V2 mentor communication is PAUSED. See `formula_integrity_audit_2026-06-19.md` Finding 2.
+>
+> The rest of this document records the V2 work as executed; read it with the correction above in
+> mind. The numerical results (bimodality bands, survival rates, Spearman) are correctly computed
+> from the inputs as defined, but the inputs encode the V1 error, so the "smoother R resolves
+> bimodality" conclusion is about an artifact, not a real property of the catchment's erosivity.
+
 ## Literature-integrity correction (2026-06-19, post-implementation review)
 
 A post-implementation literature-integrity review found two issues that affect the formulas cited

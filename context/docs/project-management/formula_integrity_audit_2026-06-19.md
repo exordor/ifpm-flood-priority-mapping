@@ -8,6 +8,15 @@ coefficient. This audit is a defensive sweep, not a validation of model outputs.
 It does NOT authorise any download, AHP overlay, flood-risk interpretation, sediment-risk
 interpretation, or intervention-priority claim.
 
+**Revision 2026-06-19 (same day, deeper pass):** after extracting the exact equations from the
+Renard & Freimund (1994) original PDF, the P/MFI finding was reclassified from "variable
+confusion" to a more serious compound error (P-based coefficients applied to MFI AND an invented
+break point), and the Arnoldus finding was corrected (the coefficients ARE Arnoldus 1977's
+original values, but use metric units inconsistent with the USLE R-factor unit). The severity of
+these two findings was upgraded; see Findings 2 and 3 below. The V2 mentor communication is
+PAUSED pending mentor guidance on the correct R-factor method for the study area (see Impact and
+Open Items).
+
 ## Why this audit exists
 
 The V2 smoother-R package introduced candidate MFI->R formulas. A check on one candidate ("Lo et
@@ -21,13 +30,15 @@ literature-backed and which carry open methodological risk.
 | Item | Formula / value | Verdict | Action taken |
 |---|---|---|---|
 | R: rf_lo candidate | `0.0737 * MFI^1.81` ("Lo et al. 1985") | FABRICATED (no traceable source) | removed from V2 candidates |
-| R: Renard-Freimund coeffs on MFI | `0.0483*MFI^1.61` / `587.8-1.219*MFI+0.004105*MFI^2` | VARIABLE CONFUSION (P-based coeffs applied to MFI; inherited from V1) | flagged, NOT silently fixed (preserved for V1-V2 comparability) |
-| R: Arnoldus coeffs | `0.2647 * MFI^1.5` | NON-UNIVERSAL (regionally-fitted; Arnoldus gave only R=a*Fm^b framework) | kept, labelled as non-authoritative candidate |
+| R: Renard-Freimund on MFI | P-based coeffs `0.0483*MFI^1.61` / `587.8-1.219*MFI+0.004105*MFI^2` applied to MFI with INVENTED break at MFI=80 | COMPOUND ERROR: wrong coefficients for MFI variable AND fabricated break point. The V1 bimodality is an artifact of the wrong break (should be F=55mm for the MFI form). | flagged; V1/V2 R absolute values NOT trustworthy; needs mentor decision on the correct R method before any re-run |
+| R: Arnoldus coeffs | `0.2647 * MFI^1.5` | COEFFICIENTS ARE ORIGINAL (Arnoldus 1977 Eq 8: `R=0.264*F^1.50`) BUT UNIT MISMATCH (Arnoldus used metric t-m-cm-ha-h units, not USLE MJ-mm-ha-h) | kept as a smoothing test function only; absolute values unit-inconsistent |
 | K: US->SI conversion | `K_US * 0.1317` | CORRECT | no change |
 | LS: normalising constants | `22.13`, `0.0896` | CORRECT | no change |
 | LS: exponents | `0.4`, `1.2` | CORRECT (lower bound of documented range) | no change |
 
-Two real findings (rf_lo removal; P/MFI ambiguity); the rest verified against primary sources.
+Three real findings (rf_lo removal; the Renard-Freimund compound error; the Arnoldus unit
+mismatch). The Renard-Freimund error is the most serious because it manufactured the V1
+bimodality that motivated the V2 exercise. K, LS constants, and LS exponents are verified correct.
 
 ## Detailed findings
 
@@ -49,39 +60,57 @@ Two real findings (rf_lo removal; P/MFI ambiguity); the rest verified against pr
 - Why not "fixed": there is no verified Lo-et-al MFI coefficient to substitute. Any reintroduction
   must come with a verified citation and the correct predictor variable.
 
-### Finding 2 - VARIABLE CONFUSION: Renard-Freimund coefficients applied to MFI (inherited from V1)
+### Finding 2 - COMPOUND ERROR: Renard-Freimund P-based coefficients applied to MFI with an invented break point (inherited from V1)
 
 - Location: `bin/derive_v1_chirps_rfactor.py` (V1) and `bin/derive_v2_rfactor_candidates.py` (V2),
-  candidate `rf_v1_bimodal` and `rf_rf_low_branch`. The function is named `renard_freimund_r(mfi)`.
-- Problem: Renard & Freimund (1994) published TWO related forms:
-  - a P-based form: `R = 0.0483*P^1.61` if P < 850 mm else `587.8 - 1.219*P + 0.004105*P^2`,
-    where P = mean annual precipitation;
-  - an F-based form (F = Modified Fournier Index), with DIFFERENT coefficients.
-  The coefficient values 0.0483 / 1.61 / 587.8 / 1.219 / 0.004105 used here are the P-based
-  coefficients, but they are applied to MFI. The MFI=80 break used in the code is also the P=850mm
-  threshold rescaled by convention.
-- Severity: medium-high. This affects the ABSOLUTE value of every V1 and V2 R-factor and therefore
-  every A-factor magnitude. It does NOT affect the V1-vs-V2 comparison (both use the same
-  convention) or the bimodality / hotspot-structure conclusions (those are about the discontinuity,
-  not the absolute scale).
-- Resolution: FLAGGED, not silently fixed. Changing the convention now would break V1-vs-V2
-  comparability and would require re-deriving the entire V1 R-factor. This is recorded as an open
-  methodological risk for the mentor to resolve before any USLE result supports a claim. The V2
-  script docstring and the V2 processing note both document the convention and the risk.
+  candidates `rf_v1_bimodal` and `rf_rf_low_branch`. The function is named `renard_freimund_r(mfi)`.
+- Problem (verified against the original PDF, `outputs/literature_verification/renard_freimund_1994_fulltext.txt`).
+  Renard & Freimund (1994) published TWO independent equation composites:
+  - P-based form (Eq 11/12), variable = mean annual precipitation P (mm), break at **P = 850 mm**:
+    `R = 0.04830*P^1.610` (P<850) and `R = 587.8 - 1.219*P + 0.004105*P^2` (P>=850).
+  - F-based form (Eq 13/14), variable = modified Fournier index F = sum(pi^2)/P (mm) = the
+    project's MFI, break at **F = 55 mm**:
+    `R = 0.07397*F^1.847` (F<55) and `R = 95.77 - 6.081*F + 0.4770*F^2` (F>=55).
+  The project applies the **P-based coefficients** (0.0483/1.61/587.8/1.219/0.004105) to MFI AND
+  sets the break at **MFI=80**. MFI=80 is NEITHER the P-form break (850) NOR the F-form break (55);
+  it is invented.
+- Severity: HIGH. This is a compound error with two consequences:
+  1. The break at MFI=80 is fabricated, and V1's MFI range (70-117) straddles it. Under the
+     CORRECT F-form (break at 55) EVERY V1 cell falls in the upper branch (F>=55), so there is NO
+     discontinuity and NO bimodality. **The V1 bimodality (29 low / 103 high cells) is an artifact
+     of the wrong break point, not a real erosivity structure.**
+  2. The absolute R values are wrong on both scale and structure. At MFI=92.9 the project reports
+     R~510 (upper branch of the wrong form); the correct F-form gives R~3650 at the same MFI.
+- Impact on V2: the V2 smoother-R exercise was framed as "resolve the V1 bimodality and test
+  hotspot survival". Because the bimodality was an artifact, the "resolve the bimodality" half of
+  that premise does not hold up (there is nothing real to resolve once the correct break is used).
+  The hotspot-survival half remains valid, because it tests the LS x C structure, which is
+  R-invariant and independent of the R formula. The V2 comparison outputs and board therefore
+  remain useful as a STRUCTURE test but must NOT be presented as "V2 fixed a real V1 problem".
+- Resolution: FLAGGED. Not silently re-derived, because the correct re-derivation needs a mentor
+  decision on which method suits semi-arid Zimbabwe (the F-form gives very high R for this MFI
+  range, which may itself indicate the Renard-Freimund US-calibrated relations are not transferable
+  here). **V1/V2 R-factor absolute values are NOT trustworthy until this is resolved.** This is the
+  highest-priority open item for the mentor.
+- Re-run needed: YES, for the R-factor and USLE A-factor, once the correct method is chosen. No
+  re-run needed for LS/C/K or the non-R parts of the pipeline.
 
-### Finding 3 - NON-UNIVERSAL: Arnoldus (1980) coefficients 0.2647 / 1.5
+### Finding 3 - UNIT MISMATCH: Arnoldus (1977) coefficients are original but use metric units
 
 - Location: `bin/derive_v2_rfactor_candidates.py`, candidate `rf_arnoldus`.
-- Problem: Arnoldus (1980) presented only the FRAMEWORK `R = a * Fm^b`; the a/b values are
-  regionally-fitted regression coefficients, NOT universal constants Arnoldus published. The
-  0.2647 / 1.5 pair appears in some applied papers but is region-specific. A 2023 Catena systematic
-  review documents widespread mis-citation/misuse of this equation family.
-- Severity: low-medium. The candidate is used as a smoothing function to test hotspot survival, not
-  as an authoritative R value. The absolute Arnoldus A values are already flagged as
-  non-interpretable.
-- Resolution: kept as a candidate, but its display name and the processing note now label the
-  coefficients as "regionally-fitted / non-universal" so the mentor does not read them as Arnoldus's
-  original values.
+- Problem (verified against the original PDF). The earlier "non-universal / regionally-fitted"
+  assessment was INCORRECT and is corrected here. Renard & Freimund (1994, Eq 8, citing Arnoldus
+  1977) state the Arnoldus relation as `R = 0.264*F^1.50`. So the coefficients ARE Arnoldus's
+  original published values (the project's 0.2647 vs the paper's 0.264 is a rounding difference
+  from secondary citations). HOWEVER the paper explicitly notes Arnoldus's R units are metric
+  (t-m cm ha-1 h-1 year-1), NOT the USLE-standard MJ mm ha-1 h-1 year-1, and that "units ... were
+  identified as metric units but not specified" by Arnoldus.
+- Severity: medium. The coefficient values are correctly attributed, but mixing Arnoldus's metric
+  R units with the USLE-standard R units used by the rest of the pipeline is a unit inconsistency.
+  As a smoothing test function this is tolerable; as an absolute R value it is not.
+- Resolution: kept as a candidate smoothing function. The earlier "non-universal" label in the
+  processing note and task board is superseded: the coefficients are Arnoldus 1977 original values,
+  and the caveat is a UNIT MISMATCH, not non-universality.
 
 ### Finding 4 - VERIFIED CORRECT: K-factor US->SI conversion 0.1317
 
@@ -116,6 +145,21 @@ Two real findings (rf_lo removal; P/MFI ambiguity); the rest verified against pr
   but worth stating if the LS magnitude is ever challenged.
 - Verdict: correct, no change.
 
+## Impact summary (what is and is not affected)
+
+- V1 R-factor (RF and bimodal) and V2 rf_v1_bimodal / rf_rf_low_branch candidates: absolute values
+  NOT trustworthy (Finding 2). Re-run needed once the correct method is chosen.
+- V2 rf_arnoldus candidate: coefficient values correct, but R units inconsistent (Finding 3). Keep
+  as a structural test only.
+- V2 "resolve the bimodality" framing: does NOT hold (the bimodality was an artifact of the wrong
+  break point). Do not present V2 to the mentor as fixing a real V1 problem.
+- V2 hotspot-survival test: STILL VALID as a structure test, because it uses the R-invariant
+  a_structure = K x LS x C reference and is independent of the R formula. The survival rates and
+  Spearman agreement reported are about the LS x C structure, not about R.
+- LS, C, K factors, hydrology derivatives, terrain preprocessing, CHIRPS rainfall comparison, and
+  all non-R pipeline parts: unaffected.
+- AHP, flood-risk, intervention-priority: remain blocked (no change).
+
 ## What this audit does NOT cover
 
 - It does not validate the MFI computation itself (the 5-month Nov-Mar sum vs full 12 months);
@@ -125,12 +169,25 @@ Two real findings (rf_lo removal; P/MFI ambiguity); the rest verified against pr
 - It does not authorise any interpretable soil-loss or risk claim; all V1/V2 USLE outputs remain
   DIAGNOSTIC.
 
-## Open items handed to the mentor
+## Open items handed to the mentor (HIGHEST PRIORITY first)
 
-1. P-vs-MFI variable confusion in the Renard-Freimund R-factor (Finding 2): which convention is
-   correct for the study area, and does V1 need re-derivation before any USLE claim?
-2. Confirm the V2 R formula choice (Arnoldus, with its non-universal coefficients; or RF-low-branch;
-   or another) and whether the P/MFI convention must be resolved first.
+1. R-factor method for semi-arid Zimbabwe (Finding 2): the V1 R used P-based Renard-Freimund
+   coefficients on MFI with an invented break at MFI=80, which manufactured the bimodality. The
+   correct F-form (break at 55) gives no bimodality over V1's MFI range but yields very high R
+   values, suggesting the US-calibrated Renard-Freimund relations may not transfer here. Which R
+   method is appropriate (correct F-form; P-form on annual precipitation; a region-calibrated
+   method; or another)? This blocks all R/A absolute values.
+2. Once the R method is chosen: re-derive the V1 R-factor and USLE A, then re-evaluate the V2
+   smoother-R exercise (which may be moot if the correct method is already smooth).
+3. Arnoldus unit consistency (Finding 3): if Arnoldus is retained as a candidate, confirm whether a
+   unit conversion to USLE-standard MJ mm ha-1 h-1 is required.
+
+## Mentor communication status
+
+PAUSED. The V2 R-factor comparison board and the "V2 resolves the bimodality" framing must NOT be
+sent to the mentor until Finding 2 is resolved, because the bimodality was an artifact. The V2
+hotspot-structure results may be shared later as a structural finding only, clearly separated from
+any R-absolute-value claim.
 
 ## Cross-references
 

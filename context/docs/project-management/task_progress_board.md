@@ -348,32 +348,38 @@ interpretation, and intervention interpretation remain blocked pending mentor de
     evidence.
   - Recommended V2 candidate: Arnoldus 1980 (cleanest bimodality resolution, highest survival rate
     and Spearman). Final V2 R formula is still a mentor methodological decision.
-- Literature-integrity review (2026-06-19):
-  - REMOVED a "Lo et al. (1985)" candidate (R = 0.0737*MFI^1.81): a literature check showed Lo et
-    al. 1985 used mean annual precipitation (not MFI), and the 0.0737/1.81 coefficients had no
-    traceable source (unverified/fabricated). Kept out until a verified citation exists.
-  - FLAGGED (not silently fixed) a Renard & Freimund (1994) variable-confusion risk inherited from
-    V1: the coefficients 0.0483/1.61/587.8/1.219/0.004105 are the P-based form (P = mean annual
-    precipitation) but are applied to MFI in both V1 and V2. V2 preserves the V1 convention for
-    comparability; this is an open methodological risk for the mentor to resolve before any USLE
-    result supports a claim.
-  - Arnoldus (1980) coefficients 0.2647/1.5 are regionally-fitted (not Arnoldus's universal values;
-    see Catena 2023 systematic review on misuse). Recorded as a candidate smoothing function.
+- Literature-integrity review (2026-06-19, REVISED severity after a deeper pass against the
+  original PDF; see IFPM-080):
+  - REMOVED a "Lo et al. (1985)" candidate (R = 0.0737*MFI^1.81): Lo et al. 1985 used mean annual
+    precipitation (not MFI), and the 0.0737/1.81 coefficients had no traceable source. Unverified.
+  - UPGRADED TO HIGH (was "variable confusion"): the V1 R applies the P-based Renard-Freimund
+    coefficients (0.0483/1.61/587.8/1.219/0.004105) to MFI with an INVENTED break at MFI=80. The
+    paper's F-based (MFI) form breaks at F=55 mm. V1's MFI range (70-117) lies entirely in the
+    upper branch of the correct form, so the V1 bimodality is an ARTIFACT of the wrong break, not
+    a real erosivity structure. This means the V2 "resolve the bimodality" premise does NOT hold.
+    V1/V2 R absolute values are NOT trustworthy until the correct method is chosen.
+  - CORRECTED (was "non-universal"): the Arnoldus coefficients ARE Arnoldus 1977's original values
+    (Renard-Freimund Eq 8: R=0.264*F^1.50), but Arnoldus's R units are metric (t-m cm ha-1 h-1
+    yr-1), inconsistent with the USLE-standard MJ mm ha-1 h-1 yr-1. Unit mismatch, not
+    non-universality.
   - Verified correct: K-factor conversion 0.1317 (Foster et al. 1981); LS constants 22.13/0.0896
     (Moore & Nieber 1989). LS exponents 0.4/1.2 verified against USDA-ARS GISus-M (Oliveira et al.
     2015, eq 13): the UCA LS form uses m in [0.4-0.56] and n in [1.2-1.3]; 0.4/1.2 are the
     lower-bound starting combination of that documented range.
 - Impact on open risks/decisions:
-  - Advances the R-factor branch of IFPM-074; the V1 bimodality caveat now has a demonstrated V2
-    resolution path with surviving hotspot structure.
-  - Absolute A values remain R-method-dependent (Arnoldus 0.29 vs V1 0.50 vs RF-low-branch 0.09
-    t/ha/yr) and are not comparable/interpretable across candidates.
-  - The P-vs-MFI ambiguity affects ALL R-factor absolute values (V1 and V2); this is a new open
-    methodological item to surface to the mentor.
+  - The V2 "resolve the bimodality" framing does NOT hold (the bimodality was an artifact). Do not
+    present V2 to the mentor as fixing a real V1 problem.
+  - The V2 hotspot-survival test REMAINS VALID as a structure test (it uses the R-invariant
+    K x LS x C reference and is independent of the R formula).
+  - V1/V2 R-factor absolute values are NOT trustworthy; re-run of the R and USLE A factors is
+    needed once the mentor chooses the correct R method for semi-arid Zimbabwe.
+  - The correct F-form yields very high R for V1's MFI range, suggesting the US-calibrated
+    Renard-Freimund relations may not transfer here; this is a mentor methodological decision.
   - Does NOT unblock flood-risk, AHP overlay, or intervention-priority interpretation.
-- Next action: surface the V2 R-factor comparison board, the recommendation, AND the two
-  literature-integrity findings (rf_lo removal; P-vs-MFI ambiguity) to the mentor; await
-  confirmation of the final V2 R formula before any USLE re-run at zonal level.
+- Next action: PAUSED on V2 mentor communication. Do NOT send the V2 board until Finding 2
+  (IFPM-080) is resolved. Surface the R-factor method question to the mentor FIRST as the highest
+  priority; the V2 structural results may be shared later, clearly separated from R-absolute-value
+  claims.
 
 ### IFPM-080 USLE Formula And Citation Integrity Audit
 
@@ -382,19 +388,31 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   unverified R-factor coefficient.
 - Evidence: `context/docs/project-management/formula_integrity_audit_2026-06-19.md`,
   `bin/verify_ls_factor_exponents.py`, `outputs/literature_verification/` (capture records).
-- Key results:
+- Key results (REVISED 2026-06-19 after a deeper pass against the original PDF):
   - FABRICATED and removed: the "Lo et al. (1985)" V2 R candidate (0.0737*MFI^1.81) had no
     traceable source. (See IFPM-079 for the removal.)
-  - FLAGGED (not silently fixed): Renard-Freimund (1994) coefficients are the P-based form but are
-    applied to MFI - an inherited V1 convention, preserved for V1-V2 comparability. Open
-    methodological risk.
-  - LABELLED: Arnoldus (1980) coefficients 0.2647/1.5 are regionally-fitted, non-universal.
+  - UPGRADED TO HIGH: the V1 R applies the P-based Renard-Freimund coefficients to MFI with an
+    INVENTED break at MFI=80. The paper's F-based (MFI) form breaks at F=55 mm; V1's MFI range
+    lies entirely in its upper branch, so the V1 bimodality is an artifact of the wrong break, not
+    a real structure. V1/V2 R absolute values NOT trustworthy; needs mentor decision on the correct
+    R method (the correct F-form yields very high R for this MFI range, questioning transferability
+    of the US-calibrated relations to semi-arid Zimbabwe). Re-run of R and USLE A needed once
+    chosen.
+  - CORRECTED: Arnoldus coefficients ARE Arnoldus 1977's original values (R=0.264*F^1.50, Renard-
+    Freimund Eq 8), but use metric units inconsistent with the USLE-standard R unit. Unit mismatch,
+    not non-universality.
   - VERIFIED CORRECT: K-factor US->SI conversion 0.1317 (Foster et al. 1981); LS constants
     22.13/0.0896 and exponents 0.4/1.2 (Moore & Nieber 1989; 0.4/1.2 are the lower bound of the
     documented m[0.4-0.56]/n[1.2-1.3] range per USDA-ARS GISus-M, Oliveira et al. 2015 eq 13).
-- Impact: two real findings affect R-factor ABSOLUTE values; none affect the V1-vs-V2 comparison
-  or the bimodality/hotspot-structure conclusions. Does NOT unblock any interpretable claim.
-- Next action: hand the two open items to the mentor (P-vs-MFI convention; V2 R formula choice).
+- Impact: the Renard-Freimund compound error is the most serious finding - it manufactured the V1
+  bimodality that motivated the V2 exercise, so V1/V2 R and USLE A absolute values are NOT
+  trustworthy and the "V2 resolves the bimodality" framing does not hold. The V2 hotspot-survival
+  test remains valid as a structure test (R-invariant reference). K/LS findings are unaffected.
+  Does NOT unblock any interpretable claim.
+- Next action: PAUSED on V2 mentor communication. Hand the R-factor method question to the mentor
+  FIRST (highest priority): which R method suits semi-arid Zimbabwe? Then re-derive the V1 R and
+  USLE A; the V2 smoother-R exercise may be moot if the correct method is already smooth. Do NOT
+  send the V2 board or the "V2 fixes the bimodality" framing until Finding 2 is resolved.
 
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
