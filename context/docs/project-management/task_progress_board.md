@@ -413,6 +413,15 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   FIRST (highest priority): which R method suits semi-arid Zimbabwe? Then re-derive the V1 R and
   USLE A; the V2 smoother-R exercise may be moot if the correct method is already smooth. Do NOT
   send the V2 board or the "V2 fixes the bimodality" framing until Finding 2 is resolved.
+- Deprecation markers (2026-06-19): all V1/V2 R-factor and USLE A products are marked DEPRECATED
+  in their output directories. Markers (local, not git-tracked since `outputs/` is ignored):
+  - `outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md` (main notice + full product
+    list)
+  - `outputs/chirps_v3_zimbabwe_prototype/r_factor/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md` (pointer)
+  - `outputs/chirps_v3_zimbabwe_prototype/r_factor_v2/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md` (pointer)
+  NOT deprecated and safe as a re-derivation base: `a_structure_K_LS_C_30m.tif` (R-invariant,
+  K and LS verified correct). The V2 hotspot-survival NUMBERS remain valid as a structure test
+  only. Re-run of R and A waits on the mentor's R-method decision.
 
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
