@@ -2,7 +2,7 @@
 
 Status: active internal rule; executable gate implemented
 
-Last updated: 2026-06-13
+Last updated: 2026-06-16
 
 Scope: V1 controlled prototype terrain preprocessing only. This rule does not accept V1 as the
 final thesis boundary and does not authorize CHIRPS, AHP overlay, flood-risk interpretation, or
@@ -133,6 +133,28 @@ Blocked CHIRPS handling:
 - mixing CHIRPS pixels with terrain rasters in a cell-by-cell weighted overlay before a separate
   modelling-unit decision. If a future coarse rainfall visualization is approved, it must be
   labelled as a zonal or coarse-summary product, not as 30 m rainfall evidence.
+
+## Documented Diagnostic Waiver (V2 R-factor hotspot survival test, 2026-06-16)
+
+The V2 R-factor hotspot survival test (`bin/derive_v2_usle_soil_loss.py`, IFPM-079) resamples the
+0.05 deg CHIRPS-derived R-factor raster to the V1 30 m grid for ONE purpose only: to quantify how
+much R's spatial heterogeneity perturbs the LS x C x K erosion-hotspot pattern. This is a
+diagnostic-only resample, not pixel-level 30 m evidence.
+
+This waiver is recorded here because the Blocked CHIRPS handling section above has no general
+"diagnostic-only" exception. The waiver is narrowly scoped:
+
+- Allowed: the resampled R is combined into `a_v2_<candidate>_spatial_DIAGNOSTIC_30m.tif`, used
+  only inside the survival-test diagnostics and the comparison board, and never enters
+  standardization, AHP overlay, flood-risk interpretation, or intervention-priority interpretation.
+- The diagnostic product filename carries the explicit `_DIAGNOSTIC` suffix and the GeoTIFF band
+  carries an `IFPM_NOTE` tag stating it is not pixel-level evidence.
+- The primary V2 R-factor products remain the native 0.05 deg rasters and the zonal scalar A; the
+  spatial 30 m path is supplementary only.
+- This waiver does NOT extend to any other CHIRPS use and does NOT authorise treating CHIRPS as 30 m
+  evidence for the AHP overlay or any interpretable flood-risk/soil-loss claim.
+- This waiver must be revisited if the spatial 30 m diagnostic product is ever proposed for a use
+  beyond the internal survival test.
 
 ## Data Governance
 

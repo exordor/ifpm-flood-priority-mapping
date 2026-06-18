@@ -1,6 +1,6 @@
 # IFPM Task Progress And Plan Board
 
-Updated: 2026-06-15
+Updated: 2026-06-16
 
 Scope: private project planning for the IFPM comparative flood-risk modelling workspace.
 
@@ -31,6 +31,20 @@ standardization, diagnostic overlays with documented weights) is GO and self-aut
 documented defaults. Interpretable claims (validated flood-risk map, intervention priority,
 Zimbabwe-Peru comparison, publication) remain NO-GO and are the mentor's calls. The next
 data-processing work proceeds without waiting for thesis-level mentor decisions.
+
+On 2026-06-16 the mentor provided a methodology slide defining the PIM formula and a five-criteria
+pairwise comparison matrix (Flood, Sediment, Land Use/ASM, Environmental, Socioeconomic). The
+matrix is internally consistent (CR 0.022) and structurally aligns with the deliverable pipeline's
+already-implemented overlay. However, the slide labels the matrix as an example, so it is recorded
+as a mentor-provided candidate, not a final authorised weight matrix. The slide also leaves the
+role of `Rehabilitation Potential` (input layer listed but absent from the PIM formula and matrix)
+unconfirmed, which keeps the final AHP criteria hierarchy open at five or six criteria.
+
+On 2026-06-16 the mentor also answered the V1 USLE R-factor bimodality question (IFPM-074): keep
+V1 as a diagnostic baseline, switch V2 to a smoother R, and test whether the spatial hotspot
+pattern survives. This unblocks V2 R-factor engineering as a HiWi data-processing action without
+waiting for a thesis-level claim. The absolute A values remain R-dependent until the V2 smoother-R
+robustness check is run (see IFPM-074/IFPM-077).
 
 Do not start broad data downloads yet. HydroSHEDS boundary discovery has been executed for one
 authorized artifact, and the Zimbabwe Geoportal Sub-Catchments alternative has been downloaded
@@ -149,17 +163,24 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 
 ### IFPM-063 P1 R1.3 AHP Weighting Decision Package
 
-- Status: decision package and elicitation instrument complete; awaits expert elicitation.
+- Status: partially advanced. A mentor-provided candidate pairwise matrix now exists but is not
+  yet authorised as final. Decision package and elicitation instrument still await mentor
+  confirmation; the 2026-06-16 candidate matrix is a conversation start, not an authorisation.
 - Evidence:
   `context/docs/project-management/p1_ahp_weighting_decision_package_2026-06-15.md`,
   `context/docs/mentor-explanation/AHP_Elicitation_Protocol_And_Template_2026-06-15.md`,
-  `context/docs/project-management/p1_risk_overview_2026-06-15.md`.
+  `context/docs/project-management/p1_risk_overview_2026-06-15.md`,
+  `context/docs/mentor-explanation/Mentor_Methodology_Slide_Record_2026-06-16.md` (mentor-provided
+  candidate matrix).
 - Key result: the non-authoritative illustrative structural prior (derived from the methodology
   figure's three-tier decomposition) was verified at CR 0.0406; it is a conversation starter only
-  and must not enter `configs/` or generate interpretable outputs.
-- Next action: surface R1.3 mentor decision questions; if elicitation cannot be completed, apply
-  the fallback (keep the pipeline runnable on synthetic data only and label all outputs as
-  workflow diagnostics).
+  and must not enter `configs/` or generate interpretable outputs. The 2026-06-16 mentor slide
+  adds a different, mentor-provided candidate matrix at CR 0.022 (Flood 0.490, Sediment 0.226,
+  Environmental 0.141, Land Use/ASM 0.087, Socioeconomic 0.056), but it is slide-labelled as an
+  example and still requires explicit mentor authorisation before use.
+- Next action: surface the R1.3 mentor confirmation question (is the slide matrix an example or an
+  authorisable weight matrix?); until confirmed, the fallback stands (keep the pipeline runnable on
+  synthetic data only and label all outputs as workflow diagnostics).
 
 ### IFPM-064 P2 R2.1 Sediment Risk Decision Package
 
@@ -275,13 +296,105 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 
 ### IFPM-074 V1 USLE R-Factor (CHIRPS Modified Fournier)
 
-- Status: complete as a 0.05 deg diagnostic; FLAGGED for methodological review.
+- Status: complete as a 0.05 deg diagnostic; FLAGGED methodological decision now ANSWERED by the
+  mentor (2026-06-16): keep V1 as diagnostic baseline, switch V2 to a smoother R, and test whether
+  the spatial hotspot pattern survives.
 - Evidence: `bin/derive_v1_chirps_rfactor.py`,
   `outputs/chirps_v3_zimbabwe_prototype/r_factor/r_factor_modified_fournier_0p05deg.tif`,
   `usle_factor_batch_processing_2026-06-15.md`.
 - Key result: P_annual 583 mm/yr; R mean 408, range 45-517. STRONGLY BIMODAL (29 cells <100,
   103 cells >400, 0 in between) due to the Renard-Freimund piecewise discontinuity at MFI=80;
-  needs mentor methodological decision before USLE use. NOT resampled to 30 m.
+  NOT resampled to 30 m.
+- Mentor decision (2026-06-16): V1 bimodal R is PRESERVED as a diagnostic baseline; V2 should
+  switch to a smoother R. If the spatial hotspot pattern survives the smoother-R test, the
+  evidence board becomes much stronger. This unblocks V2 R-factor engineering as a HiWi
+  data-processing action (no thesis-level claim pending). Candidate smoother formulas evaluated
+  for V2 (see IFPM-079): a single-branch Renard-Freimund and a continuous Modified Fournier
+  (Arnoldus 1980) without the MFI=80 discontinuity. (A "Lo et al. 1985" candidate was removed after
+  a 2026-06-19 literature-integrity check - coefficients had no traceable source.) V2 R-factor
+  choice must be recorded with its formula and rationale before any USLE re-run. NOTE: a Renard &
+  Freimund P-vs-MFI variable-confusion risk (coefficients are the P-based form but applied to MFI,
+  inherited from V1) is flagged in IFPM-079 for the mentor to resolve.
+- Next action: DONE (see IFPM-079). V2 smoother-R candidates implemented and the hotspot survival
+  test run. V1 and V2 R-factor diagnostics stay at native 0.05 deg; the only 30 m resample is the
+  diagnostic-only R used for the spatial survival test, which is not a pixel-level evidence product.
+  Awaiting mentor confirmation of the final V2 R formula.
+
+### IFPM-079 V2 Smoother R-Factor Candidates and Hotspot Survival Test
+
+- Status: complete as a diagnostic package. Responds to mentor decision 2026-06-16 (IFPM-074) to
+  switch V2 to a smoother R and test hotspot survival; awaiting mentor confirmation of the final V2
+  formula. A 2026-06-19 literature-integrity review removed one unverified candidate and flagged an
+  inherited V1 methodological ambiguity (see integrity notes below).
+- Evidence:
+  `context/docs/project-management/v2_rfactor_processing_2026-06-16.md` (includes the
+  literature-integrity correction section),
+  `bin/derive_v2_rfactor_candidates.py`, `bin/derive_v2_usle_soil_loss.py`,
+  `bin/plot_v2_rfactor_comparison_board.py`, `bin/compare_v2_rfactor_candidates.py`,
+  `outputs/chirps_v3_zimbabwe_prototype/r_factor_v2/v2_rfactor_diagnostics.json`,
+  `outputs/v1_usle_soil_loss/v2_rfactor/v2_hotspot_survival_diagnostics.json`,
+  `outputs/v1_usle_soil_loss/v2_rfactor/mentor_v2_rfactor_comparison_board.png`.
+- Key results:
+  - Two smoother candidates (Arnoldus 1980, single-branch Renard-Freimund) resolve the V1
+    bimodality: the MFI=80 R-jump drops from ~461 (V1) to <1, and the empty middle band (100-400)
+    is populated.
+  - Hotspot survival test: reference hotspots are the top p95 of a_structure (K x LS x C, the
+    R-invariant raster). With spatially-varying R, 84-87% of reference hotspots survive across
+    candidates (V1 baseline 0.840; Arnoldus 0.869; RF-low-branch 0.863).
+  - Smoother candidates raise the zonal-vs-spatial Spearman agreement to ~0.99 vs the V1 bimodal
+    baseline 0.883, i.e. the smoother R is more internally consistent. NOTE: the survival-rate
+    metric is structurally biased high (LS dynamic range >> R) and is a weak confirmatory signal,
+    not a candidate-quality ranking; the Spearman gain and discontinuity removal are the stronger
+    evidence.
+  - Recommended V2 candidate: Arnoldus 1980 (cleanest bimodality resolution, highest survival rate
+    and Spearman). Final V2 R formula is still a mentor methodological decision.
+- Literature-integrity review (2026-06-19):
+  - REMOVED a "Lo et al. (1985)" candidate (R = 0.0737*MFI^1.81): a literature check showed Lo et
+    al. 1985 used mean annual precipitation (not MFI), and the 0.0737/1.81 coefficients had no
+    traceable source (unverified/fabricated). Kept out until a verified citation exists.
+  - FLAGGED (not silently fixed) a Renard & Freimund (1994) variable-confusion risk inherited from
+    V1: the coefficients 0.0483/1.61/587.8/1.219/0.004105 are the P-based form (P = mean annual
+    precipitation) but are applied to MFI in both V1 and V2. V2 preserves the V1 convention for
+    comparability; this is an open methodological risk for the mentor to resolve before any USLE
+    result supports a claim.
+  - Arnoldus (1980) coefficients 0.2647/1.5 are regionally-fitted (not Arnoldus's universal values;
+    see Catena 2023 systematic review on misuse). Recorded as a candidate smoothing function.
+  - Verified correct: K-factor conversion 0.1317 (Foster et al. 1981); LS constants 22.13/0.0896
+    (Moore & Nieber 1989). LS exponents 0.4/1.2 verified against USDA-ARS GISus-M (Oliveira et al.
+    2015, eq 13): the UCA LS form uses m in [0.4-0.56] and n in [1.2-1.3]; 0.4/1.2 are the
+    lower-bound starting combination of that documented range.
+- Impact on open risks/decisions:
+  - Advances the R-factor branch of IFPM-074; the V1 bimodality caveat now has a demonstrated V2
+    resolution path with surviving hotspot structure.
+  - Absolute A values remain R-method-dependent (Arnoldus 0.29 vs V1 0.50 vs RF-low-branch 0.09
+    t/ha/yr) and are not comparable/interpretable across candidates.
+  - The P-vs-MFI ambiguity affects ALL R-factor absolute values (V1 and V2); this is a new open
+    methodological item to surface to the mentor.
+  - Does NOT unblock flood-risk, AHP overlay, or intervention-priority interpretation.
+- Next action: surface the V2 R-factor comparison board, the recommendation, AND the two
+  literature-integrity findings (rf_lo removal; P-vs-MFI ambiguity) to the mentor; await
+  confirmation of the final V2 R formula before any USLE re-run at zonal level.
+
+### IFPM-080 USLE Formula And Citation Integrity Audit
+
+- Status: complete as an internal audit record. A defensive sweep of every USLE/RUSLE formula,
+  coefficient, unit, and citation in the V1 and V2 USLE tooling, after a spot-check found an
+  unverified R-factor coefficient.
+- Evidence: `context/docs/project-management/formula_integrity_audit_2026-06-19.md`,
+  `bin/verify_ls_factor_exponents.py`, `outputs/literature_verification/` (capture records).
+- Key results:
+  - FABRICATED and removed: the "Lo et al. (1985)" V2 R candidate (0.0737*MFI^1.81) had no
+    traceable source. (See IFPM-079 for the removal.)
+  - FLAGGED (not silently fixed): Renard-Freimund (1994) coefficients are the P-based form but are
+    applied to MFI - an inherited V1 convention, preserved for V1-V2 comparability. Open
+    methodological risk.
+  - LABELLED: Arnoldus (1980) coefficients 0.2647/1.5 are regionally-fitted, non-universal.
+  - VERIFIED CORRECT: K-factor US->SI conversion 0.1317 (Foster et al. 1981); LS constants
+    22.13/0.0896 and exponents 0.4/1.2 (Moore & Nieber 1989; 0.4/1.2 are the lower bound of the
+    documented m[0.4-0.56]/n[1.2-1.3] range per USDA-ARS GISus-M, Oliveira et al. 2015 eq 13).
+- Impact: two real findings affect R-factor ABSOLUTE values; none affect the V1-vs-V2 comparison
+  or the bimodality/hotspot-structure conclusions. Does NOT unblock any interpretable claim.
+- Next action: hand the two open items to the mentor (P-vs-MFI convention; V2 R formula choice).
 
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
@@ -305,7 +418,9 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 
 ### IFPM-077 V1 LS-Factor And USLE Annual Soil Loss Diagnostic
 
-- Status: complete as a 30 m diagnostic; A absolute values flagged (R-dependent).
+- Status: complete as a 30 m diagnostic; A absolute values flagged (R-dependent). The R-dependence
+  caveat now has a mentor-directed resolution path (2026-06-16, see IFPM-074): V1 stays as
+  baseline, V2 uses a smoother R, and the LS x C x K hotspot structure is re-tested under V2.
 - Evidence: `bin/derive_v1_ls_factor.py`, `bin/derive_v1_usle_soil_loss.py`,
   `outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor/`,
   `outputs/v1_usle_soil_loss/` (a_mean / a_low_R50 / a_high_R510 / a_structure / a_mean_classes),
@@ -314,6 +429,36 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   A-mean 0.50 t/ha/yr; ~87% of V1 < 1 t/ha/yr (very low); erosion hotspots where steep slopes
   meet cropland/bare ground. Absolute A depends on the bimodal R-factor; spatial structure
   (LS x C x K) is trustworthy. Completes 5/5 USLE factors and the first V1 soil-loss diagnostic.
+
+### IFPM-078 Mentor Methodology Slide Received (2026-06-16)
+
+- Status: received and recorded as internal evidence; not an authorisation of final weights,
+  overlay, or interpretation.
+- Evidence:
+  `context/docs/mentor-explanation/Mentor_Methodology_Slide_Record_2026-06-16.md`,
+  `context/docs/project-management/mentor_methodology_slide_interpretation_2026-06-16.md`,
+  `context/images/mentor_methodology_slide_2026-06-16.png`.
+- Key results:
+  - The slide defines the Priority Intervention Map index as
+    `PIM = wF(FH) + wS(SR) + wL(LU) + wE(ES) + wSE(SV)` (five scored criteria), which structurally
+    matches the deliverable pipeline's already-implemented weighted overlay.
+  - The slide supplies a mentor-provided candidate pairwise matrix over the five criteria, computed
+    at CR 0.022 (consistent): Flood 0.490, Sediment 0.226, Environmental 0.141, Land Use/ASM 0.087,
+    Socioeconomic 0.056.
+  - The slide labels the matrix as an example, so it is a candidate, not an authorisation. It must
+    not enter `configs/` or generate interpretable outputs until explicitly confirmed.
+  - The slide lists `Rehabilitation Potential` as an input layer but omits it from the PIM formula
+    and pairwise matrix, leaving the final AHP criteria hierarchy open at five or six criteria.
+- Impact on open risks/decisions:
+  - Partially advances R1.3 / IFPM-063 (a mentor-provided candidate matrix now exists, but the
+    authorisation question is still open).
+  - Confirms the five-criteria PIM structure against the deliverable pipeline, reducing hierarchy
+    uncertainty for the five named criteria.
+  - Opens IFPM-D05 / Rehabilitation-Potential role (sixth scored criterion vs post-score
+    scenario/filter) as a new explicit mentor question.
+- Next action: surface the two slide-derived mentor questions (matrix authorisation; Rehabilitation
+  Potential role). Do not promote the candidate matrix to `configs/`, do not run real-data overlay,
+  and do not interpret outputs until the matrix and hierarchy are confirmed.
 
 ## Current Milestones And Gates
 
@@ -790,7 +935,9 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 
 ### IFPM-D04 AHP Weighting Protocol
 
-- Decision needed: who supplies expert pairwise comparisons and how CR is reviewed.
+- Decision needed: who supplies expert pairwise comparisons and how CR is reviewed. A
+  mentor-provided candidate matrix now exists (2026-06-16 slide, CR 0.022) but is slide-labelled
+  as an example, so the authorisation step is still open.
 - Why it matters: prevents arbitrary weights.
 
 ### IFPM-D05 Mining-Data Interpretation Rule
