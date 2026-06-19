@@ -19,7 +19,7 @@ For Microsoft Teams chat. Short, spoken-style. Attach the briefing
 >
 > Suggested soil loss A is ~0.6 t/ha/yr with this R (vs ~2-4 if the high formulas were right).
 >
-> One question: happy for me to use the ERA5-based R (~500) going forward, or do you want me to chase a rain-gauge / GPM dataset for a stricter 30-min R? Details + plots in the attached note.
+> One question: do I use the ERA5-based R (~500) from here on? That's your call. The alternative is I chase a rain-gauge / GPM dataset for a stricter 30-min R. Details + plots in the attached note.
 
 **中文:** 雨强侵蚀力 R 因子跟您说下。我之前用的公式断点不对（原文里没有），整个重做了。
 >
@@ -27,7 +27,7 @@ For Microsoft Teams chat. Short, spoken-style. Attach the briefing
 >
 > 这样算下来土壤流失 A 约 0.6 t/ha/yr（高公式会给 2-4）。
 >
-> 一个问题：后面用 ERA5 的 R（~500）行吗？还是您希望我找雨量站 / GPM 数据做更严格的 30 分钟 R？细节和图在附件里。
+> 一个问题：后面用 ERA5 的 R（~500）需要您定一下，还是您希望我找雨量站 / GPM 数据做更严格的 30 分钟 R？细节和图在附件里。
 
 ---
 

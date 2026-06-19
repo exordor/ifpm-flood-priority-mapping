@@ -14,6 +14,11 @@ process report.
   found").
 - State a personal judgment where you have one ("my reading is that..."), with the evidence behind
   it. Do not hide behind "it can be argued that".
+- When the document needs a decision from the mentor, **say so plainly and firmly**: "I need your
+  decision on X", "this is your call". Do not soften it into "I'd appreciate your guidance",
+  "I was hoping to get your thoughts", or "it would be good to hear your view". The mentor is the
+  decision-maker for thesis-level calls; asking weakly understates that the work is blocked on
+  them. A direct ask respects their role and the dependency.
 
 ## Structure: state results, not the journey
 

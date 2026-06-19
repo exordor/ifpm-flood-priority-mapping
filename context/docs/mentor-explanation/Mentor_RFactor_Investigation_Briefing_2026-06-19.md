@@ -2,9 +2,9 @@
 
 Date: 2026-06-19
 
-I have been working on the rainfall-erosivity (R) factor for the V1 catchment and have run into a
-method problem I'd like your decision on. This note states the problem, what I found, and the one
-question I need answered. All R and soil-loss (A) figures here are exploratory until you decide.
+I have been working on the rainfall-erosivity (R) factor for the V1 catchment and have hit a
+method choice I need you to decide. This note states the problem, what I found, and the one
+decision I need from you. All R and soil-loss (A) figures here are exploratory until you decide.
 
 ## The problem
 
@@ -54,12 +54,13 @@ soil loss A ≈ 0.6 t/ha/yr. The High group would give A ≈ 2-4 t/ha/yr. The sp
 erosion (where it is relatively worse) is set by slope and land cover and is the same under any R,
 because R only scales the magnitude.
 
-## The question
+## The decision I need from you
 
-Which R-factor do you want me to use? My recommendation is the ERA5-based value (≈ 500) or one of
-the Low-group regional equations (Hurni or Epworth, ≈ 240-320). The one caveat is that ERA5 hourly
-data is a lower bound on the true 30-minute R, so if you need a stricter figure, the route is a
-local rain gauge or GPM IMERG data.
+Which R-factor should I use for V1? This is your call - it sets the magnitude of every soil-loss
+result in the thesis. My recommendation is the ERA5-based value (≈ 500) or one of the Low-group
+regional equations (Hurni or Epworth, ≈ 240-320). The one caveat is that ERA5 hourly data is a
+lower bound on the true 30-minute R, so if you want a stricter figure, the route is a local rain
+gauge or GPM IMERG data. Either way, I'm blocked on the R magnitude until you decide.
 
 ## Figures
 
