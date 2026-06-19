@@ -11,19 +11,19 @@ For Microsoft Teams chat. Short, spoken-style. Attach the briefing
 
 **EN:**
 
-> Quick one on the rainfall erosivity (R) factor. I found the formula I'd been using was wrong (a break point that isn't in the original paper), so I redid the whole thing.
+> Quick one on the rainfall erosivity (R) factor. I found the formula I'd been using was wrong (a break point that isn't in the original paper), so I redid the whole thing and hand-checked every number against the source papers.
 >
-> I tested the standard literature formulas + computed an R directly from ERA5 hourly rainfall as an independent check. Bottom line:
-> - The US/Morocco formulas (incl. Elwell's Zimbabwe one) give R ~1400-3700 — about 4x too high for our semi-arid area.
+> I tested the standard literature formulas + computed an R directly from ERA5 hourly rainfall as an independent check. The result:
+> - The US-based Renard-Freimund formulas, an Arnoldus-family power law, and Elwell's Zimbabwe relation all give R ~1400-3700 — about 4x too high for our semi-arid area.
 > - ERA5 + the simpler regional equations (Hurni, Epworth/Harare) give R ~250-500, which the ERA5 data supports.
 >
 > Suggested soil loss A is ~0.6 t/ha/yr with this R (vs ~2-4 if the high formulas were right).
 >
 > One question: do I use the ERA5-based R (~500) from here on? That's your call. The alternative is I chase a rain-gauge / GPM dataset for a stricter 30-min R. Details + plots in the attached note.
 
-**中文:** 雨强侵蚀力 R 因子跟您说下。我之前用的公式断点不对（原文里没有），整个重做了。
+**中文:** 雨强侵蚀力 R 因子跟您说下。我之前用的公式断点不对（原文里没有），整个重做了，每个数字都对着原始论文手算核过。
 >
-> 测了标准文献公式，又用 ERA5 小时降雨直接算了个 R 做独立验证。结论：美国/摩洛哥那套（含 Elwell 的津巴布韦版）给 R ~1400-3700，对我们这种半干旱区偏高约 4 倍；ERA5 加上 Hurni、Epworth（哈拉雷）这类简化公式给 R ~250-500，ERA5 数据也支持这个量级。
+> 测了标准文献公式，又用 ERA5 小时降雨直接算了个 R 做独立验证。结论：美国的 Renard-Freimund、一个 Arnoldus 类公式、还有 Elwell 的津巴布韦关系都给 R ~1400-3700，对我们这种半干旱区偏高约 4 倍；ERA5 加上 Hurni、Epworth（哈拉雷）这类简化公式给 R ~250-500，ERA5 数据也支持这个量级。
 >
 > 这样算下来土壤流失 A 约 0.6 t/ha/yr（高公式会给 2-4）。
 >
