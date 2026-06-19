@@ -508,6 +508,27 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 - Next action: send the briefing + the three boards to the mentor; await the R-method decision,
   which unblocks the V1 R and USLE A re-derivation.
 
+### IFPM-084 V1 Hydrology Candidate Evidence Standardization
+
+- Status: complete as candidate evidence for mentor review (no overlay). Fills the gap left by
+  IFPM-055: terrain had three 0-1 candidates but hydrology had none.
+- Evidence: `bin/standardize_v1_hydrology.py`, `bin/plot_v1_hydrology_evidence_board.py`,
+  `outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/` (two 0-1 candidates +
+  diagnostics CSV + handoff + mentor board),
+  `outputs/v1_full_methodology_evidence_sweep/v1_full_methodology_evidence_matrix.csv` (updated).
+- Key results:
+  - `v1_twi_high_wetness_0_1.tif`: TWI standardized, higher TWI -> higher value (wet/converging
+    flood-susceptible). Clip [5.23, 14.21], mean 0.28.
+  - `v1_drainage_proximity_0_1.tif`: distance-to-drainage standardized (inverted), closer ->
+    higher value (flood exposure). Clip [0, 800m], mean 0.63.
+  - Same 2-98 percentile + min-max method as terrain candidates, so terrain and hydrology are
+    comparable. Both pass the V1 raster grid gate (grid_compatible=true).
+- Status: CANDIDATE EVIDENCE, NOT overlay-ready. Per AGENTS.md, no criterion enters AHP overlay or
+  interpretation until the mentor confirms the criteria hierarchy (IFPM-D01/D04) and modelling
+  unit (Gate G2).
+- Next action: present alongside the terrain candidates (IFPM-055/056) in the next mentor review
+  of the criteria hierarchy.
+
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
 - Status: complete as 30 m diagnostic rasters; all grid_compatible.
