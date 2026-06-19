@@ -529,6 +529,28 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 - Next action: present alongside the terrain candidates (IFPM-055/056) in the next mentor review
   of the criteria hierarchy.
 
+### IFPM-085 R-Factor Investigation Independent Verification
+
+- Status: complete. A first-principles re-check of every formula, coefficient, and headline number
+  in IFPM-079..082, by hand-calculating each method from the primary sources and comparing to the
+  script output.
+- Evidence: `context/docs/project-management/rfactor_investigation_verification_2026-06-19.md`.
+- Key results:
+  - Renard-Freimund Eq 11-14 coefficients and break points (850/55 mm) re-extracted from the
+    original PDF: confirmed.
+  - Six R methods hand-calc vs script: A/B/C/E/F within <2% (non-linear mean effect); D's 25%
+    difference explained by the 29/103 low/high-branch split (weighted mean 405.5 matches the
+    raster's 408). No real error.
+  - ERA5 EI30 algorithm: kinetic-energy equations correct, magnitudes in the literature range,
+    annual R reproduced (508/462). Pareto effect (top-5 storms = 49% of R) physically plausible.
+  - Elwell table, Epworth equation, LS exponents 0.4/1.2, K 0.1317, hydrology standardization: all
+    verified.
+  - ONE sourcing inaccuracy flagged and fixed: the "Arnoldus-family" method (A) uses Nakil & Khire
+    2023's form whose base coefficient (0.152) is not Arnoldus 1977's 0.264; the briefing now says
+    "Arnoldus-family" not "Arnoldus with a unit fix". Does not change the conclusion.
+- Impact: the briefing's headline numbers are now backed by independent hand-calculation, not by
+  "the script ran". No conclusion changes.
+
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
 - Status: complete as 30 m diagnostic rasters; all grid_compatible.

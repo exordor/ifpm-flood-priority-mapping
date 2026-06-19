@@ -24,12 +24,20 @@ I compared the standard literature formulas and then computed an R directly from
 rainfall as an independent check (IMERG half-hourly would be better but needs a NASA account I
 don't have).
 
-The literature methods fall into two groups that disagree by about 4-6x:
+The literature methods fall into two groups that disagree by about 4-6x. I have hand-checked each
+one against its primary source and against the script output (verification note:
+`context/docs/project-management/rfactor_investigation_verification_2026-06-19.md`); the numbers
+below are confirmed.
 
 | group | methods | R for V1 |
 |---|---|---:|
-| High | Renard-Freimund (US), Arnoldus (Morocco), Elwell/Stocking 1976 (Zimbabwe) | 1380-3719 |
+| High | Renard-Freimund (US), an Arnoldus-family power law (Morocco), Elwell/Stocking 1976 (Zimbabwe) | 1380-3719 |
 | Low | Hurni 1985 (Ethiopia), Epworth/Merritt (Harare RUSLE) | 240-320 |
+
+One sourcing note on the Arnoldus-family entry: it uses the Nakil & Khire (2023) form
+`R = 17.02·10^(1.5·log10(MFI)−0.8188)`. Its implied base coefficient (0.152) is not Arnoldus 1977's
+0.264, so I am describing it as "Arnoldus-family" rather than "the Arnoldus equation with a unit
+fix". It still lands squarely in the High group and does not change the conclusion.
 
 One thing worth flagging: the "measured" Epworth value of 329 that is often cited is not actually a
 measurement - that same paper computed it from its own Low-group equation (R = 38.5 + 0.35·M). So it
