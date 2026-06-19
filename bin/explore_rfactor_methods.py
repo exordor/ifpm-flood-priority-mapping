@@ -210,12 +210,28 @@ def r_method_E_hurni(p_annual: np.ndarray) -> np.ndarray:
     return -8.12 + 0.562 * p_safe
 
 
+def r_method_F_epworth_merritt(p_annual: np.ndarray) -> np.ndarray:
+    """Epworth/Harare RUSLE equation (Eq 2): R = 38.5 + 0.35*M, M = mean annual rainfall.
+
+    Source: Ndlovu et al. (2020), Assessment of Soil Erosion Using the RUSLE Model for the Epworth
+    District, Harare, Zimbabwe (MDPI Sustainability 12(20):8531), citing Merritt et al. (2003) and
+    Tundu et al. (2018). At Harare M~880mm this gives R~346, matching the paper's reported ~329.
+    This is the equation actually used to compute the "measured" 329/315 anchor cited in this
+    exploration. It belongs to the same low-R family as Hurni (Method E). UNIT CAVEAT: like Hurni,
+    the ultimate original calibration and its unit convention are not fully traceable from the
+    citing chain; treat as indicative.
+    """
+    p_safe = np.where(p_annual <= 0, np.nan, p_annual)
+    return 38.5 + 0.35 * p_safe
+
+
 METHODS = [
     ("method_A_corrected_arnoldus", "Corrected Arnoldus (Nakil & Khire 2023)", r_method_A_corrected_arnoldus, "mfi"),
     ("method_B_rf_f_correct", "Renard-Freimund F-based correct (Eq 13/14)", r_method_B_rf_f_correct, "mfi"),
     ("method_C_rf_p_correct", "Renard-Freimund P-based correct (Eq 11/12)", r_method_C_rf_p_correct, "p_annual"),
     ("method_D_old_wrong", "OLD V1 method (WRONG, reference only)", r_method_D_old_wrong, "mfi"),
     ("method_E_hurni", "Hurni (1985) regional R-P regression (Ethiopia-calibrated)", r_method_E_hurni, "p_annual"),
+    ("method_F_epworth_merritt", "Epworth/Merritt Eq (R=38.5+0.35M, Harare RUSLE)", r_method_F_epworth_merritt, "p_annual"),
 ]
 
 

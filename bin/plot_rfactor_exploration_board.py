@@ -50,6 +50,7 @@ METHOD_ORDER = [
     "method_C_rf_p_correct",
     "method_D_old_wrong",
     "method_E_hurni",
+    "method_F_epworth_merritt",
 ]
 SHORT_LABELS = {
     "method_A_corrected_arnoldus": "A: Corrected Arnoldus\n(Nakil & Khire 2023)",
@@ -57,7 +58,12 @@ SHORT_LABELS = {
     "method_C_rf_p_correct": "C: RF P-based correct\n(Eq 11/12, P=P_annual)",
     "method_D_old_wrong": "D: OLD V1 method\n(WRONG, reference)",
     "method_E_hurni": "E: Hurni 1985\n(regional R-P, Ethiopia)",
+    "method_F_epworth_merritt": "F: Epworth/Merritt\n(R=38.5+0.35M, Harare)",
 }
+# Elwell/Stocking 1976 Zimbabwe-native value (from Renard-Freimund 1994 table, ~400 per 100mm):
+# at V1 P~583, R~2000. Shown as a reference line, not a method (it is a lookup table, not an eqn,
+# and reaches us via secondary reproduction).
+ELWELL_REF_R = 2000.0
 
 
 def read_array(path: Path):
@@ -92,6 +98,8 @@ def main() -> None:
                label=f"Semi-arid measured range ({zim_low:.0f}-{zim_high:.0f})")
     ax.axhline(epworth, color="#d73027", linestyle="--", linewidth=1.4,
                label=f"Epworth Zimbabwe measured ({epworth:.0f})")
+    ax.axhline(ELWELL_REF_R, color="#1a9850", linestyle=":", linewidth=1.6,
+               label=f"Elwell/Stocking 1976 Zimbabwe-native (~{ELWELL_REF_R:.0f})")
     ax.set_xticks(x)
     ax.set_xticklabels([SHORT_LABELS[mid] for mid in METHOD_ORDER], fontsize=8)
     ax.set_ylabel("R-factor zonal mean\n(MJ mm ha$^{-1}$ h$^{-1}$ yr$^{-1}$)")
@@ -121,16 +129,16 @@ def main() -> None:
     )
 
     caveat = (
-        "Methods A/B/C are literature-CORRECT forms (Renard & Freimund 1994; Nakil & Khire 2023). "
-        "Method D is the old V1 method (P-based coeffs on MFI, invented break at 80), reference only. "
-        "Method E is Hurni (1985), a data-scarce regional R-P regression (unit caveat: pre-SI calibration).   "
-        f"Measured Zimbabwe R (Epworth/Harare RUSLE) ~{epworth:.0f}; semi-arid lowlands {zim_low:.0f}-{zim_high:.0f}.   "
-        f"A/B/C give R~{r_means['method_C_rf_p_correct']:.0f}-{r_means['method_B_rf_f_correct']:.0f} (over-estimate 3-11x); "
-        f"E (Hurni) gives R~{r_means['method_E_hurni']:.0f}, very close to measured {epworth:.0f}. "
-        "The US/Morocco-calibrated relations are NOT transferable; a regional R-P method (Hurni or a "
-        "Zimbabwe-specific calibration) is the promising direction."
+        "Two incompatible R-families emerge. HIGH-R family: A/B/C (US/Morocco formulas) AND the "
+        "Zimbabwe-native Elwell/Stocking 1976 (green dotted, ~2000) all give R~1400-3700 and AGREE "
+        f"with each other. LOW-R family: E (Hurni) ~{r_means['method_E_hurni']:.0f} and F "
+        f"(Epworth/Merritt) ~{r_means['method_F_epworth_merritt']:.0f} give R~240-320, ~6x lower.   "
+        f"The 'measured' Epworth 329 was itself computed with the F equation, so it is NOT an "
+        f"independent anchor - it confirms F, not the true R.   "
+        "The real open question is which family uses the correct R definition/units; this needs "
+        "the mentor or a primary EI30 dataset to settle. EXPLORATORY."
     )
-    fig.text(0.5, -0.02, caveat, ha="center", va="top", fontsize=7.6, style="italic", color="#333")
+    fig.text(0.5, -0.02, caveat, ha="center", va="top", fontsize=7.4, style="italic", color="#333")
 
     fig.savefig(BOARD_PNG)
     fig.savefig(BOARD_PDF)

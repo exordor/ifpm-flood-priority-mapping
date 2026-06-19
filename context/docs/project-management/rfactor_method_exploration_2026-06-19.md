@@ -22,74 +22,92 @@ concrete evidence behind it.
 | C | RF P-based correct | `R = 0.04830*P^1.61` if P<850 else `587.8-1.219*P+0.004105*P^2`, P=P_annual | Renard & Freimund 1994, Eq 11/12 |
 | D | OLD V1 (WRONG) | P-based coeffs on MFI, break at 80 | V1 error (kept as reference baseline only) |
 | E | Hurni regional R-P | `R = -8.12 + 0.562*P` | Hurni 1985 (Erosion-Productivity-Conservation Systems in Ethiopia); data-scarce regional proxy. Unit caveat: pre-SI calibration. |
+| F | Epworth/Merritt R-P | `R = 38.5 + 0.35*M` | Ndlovu et al. 2020 (MDPI Sustainability 12:8531) Eq 2, citing Merritt 2003 / Tundu 2018. This is the equation used to compute the "measured" Epworth 329 anchor. |
 
-Methods A/B/D/E share the same MFI input (`sum_i(Pi^2)/P_annual`, Nov-Mar, full-year P_annual)
-computed from the V1 CHIRPS climatology; methods C and E use P_annual directly. V1 inputs:
-P_annual mean 583.5 mm; MFI mean 92.92.
+Methods A/B/D use MFI; C/E/F use P_annual. V1 inputs: P_annual mean 583.5 mm; MFI mean 92.92.
 
-## Measured Zimbabwe R-factor anchor (for sanity-checking)
+A further Zimbabwe-native reference (not a raster method, shown as a reference line): Stocking &
+Elwell (1976), "Rainfall Erosivity over Rhodesia", whose R-vs-annual-rainfall table is reproduced in
+Renard & Freimund (1994). At V1 P~583 the table gives R~2000 (slope ~400 MJ mm ha-1 h-1 yr-1 per
+100 mm). Source is secondary reproduction (via RF1994), so treated as a reference point only.
+
+## Measured Zimbabwe R-factor anchor (for sanity-checking) - WITH A CRITICAL CAVEAT
 
 - Epworth (Harare area), RUSLE: R ~ 329 (1984-2000), ~ 315 (2000-2018) MJ mm ha-1 h-1 yr-1
 - Southern Africa semi-arid lowlands: ~ 150-400
 - Source: MDPI Sustainability 12(20):8531 (Epworth); Lesotho RUSLE assessments (lowlands)
 
-A defensible R for the V1 catchment is therefore expected in the low hundreds, NOT thousands.
+**CRITICAL CAVEAT (added 2026-06-19): the Epworth 329 is NOT an independent measurement.** It was
+computed in that same paper using Equation (2) `R = 38.5 + 0.35*M` (Merritt 2003 / Tundu 2018).
+So 329 is a model output from the low-R family, not a primary EI30 observation. Citing it to
+validate the low-R family (Hurni/Epworth) is circular. It is retained here only to expose that
+circularity. There is NO independent measured EI30 R for the V1 catchment in the sources found.
 
 ## Results
 
-| method | R zonal mean (MJ mm ha-1 h-1 yr-1) | ratio to measured (~330) | verdict |
-|---|---:|---:|---|
-| A: Corrected Arnoldus | 2329 | 7.1x | far above measured |
-| B: RF F-based correct | 3719 | 11.3x | far above measured |
-| C: RF P-based correct | 1380 | 4.2x | far above measured |
-| D: OLD V1 (WRONG) | 408 | 1.2x | near measured (but wrong, errors cancelled) |
-| E: Hurni 1985 regional R-P | 320 | 1.0x | **within measured range, ~Epworth 329** |
+| method | R zonal mean (MJ mm ha-1 h-1 yr-1) | family | notes |
+|---|---:|---|---|
+| A: Corrected Arnoldus | 2329 | HIGH | US/Morocco transfer formula |
+| B: RF F-based correct | 3719 | HIGH | US transfer formula |
+| C: RF P-based correct | 1380 | HIGH | US transfer formula |
+| (Elwell/Stocking 1976 ref) | ~2000 | HIGH | Zimbabwe-native, via RF1994 table |
+| D: OLD V1 (WRONG) | 408 | (mixed) | errors happened to land mid-range |
+| E: Hurni 1985 | 320 | LOW | Ethiopia regional R-P |
+| F: Epworth/Merritt | 243 | LOW | Harare RUSLE Eq 2 |
 
-Indicative USLE A estimates (A = a_structure_mean * R_zonal, with the verified-clean R-invariant
-a_structure): A ~ 2.8 t/ha/yr (A), 4.5 (B), 1.7 (C), 0.5 (D), 0.39 (E). These vary ~11x across
-methods, underscoring that the R choice dominates the A magnitude.
+Indicative USLE A estimates (A = a_structure_mean * R_zonal, R-invariant a_structure verified
+clean): A ~ 2.8 (A), 4.5 (B), 1.7 (C), 0.5 (D), 0.39 (E), 0.30 (F) t/ha/yr. The ~15x spread across
+methods shows the R choice dominates the A magnitude.
 
-## Key finding
+## Key finding (REVISED 2026-06-19 - this overturns the earlier single-family conclusion)
 
-**The three standard transfer formulas (A/B/C) over-estimate the measured Zimbabwe R-factor by
-3-11x. The OLD WRONG V1 method (D) falls near the range only because its errors cancelled. Method E
-(Hurni 1985 regional R-P regression) gives R ~ 320, within the measured semi-arid range and almost
-exactly the Epworth/Harare measured value of 329.**
+**The methods split into two mutually incompatible R-families that differ by ~6x, and the
+"measured Zimbabwe 329" anchor is NOT independent evidence - it is a self-confirmation of the
+low-R family.**
 
-This is strong evidence that:
-1. The **Renard-Freimund (US-calibrated, 132 stations) and Arnoldus (Morocco-calibrated) relations
-   are NOT transferable to semi-arid Zimbabwe.** The catchment's rainfall regime (concentrated
-   convective storms, MFI ~93, P ~583 mm) produces an erosivity structure these temperate/US
-   regressions do not capture. The 2023 Catena systematic review flags exactly this class of
-   transferability problem.
-2. A **regional R-P method is the promising direction.** Hurni (1985), calibrated for the Ethiopian
-   Highlands, matches the measured southern-African R magnitude despite being from a different
-   (though also semi-arid tropical) region. A Zimbabwe-specific calibration (Elwell & Stocking's
-   work, see below) would be even better.
+- **HIGH-R family** (~1400-3700): the US-calibrated Renard-Freimund forms (A/B/C) AND the
+  Zimbabwe-native Elwell/Stocking (1976) relation (~2000 at V1 P~583) AGREE with each other.
+  This is significant: Elwell/Stocking used Rhodesian (Zimbabwe) rainfall data, independent of the
+  US calibration, yet lands in the same range. So the "US formulas don't transfer" hypothesis from
+  the earlier draft is NOT supported once the Zimbabwe-native relation is included.
+- **LOW-R family** (~240-320): Hurni (1985, Ethiopia) and the Epworth/Merritt equation (R=38.5+
+  0.35*M, used in Harare RUSLE). These two agree with each other but are ~6x below the high family.
+- **The "measured" Epworth 329 is circular.** It was computed using the F equation (R=38.5+0.35*M),
+  so citing it as validation for the low-R family is circular reasoning - it confirms F, not the
+  true R. The 329 is a model output, not an independent EI30 measurement.
 
-### Note on Hurni units
-Hurni's original (1985) calibration predates the strict RUSLE SI standardization, so its output
-units are ambiguous (older USLE English vs MJ mm ha-1 h-1). Despite this, its magnitude matches the
-measured Zimbabwe R, so it is a strong candidate. The unit caveat must be resolved (or the result
-accepted as an order-of-magnitude match) before Hurni is used for any quantitative A claim.
+**The earlier draft's conclusion ("US/Morocco formulas not transferable; Hurni matches measured") was
+wrong** because it treated the Epworth 329 as an independent anchor. With the Elwell/Stocking
+Zimbabwe-native relation added, the high-R family has independent Zimbabwe support, and the
+low-R family's only "validation" is its own equation.
+
+### The real open question
+
+Which family uses the correct R definition/units? Both cannot be right for the same physical
+quantity. Candidate explanations:
+1. The low-R family may use a different R convention (e.g. Roose's West-Africa R, a per-storm
+   rather than annual index, or unconverted units) that is ~6x smaller than USLE-standard R.
+2. The high-R family may over-predict convective-storm erosivity in this regime.
+3. Only a primary EI30 dataset (sub-daily rainfall from a local gauge) can settle this. Neither
+   family has been validated against true EI30 in the V1 catchment.
+
+This is precisely the question to put to the mentor - with the evidence that the two families
+exist, that the Zimbabwe-native Elwell relation supports the high family, and that the low family's
+"measured" anchor is circular.
 
 ## Implications for the project
 
-1. The R-factor method is not a "fix the coefficient" problem; it is a "the standard US/Morocco
-   formulas do not fit this region" problem. This reframes the mentor question.
-2. Candidate paths forward (for the mentor to weigh), now with concrete evidence:
-   - **Hurni (1985) `R = -8.12 + 0.562*P`** - the only tested method matching measured R; strong
-     candidate, with a unit caveat to resolve.
-   - a Zimbabwe-specific R-P/R-MFI calibration - Elwell & Stocking (1973) and Elwell (1976,
-     "Rainfall Erosivity over Rhodesia") are the foundational Zimbabwe references; their SLEMSA
-     model uses kinetic energy directly (E = 29.82 - 127.51/I) rather than a USLE R, so adopting
-     them needs a conversion or a move to SLEMSA. Worth checking whether Elwell published an R-P
-     regression directly usable in USLE.
-   - direct EI30 / R computation from sub-daily rainfall if a higher-temporal-resolution source is
-     available (CHIRPS-daily is not storm-resolved, but a regional gauge or GPM IMERG might be);
-   - adoption of a published regional R value (e.g. the Epworth ~329) as a documented scalar.
+1. The R-factor problem is a "two incompatible literature families, unresolved by available data"
+   problem - NOT simply "wrong coefficients" or "non-transferable US formulas".
+2. To settle R, the project needs ONE of:
+   - a primary EI30 dataset (sub-daily gauge or GPM IMERG) in or near V1, to compute R directly and
+     see which family it matches;
+   - a mentor ruling on which R convention the thesis will adopt, with the family choice documented;
+   - a traceable original source for the low-R family's equation (Hurni 1985 / the Merritt-Tundu
+     chain) to resolve its units.
 3. The USLE A absolute values cannot be settled until R is settled. The spatial structure (LS x C,
-   via the clean a_structure) remains valid and ready to multiply by whichever R is chosen.
+   via the clean a_structure) remains valid and ready to multiply by whichever R is chosen. The A
+   estimate would be ~0.3 t/ha/yr (low family) or ~2-4 t/ha/yr (high family) - a >10x difference.
 
 ## What this experiment does NOT do
 

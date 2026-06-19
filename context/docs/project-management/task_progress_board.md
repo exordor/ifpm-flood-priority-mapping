@@ -439,20 +439,23 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   - B: RF F-based correct (Eq 13/14): R = 3719 (11x measured).
   - C: RF P-based correct (Eq 11/12): R = 1380 (4x measured).
   - D: OLD V1 (wrong): R = 408 (1.2x measured; closest only because errors cancelled).
-  - E: Hurni (1985) regional R-P regression (R = -8.12 + 0.562*P): R = 320, WITHIN the measured
-    semi-arid range and ~equal to the Epworth/Harare measured 329. (Unit caveat: pre-SI calibration.)
-  - Conclusion: the three US/Morocco-calibrated formulas over-estimate by 3-11x and are NOT
-    transferable; Hurni (regional) is the only tested method matching measured R, making a
-    regional R-P method (Hurni, or a Zimbabwe-specific Elwell/Stocking calibration) the promising
-    direction.
-- Impact: reframes the mentor question from "fix the coefficient" to "the standard formulas do not
-  fit this region; a regional R-P method is needed", and supplies a strong candidate (Hurni 1985)
-  that matches the measured magnitude. Supports IFPM-080 Finding 2 with concrete numbers. Does NOT
-  re-derive V1 R or replace the deprecated products.
-- Next action: present the exploration board (now 5 methods incl. Hurni) and the transferability
-  finding to the mentor; Hurni is the leading candidate pending its unit-caveat resolution and/or
-  a Zimbabwe-specific Elwell calibration. The mentor's R-method decision now has quantitative
-  evidence behind it.
+  - E: Hurni (1985) regional R-P regression (R = -8.12 + 0.562*P): R = 320.
+  - F: Epworth/Merritt (R = 38.5 + 0.35*M, the Harare RUSLE equation): R = 243.
+  - REVISED CONCLUSION (the earlier "Hurni matches measured, so US formulas don't transfer" was
+    wrong): the methods split into TWO incompatible R-families ~6x apart. HIGH-R family
+    (Arnoldus 2329 / RF-F 3719 / RF-P 1380 / Elwell-Stocking-1976 Zimbabwe-native ~2000) all
+    agree, including the Zimbabwe-native relation. LOW-R family (Hurni 320 / Epworth 243) agree
+    with each other. The "measured" Epworth 329 was computed with the F equation, so it is
+    CIRCULAR evidence - it confirms F, not the true R. No independent EI30 measurement exists for
+    V1. The real open question: which family uses the correct R definition/units?
+- Impact: reframes the R-method question from "fix the coefficient" / "non-transferable formulas"
+  to "two unresolved literature R-families; needs a primary EI30 dataset or a mentor ruling".
+  Supports IFPM-080 Finding 2 with concrete numbers. Does NOT re-derive V1 R or replace the
+  deprecated products.
+- Next action: present the exploration board (6 methods + Elwell reference, showing the two
+  R-families) and the Epworth-circularity finding to the mentor. The decision needed is which
+  R-family/convention the thesis adopts, or whether to obtain a primary EI30 dataset (sub-daily
+  gauge / GPM IMERG) to resolve it empirically. Hurni is NOT pre-endorsed as leading candidate.
 
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
