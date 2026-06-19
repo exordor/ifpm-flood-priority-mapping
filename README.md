@@ -71,6 +71,7 @@ ifpm-flood-pipeline/
 - `context/docs/mentor-explanation/AHP_Elicitation_Protocol_And_Template_2026-06-15.md`
 - `context/docs/mentor-explanation/Mentor_Decision_Briefing_2026-06-15.md`
 - `context/docs/mentor-explanation/Mentor_Teams_Messages_2026-06-15.md`
+- `context/docs/mentor-explanation/Mentor_RFactor_Investigation_Briefing_2026-06-19.md`
 - `context/docs/project-analysis/IFPM_HiWi_Project_Analysis.md`
 - `context/docs/project-analysis/AI_Research_Document_Generation_Lessons_Learned.md`
 

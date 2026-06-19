@@ -495,6 +495,19 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   decision is now informed by independent empirical evidence + a spatial R layer. Caveats (ERA5
   hourly lower bound, convective under-estimation) must travel with the result.
 
+### IFPM-083 Mentor Briefing: USLE R-Factor Investigation
+
+- Status: complete as an internal mentor-facing briefing. Consolidates the full multi-round
+  R-factor investigation (IFPM-079..082) into one decision-ready document: the V1 formula error,
+  the two R-families, the Epworth circularity, the ERA5 empirical resolution, and the one decision
+  needed.
+- Evidence: `context/docs/mentor-explanation/Mentor_RFactor_Investigation_Briefing_2026-06-19.md`.
+- Key recommendation: adopt a LOW-family R (ERA5 empirical ~507, or Hurni/Epworth ~240-320) for
+  V1; the HIGH family (RF/Arnoldus/Elwell) is contradicted by independent empirical data and
+  over-estimates ~4x. One open caveat: ERA5 hourly lower-bounds true 30-min EI30.
+- Next action: send the briefing + the three boards to the mentor; await the R-method decision,
+  which unblocks the V1 R and USLE A re-derivation.
+
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
 - Status: complete as 30 m diagnostic rasters; all grid_compatible.
