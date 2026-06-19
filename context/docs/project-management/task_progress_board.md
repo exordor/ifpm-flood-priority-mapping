@@ -423,6 +423,32 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   K and LS verified correct). The V2 hotspot-survival NUMBERS remain valid as a structure test
   only. Re-run of R and A waits on the mentor's R-method decision.
 
+### IFPM-081 Exploratory R-Factor Method Comparison For Semi-Arid Zimbabwe
+
+- Status: complete as an exploratory experiment. Runs four literature-based R-factor methods on
+  the V1 CHIRPS inputs and compares them to measured Zimbabwe R values, to turn the R-method
+  question into an evidence-backed decision rather than an abstract choice.
+- Evidence:
+  `context/docs/project-management/rfactor_method_exploration_2026-06-19.md`,
+  `bin/explore_rfactor_methods.py`, `bin/plot_rfactor_exploration_board.py`,
+  `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/rfactor_method_exploration_diagnostics.json`,
+  `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/mentor_rfactor_exploration_board.png`.
+- Key results (V1 MFI mean 92.92, P_annual mean 583.5 mm; measured Zimbabwe R ~330, semi-arid
+  range 150-400):
+  - A: corrected Arnoldus (Nakil & Khire 2023, with 17.02 unit conversion): R = 2329 (7x measured).
+  - B: RF F-based correct (Eq 13/14): R = 3719 (11x measured).
+  - C: RF P-based correct (Eq 11/12): R = 1380 (4x measured).
+  - D: OLD V1 (wrong): R = 408 (1.2x measured; closest only because errors cancelled).
+  - All three literature-correct methods over-estimate measured Zimbabwe R by 3-11x. The
+    Renard-Freimund (US) and Arnoldus (Morocco) relations are NOT transferable to semi-arid
+    Zimbabwe.
+- Impact: reframes the mentor question from "fix the coefficient" to "the standard formulas do not
+  fit this region; a region-appropriate R method is needed" (regional R-P/MFI regression, sub-daily
+  EI30 if a source exists, or adoption of a published regional R). Supports IFPM-080 Finding 2 with
+  concrete numbers. Does NOT re-derive V1 R or replace the deprecated products.
+- Next action: present the exploration board and the transferability finding to the mentor; the
+  mentor's R-method decision now has quantitative evidence behind it.
+
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
 - Status: complete as 30 m diagnostic rasters; all grid_compatible.
