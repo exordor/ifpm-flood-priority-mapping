@@ -194,11 +194,28 @@ def r_method_D_old_wrong(mfi: np.ndarray) -> np.ndarray:
     return np.where(mfi_safe < 80.0, low, high)
 
 
+def r_method_E_hurni(p_annual: np.ndarray) -> np.ndarray:
+    """Hurni (1985) regional simplified R-P regression: R = -8.12 + 0.562*P.
+
+    Calibrated for the Ethiopian Highlands from mean annual rainfall P (mm), widely used in
+    data-scarce African RUSLE studies where sub-daily intensity (EI30) is unavailable. Source:
+    Hurni, H. (1985), Erosion-Productivity-Conservation Systems in Ethiopia, Proc. 4th ISCO.
+
+    UNIT CAVEAT: the original calibration predates the strict RUSLE SI standardization, so the
+    output units are ambiguous (older USLE English units vs MJ mm ha-1 h-1). Treat the magnitude
+    as indicative; it is included because it is the standard data-scarce regional proxy and, unlike
+    the Renard-Freimund/Arnoldus forms, falls near measured southern-African R values.
+    """
+    p_safe = np.where(p_annual <= 0, np.nan, p_annual)
+    return -8.12 + 0.562 * p_safe
+
+
 METHODS = [
     ("method_A_corrected_arnoldus", "Corrected Arnoldus (Nakil & Khire 2023)", r_method_A_corrected_arnoldus, "mfi"),
     ("method_B_rf_f_correct", "Renard-Freimund F-based correct (Eq 13/14)", r_method_B_rf_f_correct, "mfi"),
     ("method_C_rf_p_correct", "Renard-Freimund P-based correct (Eq 11/12)", r_method_C_rf_p_correct, "p_annual"),
     ("method_D_old_wrong", "OLD V1 method (WRONG, reference only)", r_method_D_old_wrong, "mfi"),
+    ("method_E_hurni", "Hurni (1985) regional R-P regression (Ethiopia-calibrated)", r_method_E_hurni, "p_annual"),
 ]
 
 

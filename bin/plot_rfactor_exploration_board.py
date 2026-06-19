@@ -49,12 +49,14 @@ METHOD_ORDER = [
     "method_B_rf_f_correct",
     "method_C_rf_p_correct",
     "method_D_old_wrong",
+    "method_E_hurni",
 ]
 SHORT_LABELS = {
     "method_A_corrected_arnoldus": "A: Corrected Arnoldus\n(Nakil & Khire 2023)",
     "method_B_rf_f_correct": "B: RF F-based correct\n(Eq 13/14, F=MFI)",
     "method_C_rf_p_correct": "C: RF P-based correct\n(Eq 11/12, P=P_annual)",
     "method_D_old_wrong": "D: OLD V1 method\n(WRONG, reference)",
+    "method_E_hurni": "E: Hurni 1985\n(regional R-P, Ethiopia)",
 }
 
 
@@ -75,14 +77,15 @@ def main() -> None:
     zim_low, zim_high = anchor["southern_africa_semi_arid_lowlands_range"]
     epworth = anchor["epworth_harare_1984_2000"]
 
-    fig = plt.figure(figsize=(14, 9), constrained_layout=True)
-    gs = fig.add_gridspec(2, 4, height_ratios=[1.15, 1])
+    fig = plt.figure(figsize=(17, 9), constrained_layout=True)
+    gs = fig.add_gridspec(2, len(METHOD_ORDER), height_ratios=[1.15, 1])
 
     # --- Top: bar chart of R zonal means vs measured Zimbabwe range ---
     ax = fig.add_subplot(gs[0, :])
     x = np.arange(len(METHOD_ORDER))
     vals = [r_means[mid] for mid in METHOD_ORDER]
-    colors = ["#4575b4", "#4575b4", "#4575b4", "#d73027"]  # literature methods blue, old-wrong red
+    # literature/regional methods blue, old-wrong method D red
+    colors = ["#d73027" if mid == "method_D_old_wrong" else "#4575b4" for mid in METHOD_ORDER]
     bars = ax.bar(x, vals, color=colors, edgecolor="#333", linewidth=0.6)
     # measured range band
     ax.axhspan(zim_low, zim_high, color="#fee08b", alpha=0.5, zorder=0,
@@ -118,17 +121,16 @@ def main() -> None:
     )
 
     caveat = (
-        "Methods A/B/C are literature-CORRECT forms (verified against Renard & Freimund 1994 and "
-        "Nakil & Khire 2023). Method D is the old V1 method (P-based coeffs on MFI, invented break "
-        "at 80) kept only as a reference baseline.   "
+        "Methods A/B/C are literature-CORRECT forms (Renard & Freimund 1994; Nakil & Khire 2023). "
+        "Method D is the old V1 method (P-based coeffs on MFI, invented break at 80), reference only. "
+        "Method E is Hurni (1985), a data-scarce regional R-P regression (unit caveat: pre-SI calibration).   "
         f"Measured Zimbabwe R (Epworth/Harare RUSLE) ~{epworth:.0f}; semi-arid lowlands {zim_low:.0f}-{zim_high:.0f}.   "
-        "All three correct methods give R~{:.0f}-{:.0f}, far above measured; only the WRONG method "
-        "({:.0f}) is near the range. Conclusion: the US/Morocco-calibrated relations are NOT "
-        "transferable to semi-arid Zimbabwe; a region-appropriate R method is needed.".format(
-            r_means["method_C_rf_p_correct"], r_means["method_B_rf_f_correct"], r_means["method_D_old_wrong"]
-        )
+        f"A/B/C give R~{r_means['method_C_rf_p_correct']:.0f}-{r_means['method_B_rf_f_correct']:.0f} (over-estimate 3-11x); "
+        f"E (Hurni) gives R~{r_means['method_E_hurni']:.0f}, very close to measured {epworth:.0f}. "
+        "The US/Morocco-calibrated relations are NOT transferable; a regional R-P method (Hurni or a "
+        "Zimbabwe-specific calibration) is the promising direction."
     )
-    fig.text(0.5, -0.02, caveat, ha="center", va="top", fontsize=7.8, style="italic", color="#333")
+    fig.text(0.5, -0.02, caveat, ha="center", va="top", fontsize=7.6, style="italic", color="#333")
 
     fig.savefig(BOARD_PNG)
     fig.savefig(BOARD_PDF)
@@ -141,20 +143,23 @@ def main() -> None:
         f"Date: {date.today().isoformat()}\n\n"
         f"**Status: EXPLORATORY - informs the mentor R-method decision; not a validated result.**\n\n"
         f"After the integrity audit found the V1 R-factor used wrong coefficients on MFI with an "
-        f"invented break, this board compares four literature-based R methods on the same V1 CHIRPS "
-        f"inputs, against MEASURED Zimbabwe R-factor values.\n\n"
-        f"**Key finding:** all three literature-CORRECT methods (A: corrected Arnoldus {r_means['method_A_corrected_arnoldus']:.0f}; "
-        f"B: RF F-based {r_means['method_B_rf_f_correct']:.0f}; C: RF P-based {r_means['method_C_rf_p_correct']:.0f}) "
-        f"over-estimate the measured Zimbabwe R ({epworth:.0f} at Epworth/Harare; {zim_low:.0f}-{zim_high:.0f} "
-        f"semi-arid range) by 3-9x. Only the OLD WRONG V1 method ({r_means['method_D_old_wrong']:.0f}) falls near the "
-        f"measured range - and only because its errors happened to cancel the over-estimation.\n\n"
-        f"**Implication:** the Renard-Freimund (US-calibrated) and Arnoldus (Morocco-calibrated) "
-        f"relations are NOT transferable to semi-arid Zimbabwe. The project needs a region-"
-        f"appropriate R-factor method - candidates include a Zimbabwe/southern-Africa-calibrated "
-        f"R-P or R-MFI regression, direct EI30 computation from sub-daily CHIRPS if available, or "
-        f"adoption of a published regional R value. This is the decision to put to the mentor.\n\n"
+        f"invented break, this board compares five R methods on the same V1 CHIRPS inputs, against "
+        f"MEASURED Zimbabwe R-factor values.\n\n"
+        f"**Key finding:** the three literature-CORRECT transfer formulas (A: corrected Arnoldus "
+        f"{r_means['method_A_corrected_arnoldus']:.0f}; B: RF F-based {r_means['method_B_rf_f_correct']:.0f}; "
+        f"C: RF P-based {r_means['method_C_rf_p_correct']:.0f}) over-estimate the measured Zimbabwe R "
+        f"({epworth:.0f} at Epworth/Harare; {zim_low:.0f}-{zim_high:.0f} semi-arid range) by 3-11x. "
+        f"The OLD WRONG V1 method (D, {r_means['method_D_old_wrong']:.0f}) falls near the range only "
+        f"because its errors cancelled. Method E (Hurni 1985 regional R-P regression) gives "
+        f"R~{r_means['method_E_hurni']:.0f}, very close to the Epworth measured {epworth:.0f}.\n\n"
+        f"**Implication:** the US/Morocco-calibrated relations are NOT transferable to semi-arid "
+        f"Zimbabwe. A regional R-P method - Hurni (1985), a Zimbabwe-specific calibration, or direct "
+        f"EI30 if a sub-daily source exists - is the promising direction. Hurni has a unit caveat "
+        f"(pre-SI calibration) but matches the measured magnitude, so it is a strong candidate to "
+        f"discuss with the mentor.\n\n"
         f"**Sources:** Renard & Freimund 1994 (J. Hydrology 157); Nakil & Khire 2023 (Catena "
-        f"systematic review); Epworth Zimbabwe RUSLE (MDPI Sustainability 12:8531).\n",
+        f"systematic review); Hurni 1985 (Erosion-Productivity-Conservation Systems in Ethiopia); "
+        f"Epworth Zimbabwe RUSLE (MDPI Sustainability 12:8531).\n",
         encoding="utf-8",
     )
     print(f"wrote {CAPTION_MD}")

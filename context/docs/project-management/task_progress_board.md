@@ -439,15 +439,20 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   - B: RF F-based correct (Eq 13/14): R = 3719 (11x measured).
   - C: RF P-based correct (Eq 11/12): R = 1380 (4x measured).
   - D: OLD V1 (wrong): R = 408 (1.2x measured; closest only because errors cancelled).
-  - All three literature-correct methods over-estimate measured Zimbabwe R by 3-11x. The
-    Renard-Freimund (US) and Arnoldus (Morocco) relations are NOT transferable to semi-arid
-    Zimbabwe.
+  - E: Hurni (1985) regional R-P regression (R = -8.12 + 0.562*P): R = 320, WITHIN the measured
+    semi-arid range and ~equal to the Epworth/Harare measured 329. (Unit caveat: pre-SI calibration.)
+  - Conclusion: the three US/Morocco-calibrated formulas over-estimate by 3-11x and are NOT
+    transferable; Hurni (regional) is the only tested method matching measured R, making a
+    regional R-P method (Hurni, or a Zimbabwe-specific Elwell/Stocking calibration) the promising
+    direction.
 - Impact: reframes the mentor question from "fix the coefficient" to "the standard formulas do not
-  fit this region; a region-appropriate R method is needed" (regional R-P/MFI regression, sub-daily
-  EI30 if a source exists, or adoption of a published regional R). Supports IFPM-080 Finding 2 with
-  concrete numbers. Does NOT re-derive V1 R or replace the deprecated products.
-- Next action: present the exploration board and the transferability finding to the mentor; the
-  mentor's R-method decision now has quantitative evidence behind it.
+  fit this region; a regional R-P method is needed", and supplies a strong candidate (Hurni 1985)
+  that matches the measured magnitude. Supports IFPM-080 Finding 2 with concrete numbers. Does NOT
+  re-derive V1 R or replace the deprecated products.
+- Next action: present the exploration board (now 5 methods incl. Hurni) and the transferability
+  finding to the mentor; Hurni is the leading candidate pending its unit-caveat resolution and/or
+  a Zimbabwe-specific Elwell calibration. The mentor's R-method decision now has quantitative
+  evidence behind it.
 
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
