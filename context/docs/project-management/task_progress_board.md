@@ -485,9 +485,15 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   defensible for V1; the deprecated V1 R=408 is accidentally near the right magnitude (by error
   cancellation), though still not validated. Does NOT re-derive V1 R or replace the deprecated
   products.
-- Next action: present the empirical ERA5 board alongside the families board to the mentor. The
-  R-method decision is now informed by independent empirical evidence. Caveats (ERA5 hourly lower
-  bound, convective under-estimation) must travel with the result.
+- Extension (2026-06-19): extended to a 45-point V1 grid -> interpolated 0.05 deg R raster ->
+  recomputed USLE A. Headline empirical R (WS I30 est) V1 zonal = 507 (matches 7-point 506).
+  USLE A_zonal = 0.621 t/ha/yr; A_spatial (diagnostic) = 0.619 t/ha/yr (agree <1% -> hotspots are
+  LS*C-driven, not R-driven). This moves the empirical R to a spatially-explicit R layer + A
+  estimate. Outputs remain EXPLORATORY; do not replace the deprecated V1 products.
+- Next action: present the empirical ERA5 R raster + A board alongside the families board to the
+  mentor. The empirical evidence (R~500, A~0.6 t/ha/yr) supports the LOW R-family. The R-method
+  decision is now informed by independent empirical evidence + a spatial R layer. Caveats (ERA5
+  hourly lower bound, convective under-estimation) must travel with the result.
 
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 

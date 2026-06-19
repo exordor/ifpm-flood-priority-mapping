@@ -98,11 +98,39 @@ key argument for the HIGH family in the previous round. The conclusion from the 
 
 ## Outputs
 
-- `outputs/v1_usle_soil_loss/rfactor_empirical_era5/era5_empirical_rfactor_diagnostics.json`
+- `outputs/v1_usle_soil_loss/rfactor_empirical_era5/era5_empirical_rfactor_diagnostics.json` (7-point family arbitration)
 - `outputs/v1_usle_soil_loss/rfactor_empirical_era5/mentor_era5_empirical_rfactor_board.{png,pdf}`
 - `outputs/v1_usle_soil_loss/rfactor_empirical_era5/mentor_era5_empirical_rfactor_caption.md`
 - Raw series: `data/raw/era5_hourly_precip_v1_rfactor/era5_hourly_<pt>_2018-2023.json`
 - Tooling: `bin/compute_era5_empirical_rfactor.py`, `bin/plot_era5_empirical_rfactor_board.py`
+
+## Extension: spatial R raster and USLE A (2026-06-19)
+
+The 7-point experiment was extended to a denser V1 grid (45 points at ~0.12 deg, ERA5 hourly
+2018-2023), interpolated to a 0.05 deg R raster, and used to recompute USLE A with the clean
+R-invariant a_structure.
+
+- Headline empirical R (Wischmeier-Smith I30 est) V1 zonal mean over 45 points = **507** (matches
+  the 7-point 506, confirming spatial stability).
+- USLE A_zonal (R=507 as catchment scalar): mean = **0.621 t/ha/yr**.
+- USLE A_spatial (DIAGNOSTIC, R resampled to 30m): mean = **0.619 t/ha/yr**.
+- A_zonal and A_spatial agree to <1%, confirming the soil-loss hotspot pattern is governed by
+  LS x C (R-invariant a_structure), not by R spatial variation.
+
+Additional outputs:
+- `outputs/v1_usle_soil_loss/rfactor_empirical_era5/r_empirical_era5_<form>_0p05deg.tif` (4 R rasters: WS/BF x I60/I30)
+- `outputs/v1_usle_soil_loss/rfactor_empirical_era5/a_empirical_era5_zonal_30m.tif`
+- `outputs/v1_usle_soil_loss/rfactor_empirical_era5/a_empirical_era5_spatial_DIAGNOSTIC_30m.tif`
+- `outputs/v1_usle_soil_loss/rfactor_empirical_era5/era5_rfactor_raster_diagnostics.json`
+- `outputs/v1_usle_soil_loss/rfactor_empirical_era5/mentor_era5_rfactor_raster_board.{png,pdf}`
+- Raw grid series: `data/raw/era5_hourly_precip_v1_rfactor/grid_<lon>_<lat>_2018-2023.json`
+- Tooling: `bin/build_era5_rfactor_raster.py`, `bin/plot_era5_rfactor_raster_board.py`
+
+This moves the empirical R from a family-arbitration number to a spatially-explicit R layer + A
+estimate. The empirical A (~0.62 t/ha/yr) is in the same low range as the V1 diagnostic A-mean
+(0.50, which used the wrong R=408 - accidentally near the empirical magnitude by error
+cancellation). All empirical R/A outputs remain EXPLORATORY and do not replace the deprecated V1
+products until the mentor confirms ERA5 is an acceptable R source.
 
 ## Sources
 
