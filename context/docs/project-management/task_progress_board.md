@@ -452,10 +452,42 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   to "two unresolved literature R-families; needs a primary EI30 dataset or a mentor ruling".
   Supports IFPM-080 Finding 2 with concrete numbers. Does NOT re-derive V1 R or replace the
   deprecated products.
-- Next action: present the exploration board (6 methods + Elwell reference, showing the two
-  R-families) and the Epworth-circularity finding to the mentor. The decision needed is which
-  R-family/convention the thesis adopts, or whether to obtain a primary EI30 dataset (sub-daily
-  gauge / GPM IMERG) to resolve it empirically. Hurni is NOT pre-endorsed as leading candidate.
+- Next action: SUPERSEDED - see IFPM-082, which adds an empirical ERA5 EI30 R that arbitrates the
+  families. (The two-families framing and the Epworth-circularity finding stand; the family choice
+  is now informed by empirical data.)
+
+### IFPM-082 Empirical ERA5 EI30 R-Factor To Arbitrate The Two R-Families
+
+- Status: complete as an exploratory experiment. Computes an empirical USLE/RUSLE R-factor from
+  ERA5 hourly precipitation (open-meteo, no auth) to arbitrate the HIGH vs LOW R-families from
+  IFPM-081 with INDEPENDENT (non-circular) data.
+- Evidence:
+  `context/docs/project-management/rfactor_empirical_era5_2026-06-19.md`,
+  `bin/compute_era5_empirical_rfactor.py`, `bin/plot_era5_empirical_rfactor_board.py`,
+  `outputs/v1_usle_soil_loss/rfactor_empirical_era5/era5_empirical_rfactor_diagnostics.json`,
+  `outputs/v1_usle_soil_loss/rfactor_empirical_era5/mentor_era5_empirical_rfactor_board.png`,
+  `context/docs/data-management/registry/era5_hourly_precip_v1_rfactor.md`.
+- Method: standard EI30 algorithm on ERA5 hourly (2018-2023, 7 V1 points), Wischmeier-Smith and
+  Brown-Foster kinetic-energy forms, I60 as a lower bound on I30 (hourly != 30-min) plus an I30
+  estimate.
+- Key results (spatial-mean empirical R):
+  - Wischmeier-Smith, I60 lower bound: R = 460; I30 est: 506.
+  - Brown-Foster, I60 lower bound: R = 358; I30 est: 394.
+  - Empirical R (~360-506) sits in/near the LOW family (Hurni/Epworth 240-320) and is ~4x BELOW
+    the HIGH family (RF/Arnoldus/Elwell 1380-3719).
+  - Because ERA5 hourly is a lower bound on true 30-min EI30, real R is likely above the empirical
+    values but still well below the HIGH family.
+- Conclusion: the first NON-CIRCULAR evidence supports the LOW family and contradicts the HIGH
+  family, INCLUDING the Zimbabwe-native Elwell relation (which was the argument for HIGH in
+  IFPM-081). The HIGH family over-estimates R for this semi-arid convective regime by ~4x.
+- Impact: tilts the R-method decision toward a regional LOW-R method (Hurni / Epworth /
+  Zimbabwe-specific calibration), away from RF/Arnoldus/Elwell. A ~360-500 R is physically
+  defensible for V1; the deprecated V1 R=408 is accidentally near the right magnitude (by error
+  cancellation), though still not validated. Does NOT re-derive V1 R or replace the deprecated
+  products.
+- Next action: present the empirical ERA5 board alongside the families board to the mentor. The
+  R-method decision is now informed by independent empirical evidence. Caveats (ERA5 hourly lower
+  bound, convective under-estimation) must travel with the result.
 
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
