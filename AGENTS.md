@@ -96,6 +96,16 @@ Key recurring open questions:
 
 Prefer concrete checklists, traceable dataset links, and conservative claim boundaries.
 
+## Mentor-Facing Document Style
+
+Any file under `context/docs/mentor-explanation/`, and any short message or briefing written for
+the mentor, must follow the style rule in `context/docs/mentor-explanation/STYLE.md`: first person,
+lead with the conclusion, one question per message, and no AI-style scaffolding (TL;DR / "bottom
+line" headers, over-symmetric structure, filler hedges, decorative formatting). This keeps
+mentor-facing documents reading as the HiWi's own work. It does not apply to internal engineering
+notes under `project-management/` or `data-management/`, where full step-by-step evidence chains
+are wanted.
+
 ## V1 Terrain Reference Grid Rule
 
 For V1 controlled prototype terrain preprocessing, follow the internal rule file:
