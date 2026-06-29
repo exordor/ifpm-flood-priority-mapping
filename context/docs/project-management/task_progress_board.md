@@ -93,6 +93,16 @@ comparison. The data-readiness inventory shows the public global sources are rea
 without new institutional access, and Peru's mining cadastre (INGEMMET/GEOCATMIN) is publicly
 accessible — strictly better than Zimbabwe's OSM-only mining proxy.
 
+Also on 2026-06-30, the Peru terrain chain was started with an engineering-pilot boundary PE1
+(IFPM-092). Because the mentor has not named a specific Peru site, PE1 was selected by an explicit
+rule (pacific-slope, fully inside the three-department envelope, area comparable to Zimbabwe V1,
+non-terminal) to run the terrain chain end-to-end and prove comparability — it is NOT a
+research-selected boundary. The chain completed: PE1 boundary exported (2745 km2, ratio 0.74 vs
+Zimbabwe V1), 2 SRTM tiles downloaded, PE1 DEM built (EPSG:32718, 30 m, elevation 145-3188 m),
+and a Peru reference-grid rule recorded. Peru now has a working terrain chain at a comparable
+scale. PE1 will be replaced if the mentor names a specific Peru site. No overlay, interpretation,
+or Zimbabwe-Peru comparison is authorized.
+
 ## Done
 
 ### IFPM-001 Workspace Boundary Split
@@ -689,6 +699,36 @@ accessible — strictly better than Zimbabwe's OSM-only mining proxy.
 - Next action: surface IFPM-D02 to the mentor with this discovery as evidence (administrative vs
   hydrographic vs clipped boundary; is Peru a hard thesis requirement?); obtain an authoritative
   administrative polygon to replace the discovery envelope before any boundary acceptance.
+
+### IFPM-092 Peru Engineering-Pilot Terrain Chain (PE1)
+
+- Status: complete as `diagnostic_only` / `engineering_pilot` terrain chain. PE1 is NOT a
+  research-selected boundary; it was chosen by an explicit selection rule (pacific-slope, fully
+  inside the three-department envelope, area comparable to Zimbabwe V1, non-terminal) to run the
+  Peru terrain chain end-to-end and prove comparability. It will be replaced if the mentor names a
+  specific Peru site.
+- Evidence:
+  `context/docs/project-management/peru_pilot_boundary_decision_2026-06-30.md`,
+  `context/docs/data-management/peru_pilot_terrain_reference_grid_rule.md`,
+  `bin/export_peru_pilot_boundary.py`, `bin/plan_srtm_tiles_for_peru_pilot.py`,
+  `bin/preprocess_srtm_peru_pilot_dem.py`, ignored raw under
+  `data/raw/srtm_1arcsec_peru_pilot/`, ignored outputs under
+  `outputs/peru_pilot_boundary/` and `outputs/srtm_1arcsec_peru_pilot/`.
+- Key results:
+  - PE1 = HydroBASINS L7 `HYBAS_ID=6070641200`, `2745.4 km2` (ratio 0.74 vs Zimbabwe V1 ~3689.5
+    km2), pacific-slope, ~17 km west of Arequipa city.
+  - Downloaded 2 SRTMGL1 tiles (`S17W073`, `S17W072`, ~25 MB total, SHA-256 recorded) from the
+    ESA STEP mirror (same source as Zimbabwe, no login).
+  - PE1 DEM: `EPSG:32718` (UTM 18S), 30 m, float32, NoData -9999.0, elevation 144.9-3188.3 m,
+    valid fraction 0.4506. This DEM is the Peru reference grid (separate from Zimbabwe's
+    EPSG:32735 reference).
+  - A Peru reference-grid rule is recorded so future Peru terrain derivatives must match it.
+- Impact: the Peru side can now run the same terrain/hydrology/USLE workflow as Zimbabwe. Peru is
+  no longer entirely blank; it has a working terrain chain at a comparable scale. This does NOT
+  make PE1 a research-meaningful site, does NOT authorize overlay or interpretation, and does NOT
+  make a Zimbabwe-Peru comparison.
+- Next action: derive PE1 slope + hydrology (the next terrain derivatives), mirroring the
+  Zimbabwe `derive_srtm_v1_slope.py` / `derive_v1_hydrology.py` against the PE1 reference grid.
 
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
