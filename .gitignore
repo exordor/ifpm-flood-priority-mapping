@@ -22,6 +22,9 @@ tmp/
 *.tmp
 *.temp
 
+# Local git worktrees (isolated workspaces, never committed)
+.worktrees/
+
 # Local data, model outputs, and release archives are not part of the private context repo.
 /data/
 /outputs/
