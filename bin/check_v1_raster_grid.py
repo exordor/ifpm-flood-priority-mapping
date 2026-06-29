@@ -73,6 +73,20 @@ def parse_args() -> argparse.Namespace:
         default=CHECK_CSV,
         help="CSV manifest output path.",
     )
+    parser.add_argument(
+        "--boundary",
+        type=Path,
+        default=V1_GPKG,
+        help="Boundary GeoPackage for valid-cell-fraction masking. Defaults to the V1 Zimbabwe "
+        "boundary. Pass a country-specific boundary (e.g. the Peru PE1 boundary) when checking "
+        "non-Zimbabwe rasters, so the gate masks against the correct AOI.",
+    )
+    parser.add_argument(
+        "--boundary-layer",
+        type=str,
+        default="v1_working_boundary",
+        help="Layer name in the boundary GeoPackage.",
+    )
     return parser.parse_args()
 
 
@@ -91,11 +105,18 @@ def transform_text(transform) -> str:
     return ",".join(f"{value:.12g}" for value in transform.to_gdal())
 
 
-def load_v1_geometry(crs) -> object:
-    boundary = gpd.read_file(V1_GPKG, layer="v1_working_boundary")
+def load_boundary_geometry(crs, boundary_path: Path, boundary_layer: str) -> object:
+    boundary = gpd.read_file(boundary_path, layer=boundary_layer)
     if len(boundary) != 1 or boundary.geometry.iloc[0].is_empty:
-        raise ValueError("Expected one non-empty V1 working boundary")
+        raise ValueError(f"Expected one non-empty boundary feature in {boundary_layer}")
     return boundary.to_crs(crs).geometry.iloc[0]
+
+
+# Back-compat alias used elsewhere in the file.
+def load_v1_geometry(crs, boundary_path: Path | None = None, boundary_layer: str = "v1_working_boundary") -> object:
+    if boundary_path is None:
+        boundary_path = V1_GPKG
+    return load_boundary_geometry(crs, boundary_path, boundary_layer)
 
 
 def valid_stats(src, geometry) -> tuple[float, float | str, float | str, float | str]:
@@ -137,7 +158,8 @@ def reference_profile(reference: Path) -> dict[str, object]:
         }
 
 
-def compare_raster(path: Path, reference: Path, ref_profile: dict[str, object]) -> dict[str, object]:
+def compare_raster(path: Path, reference: Path, ref_profile: dict[str, object],
+                   boundary_path: Path | None = None, boundary_layer: str = "v1_working_boundary") -> dict[str, object]:
     role = "reference" if path.resolve() == reference.resolve() else "candidate"
     row: dict[str, object] = {
         "path": rel(path),
@@ -199,7 +221,7 @@ def compare_raster(path: Path, reference: Path, ref_profile: dict[str, object]) 
             if src.nodata != EXPECTED_NODATA:
                 issues.append(f"nodata_mismatch expected={EXPECTED_NODATA} got={src.nodata}")
 
-            geometry = load_v1_geometry(src.crs)
+            geometry = load_v1_geometry(src.crs, boundary_path, boundary_layer)
             valid_fraction, raster_min, raster_max, raster_mean = valid_stats(src, geometry)
             row.update(
                 {
@@ -238,7 +260,7 @@ def main() -> int:
     output = resolve(args.output)
 
     ref_profile = reference_profile(reference)
-    rows = [compare_raster(path, reference, ref_profile) for path in rasters]
+    rows = [compare_raster(path, reference, ref_profile, args.boundary, args.boundary_layer) for path in rasters]
     write_manifest(output, rows)
 
     failed = [row for row in rows if row["grid_compatible"] != "true"]
