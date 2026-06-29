@@ -4,8 +4,8 @@ Status: active internal rule; executable gate implemented
 
 Last updated: 2026-06-16
 
-Scope: V1 controlled prototype terrain preprocessing only. This rule does not accept V1 as the
-final thesis boundary and does not authorize CHIRPS, AHP overlay, flood-risk interpretation, or
+Scope: V1 controlled prototype raster preprocessing and grid compatibility. This rule does not
+accept V1 as the final thesis boundary and does not authorize final flood-risk interpretation or
 intervention-priority interpretation.
 
 ## Purpose
@@ -116,23 +116,26 @@ Current default checked rasters:
 
 Both default rasters must be `grid_compatible=true` before any terrain standardization step.
 
-## CHIRPS Scale Constraint
+## CHIRPS Scale And Status Constraint
 
-CHIRPS must not be forced onto the V1 30 m terrain grid for pixel-level overlay. Its source
-resolution is much coarser than SRTM-derived terrain layers.
+CHIRPS must not be described as native 30 m rainfall evidence. Its source resolution is much
+coarser than SRTM-derived terrain layers.
 
-Allowed CHIRPS handling before a separate modelling-unit decision:
+Allowed CHIRPS handling:
 
 - native-resolution rainfall diagnostics;
 - catchment-level zonal summaries;
 - sub-basin-level zonal summaries.
+- explicitly labelled coarse-to-reference-grid resampling for diagnostic, provisional, or
+  sensitivity MCDA experiments, if metadata records native resolution, target grid, resampling
+  method, effective-resolution warning, source lineage, and status/claim level.
 
-Blocked CHIRPS handling:
+Blocked CHIRPS claims:
 
 - resampling CHIRPS to the V1 30 m grid and treating the result as 30 m evidence;
-- mixing CHIRPS pixels with terrain rasters in a cell-by-cell weighted overlay before a separate
-  modelling-unit decision. If a future coarse rainfall visualization is approved, it must be
-  labelled as a zonal or coarse-summary product, not as 30 m rainfall evidence.
+- presenting coarse rainfall as measured 30 m rainfall intensity;
+- using a CHIRPS-derived overlay as a final flood-risk, sediment-risk, or intervention-priority
+  claim without separate approval and validation.
 
 ## Documented Diagnostic Waiver (V2 R-factor hotspot survival test, 2026-06-16)
 
@@ -141,18 +144,18 @@ The V2 R-factor hotspot survival test (`bin/derive_v2_usle_soil_loss.py`, IFPM-0
 much R's spatial heterogeneity perturbs the LS x C x K erosion-hotspot pattern. This is a
 diagnostic-only resample, not pixel-level 30 m evidence.
 
-This waiver is recorded here because the Blocked CHIRPS handling section above has no general
-"diagnostic-only" exception. The waiver is narrowly scoped:
+This waiver is recorded here as an early example of a labelled coarse-to-reference-grid diagnostic
+scenario. The waiver is narrowly scoped:
 
 - Allowed: the resampled R is combined into `a_v2_<candidate>_spatial_DIAGNOSTIC_30m.tif`, used
   only inside the survival-test diagnostics and the comparison board, and never enters
-  standardization, AHP overlay, flood-risk interpretation, or intervention-priority interpretation.
+  final-claim interpretation.
 - The diagnostic product filename carries the explicit `_DIAGNOSTIC` suffix and the GeoTIFF band
   carries an `IFPM_NOTE` tag stating it is not pixel-level evidence.
 - The primary V2 R-factor products remain the native 0.05 deg rasters and the zonal scalar A; the
   spatial 30 m path is supplementary only.
-- This waiver does NOT extend to any other CHIRPS use and does NOT authorise treating CHIRPS as 30 m
-  evidence for the AHP overlay or any interpretable flood-risk/soil-loss claim.
+- This waiver does NOT authorise treating CHIRPS as native 30 m evidence or any final
+  flood-risk/soil-loss claim.
 - This waiver must be revisited if the spatial 30 m diagnostic product is ever proposed for a use
   beyond the internal survival test.
 

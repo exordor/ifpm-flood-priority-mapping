@@ -1,6 +1,6 @@
 # Real-Data Execution Preflight Gate
 
-Updated: 2026-06-13
+Updated: 2026-06-29
 
 Status: internal gate record, revised 2026-06-15 to separate the HiWi data-processing scope from
 the mentor/thesis claim scope. Scoped SRTM download, raw inventory, and V1 DEM/slope preprocessing
@@ -15,6 +15,10 @@ This gate was originally written as if data production and claim-making were the
 They are not. This section separates them so the HiWi (data processor) is not blocked by
 thesis-level decisions that are the mentor's responsibility.
 
+Execution rule: uncertainty reduces claim level; it does not automatically pause execution. Use
+`diagnostic_only`, `provisional`, or `sensitivity_scenario` outputs when final scientific support
+is missing. Reserve `final_claim` for explicitly approved, validated thesis/public results.
+
 **Data production** (HiWi scope; proceeds with documented defaults; not blocked by this gate
 unless a dataset-specific preflight is incomplete):
 
@@ -23,8 +27,15 @@ unless a dataset-specific preflight is incomplete):
 - deriving terrain, hydrology, sediment-factor, and land-use indicators from already-downloaded
   data;
 - standardizing layers to 0-1 with a documented rule;
-- producing diagnostic overlays and sensitivity runs with documented synthetic or placeholder
-  weights, clearly labelled as non-interpretable diagnostics;
+- producing diagnostic overlays and sensitivity runs with documented synthetic, placeholder,
+  slide-derived, or candidate weights, clearly labelled with claim/status level;
+- producing rainfall-derived diagnostic/provisional criteria through zonal aggregation or
+  explicitly labelled coarse-to-reference-grid resampling, without claiming native 30 m rainfall
+  information;
+- producing R-factor family diagnostics and provisional/sensitivity sediment-risk products from
+  fresh documented lineage while keeping known-invalid R/A products deprecated;
+- producing Peru data inventory and terrain/readiness diagnostics before any final cross-country
+  comparison;
 - generating diagnostics, figures, and handoff tables.
 
 Data-production outputs must be labelled as workflow/diagnostic products and must not be
@@ -85,14 +96,15 @@ Zimbabwe-Peru comparison.
 
 Per the scope split above: **data production is GO** for already-authorized public datasets and
 for deriving diagnostic products from already-downloaded data, using documented defaults.
-**Interpretable claims remain NO-GO** (validated flood-risk map, intervention priority,
+**Final claims remain NO-GO** (validated flood-risk map, intervention priority, final
 Zimbabwe-Peru comparison, public release) until the relevant mentor decisions close.
 
-The 30 m CHIRPS resampling rule is a binding data-quality rule (not a claim) and stays in force
-regardless of scope: CHIRPS must not be resampled to the V1 30 m terrain grid as pixel-level
-evidence.
+The CHIRPS scale rule is a binding data-quality rule (not a claim): CHIRPS must not be described
+as native 30 m rainfall evidence. Coarse rainfall may be used in labelled diagnostic/provisional
+scenarios via zonal aggregation or coarse-to-reference-grid resampling if metadata records native
+resolution, target grid, method, effective-resolution warning, and claim/status level.
 
-The project is not ready for broad bulk download or for interpretable claims yet.
+The project is not ready for broad bulk download or for final claims yet.
 
 The project has completed one narrow terrain chain: six SRTMGL1 raw tiles were downloaded,
 inventoried, mosaicked, reprojected, clipped to V1, and converted into DEM/slope diagnostics. The
@@ -107,9 +119,9 @@ There are two narrow boundary-only exceptions:
   registry, preflight note, and authenticated page inspection were completed.
 
 These exceptions support boundary selection only. The later SRTM exception supports terrain
-diagnostics only. The scoped CHIRPS comparison supports rainfall sensitivity review only. None of
-these exceptions authorize model overlay, flood-risk interpretation, or intervention-map
-interpretation.
+diagnostics. The scoped CHIRPS comparison supports rainfall sensitivity review. None of these
+exceptions authorize final flood-risk interpretation or intervention-map interpretation, but they
+may support labelled diagnostic/provisional/sensitivity scenario work.
 
 Current boundary-discovery status: executed for the authorized HydroBASINS artifact and the
 authorized Zimbabwe Geoportal Sub-Catchments artifact. Candidate HYBAS and PFAF ids were
@@ -183,8 +195,10 @@ Current state: closed with waiver for controlled prototype SRTM terrain diagnost
   `outputs/v1_working_boundary/v1_working_boundary_manifest.csv`, and
   `outputs/v1_working_boundary/v1_anchor_check.csv`.
 
-Final boundary acceptance remains open. The waiver does not authorize 30 m CHIRPS resampling,
-overlay, flood-risk interpretation, or intervention-priority interpretation.
+Final boundary acceptance remains open. The waiver does not authorize treating CHIRPS as native
+30 m rainfall evidence, final flood-risk interpretation, or intervention-priority interpretation.
+It may support controlled prototype overlay or sensitivity scenarios when status and assumptions
+are explicit.
 
 Boundary-only exceptions already executed:
 
@@ -225,8 +239,9 @@ Exit evidence:
 - statement of whether any pixel-level overlay is allowed;
 - statement that CHIRPS will not be treated as 30 m information.
 
-Current state: blocked for combining terrain and rainfall; CHIRPS comparison is available only
-as native-grid diagnostics and V1 summaries.
+Current state: final terrain-rainfall claim is blocked. Diagnostic/provisional integration may
+proceed using either zonal aggregation or labelled coarse-to-reference-grid rainfall scenarios,
+with status metadata and no native-30 m rainfall claim.
 
 ## Gate G3: Temporal Window And Rainfall Product
 
@@ -262,7 +277,8 @@ Current blockers:
 - Zimbabwe Geoportal Sub-Catchments: boundary-comparison download and inspection are complete.
   Boundary acceptance and redistribution clearance remain open.
 - CHIRPS: scoped comparison download and native/zonal diagnostics complete. Final rainfall
-  criterion, modelling-unit integration, and overlay role remain blocked.
+  criterion claims remain blocked, but provisional/sensitivity rainfall criteria may be produced
+  with status metadata and scale warnings.
 
 Exit evidence:
 
@@ -271,8 +287,9 @@ Exit evidence:
 - command or manual workflow cannot overwrite unrelated local data.
 
 Current state: closed for the scoped SRTM raw-tile download and scoped CHIRPS comparison; still
-blocked for AHP overlay, 30 m CHIRPS resampling, flood-risk interpretation, and intervention
-interpretation.
+blocked for final flood-risk interpretation and intervention interpretation. Scenario AHP overlays
+and coarse rainfall integration may proceed only as labelled diagnostic/provisional/sensitivity
+outputs.
 
 ## Gate G5: Download Authorization Record
 
@@ -310,8 +327,8 @@ After a controlled download succeeds:
 - write transformed analysis copies and diagnostics under `outputs/`;
 - run grid diagnostics before standardization or overlay;
 - use a shared validity mask for pixel overlay, or document why masks differ;
-- block interpretation if CRS, transform, resolution, shape, band count, or NoData checks fail
-  without waiver;
+- block final interpretation if CRS, transform, resolution, shape, band count, or NoData checks
+  fail without waiver;
 - label any output as workflow or preliminary susceptibility only.
 
 Current state: ready as a draft rule set.
@@ -335,9 +352,10 @@ Current state: the five engineering-readiness items are closed (`ifpm-flood-pipe
 `39f6b33` -- durable geospatial verification target with 0 skipped GeoTIFF tests, finite-value/mask
 diagnostics, 0-1 overlay-input enforcement with explicit override, per-layer mask-loss reporting,
 and a zonal scoring branch; 36 -> 51 tests passing, 0 skipped). Real-data overlay, scoring, and
-interpretation remain blocked pending mentor decisions on modelling unit (Gate G2), criteria, and
-final boundary; the pipeline is now executable for a controlled run once those close. Boundary
-discovery and metadata-only inspection can proceed only under their own gate rules.
+final interpretation remain blocked pending mentor decisions on modelling unit (Gate G2),
+criteria, and final boundary; diagnostic/provisional/sensitivity scoring is executable when
+inputs are labelled and metadata are recorded. Boundary discovery and metadata-only inspection can
+proceed under their own gate rules.
 
 ## Go Criteria
 
@@ -355,7 +373,7 @@ General real-data download may proceed only when all of these are true:
 The completed HydroSHEDS and Zimbabwe Geoportal downloads remain boundary-selection steps, not
 modelling runs.
 
-## No-Go Triggers
+## No-Go Triggers For Download Or Final Claims
 
 Stop before download if any of these appears:
 
@@ -365,7 +383,8 @@ Stop before download if any of these appears:
 - command would write outside `data/` or overwrite unrelated local files;
 - selected artifact names are not recorded;
 - the workflow would imply CHIRPS has 30 m spatial detail;
-- real-data overlay would run without the Gate G7 engineering readiness checks;
+- final real-data overlay interpretation would run without the Gate G7 engineering readiness
+  checks;
 - credentials, cookies, tokens, or private cloud links would be written to a committed file.
 
 ## Immediate Next Action (Data-Processor Scope)

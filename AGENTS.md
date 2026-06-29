@@ -96,6 +96,240 @@ Key recurring open questions:
 
 Prefer concrete checklists, traceable dataset links, and conservative claim boundaries.
 
+## Default Experiment Worker Mode
+
+Default operating mode in this workspace is `EXPERIMENT_WORKER`.
+
+Unless the user explicitly asks for brainstorming, explanation, review-only feedback, or mentor
+wording only, every non-trivial task should produce at least one concrete artifact:
+
+- executable code or a small script;
+- a config, manifest, registry, preflight, or assumption record;
+- a test, smoke test, or reproducible command;
+- a generated table, raster, map, figure, or diagnostic under `outputs/`;
+- an internal project note that records commands, inputs, assumptions, and blockers.
+
+Long prose-only responses are not enough for implementation tasks. Move the project forward with
+small, auditable outputs.
+
+## Governance Budget
+
+Experiments and outputs have priority over process documents.
+
+Do not create new governance documents unless they directly support a concrete experiment output,
+data artifact, or mentor-facing evidence packet. In particular, do not create new decision
+packages, risk overviews, preflights, registries, handoffs, long methodology clarifications, or
+adversarial self-review documents as standalone work unless the user explicitly asks for that
+document type or a real data download requires a registry/preflight record.
+
+Active control files should remain few:
+
+- `AGENTS.md`
+- `README.md`
+- `context/docs/project-management/assumptions_log.md`
+- a current experiment manifest or output-local manifest for the active run
+- a current mentor packet only when a mentor message or artifact is being prepared
+
+Older governance documents are archival. They may be referenced for evidence, but they must not
+drive new work unless the user explicitly points to them or the active experiment needs a recorded
+fact from them.
+
+For every documentation-only task, prefer at least three code, config, test, table, map, raster, or
+experiment-output tasks before opening another documentation task. If a task can be completed by
+changing code/config/output instead of adding prose, do that.
+
+## Version Naming Convention
+
+Keep boundary versions separate from experiment versions.
+
+- `boundary_id` names the study area / working boundary, for example `boundary_v1`.
+- `experiment_id` names a criteria stack, processing run, or scenario set, for example
+  `criteria_stack_v0_2`.
+- Do not write ambiguous phrases like `V1 v0.2` in human-facing text. Use
+  `boundary_v1 / criteria_stack_v0_2`.
+- File and directory paths should prefer the same two-level structure:
+  `outputs/boundary_v1/<experiment_id>/`.
+- If legacy filenames already contain mixed strings such as `v1_v0_2`, treat them as archival
+  compatibility artifacts. New scripts and reports should use explicit `boundary_id` and
+  `experiment_id` fields.
+
+## Execution Status Policy
+
+Core principle: uncertainty reduces claim level; it does not automatically pause execution.
+
+Detailed internal policy:
+`context/docs/project-management/execution_status_policy.md`.
+
+If a scientific choice is uncertain, continue with a clearly labelled diagnostic, provisional, or
+sensitivity scenario; record the assumption and lineage; expose the choice in config or a table
+where practical; and avoid final scientific claims.
+
+Every generated output must declare or inherit one of these status levels:
+
+- `diagnostic_only`: tests pipeline behavior or data readiness; no scientific claim.
+- `provisional`: method is defensible enough for controlled prototype work but awaits stronger
+  data, mentor review, or validation.
+- `sensitivity_scenario`: compares assumptions, weights, thresholds, formulas, or data families.
+- `mentor_review_ready`: suitable to show the mentor for feedback on a concrete map/table/result.
+- `final_claim`: allowed only after explicit approval, validation/claim evidence, and complete
+  documentation.
+
+Most current IFPM work should be `diagnostic_only`, `provisional`, or `sensitivity_scenario`.
+Only `final_claim` requires full validation and explicit approval.
+
+The agent may not mark the project as paused merely because mentor confirmation would improve
+scientific confidence. Mentor confirmation is a reason to downgrade status, not to stop execution.
+Pause only when required inputs are missing and no provisional substitute exists, code cannot run
+and the exact error is documented, continuing would overwrite or corrupt valid outputs, or the user
+explicitly asks to pause.
+
+## Active Prototype Scope
+
+The current practical prototype path is `boundary_v1` controlled experimentation, not a full
+hydrodynamic flood model and not a final thesis claim.
+
+Prefer scoped experiments with:
+
+- one clearly named study area or boundary version;
+- one declared CRS and, for raster overlays, one reference grid;
+- 3-5 simple spatial indicators before adding complex criteria;
+- normalized layers with documented directionality;
+- placeholder or candidate weights stored in a config/table and labelled as such;
+- one reproducible command chain;
+- one generated map, raster, table, or handoff;
+- one short experiment note with assumptions and limits.
+
+Allowed first-pass indicators include elevation, slope, TWI/flow accumulation or distance to
+drainage, distance to rivers, land-cover/bare-ground classes, road/access proximity, and explicitly
+labelled mining/ASM proxies.
+
+Avoid unless explicitly requested or already scoped in a current plan:
+
+- full hydrodynamic modelling;
+- broad RUSLE/R-factor rework beyond the named experiment;
+- full AHP expert-survey design;
+- citizen-science modules;
+- WebGIS/dashboard work;
+- long literature-review writing;
+- broad refactoring or rewriting project documents unrelated to the task.
+
+## Handling Uncertainty During Experiments
+
+Do not stop implementation solely because a scientific decision is uncertain. Instead:
+
+- record the assumption in the relevant project note, registry, preflight file, handoff, or a
+  cross-cutting `context/docs/project-management/assumptions_log.md` if one is needed;
+- expose uncertain values as config/table parameters where practical;
+- continue with clearly labelled placeholder, candidate, proxy, or context evidence;
+- never claim scientific validity, validation, final flood-risk status, or intervention priority
+  from placeholder evidence.
+
+Examples:
+
+- Placeholder weights are allowed only when labelled as placeholder/candidate and stored in a
+  reproducible table or config.
+- Demo boundaries or bounding boxes are allowed only for pipeline testing and must be labelled
+  non-scientific or prototype-only.
+- Missing local data should become a blocker or data-request entry, not a reason to stop coding.
+- Proxy evidence such as OSM quarry, road proximity, or coarse population data must remain labelled
+  as proxy/context until stronger source data or an accepted modelling rule exists.
+
+## Criteria Design Rules
+
+Criterion names must describe what the data actually measure. Do not use broad scientific labels
+when the layer is only a narrow proxy.
+
+- `K x LS x C` without an accepted rainfall erosivity factor is `erosion_structure_proxy`, not
+  final sediment risk.
+- River or water proximity alone is `river_proximity_proxy`, not environmental sensitivity.
+- Road proximity alone is `road_accessibility_proxy`, not socioeconomic vulnerability.
+- C-factor / vegetation / bare-ground evidence is `land_cover_pressure`.
+- Mining or quarry proximity/footprint evidence is `mining_pressure`.
+- Population, built-up, schools, health facilities, bridges, damaged roads, or affected places are
+  exposure evidence; road distance alone is only an access proxy.
+
+Do not hide within-criterion equal-weight averaging in code. If components are combined, put the
+component names, weights, direction, and `claim_level` in a config, manifest, or scenario table.
+
+NoData must remain NoData unless a documented method explicitly justifies imputation. Never treat
+NoData as low risk by filling it with `0` for scoring. Produce a coverage report when NoData affects
+a scored raster.
+
+Each scored criterion should record:
+
+- semantic meaning;
+- input layers;
+- transformation / normalization;
+- NoData policy;
+- component weights, if any;
+- `claim_level`.
+
+Mentor-facing requests should normally ask one concrete decision question from a table/map, not a
+bundle of abstract methodology questions.
+
+## Rainfall, AHP, R-Factor, And Peru Execution Rules
+
+Rainfall / CHIRPS:
+
+- CHIRPS or other coarse rainfall products must not be represented as native 30 m information.
+- Rainfall-derived metrics may enter diagnostic, provisional, or sensitivity MCDA experiments via
+  catchment/sub-basin zonal aggregation or explicitly labelled coarse-to-reference-grid resampling
+  for overlay compatibility.
+- Required metadata: native resolution, target grid, resampling or aggregation method, effective
+  resolution warning, source lineage, and claim/status level.
+- Do not block rainfall criteria only because CHIRPS is coarse; block only unsupported claims that
+  treat CHIRPS as true 30 m rainfall evidence.
+
+AHP:
+
+- AHP matrices from mentor slides, meetings, or documented project materials may be used as
+  `sensitivity_scenario` inputs.
+- Scenario weights must not be named or described as final approved weights unless explicitly
+  confirmed.
+- Scenario metadata must include source, date, criteria order, consistency ratio, and status.
+
+R-factor / RUSLE:
+
+- Known-invalid R/A products remain deprecated and must not be revived as accepted evidence.
+- New R-factor products may be generated as provisional or sensitivity scenarios if method,
+  source, value range, uncertainty, and lineage are documented.
+- Do not pause all R-factor work while waiting for mentor confirmation; downgrade the claim level
+  and keep invalid old products separate.
+
+Peru:
+
+- Peru work may run in parallel for data inventory, terrain indicators, and diagnostic readiness
+  checks.
+- Final Zimbabwe-Peru comparison remains blocked until both countries share harmonized criteria,
+  normalization, thresholds, and claim rules.
+- Do not block Peru terrain or data-readiness work merely because the Zimbabwe final methodology
+  is not locked.
+
+Documentation:
+
+- Avoid repeating broad disclaimers in every output.
+- Prefer one global scope statement plus per-output status or `claim_level` metadata.
+- Prefer code, configs, outputs, maps, and comparison tables over long defensive prose.
+
+## Required Task Workflow
+
+For every non-trivial implementation task:
+
+1. State the concrete artifact to be produced in no more than five bullets.
+2. Inspect relevant existing files before editing.
+3. Make the smallest useful change.
+4. Run a smoke test, validation command, or exact attempted command with the exact error.
+5. End with the practical handoff: changed files, commands run, outputs created, assumptions added,
+   and remaining blockers.
+
+A task is not complete unless:
+
+- code, config, documentation, or output changed as requested;
+- there is a reproducible command or a recorded reason why it could not run;
+- outputs are in predictable allowed folders;
+- assumptions are separated from results;
+- unsupported scientific claims are avoided.
+
 ## Mentor-Facing Document Style
 
 Any file under `context/docs/mentor-explanation/`, and any short message or briefing written for
@@ -118,11 +352,12 @@ For V1 controlled prototype terrain preprocessing, follow the internal rule file
   width, height, band count, dtype, NoData, and V1 valid-cell coverage before standardization,
   scoring, or weighted overlay.
 - Incompatible rasters must be recorded as `grid-compatible=false` and blocked from overlay.
-- CHIRPS must not be resampled to the V1 `30 m` terrain grid and treated as pixel-level
-  evidence; use native-resolution diagnostics or catchment/sub-basin zonal summaries until a
-  separate modelling-unit decision is accepted.
-- This rule does not accept V1 as the final thesis boundary and does not authorize CHIRPS,
-  AHP overlay, flood-risk interpretation, or intervention-priority interpretation.
+- CHIRPS must not be represented as native `30 m` rainfall evidence. It may be used through
+  native/zonal summaries or explicitly labelled coarse-to-reference-grid diagnostic/provisional
+  scenarios when native resolution, target grid, resampling/aggregation method, and claim level are
+  recorded.
+- This rule does not accept V1 as the final thesis boundary and does not authorize final
+  flood-risk interpretation or intervention-priority interpretation.
 
 ## Python Environment
 

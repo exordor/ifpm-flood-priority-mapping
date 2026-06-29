@@ -2,11 +2,17 @@
 
 Date: 2026-06-15
 
-Status: internal decision package. This document does not authorize any AHP overlay,
+Status: internal decision package. This document does not authorize final AHP weights,
 flood-risk interpretation, or intervention-priority interpretation on real data. It proposes a
 structured expert-elicitation protocol, a blank comparison template, and an explicitly
-non-authoritative illustrative prior. No weights in this package may be used to generate
-interpretable project outputs.
+non-authoritative illustrative prior. Weights in this package may be used only as labelled
+diagnostic or sensitivity scenarios, not as final project weights.
+
+2026-06-29 execution-status update: AHP matrices from mentor slides, meetings, or documented
+project material may enter internal `configs/scenarios/` or equivalent root-context scenario
+tables as `sensitivity_scenario` inputs if source, date, criteria order, consistency ratio, and
+claim/status level are recorded. They must not be named or described as final approved weights
+unless explicitly confirmed.
 
 ## Risk Statement
 
@@ -18,7 +24,8 @@ Current evidence baseline:
   `ifpm-flood-pipeline/configs/example_pairwise_matrix.csv`, a synthetic test fixture.
 - No expert pairwise comparisons have been collected.
 - No documented weighting protocol exists.
-- No sensitivity-analysis scenario has been defined (IFPM-038 in backlog).
+- Sensitivity-analysis scenarios may now be defined from documented candidate matrices, but they
+  do not close the final-weight decision.
 - Multi-level progress review P2-2 explicitly warned: "the synthetic sample matrix becomes de
   facto expert judgment" if no first-slice AHP protocol exists before any real output is
   interpreted.
@@ -40,7 +47,7 @@ Per AGENTS.md and the project analysis note:
   Criteria and Sub-Criteria as expert tasks.
 
 This package therefore prepares the elicitation instrument and procedure, and an explicitly
-non-authoritative structural prior that must be replaced before any real overlay.
+non-authoritative structural prior that must be replaced before any final interpreted overlay.
 
 ## Proposed Elicitation Protocol (Summary)
 
@@ -75,9 +82,12 @@ concrete starting point rather than a blank page.
 Hard rules for the illustrative prior:
 
 - It must never be the basis of a real-data overlay that gets interpreted.
-- It must never be copied into `ifpm-flood-pipeline/configs/` as if it were a project matrix.
-- It must be replaced by the elicited expert matrix before any V1 priority map is produced.
-- Any use of it in a synthetic smoke test must label the output as a workflow diagnostic.
+- It must never be copied into `ifpm-flood-pipeline/configs/` as if it were a final project matrix.
+- It may be copied into an internal scenario config/table only when labelled
+  `sensitivity_scenario`.
+- It must be replaced by an elicited or explicitly confirmed expert matrix before any final V1
+  priority claim is produced.
+- Any use of it in a smoke test, diagnostic run, or sensitivity run must label the output status.
 
 ## Claim Boundary Fallback (Important)
 
@@ -106,7 +116,10 @@ default unless the mentor completes or delegates the elicitation.
 ## Boundaries And Blockers
 
 - No real-data AHP overlay is authorized by this document.
-- The illustrative prior must not enter `configs/`, `examples/`, or any release archive.
+- No final real-data AHP claim is authorized by this document.
+- The illustrative prior must not enter public `configs/`, `examples/`, or any release archive as
+  final weights. Internal scenario configs/tables are allowed only with `sensitivity_scenario`
+  status.
 - Elicitation must follow the recorded protocol; ad-hoc weights from a single informal conversation
   are not sufficient for an interpretable output.
 - Claim-boundary fallback applies to public docs and interpretation only.

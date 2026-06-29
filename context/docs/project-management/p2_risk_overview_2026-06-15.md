@@ -51,12 +51,12 @@ and the recommended order in one place.
 
 - Risk: zero Peru data; no Peru boundary; comparative dimension of the project is zero.
 - Decision package: `p2_peru_side_decision_package_2026-06-15.md`.
-- Dependencies: should NOT start until the Zimbabwe methodology (criteria hierarchy,
-  standardization rules, modelling-unit branch, validation protocol) is locked, to preserve
-  comparative symmetry.
+- Dependencies: final Zimbabwe-Peru comparison should not start until criteria hierarchy,
+  standardization rules, modelling-unit branch, validation protocol, and thresholds are harmonized.
+  Peru data inventory, terrain indicators, and diagnostic readiness checks may run in parallel.
 - Self-resolvable: public global sources (SRTM, CHIRPS, WorldCover, etc.) apply to Peru; INGEMMET
-  GEOCATMIN is publicly accessible for Peru mining data. But sequencing gate: wait for Zimbabwe
-  lock.
+  GEOCATMIN is publicly accessible for Peru mining data. Sequencing gate applies to final
+  comparison claims, not to Peru readiness diagnostics.
 - Default fallback: reframe as single-site Zimbabwe study with Peru as documented future work.
 
 ### R2.4 Modelling Unit Undecided (Gate G2)
@@ -90,7 +90,7 @@ dependency chain. Closing them in this order avoids rework:
 R2.4 modelling unit  ──┐
                        ├──> R2.1 sediment (needs modelling-unit branch + LS factor)
 R2.2 hydrology        ──┤
-   assumptions          ├──> R2.3 Peru (waits for Zimbabwe methodology lock)
+   assumptions          ├──> R2.3 Peru final comparison (waits for harmonized rules)
                        │
 R2.5 boundary         ──┘ (unlocks sub-basin branch R2.4-B2 + area-dependent reporting)
 ```
@@ -105,7 +105,8 @@ Recommended mentor-question order:
    LS-factor engineering; no new download).
 4. **R2.1 sediment** once R2.2 (LS factor) and R2.4 (modelling unit) are closed. SoilGrids
    preflight can be authorized in parallel.
-5. **R2.3 Peru** last, after the full Zimbabwe methodology is locked.
+5. **R2.3 Peru final comparison** last, after harmonized rules are locked. Peru data inventory
+   and terrain/readiness diagnostics may run earlier as `diagnostic_only`.
 
 ## Engineering Track (What Becomes Actionable Without New Downloads)
 

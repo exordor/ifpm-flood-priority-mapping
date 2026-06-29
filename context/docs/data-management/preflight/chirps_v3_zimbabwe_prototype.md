@@ -1,8 +1,8 @@
 # Download Preflight: CHIRPS v3 Zimbabwe Prototype
 
 Status: closed for controlled V1 rainfall-sensitivity comparison download and native/zonal
-diagnostics. This does not authorize AHP overlay, flood-risk interpretation, or 30 m CHIRPS
-resampling.
+diagnostics. This does not authorize final flood-risk interpretation or treating CHIRPS as native
+30 m rainfall evidence.
 
 ## Scope
 
@@ -19,8 +19,10 @@ Selected comparison scope:
 - Monthly Africa GeoTIFFs: November-March rainy seasons 1981/82-2023/24.
 - Pentad Africa GeoTIFFs: November-March rainy seasons 2019/20-2023/24.
 - Daily RNL COGs: 2023-11-01 to 2024-03-31, clipped to the V1 bounding box plus small padding.
-- Output use: native CHIRPS grid diagnostics and V1 zonal summaries only.
-- Blocked use: resampling CHIRPS to the V1 30 m terrain grid for pixel-level overlay.
+- Output use: native CHIRPS grid diagnostics, V1 zonal summaries, and labelled
+  diagnostic/provisional/sensitivity rainfall scenarios.
+- Scale rule: any coarse-to-reference-grid resampling must record native resolution, target grid,
+  resampling method, effective-resolution warning, and claim/status level.
 
 ## Access And Licence
 
@@ -70,8 +72,9 @@ Selected comparison scope:
   `outputs/chirps_v3_zimbabwe_prototype/rainfall_comparison/v1_rainfall_metric_summary.csv`
   and `outputs/chirps_v3_zimbabwe_prototype/rainfall_comparison/mentor_v1_chirps_rainfall_comparison_board.png`.
 
-Remaining blocked uses:
+Remaining blocked claims:
 
-- Do not resample CHIRPS to the V1 30 m terrain reference grid for pixel-level scoring.
-- Do not run AHP weights, weighted overlay, intervention-priority mapping, or flood-risk
-  interpretation from this comparison package alone.
+- Do not describe CHIRPS-derived products as native 30 m rainfall evidence.
+- Do not run final intervention-priority mapping or final flood-risk interpretation from this
+  comparison package alone.
+- Do not use this package as the sole authority for final rainfall/R-factor choice.
