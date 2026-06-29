@@ -730,6 +730,37 @@ or Zimbabwe-Peru comparison is authorized.
 - Next action: derive PE1 slope + hydrology (the next terrain derivatives), mirroring the
   Zimbabwe `derive_srtm_v1_slope.py` / `derive_v1_hydrology.py` against the PE1 reference grid.
 
+### IFPM-093 Peru PE1 Full Evidence Stack + Prototype Priority Map
+
+- Status: complete as `diagnostic_only` / `engineering_pilot` prototype. PE1 now has a full
+  evidence stack and a priority map comparable to Zimbabwe V1 v0.2.
+- Evidence: `bin/derive_peru_pilot_usle_soil_loss.py`, `bin/build_pe1_criteria_stack.py`,
+  `bin/run_pe1_priority_scenarios.py`, ignored outputs under
+  `outputs/srtm_1arcsec_peru_pilot/{ls_factor,usle_soil_loss,criteria_stack,priority_scenarios}/`
+  and `outputs/esa_worldcover_2021_peru_pilot/`, `outputs/soilgrids_250m_peru_pilot/`.
+- Key results:
+  - USLE factors complete: LS (hillslope mean 3.70), K (0.1815 US, native 250m), C (mean 0.6096,
+    bare/sparse dominant on arid Andean Pacific slope). PE1 USLE structure + provisional-R soil
+    loss (LOW R=238.6 mean 8.74 t/ha/yr vs Zimbabwe 0.50 — steeper + barer terrain, expected).
+  - Criteria stack: 3 criteria (flood_hazard, erosion_structure, land_cover_pressure) on the PE1
+    30m grid. Mining + socioeconomic exposure DEFERRED (no Peru OSM/INGEMMET data processed yet) —
+    recorded as gaps, NOT invented.
+  - Priority scenarios (equal + flood/erosion heavy): top-20% stable hotspot across both
+    scenarios `379.183 km2` (Zimbabwe V1 v0.2 ref `431.907 km2` with 4-6 criteria). PE1 board
+    produced.
+- Physical-comparison signal: PE1 C-factor (0.61, bare) vs Zimbabwe (0.04, shrub/grass), and PE1
+  soil loss (8.74) vs Zimbabwe (0.50) — the two sites have fundamentally different erosion
+  regimes (arid Andean Pacific slope vs semi-humid savanna). This is a real, defensible contrast,
+  not noise.
+- Impact: Peru is no longer entirely blank — it has a working full terrain/hydrology/USLE chain
+  AND a provisional priority map at a comparable scale to Zimbabwe. The two countries can now be
+  compared structurally. This does NOT make PE1 research-selected, does NOT authorize validated
+  flood-risk claims, and does NOT by itself complete a Zimbabwe-Peru comparison (needs harmonized
+  criteria + the missing mining/exposure criteria).
+- Next action: obtain Peru OSM (roads/places/mining proxy) and/or INGEMMET/GEOCATMIN to fill the
+  mining + exposure criteria; or present the Zimbabwe-Peru structural comparison to the mentor
+  with explicit claim-level limits.
+
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
 - Status: complete as 30 m diagnostic rasters; all grid_compatible.
