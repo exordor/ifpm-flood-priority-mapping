@@ -44,6 +44,11 @@ Avoid these (they signal machine-generated text):
 
 - Short sentences. Plain words. No jargon a non-GIS reader has to stop on without a one-line
   gloss.
+- **No internal code names.** Terms like `V1`, `boundary_v1`, `HB_L8_*`, `HYBAS_ID=*`,
+  `Gate G*`, `IFPM-*`, and status tags (`diagnostic_only`, `provisional`,
+  `sensitivity_scenario`) are internal engineering vocabulary. They do not appear in
+  mentor-facing text. Translate them into plain words using the table in
+  `context/docs/glossary.md`.
 - Numbers in the text, not buried in a sentence: "R ≈ 500", not "the R factor, which was computed
   to be approximately five hundred".
 - When you cite a finding, give the number and the source in the same line.

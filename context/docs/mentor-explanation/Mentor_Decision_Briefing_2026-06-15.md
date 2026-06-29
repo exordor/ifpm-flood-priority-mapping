@@ -13,7 +13,7 @@ The HiWi is the **data processor**, not the thesis author. The decisions below a
 mentor because they are thesis/claim-level calls: what the deliverable must achieve, what counts
 as validation, what weights are authoritative, what the final boundary is, whether Peru is
 required. None of them block the HiWi's data-processing work, which proceeds on already-authorized
-data with documented defaults (see the Scope section in `real_data_execution_preflight_gate.md`).
+data with documented defaults.
 
 The HiWi needs answers to these decisions only to know how to **label** outputs (diagnostic vs
 interpretable) and what additional data to request access to. Data production itself does not wait
@@ -84,11 +84,10 @@ mentor only needs to confirm or override.
 > the project?
 
 - Unblocks: R1.3 (AHP weights); determines whether any real-data overlay can be interpreted.
-- If **yes**: provide the matrix using the template in
-  `AHP_Elicitation_Protocol_And_Template_2026-06-15.md`; the project can produce an interpretable
-  priority map.
-- If **no**: all real-data outputs stay labelled "synthetic-weight workflow diagnostic"; no
-  priority map is interpretable. This is the hard boundary on what the project can claim.
+- If **yes**: I have a pairwise-comparison template ready; the project can then produce an
+  interpretable priority map.
+- If **no**: all real-data outputs stay labelled as workflow diagnostics with synthetic weights;
+  no priority map is interpretable. This is the hard boundary on what the project can claim.
 
 ---
 
@@ -96,26 +95,28 @@ mentor only needs to confirm or override.
 
 ### Decision 4: Final Boundary
 
-> Should **V1 (HB_L8_1081528840, ~3689.5 km²)** be promoted from prototype waiver to the accepted
-> thesis boundary? **(recommended)** If not, when can you provide the polygon?
+> Should **the V1 prototype catchment (~3689.5 km²)** be promoted from a working prototype
+> boundary to the accepted thesis boundary? **(recommended)** If not, when can you provide the
+> polygon?
 
-- Unblocks: Gate G1; area-dependent reporting; the sub-basin modelling-unit upgrade path.
-- Default if mentor agrees: V1 accepted, with the area discrepancy vs the literature `~2138 km²`
-  documented as a limitation.
-- Alternatives if mentor objects: Geoportal named sub-catchment (~7321.5 km²), or wait for a
-  mentor-supplied polygon.
+- Unblocks: the boundary decision; area-dependent reporting; the sub-basin modelling-unit
+  upgrade path.
+- Default if mentor agrees: the V1 catchment accepted, with the area discrepancy vs the
+  literature `~2138 km²` documented as a limitation.
+- Alternatives if mentor objects: the Geoportal named sub-catchment (~7321.5 km²), or wait for
+  a mentor-supplied polygon.
 - Replaces R2.5-Q2/Q3/Q4.
 
-### Decision 5: Modelling Unit (Gate G2)
+### Decision 5: Modelling Unit
 
-> For the first V1 prototype, use **Branch 1: terrain-only raster screening, with rainfall as
-> context (not in the score)**. **(recommended)** Acceptable?
+> For the first prototype, use **terrain-only raster screening, with rainfall as context (not in
+> the score)**. **(recommended)** Acceptable?
 
-- Unblocks: Gate G2; the first interpretable real-data run path.
-- Rationale: V1 DEM is ready; avoids the CHIRPS-30m false-precision trap; matches the existing
-  pipeline; produces the fastest defensible result.
-- Branch 2 (sub-basin aggregation, rainfall in the score) is the natural upgrade once the final
-  boundary and a sub-basin layer are accepted.
+- Unblocks: the modelling-unit decision; the first interpretable real-data run path.
+- Rationale: the V1 DEM is ready; avoids a false-precision trap from treating coarse rainfall as
+  30 m detail; matches the existing pipeline; produces the fastest defensible result.
+- Sub-basin aggregation (rainfall in the score) is the natural upgrade once the final boundary
+  and a sub-basin layer are accepted.
 - Replaces R2.4-Q1/Q2/Q3.
 
 ### Decision 6: Methodology Defaults Bundle
@@ -202,14 +203,6 @@ needing only confirmation, not independent mentor judgement:
   Zimbabwe methodology locks.
 - Sub-basin layer choice for Branch 2 -> deferred; only relevant if Decision 5 selects Branch 2.
 
-If the mentor wants to discuss any folded item in detail, the full per-factor questions remain
-available in the P1/P2 decision packages under `context/docs/project-management/`.
+If the mentor wants to discuss any folded item in detail, I have the full per-factor questions
+ready and can bring them up individually.
 
-## Cross-References
-
-- P1 overview: `p1_risk_overview_2026-06-15.md`.
-- P2 overview: `p2_risk_overview_2026-06-15.md`.
-- AHP elicitation instrument: `AHP_Elicitation_Protocol_And_Template_2026-06-15.md`.
-- Mining data request template: `Mining_Data_Access_Request_Template_2026-06-15.md`.
-- Preflight gate: `real_data_execution_preflight_gate.md`.
-- Decision tasks: IFPM-069 (this briefing).

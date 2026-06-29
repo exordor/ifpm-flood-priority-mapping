@@ -1,5 +1,11 @@
 # Mentor Oral Explanation: Zimbabwe and Peru Flood Risk Study
 
+> Note: this speaking guide was written early (2026-06-10), before the rainfall-erosivity
+> (R-factor) investigation. It still reflects the dataset-inventory and methodology stage and
+> does not cover the R-factor findings, the autonomous prototype, or the current criteria. Use
+> the newer `Mentor_Trip_Data_Request_Package_2026-06-29.md` and the R-factor briefing for the
+> current state. Kept here as a speaking aid for the early-stage inventory discussion only.
+
 This is a short speaking guide for explaining the reviewed dataset inventory and methodology framework to the mentor. It is written for a meeting or informal discussion, not as a technical report.
 
 ## 1. Main Message

@@ -36,6 +36,8 @@ ifpm-flood-pipeline/
 
 ## Context Documents
 
+- `context/docs/glossary.md` (shared term reference: maps internal code names to mentor-facing
+  words; read before writing any mentor-facing text)
 - `context/docs/original/Detailed_Dataset_Inventory_Zimbabwe_Peru.md`
 - `context/docs/research-review/Detailed_Dataset_Inventory_Zimbabwe_Peru_research_review.md`
 - `context/docs/deep-research/Deep_Research_Fact_Check_Mentor_Requirements.md`

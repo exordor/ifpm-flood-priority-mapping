@@ -70,7 +70,7 @@ Prerequisite check before elicitation:
    `a_ij_group = (prod_k a_ij_k)^(1/K)` where K is the number of experts.
 3. Run the aggregated matrix through the `ahp` command for CR.
 4. Additionally run each individual matrix through the `ahp` command and record the
-   weight-spread across experts. This supports the IFPM-038 sensitivity analysis.
+   weight-spread across experts. This feeds the sensitivity analysis (section 3.4).
 5. Record all individual matrices, the aggregated matrix, CR values, and the expert roles (not
    private identities in committed files) in a registry note.
 
@@ -82,7 +82,7 @@ Prerequisite check before elicitation:
 - The `run` command enforces the threshold unless `--allow-inconsistent` is passed; do not pass
   that flag for any interpretable real-data run.
 
-### 3.4 Sensitivity analysis (IFPM-038)
+### 3.4 Sensitivity analysis
 
 After an accepted matrix exists, run at minimum:
 
@@ -182,15 +182,8 @@ If no elicitation is completed before the deadline, follow the claim-boundary fa
 `p1_ahp_weighting_decision_package_2026-06-15.md`: keep the pipeline runnable on synthetic data
 only and label all outputs as workflow diagnostics.
 
-## Cross-References
+## Next Step
 
-- Decision package: `p1_ahp_weighting_decision_package_2026-06-15.md`.
-- Risk overview: `p1_risk_overview_2026-06-15.md`.
-- Pipeline AHP code: `ifpm-flood-pipeline/src/ifpm_flood_pipeline/ahp.py`,
-  `ifpm-flood-pipeline/src/ifpm_flood_pipeline/saaty.py`,
-  `ifpm-flood-pipeline/src/ifpm_flood_pipeline/matrix_io.py`.
-- Synthetic example (public-safe test fixture only):
-  `ifpm-flood-pipeline/configs/example_pairwise_matrix.csv`.
-- Preflight gate: `real_data_execution_preflight_gate.md` (IFPM-D04, Gate G7).
-- Decision tasks: IFPM-D04 (AHP weighting protocol), IFPM-038 (first-slice AHP weighting and
-  sensitivity plan), IFPM-063 (this package).
+Once the matrix is filled in, I run it through the pipeline's consistency check, apply it as a
+sensitivity scenario on the prototype, and report both the resulting priority pattern and how
+stable it is under weight changes.
