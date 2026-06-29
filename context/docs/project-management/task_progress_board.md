@@ -1,6 +1,6 @@
 # IFPM Task Progress And Plan Board
 
-Updated: 2026-06-16
+Updated: 2026-06-29
 
 Scope: private project planning for the IFPM comparative flood-risk modelling workspace.
 
@@ -57,6 +57,31 @@ download/inventory, V1 DEM/slope preprocessing, raster grid gate, terrain-only s
 diagnostics, CHIRPS rainfall comparison, full methodology evidence sweep, and the deliverable
 pipeline's Gate G7 engineering readiness (IFPM-060) are complete. Model overlay, flood-risk
 interpretation, and intervention interpretation remain blocked pending mentor decisions.
+
+On 2026-06-24 the mentor-provided Voi rainfall archive was moved into managed raw-data storage and
+rainfall-only intake was completed (IFPM-086). The selected Voi rainfall candidates are daily
+records, not 5/15/30-minute real-time rainfall intensity. They can support only exploratory
+monthly/annual R-range checks unless a true sub-daily rainfall intensity source is provided.
+
+On 2026-06-25 the main workflow was moved back from Voi-side checking to an autonomous V1
+prototype score (IFPM-087). Existing grid-compatible V1 evidence layers were combined into five
+methodology-aligned criteria, then tested under four weight scenarios. The output is a provisional
+autonomous prototype and hotspot-stability diagnostic, not a validated flood-risk map, not an
+intervention-priority map, and not a final thesis boundary claim. Voi remains optional external
+rainfall/R sanity-check evidence only.
+
+On 2026-06-29 the project response to the mentor's 18 July trip question was reframed as a data
+request and evidence-hardening task (IFPM-088/089). The V1 prototype is fixed as the current
+baseline. The immediate need is a practical Zimbabwe/Peru data-request package for mining/ASM,
+observed flood impact, rainfall, catchment/outlet confirmation, exposure, land use, and
+rehabilitation evidence. In parallel, V1 v0.2 should harden the weakest current criteria:
+mining/ASM pressure and socioeconomic exposure.
+
+Also on 2026-06-29, defensive gates were converted into execution-status rules (IFPM-090). The
+new rule is: uncertainty reduces claim level; it does not automatically pause execution.
+Diagnostic, provisional, and sensitivity outputs may proceed when lineage, assumptions, and claim
+level are explicit. Final flood-risk, intervention-priority, and final Zimbabwe-Peru comparison
+claims remain gated.
 
 ## Done
 
@@ -296,36 +321,20 @@ interpretation, and intervention interpretation remain blocked pending mentor de
 
 ### IFPM-074 V1 USLE R-Factor (CHIRPS Modified Fournier)
 
-- Status: complete as a 0.05 deg diagnostic; FLAGGED methodological decision now ANSWERED by the
-  mentor (2026-06-16): keep V1 as diagnostic baseline, switch V2 to a smoother R, and test whether
-  the spatial hotspot pattern survives.
+- Status: superseded by the 2026-06-19 formula audit. The old 0.05 deg diagnostic is retained only
+  as an error trace; it must not be used as R evidence.
 - Evidence: `bin/derive_v1_chirps_rfactor.py`,
   `outputs/chirps_v3_zimbabwe_prototype/r_factor/r_factor_modified_fournier_0p05deg.tif`,
   `usle_factor_batch_processing_2026-06-15.md`.
-- Key result: P_annual 583 mm/yr; R mean 408, range 45-517. STRONGLY BIMODAL (29 cells <100,
-  103 cells >400, 0 in between) due to the Renard-Freimund piecewise discontinuity at MFI=80;
-  NOT resampled to 30 m.
-- Mentor decision (2026-06-16): V1 bimodal R is PRESERVED as a diagnostic baseline; V2 should
-  switch to a smoother R. If the spatial hotspot pattern survives the smoother-R test, the
-  evidence board becomes much stronger. This unblocks V2 R-factor engineering as a HiWi
-  data-processing action (no thesis-level claim pending). Candidate smoother formulas evaluated
-  for V2 (see IFPM-079): a single-branch Renard-Freimund and a continuous Modified Fournier
-  (Arnoldus 1980) without the MFI=80 discontinuity. (A "Lo et al. 1985" candidate was removed after
-  a 2026-06-19 literature-integrity check - coefficients had no traceable source.) V2 R-factor
-  choice must be recorded with its formula and rationale before any USLE re-run. NOTE: a Renard &
-  Freimund P-vs-MFI variable-confusion risk (coefficients are the P-based form but applied to MFI,
-  inherited from V1) is flagged in IFPM-079 for the mentor to resolve.
-- Next action: DONE (see IFPM-079). V2 smoother-R candidates implemented and the hotspot survival
-  test run. V1 and V2 R-factor diagnostics stay at native 0.05 deg; the only 30 m resample is the
-  diagnostic-only R used for the spatial survival test, which is not a pixel-level evidence product.
-  Awaiting mentor confirmation of the final V2 R formula.
+- Current interpretation: the old pattern was produced by a wrong Renard-Freimund
+  predictor/break-point setup. All old V1/V2 R and A products are deprecated.
+- Next action: do not regenerate the old V1 R/A workflow. Use the verified R-factor send packet
+  and ask for the next R-method decision.
 
 ### IFPM-079 V2 Smoother R-Factor Candidates and Hotspot Survival Test
 
-- Status: complete as a diagnostic package. Responds to mentor decision 2026-06-16 (IFPM-074) to
-  switch V2 to a smoother R and test hotspot survival; awaiting mentor confirmation of the final V2
-  formula. A 2026-06-19 literature-integrity review removed one unverified candidate and flagged an
-  inherited V1 methodological ambiguity (see integrity notes below).
+- Status: deprecated as an R/A communication package. The structure-test numbers may be revisited
+  later, but the old board and causal framing must not be sent.
 - Evidence:
   `context/docs/project-management/v2_rfactor_processing_2026-06-16.md` (includes the
   literature-integrity correction section),
@@ -334,20 +343,11 @@ interpretation, and intervention interpretation remain blocked pending mentor de
   `outputs/chirps_v3_zimbabwe_prototype/r_factor_v2/v2_rfactor_diagnostics.json`,
   `outputs/v1_usle_soil_loss/v2_rfactor/v2_hotspot_survival_diagnostics.json`,
   `outputs/v1_usle_soil_loss/v2_rfactor/mentor_v2_rfactor_comparison_board.png`.
-- Key results:
-  - Two smoother candidates (Arnoldus 1980, single-branch Renard-Freimund) resolve the V1
-    bimodality: the MFI=80 R-jump drops from ~461 (V1) to <1, and the empty middle band (100-400)
-    is populated.
-  - Hotspot survival test: reference hotspots are the top p95 of a_structure (K x LS x C, the
-    R-invariant raster). With spatially-varying R, 84-87% of reference hotspots survive across
-    candidates (V1 baseline 0.840; Arnoldus 0.869; RF-low-branch 0.863).
-  - Smoother candidates raise the zonal-vs-spatial Spearman agreement to ~0.99 vs the V1 bimodal
-    baseline 0.883, i.e. the smoother R is more internally consistent. NOTE: the survival-rate
-    metric is structurally biased high (LS dynamic range >> R) and is a weak confirmatory signal,
-    not a candidate-quality ranking; the Spearman gain and discontinuity removal are the stronger
-    evidence.
-  - Recommended V2 candidate: Arnoldus 1980 (cleanest bimodality resolution, highest survival rate
-    and Spearman). Final V2 R formula is still a mentor methodological decision.
+- Current safe reading:
+  - The old board is blocked.
+  - The hotspot-survival numbers remain usable only as a possible future R-invariant structure
+    check, not as evidence that any R formula is correct.
+  - No V2 candidate is currently recommended.
 - Literature-integrity review (2026-06-19, REVISED severity after a deeper pass against the
   original PDF; see IFPM-080):
   - REMOVED a "Lo et al. (1985)" candidate (R = 0.0737*MFI^1.81): Lo et al. 1985 used mean annual
@@ -477,36 +477,30 @@ interpretation, and intervention interpretation remain blocked pending mentor de
     the HIGH family (RF/Arnoldus/Elwell 1380-3719).
   - Because ERA5 hourly is a lower bound on true 30-min EI30, real R is likely above the empirical
     values but still well below the HIGH family.
-- Conclusion: the first NON-CIRCULAR evidence supports the LOW family and contradicts the HIGH
-  family, INCLUDING the Zimbabwe-native Elwell relation (which was the argument for HIGH in
-  IFPM-081). The HIGH family over-estimates R for this semi-arid convective regime by ~4x.
-- Impact: tilts the R-method decision toward a regional LOW-R method (Hurni / Epworth /
-  Zimbabwe-specific calibration), away from RF/Arnoldus/Elwell. A ~360-500 R is physically
-  defensible for V1; the deprecated V1 R=408 is accidentally near the right magnitude (by error
-  cancellation), though still not validated. Does NOT re-derive V1 R or replace the deprecated
-  products.
-- Extension (2026-06-19): extended to a 45-point V1 grid -> interpolated 0.05 deg R raster ->
-  recomputed USLE A. Headline empirical R (WS I30 est) V1 zonal = 507 (matches 7-point 506).
-  USLE A_zonal = 0.621 t/ha/yr; A_spatial (diagnostic) = 0.619 t/ha/yr (agree <1% -> hotspots are
-  LS*C-driven, not R-driven). This moves the empirical R to a spatially-explicit R layer + A
-  estimate. Outputs remain EXPLORATORY; do not replace the deprecated V1 products.
-- Next action: present the empirical ERA5 R raster + A board alongside the families board to the
-  mentor. The empirical evidence (R~500, A~0.6 t/ha/yr) supports the LOW R-family. The R-method
-  decision is now informed by independent empirical evidence + a spatial R layer. Caveats (ERA5
-  hourly lower bound, convective under-estimation) must travel with the result.
+- Current conclusion: the ERA5 hourly lower-bound check sits near the lower range and well below
+  the high-family values. This supports asking the mentor for an R-method decision, but it does not
+  validate a final R or A value.
+- Impact: do not use the deprecated V1 R/A products. Use ERA5 only as lower-bound supporting
+  evidence unless the mentor accepts it as the next rerun source.
+- Extension (2026-06-19): extended to a 45-point V1 grid as an exploratory R diagnostic. The
+  derived A layers are sensitivity outputs only and are not approved for mentor communication.
+- Next action: do not send the ERA5 R/A raster board as accepted evidence. Send only the verified
+  Figure 1 and Figure 2 package if the user approves.
 
 ### IFPM-083 Mentor Briefing: USLE R-Factor Investigation
 
-- Status: complete as an internal mentor-facing briefing. Consolidates the full multi-round
-  R-factor investigation (IFPM-079..082) into one decision-ready document: the V1 formula error,
-  the two R-families, the Epworth circularity, the ERA5 empirical resolution, and the one decision
-  needed.
-- Evidence: `context/docs/mentor-explanation/Mentor_RFactor_Investigation_Briefing_2026-06-19.md`.
-- Key recommendation: adopt a LOW-family R (ERA5 empirical ~507, or Hurni/Epworth ~240-320) for
-  V1; the HIGH family (RF/Arnoldus/Elwell) is contradicted by independent empirical data and
-  over-estimates ~4x. One open caveat: ERA5 hourly lower-bounds true 30-min EI30.
-- Next action: send the briefing + the three boards to the mentor; await the R-method decision,
-  which unblocks the V1 R and USLE A re-derivation.
+- Status: superseded by the 2026-06-19 send/no-send verification pass. The older briefing remains
+  as a work log, but should not be sent as-is.
+- Evidence:
+  `context/docs/project-management/rfactor_formula_data_workflow_full_verification_2026-06-19.md`
+  and `context/docs/mentor-explanation/Mentor_RFactor_Figure_Send_Packet_2026-06-19.md`.
+- Current send decision: Figure 1 (R-method comparison) and Figure 2 (ERA5 lower-bound check) are
+  conditionally sendable with the safer captions. Figure 3 and all V1/V2 R/A boards are blocked.
+- Current recommendation wording: ask the mentor which R route to use for the next V1 rerun
+  (ERA5-based provisional R, or first seek rain-gauge/GPM data). Do not present any current A,
+  flood-risk, or intervention-priority result as accepted.
+- Next action: remove the unsafe Teams draft contents and resend only from the verified send
+  packet if the user approves.
 
 ### IFPM-084 V1 Hydrology Candidate Evidence Standardization
 
@@ -550,6 +544,111 @@ interpretation, and intervention interpretation remain blocked pending mentor de
     "Arnoldus-family" not "Arnoldus with a unit fix". Does not change the conclusion.
 - Impact: the briefing's headline numbers are now backed by independent hand-calculation, not by
   "the script ran". No conclusion changes.
+
+### IFPM-086 Mentor Voi Rainfall Intake
+
+- Status: complete as rainfall-only intake; final R-factor calculation not started.
+- Evidence:
+  `context/docs/data-management/registry/mentor_voi_rainfall_measurements_2026-06-24.md`,
+  `context/docs/project-management/mentor_voi_rainfall_intake_2026-06-24.md`,
+  `bin/inventory_mentor_voi_rainfall_archive.py`, `bin/intake_mentor_voi_rainfall.py`, and ignored
+  outputs under `outputs/mentor_voi_rainfall_intake/`.
+- Key results:
+  - Managed raw archive:
+    `data/raw/mentor_voi_rainfall_measurements_2026-06-24/[PRIVATE_ARCHIVE_REDACTED]`.
+  - Selected two Voi rainfall candidates:
+    `[PRIVATE_WORKBOOK_REDACTED]` and `[PRIVATE_CSV_REDACTED]`.
+  - Both selected rainfall candidates are daily records; no selected file supports strict
+    `EI30/I30`.
+  - Mean annual rainfall checks: `Precip_mm` [PRIVATE_RAINFALL_REDACTED], XLSX `Rain` [PRIVATE_RAINFALL_REDACTED], CSV
+    `Rain` [PRIVATE_RAINFALL_REDACTED].
+  - QSWAT+ weather files are inventoried but deferred because spot checks showed non-Voi
+    coordinates and they are not treated as the mentor's Voi rainfall measurement data.
+- Impact: Voi data may be used only for exploratory R-method range checking. It is not a V1 Upper
+  Mzingwane rainfall replacement and does not unblock deprecated V1/V2 R/A outputs.
+- Next action: if requested, compute separate exploratory daily/monthly empirical R candidates from
+  `Precip_mm`, XLSX `Rain`, and CSV `Rain`, while keeping strict EI30 blocked.
+
+### IFPM-087 V1 Autonomous Prototype Scoring v0.1
+
+- Status: complete as provisional autonomous prototype scoring; not a final flood-risk or
+  intervention-priority result.
+- Evidence:
+  `context/docs/project-management/v1_autonomous_prototype_v0_1_2026-06-25.md`,
+  `bin/build_v1_autonomous_criteria_stack.py`,
+  `bin/run_v1_autonomous_priority_scenarios.py`,
+  `bin/plot_v1_autonomous_prototype_board.py`, and ignored outputs under
+  `outputs/v1_autonomous_prototype_v0_1/`.
+- Key results:
+  - Five criteria were built on the V1 reference grid: flood/hydrology, sediment structure,
+    land use/ASM pressure, environmental sensitivity, and socioeconomic exposure.
+  - All criteria and checked priority rasters passed the V1 raster grid gate.
+  - The methodology-slide candidate matrix remains internally consistent (`CR=0.022046`) but is
+    still treated as candidate/example weighting, not a final authorised AHP matrix.
+  - Top-20% stable hotspot area across all four scenarios: `436.907 km2`.
+  - Top-20% hotspot area in at least one scenario: `1066.03 km2`.
+  - Mean priority standard deviation across scenarios: `0.04697`.
+- Impact: the project now has a defensible autonomous baseline for asking whether hotspot patterns
+  survive weight changes. It does not rely on Voi rainfall and does not revive deprecated R/A
+  products.
+- Next action: run external critique on `gpt_pro_review_prompt.md`, then refine the weakest
+  criterion before any thesis-facing interpretation.
+
+### IFPM-088 Mentor Trip Data Request Package For 18 July
+
+- Status: complete as mentor-facing draft; ready to adapt for Teams or meeting preparation.
+- Evidence:
+  `context/docs/mentor-explanation/Mentor_Trip_Data_Request_Package_2026-06-29.md`.
+- Key result: the request list is now focused on what the mentor can ask Zimbabwe and Peru
+  contacts before or during the 18 July trip:
+  - official mining / ASM locations and active/inactive status;
+  - rehabilitation / environmental records;
+  - observed flood-affected areas and flood event dates/damages;
+  - local rainfall records and station metadata;
+  - catchment/outlet confirmation;
+  - local exposure, land-use, and infrastructure data.
+- Impact: the mentor question is now answerable without sending a long technical progress report.
+  The project can provide a practical data checklist before the trip.
+- Next action: turn the package into the exact Teams reply or a one-page printable checklist if
+  requested.
+
+### IFPM-089 V1 v0.2 Weakest-Criteria Hardening Plan
+
+- Status: first inventory complete; hotspot comparison and revised maps not yet implemented.
+- Evidence:
+  `context/docs/project-management/v1_v0_2_weakest_criteria_hardening_2026-06-29.md`,
+  `bin/prepare_v1_v0_2_weakest_criteria_inventory.py`, and ignored outputs under
+  `outputs/v1_autonomous_prototype_v0_2/`.
+- Key result: V1 v0.2 should not repeat broad experiments. It should preserve V1 v0.1 as baseline
+  and harden the two weakest criteria:
+  - `landuse_asm_pressure`: currently C-factor plus weak OSM mining proxy;
+  - `socioeconomic_exposure`: currently road/access proximity, not observed exposure.
+- Impact: this keeps the project moving autonomously while still aligning with the mentor's data
+  trip. Missing data becomes a concrete request list rather than a blocker.
+- Next action: compare the v0.1 stable hotspots against road-river crossings, OSM places,
+  GHSL/WorldPop native summaries, and mining proxy without calling the comparison validation.
+
+### IFPM-090 Defensive Gate Surgery / Execution Status Policy
+
+- Status: complete as policy and gate-document update.
+- Evidence:
+  `AGENTS.md`,
+  `context/docs/project-management/execution_status_policy.md`,
+  `context/docs/project-management/assumptions_log.md`,
+  `context/docs/project-management/real_data_execution_preflight_gate.md`,
+  `context/docs/data-management/v1_terrain_reference_grid_rule.md`,
+  `context/docs/data-management/preflight/chirps_v3_zimbabwe_prototype.md`,
+  `context/docs/project-management/p1_ahp_weighting_decision_package_2026-06-15.md`,
+  `context/docs/project-management/rfactor_formula_data_workflow_full_verification_2026-06-19.md`,
+  and `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
+- Key result: CHIRPS/rainfall, AHP matrices, new R-factor families, and Peru readiness work are
+  no longer treated as globally paused. They may proceed as `diagnostic_only`, `provisional`, or
+  `sensitivity_scenario` outputs with metadata and claim-level limits.
+- Still blocked: final flood-risk claims, intervention-priority claims, final approved AHP weights,
+  native-30 m rainfall claims, reuse of deprecated R/A products, and final Zimbabwe-Peru
+  comparison before harmonized criteria/normalization/thresholds.
+- Next action: implement the next executable experiment: rainfall-included vs rainfall-excluded
+  V1 scenario, or AHP slide-matrix scenario config, with explicit `claim_level`.
 
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 

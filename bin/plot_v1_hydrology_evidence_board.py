@@ -61,7 +61,8 @@ def main():
     twi, twi_s = read_array(TWI); twi_std, twi_std_s = read_array(TWI_STD)
     dist, dist_s = read_array(DIST); dist_std, dist_std_s = read_array(DIST_STD)
 
-    fig, axes = plt.subplots(2, 2, figsize=(13.6, 11.4), constrained_layout=True)
+    fig, axes = plt.subplots(2, 2, figsize=(13.6, 11.2), constrained_layout=False)
+    fig.subplots_adjust(left=0.07, right=0.95, top=0.88, bottom=0.07, wspace=0.23, hspace=0.34)
 
     ax = axes[0, 0]
     im = ax.imshow(twi, cmap="viridis", extent=extent_of(twi_s), origin="upper",
@@ -89,17 +90,9 @@ def main():
     ax.set_title("(d) Drainage-proximity candidate (0-1)\ninverted; near-stream -> higher value", pad=7)
     fig.colorbar(im, ax=ax, shrink=0.72, label="standardized (0-1)")
 
-    fig.suptitle("V1 hydrology candidate evidence (TWI + drainage proximity)\n"
-                 "CANDIDATE EVIDENCE for mentor review - not a flood-risk criterion, no overlay",
-                 fontsize=12.5, weight="bold", y=1.0)
-    caveat = (
-        "Candidates use the same 2-98 percentile + min-max method as the terrain candidates "
-        "(IFPM-055), so terrain and hydrology are comparable. Both pass the V1 raster grid gate. "
-        "They are NOT overlay-ready criteria: per AGENTS.md, no criterion enters AHP overlay or "
-        "interpretation until the mentor confirms the criteria hierarchy (IFPM-D01/D04) and "
-        "modelling unit (Gate G2)."
-    )
-    fig.text(0.5, -0.012, caveat, ha="center", va="top", fontsize=8.0, style="italic", color="#333")
+    fig.suptitle("V1 hydrology candidate evidence\nTWI and drainage proximity for mentor review",
+                 fontsize=13.0, weight="bold", y=0.965)
+    fig.text(0.5, 0.025, "Candidate evidence only: no AHP overlay, no flood-risk interpretation.", ha="center", fontsize=8.0, style="italic", color="#333")
     fig.savefig(BOARD_PNG); fig.savefig(BOARD_PDF); plt.close(fig)
     print(f"wrote {BOARD_PNG}"); print(f"wrote {BOARD_PDF}")
 
