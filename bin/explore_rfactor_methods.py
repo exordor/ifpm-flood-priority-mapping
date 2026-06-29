@@ -8,12 +8,14 @@ them to MEASURED Zimbabwe R-factor values from the literature. The goal is to pr
 evidence for the mentor decision on which R method suits semi-arid Zimbabwe, rather than leaving
 it as an abstract choice.
 
-All four methods have verified literature sources (no fabricated coefficients):
+All compared methods have traceable sources (no fabricated coefficients), but some are only
+exploratory transfer functions and must carry their unit/provenance caveats:
 
-  Method A - Corrected Arnoldus (Nakil & Khire 2023, Catena systematic review):
+  Method A - Arnoldus-family / Nakil-Khire MFI power law:
       R = 17.02 * 10^(1.50*log10(MFI) - 0.8188)   [MJ mm ha-1 h-1 yr-1]
-      This is the Arnoldus form WITH the 17.02 imperial->metric unit conversion that the review
-      shows is widely omitted. Equivalent prefactor 2.583 * MFI^1.50.
+      This is NOT described as a clean Arnoldus-1977 coefficient conversion. Its implied base
+      coefficient differs from Arnoldus 1977, so it is kept only as a sourced high-family
+      comparison candidate.
 
   Method B - Renard & Freimund (1994) F-based form, applied CORRECTLY to F=MFI (Eq 13/14):
       R = 0.07397*F^1.847            if F < 55 mm   [Eq 13]
@@ -165,7 +167,7 @@ def zonal_stats(arr: np.ndarray, mask: np.ndarray) -> dict:
 # --- The four R-factor methods ---
 
 def r_method_A_corrected_arnoldus(mfi: np.ndarray) -> np.ndarray:
-    """Nakil & Khire (2023) corrected Arnoldus: R = 17.02*10^(1.50*log10(MFI)-0.8188)."""
+    """Arnoldus-family/Nakil-Khire MFI law: R = 17.02*10^(1.50*log10(MFI)-0.8188)."""
     mfi_safe = np.where(mfi <= 0, np.nan, mfi)
     return 17.02 * np.power(10.0, 1.50 * np.log10(mfi_safe) - 0.8188)
 
@@ -226,7 +228,7 @@ def r_method_F_epworth_merritt(p_annual: np.ndarray) -> np.ndarray:
 
 
 METHODS = [
-    ("method_A_corrected_arnoldus", "Corrected Arnoldus (Nakil & Khire 2023)", r_method_A_corrected_arnoldus, "mfi"),
+    ("method_A_corrected_arnoldus", "Arnoldus-family / Nakil-Khire MFI law", r_method_A_corrected_arnoldus, "mfi"),
     ("method_B_rf_f_correct", "Renard-Freimund F-based correct (Eq 13/14)", r_method_B_rf_f_correct, "mfi"),
     ("method_C_rf_p_correct", "Renard-Freimund P-based correct (Eq 11/12)", r_method_C_rf_p_correct, "p_annual"),
     ("method_D_old_wrong", "OLD V1 method (WRONG, reference only)", r_method_D_old_wrong, "mfi"),

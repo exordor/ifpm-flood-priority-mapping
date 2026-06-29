@@ -57,7 +57,8 @@ def main():
     b = gpd.read_file(V1_GPKG, layer="v1_working_boundary").to_crs(r_src.crs)
     r_zonal = d["headline_R_ws_i30est_v1_zonal"]
 
-    fig, axes = plt.subplots(2, 2, figsize=(14, 12), constrained_layout=True)
+    fig, axes = plt.subplots(2, 2, figsize=(13.2, 11.2), constrained_layout=False)
+    fig.subplots_adjust(left=0.07, right=0.95, top=0.88, bottom=0.07, wspace=0.23, hspace=0.34)
 
     # (a) empirical R raster
     ax = axes[0, 0]
@@ -96,17 +97,9 @@ def main():
     ax.set_xlabel("Longitude (deg E)"); ax.set_ylabel("Latitude (deg N)")
     fig.colorbar(sc, ax=ax, shrink=0.78, label="R (MJ mm / ha / h / yr)")
 
-    fig.suptitle("Empirical ERA5 R-factor raster and USLE A for V1 (semi-arid Zimbabwe)\n"
-                 "EXPLORATORY - ERA5 hourly is a lower bound on true 30-min EI30; not a validated R/A",
-                 fontsize=12.5, weight="bold", y=1.0)
-    caveat = (
-        f"Empirical R from ERA5 hourly ({d['year_range'][0]}-{d['year_range'][1]}, {d['n_grid_points']} grid points, "
-        f"interpolated to 0.05 deg). V1 zonal R={r_zonal:.0f}, within/near the LOW literature family. "
-        f"USLE A = K*LS*C*P*R (a_structure verified clean). A_zonal and A_spatial agree closely "
-        f"({np.nanmean(a_z):.3f} vs {np.nanmean(a_s):.3f} t/ha/yr), confirming hotspots are governed "
-        f"by LS*C, not by R spatial variation. ERA5 hourly lower-bounds true EI30. EXPLORATORY."
-    )
-    fig.text(0.5, -0.012, caveat, ha="center", va="top", fontsize=7.8, style="italic", color="#333")
+    fig.suptitle("Empirical ERA5 R-factor raster and USLE A for V1\nExploratory diagnostic, not a validated R/A product",
+                 fontsize=13.0, weight="bold", y=0.965)
+    fig.text(0.5, 0.025, "ERA5 hourly lower-bounds true EI30; see caption for method and caveats.", ha="center", fontsize=8.0, style="italic", color="#333")
 
     fig.savefig(BOARD_PNG); fig.savefig(BOARD_PDF); plt.close(fig)
     print(f"wrote {BOARD_PNG}"); print(f"wrote {BOARD_PDF}")

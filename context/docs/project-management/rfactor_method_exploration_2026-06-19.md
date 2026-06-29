@@ -1,5 +1,11 @@
 # Exploratory R-factor method comparison for semi-arid Zimbabwe (2026-06-19)
 
+Revision note 2026-06-19: this note is kept as the historical exploration log. For current
+send/no-send decisions and source-checked wording, use
+`context/docs/project-management/rfactor_formula_data_workflow_full_verification_2026-06-19.md`
+and `context/docs/mentor-explanation/Mentor_RFactor_Figure_Send_Packet_2026-06-19.md`.
+Do not use this note alone to brief the mentor.
+
 Status: EXPLORATORY experiment to inform the mentor R-method decision after the V1 formula error
 (formula_integrity_audit_2026-06-19.md, Finding 2). Not a validated result. This document records
 what was tested, what was found, and what it implies.
@@ -17,7 +23,7 @@ concrete evidence behind it.
 
 | id | method | formula | source |
 |---|---|---|---|
-| A | Corrected Arnoldus | `R = 17.02 * 10^(1.50*log10(MFI) - 0.8188)` | Nakil & Khire 2023 (Catena systematic review) - Arnoldus form WITH the 17.02 imperial->metric unit conversion |
+| A | Arnoldus-family / Nakil-Khire MFI law | `R = 17.02 * 10^(1.50*log10(MFI) - 0.8188)` | Source-traced MFI power law; do not describe as a clean Arnoldus-1977 coefficient conversion |
 | B | RF F-based correct | `R = 0.07397*F^1.847` if F<55 else `95.77-6.081*F+0.4770*F^2`, F=MFI | Renard & Freimund 1994, Eq 13/14 |
 | C | RF P-based correct | `R = 0.04830*P^1.61` if P<850 else `587.8-1.219*P+0.004105*P^2`, P=P_annual | Renard & Freimund 1994, Eq 11/12 |
 | D | OLD V1 (WRONG) | P-based coeffs on MFI, break at 80 | V1 error (kept as reference baseline only) |
@@ -47,7 +53,7 @@ circularity. There is NO independent measured EI30 R for the V1 catchment in the
 
 | method | R zonal mean (MJ mm ha-1 h-1 yr-1) | family | notes |
 |---|---:|---|---|
-| A: Corrected Arnoldus | 2329 | HIGH | US/Morocco transfer formula |
+| A: Arnoldus-family / Nakil-Khire | 2329 | HIGH | source-traced MFI power law with coefficient caveat |
 | B: RF F-based correct | 3719 | HIGH | US transfer formula |
 | C: RF P-based correct | 1380 | HIGH | US transfer formula |
 | (Elwell/Stocking 1976 ref) | ~2000 | HIGH | Zimbabwe-native, via RF1994 table |
@@ -130,7 +136,8 @@ exist, that the Zimbabwe-native Elwell relation supports the high family, and th
 - Renard, K.G. & Freimund, J.R. (1994). Using monthly precipitation data to estimate the R-factor
   in the revised USLE. J. Hydrology 157, 287-306. (Eq 11-14 verified against the original PDF.)
 - Nakil, M. & Khire, M. (2023). A systematic review of the incorrect use of an empirical equation
-  for the R-factor. Catena / Earth-Science Reviews. (Corrected Arnoldus form with 17.02 conversion.)
+  for the R-factor. Catena / Earth-Science Reviews. Treat the MFI law here as Arnoldus-family with
+  a coefficient-provenance caveat, not as a clean Arnoldus-1977 conversion.
 - Hurni, H. (1985). Erosion-Productivity-Conservation Systems in Ethiopia. Proc. 4th ISCO,
   Maracay, pp. 654-674. (Method E: R = -8.12 + 0.562*P; verified via multiple secondary citations
   and the University of Pretoria thesis (Bobe 2004) which reproduces the equation.)

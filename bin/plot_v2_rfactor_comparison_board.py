@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
-"""Create a mentor-facing V1-vs-V2 R-factor comparison board.
+"""Deprecated V1-vs-V2 R-factor comparison board.
 
-Local TOOLING script. Responds to the 2026-06-16 mentor decision (IFPM-074): show that smoother
-V2 R-factor candidates resolve the V1 bimodality and that the soil-loss hotspot pattern survives.
-Six-panel board: three R candidates on the 0.05 deg grid, V1 A-mean, V2 A (Arnoldus, the main
-candidate), and a hotspot overlay showing R-invariant hotspots vs spatially-varying-R hotspots.
-
-Framed as a DIAGNOSTIC (not validated).
+Local TOOLING script kept only for provenance. Do not regenerate this board for mentor use:
+the 2026-06-19 formula audit showed that the V1 bimodality was an artifact of an invented
+Renard-Freimund break point, so the "V2 resolves bimodality" framing is invalid.
 
 Usage:
     .venv/bin/python bin/plot_v2_rfactor_comparison_board.py
@@ -22,8 +19,7 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 import numpy as np
 import rasterio
-from matplotlib.colors import BoundaryNorm, ListedColormap
-from matplotlib.lines import Line2D
+from matplotlib.colors import ListedColormap
 from matplotlib.patches import Patch
 from matplotlib.ticker import FuncFormatter
 
@@ -120,6 +116,12 @@ def read_array(path: Path):
 
 
 def main() -> None:
+    raise SystemExit(
+        "DEPRECATED: do not regenerate or send this board. "
+        "See outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md "
+        "and context/docs/project-management/formula_integrity_audit_2026-06-19.md."
+    )
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     r_v1, r_v1_src = read_array(R_V1)
@@ -129,14 +131,15 @@ def main() -> None:
     a_v2, a_v2_src = read_array(A_V2_ARNOLDUS_SPATIAL)
     a_struct, a_struct_src = read_array(A_STRUCTURE)
 
-    fig, axes = plt.subplots(3, 2, figsize=(13.5, 16.0), constrained_layout=True)
+    fig, axes = plt.subplots(3, 2, figsize=(13.2, 16.0), constrained_layout=False)
+    fig.subplots_adjust(left=0.07, right=0.95, top=0.91, bottom=0.05, wspace=0.23, hspace=0.38)
 
     # --- Panel (a): V1 bimodal R (0.05 deg) ---
     ax = axes[0, 0]
     im = ax.imshow(r_v1, cmap="viridis", extent=extent_of(r_v1_src.bounds), origin="upper",
                    vmin=np.nanmin(r_v1), vmax=np.nanmax(r_v1))
     base_geo(ax, r_v1_src)
-    ax.set_title("(a) V1 R-factor (bimodal, Renard-Freimund)\nMFI=80 discontinuity; clusters at R~50 and R~510", pad=7)
+    ax.set_title("(a) Deprecated old V1 R-factor\nDo not use as R evidence", pad=7)
     fig.colorbar(im, ax=ax, shrink=0.78, label="R (MJ mm / ha / h / yr)")
 
     # --- Panel (b): Arnoldus R (0.05 deg) ---
@@ -144,7 +147,7 @@ def main() -> None:
     im = ax.imshow(r_ar, cmap="viridis", extent=extent_of(r_ar_src.bounds), origin="upper",
                    vmin=np.nanmin(r_ar), vmax=np.nanmax(r_ar))
     base_geo(ax, r_ar_src)
-    ax.set_title("(b) V2 R-factor (Arnoldus 1980, smoother)\nSingle power law; bimodality resolved", pad=7)
+    ax.set_title("(b) Deprecated V2 R-factor candidate\nDo not use as R evidence", pad=7)
     fig.colorbar(im, ax=ax, shrink=0.78, label="R (MJ mm / ha / h / yr)")
 
     # --- Panel (c): RF-low-branch R (0.05 deg) ---
@@ -152,7 +155,7 @@ def main() -> None:
     im = ax.imshow(r_rfl, cmap="viridis", extent=extent_of(r_rfl_src.bounds), origin="upper",
                    vmin=np.nanmin(r_rfl), vmax=np.nanmax(r_rfl))
     base_geo(ax, r_rfl_src)
-    ax.set_title("(c) V2 R-factor (RF low-branch, smoother)\nSingle branch; bimodality resolved (low magnitude)", pad=7)
+    ax.set_title("(c) Deprecated V2 R-factor candidate\nDo not use as R evidence", pad=7)
     fig.colorbar(im, ax=ax, shrink=0.78, label="R (MJ mm / ha / h / yr)")
 
     # --- Panel (d): V1 A-mean (30 m) ---
@@ -208,18 +211,18 @@ def main() -> None:
         Patch(facecolor="#4575b4", edgecolor="none", label="LS$\\times$C$\\times$K only"),
         Patch(facecolor="#fee08b", edgecolor="none", label="Spatial-R only"),
     ]
-    ax.legend(handles=legend_elements, loc="lower right", frameon=True, framealpha=0.92)
-
-    # shared boundary legend
-    axes[0, 0].legend(
-        handles=[Line2D([0], [0], color="#111", linewidth=1.0, label="V1 working boundary")],
-        loc="lower right", frameon=True, framealpha=0.92,
+    ax.legend(
+        handles=legend_elements,
+        loc="center left",
+        bbox_to_anchor=(1.02, 0.50),
+        borderaxespad=0.0,
+        frameon=True,
+        framealpha=0.92,
     )
 
     fig.suptitle(
-        "V1 vs V2 R-Factor Comparison  |  smoother R resolves bimodality; hotspot pattern survives\n"
-        "DIAGNOSTIC DATA PRODUCT - not a validated soil-loss map",
-        fontsize=12.5, weight="bold", y=1.0,
+        "Deprecated V1/V2 R-Factor Comparison\nDo not send; old R/A products are deprecated",
+        fontsize=13.0, weight="bold", y=0.97,
     )
 
     # Build the caveat from the diagnostics JSON so the survival percentages can never drift from
@@ -228,18 +231,7 @@ def main() -> None:
         _hs = json.load(_f)
     surv = {cid: _hs["candidates"][cid]["hotspot_survival"]["survival_rate"]
             for cid in ["rf_v1_bimodal", "rf_arnoldus", "rf_rf_low_branch"]}
-    caveat = (
-        "All R candidates share the identical MFI input (Arnoldus 1980 from CHIRPS). V1 uses the "
-        "Renard-Freimund piecewise R(MFI) with a discontinuity at MFI=80; V2 candidates are single "
-        "continuous power laws.   "
-        "Hotspot reference = top p95 of K$\\times$LS$\\times$C (R-invariant). Survival = overlap of "
-        "V2 spatial-R hotspots with this reference. Smoother candidates: Arnoldus "
-        f"{100*surv['rf_arnoldus']:.1f}%, RF-low-branch {100*surv['rf_rf_low_branch']:.1f}% (vs V1 "
-        f"baseline {100*surv['rf_v1_bimodal']:.1f}%).   "
-        "Caveat: survival is structurally biased high (LS dynamic range >> R); treat as weak "
-        "confirmatory signal, not a quality ranking."
-    )
-    fig.text(0.5, -0.012, caveat, ha="center", va="top", fontsize=8.0, style="italic", color="#333")
+    fig.text(0.5, 0.018, "Diagnostic data product, not a validated soil-loss map. See caption for hotspot-survival caveat.", ha="center", fontsize=8.0, style="italic", color="#333")
 
     fig.savefig(BOARD_PNG)
     fig.savefig(BOARD_PDF)
@@ -253,20 +245,19 @@ def main() -> None:
         f"**Status: DIAGNOSTIC data product, not a validated soil-loss map.**\n\n"
         f"Six-panel board responding to the 2026-06-16 mentor decision (IFPM-074: keep V1 as "
         f"baseline, switch V2 to a smoother R, test hotspot survival):\n\n"
-        f"- (a) V1 R-factor (bimodal, Renard-Freimund 1994): the MFI=80 discontinuity splits cells "
-        f"into a low mode (~50) and high mode (~510) with ~0 cells in between.\n"
-        f"- (b) V2 R-factor (Arnoldus 1980, single power law): bimodality resolved; all cells fill "
-        f"the middle band.\n"
-        f"- (c) V2 R-factor (RF low-branch, single continuous branch): bimodality resolved; low "
-        f"absolute magnitude (the low branch extended across the full MFI range).\n"
+        f"- (a) Deprecated old V1 R-factor product.\n"
+        f"- (b) Deprecated V2 R-factor candidate product.\n"
+        f"- (c) Deprecated V2 R-factor candidate product.\n"
         f"- (d) V1 soil loss A (mean R=408): V1 baseline soil loss, display capped at p95.\n"
         f"- (e) V2 soil loss A (Arnoldus R, spatially varying): hotspots in the same steep-slope / "
         f"cropland locations as V1.\n"
         f"- (f) Hotspot survival: overlap of V2 spatial-R hotspots with the R-invariant "
-        f"K$\\times$LS$\\times$C hotspots. ~84-87% of reference hotspots survive across candidates.\n\n"
-        f"**Key result:** the soil-loss hotspot pattern survives the smoother-R test. The smoother "
-        f"candidates raise the zonal-vs-spatial Spearman agreement (Arnoldus 0.99, RF-low-branch "
-        f"0.99) above the V1 bimodal baseline (0.88). The discontinuity at MFI=80 is removed.\n\n"
+        f"K$\\times$LS$\\times$C hotspots. Survival rates: V1 baseline "
+        f"{100*surv['rf_v1_bimodal']:.1f}%, Arnoldus {100*surv['rf_arnoldus']:.1f}%, "
+        f"RF low-branch {100*surv['rf_rf_low_branch']:.1f}%.\n\n"
+        f"**Current decision:** do not use this board. The 2026-06-19 formula audit deprecated the "
+        f"old R/A products and invalidated the old causal framing. The hotspot-overlap values may "
+        f"only be revisited later as a separate R-invariant structure check.\n\n"
         f"**Caveats:** (1) absolute A values remain R-method-dependent and the V2 R resample to 30 m "
         f"is diagnostic-only, not pixel-level evidence. (2) The hotspot survival rate is structurally "
         f"biased high (LS dynamic range >> R); it is a weak confirmatory signal, not a quality "

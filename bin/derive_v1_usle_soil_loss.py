@@ -1,19 +1,10 @@
 #!/usr/bin/env python3
-"""Combine USLE factors into an Annual Soil Loss (A) diagnostic map for V1.
+"""Deprecated V1 USLE Annual Soil Loss generator.
 
-Local TOOLING script. Combines the five USLE/RUSLE factors A = R x K x LS x C x P.
-
-Resolution handling (documented, defensible):
-- LS and C are at the V1 30 m grid and vary spatially.
-- K (SoilGrids 250 m) is kept as a V1 zonal-mean SCALAR (coarse->fine resampling is forbidden;
-  spatial K variation is masked for this diagnostic).
-- R (CHIRPS 0.05 deg) is kept as a V1 zonal-mean SCALAR. The V1 R-factor is strongly bimodal
-  (MFI=80 discontinuity), so A is reported for the mean AND the low/high modes to show
-  sensitivity. Absolute A values are NOT trustworthy until the R method is reviewed.
-- P = 1 (documented default assumption).
-
-Units (SI throughout): R [MJ mm / ha / h / yr] x K_SI [t ha h / ha / MJ / mm] x LS x C x P
-yields A in t / ha / yr.
+This script combined A = R x K x LS x C x P using the old V1 R-factor. The 2026-06-19 formula
+audit deprecated those R/A products because the old R used Renard-Freimund coefficients with the
+wrong predictor and an invented break point. Do not rerun this script for mentor figures or
+analysis. The existing `a_structure_K_LS_C_30m.tif` is the only safe product from this workflow.
 
 Usage:
     .venv/bin/python bin/derive_v1_usle_soil_loss.py
@@ -65,6 +56,11 @@ def load_scalar(diag_path: Path, summary_key: str, metric: str, si_factor: float
 
 
 def main() -> None:
+    raise SystemExit(
+        "DEPRECATED: do not regenerate V1 R/A products from the old R-factor. "
+        "See outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md."
+    )
+
     ls, profile = read_band(LS)
     c, _ = read_band(C)
 
@@ -86,7 +82,7 @@ def main() -> None:
 
     P = 1.0
 
-    print(f"scalars: K_SI={k_si_mean:.5f}  R_mean={r_mean:.1f} (bimodal: low~{R_LOW}, high~{R_HIGH})  P={P}")
+    print(f"scalars: K_SI={k_si_mean:.5f}  R_mean={r_mean:.1f} (deprecated old-R modes: low~{R_LOW}, high~{R_HIGH})  P={P}")
 
     # Trustworthy spatial structure at 30 m: K_SI x LS x C x P  (everything except R)
     structure = k_si_mean * ls * c * P
@@ -153,10 +149,10 @@ def main() -> None:
                     "R_low": R_LOW, "R_high": R_HIGH, "P": P},
         "resolution_handling": ("LS and C at 30 m (spatially varying); K and R as V1 zonal-mean "
                                  "scalars (coarse->fine resampling forbidden). P=1 default."),
-        "r_bimodality_caveat": ("V1 R-factor is bimodal due to the Renard-Freimund MFI=80 "
-                                 "discontinuity. Absolute A values are NOT trustworthy until the "
-                                 "R method is reviewed. The a_structure raster is the trustworthy "
-                                 "spatial part (LS x C x K_SI per unit R)."),
+        "r_bimodality_caveat": ("Deprecated: the old V1 R-factor pattern was produced by a "
+                                 "wrong Renard-Freimund predictor/break-point setup. Absolute A "
+                                 "values from this workflow are NOT trustworthy. The a_structure "
+                                 "raster is the trustworthy spatial part (LS x C x K_SI per unit R)."),
         "stats": {
             "structure_per_unit_R": stats(structure),
             "a_low_R50": stats(a_low),

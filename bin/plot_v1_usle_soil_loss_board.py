@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Create a mentor-facing V1 USLE Annual Soil Loss diagnostic figure board.
+"""Deprecated V1 USLE Annual Soil Loss board.
 
-Local TOOLING script. Produces a 2x2 PNG board: LS-factor, C-factor, A-mean soil loss, and
-severity classes. Clearly framed as a DIAGNOSTIC (not validated). Flags the R-factor bimodality
-so the mentor reads absolute A values with the right caution.
+Do not regenerate or send this board. The old R/A products were deprecated after the 2026-06-19
+formula audit. Use the verified R-factor send packet instead.
 
 Usage:
     .venv/bin/python bin/plot_v1_usle_soil_loss_board.py
@@ -19,7 +18,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import rasterio
 from matplotlib.colors import BoundaryNorm, ListedColormap
-from matplotlib.lines import Line2D
 from matplotlib.ticker import FuncFormatter
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -99,13 +97,19 @@ def read_array(path: Path):
 
 
 def main() -> None:
+    raise SystemExit(
+        "DEPRECATED: do not regenerate or send the old V1 USLE A board. "
+        "See outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md."
+    )
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     ls, ls_src = read_array(LS)
     c, c_src = read_array(C)
     a, a_src = read_array(A_MEAN)
     cls, cls_src = read_array(A_CLASSES)
 
-    fig, axes = plt.subplots(2, 2, figsize=(13.6, 11.4), constrained_layout=True)
+    fig, axes = plt.subplots(2, 2, figsize=(13.8, 11.2), constrained_layout=False)
+    fig.subplots_adjust(left=0.07, right=0.95, top=0.88, bottom=0.07, wspace=0.23, hspace=0.34)
 
     # Panel A: LS-factor
     ax = axes[0, 0]
@@ -124,13 +128,12 @@ def main() -> None:
     fig.colorbar(im, ax=ax, shrink=0.72, label="C (dimensionless)")
 
     # Panel C: A-mean soil loss (display capped at p95 for visibility)
-    ax = axes[0, 1]  # placeholder reassignment below
     ax = axes[1, 0]
     a_cap = np.nanpercentile(a, 95)
     im = ax.imshow(a, cmap="YlOrRd", extent=extent(a_src.bounds), origin="upper",
                    vmin=0, vmax=a_cap)
     base_geo(ax, a_src)
-    ax.set_title(f"(c) Annual soil loss A (mean R = 408)\n$A = R \\cdot K \\cdot LS \\cdot C \\cdot P$; display capped at p95 = {a_cap:.2f} t/ha/yr", pad=7)
+    ax.set_title(f"(c) Deprecated annual soil loss A\nOld R product; display capped at p95 = {a_cap:.2f} t/ha/yr", pad=7)
     fig.colorbar(im, ax=ax, shrink=0.72, label="A (t / ha / yr)")
 
     # Panel D: severity classes
@@ -143,31 +146,16 @@ def main() -> None:
     im = ax.imshow(cls_show, cmap=cls_cmap, norm=norm, extent=extent(cls_src.bounds), origin="upper",
                    interpolation="nearest")
     base_geo(ax, cls_src)
-    ax.set_title("(d) Soil-loss severity (mean R)\nClass thresholds in t/ha/yr", pad=7)
+    ax.set_title("(d) Deprecated soil-loss severity\nClass thresholds in t/ha/yr", pad=7)
     cbar = fig.colorbar(im, ax=ax, shrink=0.72, ticks=[1, 2, 3, 4, 5])
     cbar.ax.set_yticklabels(["1 very low\n(<1)", "2 low\n(1-5)", "3 moderate\n(5-10)",
                              "4 high\n(10-50)", "5 very high\n(>50)"])
 
-    # shared legend
-    axes[0, 0].legend(
-        handles=[Line2D([0], [0], color="#111", linewidth=1.0, label="V1 working boundary")],
-        loc="lower right", frameon=True, framealpha=0.92,
-    )
-
     fig.suptitle(
-        "V1 USLE Annual Soil Loss Diagnostic  |  R$\\times$K$\\times$LS$\\times$C$\\times$P\n"
-        "DIAGNOSTIC DATA PRODUCT - not a validated soil-loss map",
-        fontsize=12.5, weight="bold", y=1.0,
+        "V1 USLE Annual Soil Loss Diagnostic\nDiagnostic data product, not a validated soil-loss map",
+        fontsize=13.0, weight="bold", y=0.965,
     )
-
-    # caveat text below the board
-    caveat = (
-        "Scalars: K$_{SI}$=0.0223 (V1 mean, SoilGrids 250m), R$_{mean}$=408 (V1 mean, CHIRPS modified Fournier), P=1.   "
-        "R is bimodal (MFI=80 discontinuity): A$_{low(R=50)}$=0.06, A$_{high(R=510)}$=0.63 t/ha/yr mean.\n"
-        "Absolute A depends on the R method (needs review); spatial structure (LS$\\times$C$\\times$K) is trustworthy. "
-        "K and R are zonal scalars here; spatial variation masked."
-    )
-    fig.text(0.5, -0.012, caveat, ha="center", va="top", fontsize=8.0, style="italic", color="#333")
+    fig.text(0.5, 0.025, "See caption for R-factor caveat and scalar assumptions.", ha="center", fontsize=8.0, style="italic", color="#333")
 
     fig.savefig(BOARD_PNG)
     fig.savefig(BOARD_PDF)
@@ -182,13 +170,11 @@ def main() -> None:
         f"Four-panel board:\n"
         f"- (a) LS-factor (hillslope, channel-masked, capped 50): mean 1.563, p95 5.511.\n"
         f"- (b) C-factor (ESA WorldCover 2021 lookup): V1 mean 0.0429.\n"
-        f"- (c) Annual soil loss A with mean R=408: V1 mean 0.50 t/ha/yr; display capped at p95 for visibility.\n"
-        f"- (d) Severity classes: ~87% of V1 is very-low (<1 t/ha/yr); hotspots where steep slopes meet cropland/bare ground.\n\n"
-        f"**Scalars (V1 zonal means):** K$_{{SI}}$=0.0223, R$_{{mean}}$=408 (bimodal: low~50, high~510), P=1.\n\n"
-        f"**Caveat:** the V1 R-factor is bimodal due to the Renard-Freimund MFI=80 discontinuity. "
-        f"Absolute A values depend on the R method and need mentor review; the spatial structure "
-        f"(driven by LS and C) is trustworthy. K and R are kept as zonal scalars (coarse-to-fine "
-        f"resampling is forbidden), so their spatial variation is masked in this 30 m map.\n",
+        f"- (c) Deprecated annual soil loss A from the old R-factor product.\n"
+        f"- (d) Deprecated severity classes from the old R-factor product.\n\n"
+        f"**Caveat:** do not use this board for mentor communication. The old V1 R/A outputs are "
+        f"deprecated after the 2026-06-19 formula audit. Only the R-invariant structure layer is "
+        f"safe as a future re-derivation input.\n",
         encoding="utf-8",
     )
     print(f"wrote {CAPTION_MD}")

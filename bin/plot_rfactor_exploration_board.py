@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Plot the exploratory R-factor method comparison board.
 
-Local TOOLING script. Produces a mentor-facing board comparing four literature-based R-factor
-methods against the measured Zimbabwe R-factor range, to support the R-method decision. The
-headline message (driven by the data): all three literature-correct methods over-estimate the
-Zimbabwe measured R by 3-9x, indicating the US/Morocco-calibrated relations are not transferable
-to semi-arid Zimbabwe.
+Local TOOLING script. Produces a mentor-facing board comparing source-traced R-factor methods
+against Zimbabwe reference values, to support the R-method decision. The output is exploratory:
+it shows that the candidate methods split into low and high value families, but it does not prove
+which family is correct for the V1 catchment.
 
 Usage:
     .venv/bin/python bin/plot_rfactor_exploration_board.py
@@ -19,11 +18,9 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-import rasterio
 
 ROOT = Path(__file__).resolve().parents[1]
 DIAG = ROOT / "outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/rfactor_method_exploration_diagnostics.json"
-RASTER_DIR = ROOT / "outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/rasters"
 OUT_DIR = ROOT / "outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration"
 BOARD_PNG = OUT_DIR / "mentor_rfactor_exploration_board.png"
 BOARD_PDF = OUT_DIR / "mentor_rfactor_exploration_board.pdf"
@@ -53,7 +50,7 @@ METHOD_ORDER = [
     "method_F_epworth_merritt",
 ]
 SHORT_LABELS = {
-    "method_A_corrected_arnoldus": "A: Corrected Arnoldus\n(Nakil & Khire 2023)",
+    "method_A_corrected_arnoldus": "A: Arnoldus-family\n(Nakil-Khire MFI law)",
     "method_B_rf_f_correct": "B: RF F-based correct\n(Eq 13/14, F=MFI)",
     "method_C_rf_p_correct": "C: RF P-based correct\n(Eq 11/12, P=P_annual)",
     "method_D_old_wrong": "D: OLD V1 method\n(WRONG, reference)",
@@ -66,13 +63,6 @@ SHORT_LABELS = {
 ELWELL_REF_R = 2000.0
 
 
-def read_array(path: Path):
-    with rasterio.open(path) as ds:
-        a = ds.read(1).astype("float64")
-        a[a == ds.nodata] = np.nan
-        return a, ds
-
-
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     with open(DIAG) as f:
@@ -83,11 +73,10 @@ def main() -> None:
     zim_low, zim_high = anchor["southern_africa_semi_arid_lowlands_range"]
     epworth = anchor["epworth_harare_1984_2000"]
 
-    fig = plt.figure(figsize=(17, 9), constrained_layout=True)
-    gs = fig.add_gridspec(2, len(METHOD_ORDER), height_ratios=[1.15, 1])
+    fig, ax = plt.subplots(figsize=(11.8, 5.8), constrained_layout=False)
+    fig.subplots_adjust(left=0.09, right=0.985, top=0.78, bottom=0.24)
 
-    # --- Top: bar chart of R zonal means vs measured Zimbabwe range ---
-    ax = fig.add_subplot(gs[0, :])
+    # Bar chart of R zonal means vs measured Zimbabwe range.
     x = np.arange(len(METHOD_ORDER))
     vals = [r_means[mid] for mid in METHOD_ORDER]
     # literature/regional methods blue, old-wrong method D red
@@ -103,42 +92,28 @@ def main() -> None:
     ax.set_xticks(x)
     ax.set_xticklabels([SHORT_LABELS[mid] for mid in METHOD_ORDER], fontsize=8)
     ax.set_ylabel("R-factor zonal mean\n(MJ mm ha$^{-1}$ h$^{-1}$ yr$^{-1}$)")
-    ax.set_title("(a) R-factor by method vs measured Zimbabwe range\nAll three literature-correct methods over-estimate by 3-9x", pad=8)
+    ax.set_title("R-factor by method vs measured Zimbabwe reference values", pad=10)
     for xi, v in zip(x, vals):
         ax.text(xi, v + max(vals) * 0.012, f"{v:.0f}", ha="center", va="bottom", fontsize=9, weight="bold")
     ax.legend(loc="upper right", fontsize=8, framealpha=0.9)
     ax.set_ylim(0, max(vals) * 1.15)
     ax.grid(axis="y", alpha=0.2)
 
-    # --- Bottom: four R rasters (0.05 deg) ---
-    for i, mid in enumerate(METHOD_ORDER):
-        ax = fig.add_subplot(gs[1, i])
-        arr, src = read_array(RASTER_DIR / f"{mid}_0p05deg.tif")
-        im = ax.imshow(arr, cmap="viridis", origin="upper",
-                       extent=[src.bounds.left, src.bounds.right, src.bounds.bottom, src.bounds.top])
-        ax.set_title(f"({chr(98 + i)}) {SHORT_LABELS[mid].split(':')[0]} mean={r_means[mid]:.0f}",
-                     fontsize=8.5)
-        ax.set_xlabel("lon" if i == 0 else "")
-        ax.set_ylabel("lat" if i == 0 else "")
-        fig.colorbar(im, ax=ax, shrink=0.8, label="R")
-
     fig.suptitle(
-        "Exploratory R-factor method comparison for semi-arid Zimbabwe\n"
-        "EXPLORATORY - informs the R-method decision; not a validated result",
-        fontsize=12.5, weight="bold", y=1.0,
+        "Exploratory R-factor method comparison\n"
+        "Two R families emerge; mentor decision needed",
+        fontsize=13.0, weight="bold", y=0.955,
     )
 
-    caveat = (
-        "Two incompatible R-families emerge. HIGH-R family: A/B/C (US/Morocco formulas) AND the "
-        "Zimbabwe-native Elwell/Stocking 1976 (green dotted, ~2000) all give R~1400-3700 and AGREE "
-        f"with each other. LOW-R family: E (Hurni) ~{r_means['method_E_hurni']:.0f} and F "
-        f"(Epworth/Merritt) ~{r_means['method_F_epworth_merritt']:.0f} give R~240-320, ~6x lower.   "
-        f"The 'measured' Epworth 329 was itself computed with the F equation, so it is NOT an "
-        f"independent anchor - it confirms F, not the true R.   "
-        "The real open question is which family uses the correct R definition/units; this needs "
-        "the mentor or a primary EI30 dataset to settle. EXPLORATORY."
+    fig.text(
+        0.5,
+        0.065,
+        "Exploratory only. See caption for source notes, units caveat, and method limitations.",
+        ha="center",
+        fontsize=8.2,
+        style="italic",
+        color="#333",
     )
-    fig.text(0.5, -0.02, caveat, ha="center", va="top", fontsize=7.4, style="italic", color="#333")
 
     fig.savefig(BOARD_PNG)
     fig.savefig(BOARD_PDF)
@@ -153,18 +128,19 @@ def main() -> None:
         f"After the integrity audit found the V1 R-factor used wrong coefficients on MFI with an "
         f"invented break, this board compares five R methods on the same V1 CHIRPS inputs, against "
         f"MEASURED Zimbabwe R-factor values.\n\n"
-        f"**Key finding:** the three literature-CORRECT transfer formulas (A: corrected Arnoldus "
+        f"**Key finding:** the source-traced transfer formulas split into two value families. "
+        f"The high-family methods (A: Arnoldus-family / Nakil-Khire "
         f"{r_means['method_A_corrected_arnoldus']:.0f}; B: RF F-based {r_means['method_B_rf_f_correct']:.0f}; "
-        f"C: RF P-based {r_means['method_C_rf_p_correct']:.0f}) over-estimate the measured Zimbabwe R "
-        f"({epworth:.0f} at Epworth/Harare; {zim_low:.0f}-{zim_high:.0f} semi-arid range) by 3-11x. "
+        f"C: RF P-based {r_means['method_C_rf_p_correct']:.0f}) are well above the lower Zimbabwe "
+        f"reference values ({epworth:.0f} at Epworth/Harare; {zim_low:.0f}-{zim_high:.0f} semi-arid range). "
         f"The OLD WRONG V1 method (D, {r_means['method_D_old_wrong']:.0f}) falls near the range only "
         f"because its errors cancelled. Method E (Hurni 1985 regional R-P regression) gives "
         f"R~{r_means['method_E_hurni']:.0f}, very close to the Epworth measured {epworth:.0f}.\n\n"
-        f"**Implication:** the US/Morocco-calibrated relations are NOT transferable to semi-arid "
-        f"Zimbabwe. A regional R-P method - Hurni (1985), a Zimbabwe-specific calibration, or direct "
-        f"EI30 if a sub-daily source exists - is the promising direction. Hurni has a unit caveat "
-        f"(pre-SI calibration) but matches the measured magnitude, so it is a strong candidate to "
-        f"discuss with the mentor.\n\n"
+        f"**Implication:** this board is evidence for a method decision, not a validated R result. "
+        f"A regional R-P method, a Zimbabwe-specific calibration, or direct EI30 from sub-daily "
+        f"rainfall are candidate routes to discuss with the mentor. Hurni and Epworth carry unit "
+        f"and transferability caveats even though their magnitudes are close to the lower reference "
+        f"range.\n\n"
         f"**Sources:** Renard & Freimund 1994 (J. Hydrology 157); Nakil & Khire 2023 (Catena "
         f"systematic review); Hurni 1985 (Erosion-Productivity-Conservation Systems in Ethiopia); "
         f"Epworth Zimbabwe RUSLE (MDPI Sustainability 12:8531).\n",

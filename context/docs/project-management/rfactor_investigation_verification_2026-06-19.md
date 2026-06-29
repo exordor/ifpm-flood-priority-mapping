@@ -87,9 +87,8 @@ Impact: Method A's value (2329) is still a valid data point for the family compa
 the HIGH family with the others), but describing it in the briefing as "Arnoldus WITH the 17.02
 conversion" overstates the lineage. The briefing text should be softened to "a 17.02-corrected
 MFI power law attributed to the Arnoldus family (Nakil & Khire 2023), noting the base coefficient
-differs from Arnoldus 1977's 0.264". This does NOT change any conclusion (HIGH family still
-over-estimates ~4x vs the empirical ERA5 R), but it is a sourcing inaccuracy that must travel with
-the result.
+differs from Arnoldus 1977's 0.264". The safer conclusion is that high-family values are much
+larger than the ERA5 hourly lower-bound check; this does not by itself settle the final R method.
 
 ## Items NOT independently re-verified here (already covered)
 - rf_lo removal: the coefficient had no traceable source; removal stands. Not re-derived.
@@ -102,7 +101,8 @@ the result.
 The investigation's headline numbers are verified by independent hand-calculation:
 - the six R-method values match (within expected non-linear-mean effects);
 - the ERA5 empirical R (~460-508) is computed correctly from a verified EI30 algorithm;
-- the family split (HIGH ~1380-3719 vs LOW ~240-320, empirical ~460-508 supporting LOW) holds.
+- the family split (HIGH ~1380-3719 vs LOW ~240-320, empirical ~460-508 near the lower range)
+  holds as method-decision evidence.
 - LS, K, hydrology standardization all verified.
 
 One sourcing inaccuracy is flagged: Method A's "corrected Arnoldus" coefficient (0.1519 base) is

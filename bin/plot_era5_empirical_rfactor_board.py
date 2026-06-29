@@ -58,7 +58,8 @@ def main() -> None:
     low_lo, low_hi = 240, 320     # Hurni/Epworth
     high_lo, high_hi = 1380, 3719  # RF/Arnoldus/Elwell
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 7), constrained_layout=True)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12.8, 5.6), constrained_layout=False)
+    fig.subplots_adjust(left=0.07, right=0.98, top=0.80, bottom=0.20, wspace=0.18)
 
     # --- Left: per-point empirical R, with family bands ---
     x = np.arange(len(pt_ids))
@@ -73,9 +74,7 @@ def main() -> None:
     ax1.set_xticklabels(pt_ids)
     ax1.set_xlabel("V1 catchment point")
     ax1.set_ylabel("Empirical annual R (MJ mm ha$^{-1}$ h$^{-1}$ yr$^{-1}$)")
-    ax1.set_title("(a) Empirical ERA5 R by point vs literature families\n"
-                  "Empirical R sits in/near the LOW family; far below the HIGH family",
-                  fontsize=10)
+    ax1.set_title("(a) ERA5 R by point vs literature families", fontsize=10.5, pad=8)
     ax1.legend(loc="upper left", fontsize=7.5, framealpha=0.9)
     ax1.grid(axis="y", alpha=0.2)
 
@@ -91,30 +90,17 @@ def main() -> None:
     ax2.set_xticks(range(len(methods)))
     ax2.set_xticklabels(methods, fontsize=7.5)
     ax2.set_ylabel("Annual R (MJ mm ha$^{-1}$ h$^{-1}$ yr$^{-1}$)")
-    ax2.set_title("(b) Mean empirical R vs literature family midpoints\n"
-                  "Empirical R matches the LOW family; HIGH family over-estimates ~4x",
-                  fontsize=10)
+    ax2.set_title("(b) Mean R comparison", fontsize=10.5, pad=8)
     for xi, v in zip(range(len(methods)), vals):
         ax2.text(xi, v + max(vals)*0.015, f"{v:.0f}", ha="center", va="bottom", fontsize=8, weight="bold")
     ax2.set_ylim(0, max(vals)*1.12)
     ax2.grid(axis="y", alpha=0.2)
 
     fig.suptitle(
-        "Empirical ERA5 EI30 R-factor vs literature families (V1, semi-arid Zimbabwe)\n"
-        "EXPLORATORY - ERA5 hourly is a lower bound on true 30-min EI30; not a validated R",
-        fontsize=12, weight="bold", y=1.0,
+        "Exploratory ERA5 R-factor check\nERA5 lower-bound is near the lower R range; high formulas are much larger",
+        fontsize=13.0, weight="bold", y=0.96,
     )
-    caveat = (
-        f"Empirical R computed from ERA5 hourly precipitation (open-meteo, 7 V1 points, "
-        f"{d['year_range'][0]}-{d['year_range'][1]}), Wischmeier-Smith & Brown-Foster kinetic "
-        f"energy. I60 (hourly) is a LOWER BOUND on I30; the I30-est column scales I60 by "
-        f"{d['parameters']['i30_upscale_from_i60']}. Even with this lower-bound caveat, empirical "
-        f"R ({min(mean_bf,mean_ws):.0f}-{max(mean_ws_i30,mean_bf_i30):.0f}) is far below the HIGH "
-        f"family ({high_lo}-{high_hi}) and at/above the LOW family ({low_lo}-{low_hi}). "
-        f"Conclusion: the data supports the LOW family; the HIGH family (incl. Elwell Zimbabwe-native) "
-        f"over-estimates R by ~4x. EXPLORATORY."
-    )
-    fig.text(0.5, -0.03, caveat, ha="center", va="top", fontsize=7.6, style="italic", color="#333")
+    fig.text(0.5, 0.045, "ERA5 hourly is a lower bound on true 30-min EI30. See caption for source and caveats.", ha="center", fontsize=8.0, style="italic", color="#333")
 
     fig.savefig(BOARD_PNG)
     fig.savefig(BOARD_PDF)

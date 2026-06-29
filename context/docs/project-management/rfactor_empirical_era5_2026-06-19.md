@@ -1,9 +1,9 @@
 # Empirical ERA5 EI30 R-factor: arbitrating the two literature R-families (2026-06-19)
 
 Status: EXPLORATORY experiment. Computes an empirical USLE/RUSLE R-factor from ERA5 hourly
-precipitation to arbitrate the HIGH vs LOW R-families identified in
+precipitation to compare against the HIGH vs LOW R-families identified in
 `rfactor_method_exploration_2026-06-19.md`. The ERA5 R is a lower bound (hourly != 30-min), so this
-is a family-arbitration result, not a validated R.
+is supporting evidence for the method decision, not a validated R.
 
 ## Why this experiment
 
@@ -14,7 +14,7 @@ The literature comparison split R-factor methods into two incompatible families 
 Pure literature reasoning could not decide between them, and the only "measured" anchor (Epworth
 329) turned out to be circular (computed from the LOW-family equation). This experiment adds an
 INDEPENDENT empirical R computed directly from hourly rainfall (ERA5 via open-meteo, no auth
-required), to see which family the data supports.
+required), to see where the hourly lower-bound estimate sits relative to the two families.
 
 GPM IMERG (half-hourly, ideal) requires a NASA Earthdata account that is unavailable; ERA5 hourly
 via open-meteo is the best no-authentication high-temporal-resolution source. CHIRPS daily cannot
@@ -54,37 +54,31 @@ Comparison:
 
 ## Key finding
 
-**The empirical ERA5 R sits in/near the LOW family and is ~4x below the HIGH family. Because ERA5
-hourly is a lower bound on true 30-min EI30 (and ERA5 under-estimates convective intensity), the
-true R is likely somewhat above the empirical values but still well below the HIGH family.**
+**The empirical ERA5 lower-bound R sits near the lower range and well below the high-family values.
+Because ERA5 is hourly rather than true 30-minute breakpoint rainfall, this is supporting evidence
+for the mentor method decision, not a final R validation.**
 
-This is the first NON-CIRCULAR evidence in the family comparison. It supports the LOW family and
-contradicts the HIGH family - INCLUDING the Zimbabwe-native Elwell/Stocking relation, which was the
-key argument for the HIGH family in the previous round. The conclusion from the previous round
-("HIGH family has independent Zimbabwe support via Elwell") is therefore NOT supported by the data.
+This is the first non-circular check in the family comparison. It raises a serious transferability
+question for the high-family formulas, including the Elwell/Stocking relation as it currently
+reaches this project, but it does not by itself settle the correct R method.
 
 ### Reconciliation
-- The HIGH family (RF/Arnoldus/Elwell) systematically over-estimates R for this semi-arid
-  convective regime by ~4x. The Elwell relation reaching us via Renard-Freimund 1994 may itself
-  carry a unit or definition issue (RF1994 reports R-values "in MJ mm ha-1 h-1 year-1" but notes
-  unit ambiguities across older African work).
-- The LOW family (Hurni/Epworth) is closer to the data but still slightly low; this is consistent
-  with ERA5 + hourly resolution under-estimating convective erosivity.
+- The high-family values are much larger than the ERA5 hourly lower-bound check. The Elwell
+  relation reaching us via Renard-Freimund 1994 may itself carry a unit or definition issue.
+- The lower-family values are closer to the ERA5 check, but Hurni/Epworth remain proxy equations
+  and are not final Zimbabwe/V1 calibrations.
 
 ## Implications for the project
 
-1. The empirical evidence tilts the R-method decision toward the LOW family (Hurni / Epworth /
-   a regional R-P regression), NOT toward the US-calibrated RF/Arnoldus forms or the Elwell
-   relation as currently available.
+1. The empirical evidence makes the lower range plausible and makes the high-family transfer
+   questionable, but the R method still needs a mentor decision.
 2. The strongest candidate remains a region-appropriate R. Hurni (1985) and the Epworth equation
    are both in the right magnitude; a Zimbabwe-specific calibration (if Elwell's original can be
    obtained and its units clarified) could refine it.
-3. Absolute A values: with the clean a_structure (~0.0012 t/ha/yr per unit R), the empirical R
-   (~360-506) implies A ~ 0.4-0.6 t/ha/yr, versus the deprecated V1 A-mean of 0.50 (which used the
-   wrong R=408). Notably the deprecated V1 A-mean is accidentally in the right magnitude - because
-   the wrong V1 R (408) happens to be close to the empirical R (~360-506), by error cancellation.
-4. This does NOT validate the deprecated V1 R; it shows the LOW-R magnitude (~300-500) is
-   physically defensible, whereas the HIGH family (~2000+) is not.
+3. Absolute A values remain blocked. The ERA5-derived A outputs are diagnostic sensitivity outputs
+   only and should not be sent as accepted soil-loss evidence.
+4. This does NOT validate the deprecated V1 R; it only shows why the R method has to be chosen
+   carefully before any A re-run.
 
 ## Caveats (strict)
 
@@ -93,7 +87,7 @@ key argument for the HIGH family in the previous round. The conclusion from the 
 - ERA5 reanalysis can under-estimate convective storm intensity in semi-arid tropical regions;
   gauge or IMERG data would be more reliable but require auth/unavailable.
 - 7 sample points, not a full grid; spatial mean is indicative.
-- This is a family-arbitration result, NOT a validated quantitative R for V1.
+- This is supporting evidence for a method decision, NOT a validated quantitative R for V1.
 - This does NOT re-derive the V1 R or replace the deprecated products.
 
 ## Outputs
@@ -126,11 +120,10 @@ Additional outputs:
 - Raw grid series: `data/raw/era5_hourly_precip_v1_rfactor/grid_<lon>_<lat>_2018-2023.json`
 - Tooling: `bin/build_era5_rfactor_raster.py`, `bin/plot_era5_rfactor_raster_board.py`
 
-This moves the empirical R from a family-arbitration number to a spatially-explicit R layer + A
-estimate. The empirical A (~0.62 t/ha/yr) is in the same low range as the V1 diagnostic A-mean
-(0.50, which used the wrong R=408 - accidentally near the empirical magnitude by error
-cancellation). All empirical R/A outputs remain EXPLORATORY and do not replace the deprecated V1
-products until the mentor confirms ERA5 is an acceptable R source.
+This moves the empirical R from a point check to a spatially-explicit diagnostic layer. The A
+outputs are retained only as sensitivity diagnostics. They do not replace the deprecated V1
+products and should not be used as accepted soil-loss evidence unless the mentor accepts the R
+source and the workflow is re-run under a documented decision.
 
 ## Sources
 
