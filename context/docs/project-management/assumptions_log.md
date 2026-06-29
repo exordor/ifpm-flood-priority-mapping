@@ -13,3 +13,4 @@ Status: active concise assumption register.
 | A-005 | OSM quarry/industrial evidence is a mining proxy, not official ASM truth. | diagnostic_only | mining/ASM criterion | Use only as proxy/context until official data arrives. |
 | A-006 | Road proximity is an exposure/access proxy, not socioeconomic vulnerability. | diagnostic_only | exposure criterion | Use road evidence cautiously and request observed flood-impact data. |
 | A-007 | Peru can run data-readiness and terrain diagnostics in parallel. | diagnostic_only | Peru side | Do not make final Zimbabwe-Peru comparison until harmonized. |
+| A-008 | The Peru Arequipa-Moquegua-Tacna discovery envelope is a discovery proxy, not an authoritative administrative boundary. | diagnostic_only | Peru boundary discovery | Candidate basins are discovery outputs; IFPM-D02 stays open until mentor resolves admin-vs-hydrographic and an authoritative polygon is obtained. |

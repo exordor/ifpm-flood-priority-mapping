@@ -1,6 +1,6 @@
 # IFPM Task Progress And Plan Board
 
-Updated: 2026-06-29
+Updated: 2026-06-30
 
 Scope: private project planning for the IFPM comparative flood-risk modelling workspace.
 
@@ -82,6 +82,16 @@ new rule is: uncertainty reduces claim level; it does not automatically pause ex
 Diagnostic, provisional, and sensitivity outputs may proceed when lineage, assumptions, and claim
 level are explicit. Final flood-risk, intervention-priority, and final Zimbabwe-Peru comparison
 claims remain gated.
+
+On 2026-06-30 the Peru side, previously entirely blank, started with its first boundary-discovery
+run (IFPM-091). HydroBASINS standard South America was downloaded under a boundary-only
+authorization (the Peru analogue of the Zimbabwe HydroBASINS Africa discovery), and candidate
+basins intersecting a discovery envelope around Arequipa-Moquegua-Tacna were found. This turns the
+open Peru boundary decision (IFPM-D02) from an abstract choice into a concrete set of candidate
+units with real areas. It does not accept any Peru boundary, run overlay, or make a cross-country
+comparison. The data-readiness inventory shows the public global sources are ready for Peru
+without new institutional access, and Peru's mining cadastre (INGEMMET/GEOCATMIN) is publicly
+accessible — strictly better than Zimbabwe's OSM-only mining proxy.
 
 ## Done
 
@@ -649,6 +659,36 @@ claims remain gated.
   comparison before harmonized criteria/normalization/thresholds.
 - Next action: implement the next executable experiment: rainfall-included vs rainfall-excluded
   V1 scenario, or AHP slide-matrix scenario config, with explicit `claim_level`.
+
+### IFPM-091 Peru Boundary Discovery And Diagnostic Readiness
+
+- Status: complete as `diagnostic_only` boundary discovery + data-readiness inventory. Peru was
+  previously entirely blank (zero Peru data, scripts, or outputs). This is the first Peru work.
+- Evidence:
+  `context/docs/data-management/preflight/peru_hydrobasins_boundary_discovery_authorization_2026-06-30.md`,
+  `context/docs/project-management/peru_diagnostic_readiness_report_2026-06-30.md`,
+  `bin/discover_peru_candidate_basins.py`, ignored raw under
+  `data/raw/hydrosheds_peru_prototype/`, ignored outputs under
+  `outputs/peru_boundary_discovery/`.
+- Key results:
+  - Downloaded HydroBASINS standard South America (`hybas_sa_lev01-12_v1c.zip`, 334 MB,
+    SHA-256 recorded) under a boundary-only authorization, the exact analogue of the Zimbabwe
+    HydroBASINS Africa discovery.
+  - Found candidate basins intersecting a discovery envelope around Arequipa-Moquegua-Tacna:
+    L7 units in the 2.8-14,300 km2 range (comparable to Zimbabwe V1 ~3,700 km2). Envelope
+    intersect converges at about 160,600 km2. Topology likely_ok (0 dangling references).
+  - Confirmed the catchment-vs-region bias risk: the three departments mix Pacific-slope and
+    highland/inland drainage tendencies.
+  - Data-readiness inventory shows the public global sources (SRTM, CHIRPS, WorldCover,
+    SoilGrids, WorldPop) are ready for Peru without new institutional access; Peru mining
+    cadastre (INGEMMET/GEOCATMIN) is publicly accessible (strictly better than Zimbabwe's
+    OSM-only proxy).
+- Impact: Peru moves from "entirely blank" to "IFPM-D02 is now a concrete choice backed by
+  real candidate areas, and the data chain is ready to run once the boundary option is picked."
+  Does NOT accept any Peru boundary, run overlay, or make a Zimbabwe-Peru comparison.
+- Next action: surface IFPM-D02 to the mentor with this discovery as evidence (administrative vs
+  hydrographic vs clipped boundary; is Peru a hard thesis requirement?); obtain an authoritative
+  administrative polygon to replace the discovery envelope before any boundary acceptance.
 
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
