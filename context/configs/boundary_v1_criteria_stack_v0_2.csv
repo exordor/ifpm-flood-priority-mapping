@@ -1,0 +1,8 @@
+boundary_id,experiment_id,criterion,component,source_key,weight,include_in_core,claim_level,semantic_meaning,nodata_policy
+boundary_v1,criteria_stack_v0_2,flood_hazard_proxy,twi_high_wetness,twi,0.5,true,provisional,wetness and drainage-prone terrain proxy,masked_not_zero_filled
+boundary_v1,criteria_stack_v0_2,flood_hazard_proxy,drainage_proximity,drainage,0.5,true,provisional,wetness and drainage-prone terrain proxy,masked_not_zero_filled
+boundary_v1,criteria_stack_v0_2,erosion_structure_proxy,k_ls_c_structure,structure,1.0,true,diagnostic_only,R-invariant erosion source structure only,masked_not_zero_filled
+boundary_v1,criteria_stack_v0_2,land_cover_pressure,c_factor_pressure,c_factor,1.0,true,provisional,land-cover or vegetation protection pressure,masked_not_zero_filled
+boundary_v1,criteria_stack_v0_2,mining_pressure,osm_mining_proxy,mining,1.0,true,provisional,weak OSM mining or quarry proxy,masked_not_zero_filled
+boundary_v1,criteria_stack_v0_2,road_accessibility_proxy,road_proximity,roads,1.0,false,diagnostic_only,accessibility or infrastructure proximity proxy,masked_not_zero_filled
+boundary_v1,criteria_stack_v0_2,river_proximity_proxy,river_proximity,rivers,1.0,false,diagnostic_only,river or water proximity proxy,masked_not_zero_filled
