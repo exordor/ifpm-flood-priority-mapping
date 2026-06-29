@@ -37,7 +37,7 @@ pipeline only supports same-grid raster overlay.
 
 Failure mode: rainfall values could be broadcast or resampled into false 30 m precision.
 
-Triage: not fixed in code in this review. Added Gate G7 engineering readiness and IFPM-028 so
+Triage: not fixed in code in this review. Added Step S5 engineering readiness and IFPM-028 so
 real-data overlay remains blocked until the selected model-unit branch is executable. If
 sub-basin aggregation is selected, a zonal or tabular scoring path is needed before overlay.
 
@@ -58,7 +58,7 @@ diagnostics separate `ready_for_overlay` from stricter metadata readiness.
 
 Failure mode: untagged sentinel values or mask mismatch can silently affect scores.
 
-Triage: added Gate G7 and IFPM-028. Real-data overlay must require strict metadata readiness,
+Triage: added Step S5 and IFPM-028. Real-data overlay must require strict metadata readiness,
 explicit full-coverage or NoData waivers, and mask-loss reporting.
 
 ### P2-4 Misplaced Data Artifacts Could Be Hidden By `.gitignore`
@@ -80,7 +80,7 @@ Finding: `rasterio` is optional, so dev-only tests can pass while GeoTIFF behavi
 Failure mode: reports say tests pass even though raster diagnostics, standardization, and
 synthetic workflow behavior were not exercised.
 
-Triage: recorded in Gate G7 and IFPM-028. A local run with geospatial dependencies passed during
+Triage: recorded in Step S5 and IFPM-028. A local run with geospatial dependencies passed during
 this review, but the project still needs a durable pre-real-data verification target that makes
 the geospatial test mode explicit.
 
@@ -91,7 +91,7 @@ Finding: docs require standardized 0-1 inputs, but overlay currently trusts inpu
 Failure mode: raw elevation or rainfall could be overlaid and produce plausible but meaningless
 scores.
 
-Triage: recorded in Gate G7 and IFPM-028. Real-data overlay must enforce standardized input
+Triage: recorded in Step S5 and IFPM-028. Real-data overlay must enforce standardized input
 ranges by default or require an explicit experimental override.
 
 ### P2-7 Raster Diagnostics Lack Finite-Value And Mask Summaries
@@ -102,7 +102,7 @@ readiness evidence.
 Failure mode: sentinel values, all-constant rasters, empty coverage, or severe outliers remain
 hidden until after scoring.
 
-Triage: recorded in Gate G7 and IFPM-028. Real-data diagnostics need finite count/fraction,
+Triage: recorded in Step S5 and IFPM-028. Real-data diagnostics need finite count/fraction,
 min/max, constant-layer flag, NoData or masked count, and valid-mask coverage.
 
 ### P2-8 Overlay Mask Loss Is Silent
@@ -112,7 +112,7 @@ drops.
 
 Failure mode: one bad criterion can remove large areas without being visible in the handoff.
 
-Triage: recorded in Gate G7 and IFPM-028. Real-data overlay readiness must report per-layer valid
+Triage: recorded in Step S5 and IFPM-028. Real-data overlay readiness must report per-layer valid
 fractions, intersection valid fraction, and dropped-cell counts.
 
 ## Lower-Severity Findings
@@ -156,4 +156,4 @@ Close a narrow HydroSHEDS boundary-discovery gate first:
 3. download only to `data/raw/hydrosheds_zimbabwe_prototype/` or
    `data/tmp/hydrosheds_zimbabwe_prototype/`;
 4. use the result only to identify candidate Upper Mzingwane boundary units;
-5. keep SRTM, CHIRPS, overlay, and interpretation blocked until Gate G7 is closed.
+5. keep SRTM, CHIRPS, overlay, and interpretation blocked until Step S5 is closed.

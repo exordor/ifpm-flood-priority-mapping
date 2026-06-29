@@ -7,7 +7,7 @@ briefing, or figure caption so internal code names do not leak into human commun
 
 This file is the single source of truth for **what to call things when writing for the mentor
 or any human reader**. Internal code names (`V1`, `boundary_v1`, `HB_L8_*`, `HYBAS_ID`,
-`Gate G*`, `IFPM-*`, `diagnostic_only`) stay inside engineering notes under
+`Step S*`, `IFPM-*`, `diagnostic_only`) stay inside engineering notes under
 `project-management/` and `data-management/`. They do not appear in `mentor-explanation/`
 documents, figure captions, or anything the mentor reads.
 
@@ -104,35 +104,39 @@ so far is susceptibility or priority — say so.
 
 ## 5. Internal Numbering Systems (For Internal Use Only)
 
-The workspace has three overlapping numbering systems. They never appear in mentor text.
+The workspace uses two internal numbering families. They never appear in mentor text.
 
-### Gate G1-G7 (engineering readiness gates)
+> **Migration note (2026-06-29):** the old "Gate G1-G7" engineering-gate numbering was merged
+> into this scheme. The two Gates that carried a real decision (G1 boundary, G2 modelling unit)
+> were folded into **IFPM-D06** and **IFPM-D01** respectively. The five Gates that were pure
+> engineering checklists (G3-G7) were renumbered as **Step S1-S5**. Old documents and git history
+> still say "Gate G*"; treat any such reference via the table below.
 
-These are internal process gates in `real_data_execution_preflight_gate.md`.
+### IFPM-D0X (open decisions — the only decision numbering)
 
-| Gate | Plain meaning |
-|---|---|
-| Gate G1 | the boundary must be accepted before download/overlay |
-| Gate G2 | the modelling unit (pixel vs sub-basin) must be chosen |
-| Gate G3 | the rainfall time window and product must be chosen |
-| Gate G4 | dataset-specific download preflight must be closed |
-| Gate G5 | a download authorization record must be written |
-| Gate G6 | execution rules after download |
-| Gate G7 | pipeline engineering readiness (tests, grid checks) |
+These are the mentor/domain decisions. They are the only place a "decision" is recorded.
 
-### IFPM-D0X (open mentor decisions)
+| ID | Plain meaning | (was) |
+|---|---|---|
+| IFPM-D01 | final modelling unit decision (pixel vs sub-basin vs mixed) | Gate G2 |
+| IFPM-D02 | Peru boundary rule | — |
+| IFPM-D03 | validation evidence hierarchy | — |
+| IFPM-D04 | AHP weighting protocol | — |
+| IFPM-D05 | mining-data interpretation rule | — |
+| IFPM-D06 | Upper Mzingwane boundary acceptance (final thesis boundary) | Gate G1 |
 
-| ID | Plain meaning |
-|---|---|
-| IFPM-D01 | final modelling unit decision |
-| IFPM-D02 | Peru boundary rule |
-| IFPM-D03 | validation evidence hierarchy |
-| IFPM-D04 | AHP weighting protocol |
-| IFPM-D05 | mining-data interpretation rule |
-| IFPM-D06 | Upper Mzingwane boundary acceptance |
+### Step S1-S5 (execution steps — engineering checklists, not decisions)
 
-Note: **Gate G2 and IFPM-D01 are the same decision** (modelling unit). **Gate G1 and IFPM-D06
-overlap** (boundary). When writing for the mentor, name the decision, not the gate.
+These are internal engineering steps in `real_data_execution_preflight_gate.md`. They verify
+readiness; they do not record a decision.
+
+| Step | Plain meaning | (was) |
+|---|---|---|
+| Step S1 | the rainfall time window and product must be chosen | Gate G3 |
+| Step S2 | dataset-specific download preflight must be closed | Gate G4 |
+| Step S3 | a download authorization record must be written | Gate G5 |
+| Step S4 | execution rules after download | Gate G6 |
+| Step S5 | pipeline engineering readiness (tests, grid checks) | Gate G7 |
 
 ### IFPM-0XX (task tracking)
 
@@ -153,8 +157,9 @@ result, defensible but not yet validated").
 |---|---|
 | `V1` / `boundary_v1` | "the V1 prototype catchment" or "the Upper Mzingwane prototype" |
 | `HB_L8_*` / `HYBAS_ID=*` | "the prototype catchment" (with its area if needed) |
-| `Gate G2` | "the modelling-unit decision" |
-| `Gate G1` / `IFPM-D06` | "the boundary decision" |
+| `IFPM-D01` | "the modelling-unit decision" |
+| `IFPM-D06` | "the boundary decision" |
+| `Step S1`-`S5` | (delete — internal engineering step) |
 | `IFPM-0XX` | (delete — it is an internal task id) |
 | `diagnostic_only` | "an internal diagnostic, not a result" |
 | `provisional` | "a working result, defensible but not yet validated" |

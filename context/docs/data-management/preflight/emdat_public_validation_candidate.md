@@ -1,7 +1,7 @@
 # Download Preflight: EM-DAT Public Validation Candidate
 
 Status: DRAFT. Pre-download blockers not yet checked. No download authorized. Created as P1 R1.1
-scaffolding. The `[ ]` items below must be checked, and Gate G5 authorization recorded, before any
+scaffolding. The `[ ]` items below must be checked, and Step S3 authorization recorded, before any
 real download attempt.
 
 ## Scope
@@ -46,7 +46,7 @@ real download attempt.
 - [ ] The command will not overwrite unrelated local data.
 - [ ] Partial or failed downloads can be identified and cleaned.
 - [ ] Output will be labelled temporal/magnitude context, not spatial flood validation.
-- [ ] Gate G5 authorization entry is written before download.
+- [ ] Step S3 authorization entry is written before download.
 
 ## Open Blockers Before Authorization
 

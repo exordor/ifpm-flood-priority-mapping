@@ -1,7 +1,7 @@
 # Download Preflight: GloFAS Public Validation Candidate
 
 Status: DRAFT. Pre-download blockers not yet checked. No download authorized. Created as P1 R1.1
-scaffolding. The `[ ]` items below must be checked, and Gate G5 authorization recorded, before any
+scaffolding. The `[ ]` items below must be checked, and Step S3 authorization recorded, before any
 real download attempt.
 
 ## Scope
@@ -48,7 +48,7 @@ real download attempt.
 - [ ] Output will be labelled outlet-scale discharge context, not overland flood validation.
 - [ ] GloFAS will not be treated as 30 m information; it stays at its native 0.1 degree grid or
       as a V1/outlet zonal summary.
-- [ ] Gate G5 authorization entry is written before download.
+- [ ] Step S3 authorization entry is written before download.
 
 ## Open Blockers Before Authorization
 

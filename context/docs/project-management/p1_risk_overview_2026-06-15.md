@@ -82,10 +82,10 @@ This strategy is consistent with:
 
 ## What This Package Does NOT Do
 
-- It does not authorize any real download. Tier A preflight drafts require Gate G5 authorization
+- It does not authorize any real download. Tier A preflight drafts require Step S3 authorization
   and mentor scope confirmation first.
-- It does not authorize any AHP overlay on real data. That remains blocked by Gates G1/G2/G7 and
-  IFPM-D01/D03/D04/D05.
+- It does not authorize any AHP overlay on real data. That remains blocked by IFPM-D01/D06 and
+  Step S5 and IFPM-D03/D04/D05.
 - It does not promote the illustrative AHP prior to `configs/`. It stays internal and
   non-authoritative.
 - It does not accept any boundary. V1 remains `accepted_with_waiver_for_controlled_prototype`.

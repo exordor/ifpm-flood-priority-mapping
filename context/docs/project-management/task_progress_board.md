@@ -19,7 +19,7 @@ decision-gated and do not authorize any download, overlay, or interpretation.
 
 A second 2026-06-15 pass covered the five P2 serious risks: R2.1 sediment-risk layer entirely
 missing (USLE/RUSLE factor plan), R2.2 hydrology derivatives incomplete (hydrological-conditioning
-assumptions A1-A5), R2.3 Peru side entirely blank, R2.4 modelling unit undecided (Gate G2), and
+assumptions A1-A5), R2.3 Peru side entirely blank, R2.4 modelling unit undecided (IFPM-D01), and
 R2.5 final boundary not accepted. Decision packages, a SoilGrids preflight draft, and a
 dependency-ordered sequencing plan are complete. Several P2 items are engineering-actionable from
 existing data once their documented decisions are accepted; none authorizes overlay or
@@ -55,7 +55,7 @@ boundaries. V1 / `HB_L8_1081528840_full_l7_chain` is now
 evidence board. The V1 working boundary package, SRTM tile preflight, scoped SRTM raw-tile
 download/inventory, V1 DEM/slope preprocessing, raster grid gate, terrain-only standardization
 diagnostics, CHIRPS rainfall comparison, full methodology evidence sweep, and the deliverable
-pipeline's Gate G7 engineering readiness (IFPM-060) are complete. Model overlay, flood-risk
+pipeline's Step S5 engineering readiness (IFPM-060) are complete. Model overlay, flood-risk
 interpretation, and intervention interpretation remain blocked pending mentor decisions.
 
 On 2026-06-24 the mentor-provided Voi rainfall archive was moved into managed raw-data storage and
@@ -229,7 +229,7 @@ claims remain gated.
   direction, flow accumulation, drainage network, TWI, and distance-to-drainage diagnostics from
   the existing V1 DEM.
 
-### IFPM-066 P2 R2.4 Modelling Unit Decision Package (Gate G2)
+### IFPM-066 P2 R2.4 Modelling Unit Decision Package (IFPM-D01)
 
 - Status: trade-off matrix and Branch-1 recommendation complete; awaits mentor selection.
 - Evidence:
@@ -238,7 +238,7 @@ claims remain gated.
 - Key result: recommended Branch 1 (terrain-only raster screening, rainfall as context) for the
   first V1 prototype; Branch 2 (sub-basin aggregation) as natural upgrade once boundary and
   sub-basin layer accepted.
-- Next action: surface R2.4 mentor decision questions; close Gate G2 by recording the selected
+- Next action: surface R2.4 mentor decision questions; close IFPM-D01 by recording the selected
   branch, rationale, and the CHIRPS-30m exclusion statement.
 
 ### IFPM-067 P2 R2.3 Peru Side Decision Package
@@ -519,7 +519,7 @@ claims remain gated.
     comparable. Both pass the V1 raster grid gate (grid_compatible=true).
 - Status: CANDIDATE EVIDENCE, NOT overlay-ready. Per AGENTS.md, no criterion enters AHP overlay or
   interpretation until the mentor confirms the criteria hierarchy (IFPM-D01/D04) and modelling
-  unit (Gate G2).
+  unit (IFPM-D01).
 - Next action: present alongside the terrain candidates (IFPM-055/056) in the next mentor review
   of the criteria hierarchy.
 
@@ -1089,13 +1089,13 @@ claims remain gated.
   eligible for the first prototype criteria set. Keep AHP weights, overlay, flood-risk
   interpretation, and intervention-priority mapping blocked.
 
-### IFPM-060 V1 Deliverable G7 Engineering Readiness
+### IFPM-060 V1 Deliverable Step S5 Engineering Readiness
 
 - Priority: P1
-- Task: close the five Gate G7 / IFPM-028 engineering-readiness items so the weighted-overlay
+- Task: close the five Step S5 / IFPM-028 engineering-readiness items so the weighted-overlay
   deliverable pipeline is safe for controlled real-data execution, without running real-data
   overlay, AHP weighting on real data, or interpretation.
-- Status: done for engineering readiness; overlay and interpretation remain gate-blocked.
+- Status: done for engineering readiness; overlay and interpretation remain blocked.
 - Completion evidence: `ifpm-flood-pipeline` commit `39f6b33` adds a durable geospatial fixture
   pair (`tests/fixtures/score_5x5.tif`, `zones_5x5.tif`) with a stable-signature regression test
   and `tests/GEOSPATIAL.md`; finite-value/mask summaries in `raster_diagnostics`; 0-1 overlay-input
@@ -1103,9 +1103,9 @@ claims remain gated.
   mask-loss reporting in the overlay diagnostics; and a new `zonal.py` + `zonal-score` CLI for the
   sub-basin/tabular scoring branch. Tests: 36 -> 51 passing, 0 skipped; ruff clean.
 - Key result: the deliverable pipeline now exposes value readiness, enforces standardized overlay
-  inputs, reports mask loss, and supports a zonal scoring path. Gate G7 engineering readiness is
-  closed; the gate stays `NO-GO` for real-data overlay pending mentor decisions.
-- Next action: keep overlay and interpretation blocked; close Gate G2 (modelling unit) and the
+  inputs, reports mask loss, and supports a zonal scoring path. Step S5 engineering readiness is
+  closed; the verdict stays `NO-GO` for real-data overlay pending mentor decisions.
+- Next action: keep overlay and interpretation blocked; close IFPM-D01 (modelling unit) and the
   criteria/boundary decisions before any controlled real-data overlay run.
 
 ### IFPM-028 Close Pre-Real-Data Engineering Readiness
@@ -1114,11 +1114,11 @@ claims remain gated.
 - Task: make the synthetic-tested pipeline safe enough for controlled real-data overlay.
 - Status: closed-scoped for engineering readiness; real-data overlay and interpretation remain
   blocked pending mentor decisions on modelling unit, criteria, and final boundary.
-- Completion evidence: `ifpm-flood-pipeline` commit `39f6b33` closes all five G7 items (durable
+- Completion evidence: `ifpm-flood-pipeline` commit `39f6b33` closes all five Step S5 items (durable
   geospatial verification target, finite-value/mask diagnostics, 0-1 overlay-input enforcement,
   per-layer mask-loss reporting, and a zonal scoring branch). Tests run with the `geospatial`
   extra installed: 36 -> 51 passing, 0 skipped (rasterio 1.5.0); `ruff check` + `ruff format` clean.
-- Next action: keep overlay and interpretation blocked until Gate G2 (modelling unit) and the
+- Next action: keep overlay and interpretation blocked until IFPM-D01 (modelling unit) and the
   criteria/boundary decisions are closed; the pipeline is now executable for a controlled run.
 
 ### IFPM-023 Implement Raster Grid Diagnostics

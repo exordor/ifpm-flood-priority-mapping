@@ -5,9 +5,15 @@ Updated: 2026-06-29
 Status: internal gate record, revised 2026-06-15 to separate the HiWi data-processing scope from
 the mentor/thesis claim scope. Scoped SRTM download, raw inventory, and V1 DEM/slope preprocessing
 are complete; scoped CHIRPS rainfall-sensitivity comparison is complete; the deliverable
-pipeline's Gate G7 engineering readiness is closed (`ifpm-flood-pipeline` commit `39f6b33`); the
+pipeline's Step S5 engineering readiness is closed (`ifpm-flood-pipeline` commit `39f6b33`); the
 deliverable pipeline's synthetic GeoTIFF fixtures are grid-compliant (`ifpm-flood-pipeline` commit
 `6269451`).
+
+> **Numbering note (2026-06-29):** this file previously used a "Gate G1-G7" scheme. The two
+> decision-bearing gates were merged into the decision numbering: G1 (boundary) -> **IFPM-D06**,
+> G2 (modelling unit) -> **IFPM-D01**. The five engineering-checklist gates were renumbered as
+> steps: G3 -> **Step S1**, G4 -> **Step S2**, G5 -> **Step S3**, G6 -> **Step S4**, G7 ->
+> **Step S5**. See `context/docs/glossary.md` section 5.
 
 ## Scope: Data Production vs Interpretable Claim
 
@@ -22,7 +28,7 @@ is missing. Reserve `final_claim` for explicitly approved, validated thesis/publ
 **Data production** (HiWi scope; proceeds with documented defaults; not blocked by this gate
 unless a dataset-specific preflight is incomplete):
 
-- downloading public datasets that have a closed registry + preflight + Gate G5 authorization;
+- downloading public datasets that have a closed registry + preflight + Step S3 authorization;
 - preprocessing, mosaicking, reprojecting, clipping, void-filling;
 - deriving terrain, hydrology, sediment-factor, and land-use indicators from already-downloaded
   data;
@@ -57,9 +63,9 @@ criteria hierarchy acceptance, boundary promotion to final, Peru scope) are the 
 and do not block data production. Where a data-processing default is needed (for example a
 hydro-conditioning algorithm or a USLE formula), the HiWi selects a standard method, documents
 the choice and its trade-offs in the processing note, produces the output, and flags any
-methodological sensitivity for the mentor's awareness. The gates below (G1-G7) apply to
-interpretable claims and to dataset-specific download authorization, not to the production of
-diagnostic data products from already-authorized data.
+methodological sensitivity for the mentor's awareness. The decisions (IFPM-D01-D06) and steps
+(Step S1-S5) below apply to interpretable claims and to dataset-specific download authorization,
+not to the production of diagnostic data products from already-authorized data.
 
 Two real vector artifacts have been downloaded only for boundary discovery and comparison:
 HydroBASINS Standard Africa and Zimbabwe Geoportal Sub-Catchments. One scoped SRTM raw-tile
@@ -160,7 +166,7 @@ Treat V1 as `accepted_with_waiver_for_controlled_prototype`. The earlier C1 /
   Grid, CRS, aggregation, NoData, and diagnostics rules are drafted.
   Evidence: `real_data_preprocessing_design.md`.
 
-## Gate G1: Outlet And Boundary Acceptance
+## IFPM-D06: Outlet And Boundary Acceptance (was Gate G1)
 
 Required before SRTM download, CHIRPS download, overlay, or aggregation:
 
@@ -221,7 +227,7 @@ Boundary-only exceptions already executed:
     only to `outputs/zimbabwe_geoportal_subcatchments_2025/`;
   - produced no public-facing output and no model claim.
 
-## Gate G2: Modelling Unit
+## IFPM-D01: Modelling Unit (was Gate G2)
 
 Select one branch before combining terrain and rainfall:
 
@@ -230,7 +236,8 @@ Select one branch before combining terrain and rainfall:
 3. Mixed product with terrain rasters and rainfall tables reported separately.
 
 The first branch is simplest for testing raster diagnostics. The second branch is more coherent
-for combining CHIRPS and terrain, but it depends on the boundary acceptance gate. The third branch
+for combining CHIRPS and terrain, but it depends on the boundary acceptance decision (IFPM-D06).
+The third branch
 is safest when scale mismatch remains unresolved.
 
 Exit evidence:
@@ -243,7 +250,7 @@ Current state: final terrain-rainfall claim is blocked. Diagnostic/provisional i
 proceed using either zonal aggregation or labelled coarse-to-reference-grid rainfall scenarios,
 with status metadata and no native-30 m rainfall claim.
 
-## Gate G3: Temporal Window And Rainfall Product
+## Step S1: Temporal Window And Rainfall Product (was Gate G3)
 
 Required before CHIRPS download or processing:
 
@@ -263,7 +270,7 @@ Exit evidence:
 Current state: closed for the scoped rainfall-sensitivity package, not closed for final rainfall
 criterion selection or overlay.
 
-## Gate G4: Dataset-Specific Preflight Closure
+## Step S2: Dataset-Specific Preflight Closure (was Gate G4)
 
 Before any individual dataset download, its preflight note must have no unchecked pre-download
 blocking item.
@@ -291,7 +298,7 @@ blocked for final flood-risk interpretation and intervention interpretation. Sce
 and coarse rainfall integration may proceed only as labelled diagnostic/provisional/sensitivity
 outputs.
 
-## Gate G5: Download Authorization Record
+## Step S3: Download Authorization Record (was Gate G5)
 
 Immediately before a real download, create a short authorization entry in the dataset registry
 or preflight note with:
@@ -319,7 +326,7 @@ Current state: used for the scoped SRTM raw-tile download and ready as a require
 remaining datasets. The HydroSHEDS boundary-discovery and Zimbabwe Geoportal Sub-Catchments
 exceptions used their own authorization records.
 
-## Gate G6: Execution Rules After Download
+## Step S4: Execution Rules After Download (was Gate G6)
 
 After a controlled download succeeds:
 
@@ -333,7 +340,7 @@ After a controlled download succeeds:
 
 Current state: ready as a draft rule set.
 
-## Gate G7: Pre-Real-Data Engineering Readiness
+## Step S5: Pre-Real-Data Engineering Readiness (was Gate G7)
 
 Before any real-data overlay, scoring, or interpretation:
 
@@ -352,7 +359,7 @@ Current state: the five engineering-readiness items are closed (`ifpm-flood-pipe
 `39f6b33` -- durable geospatial verification target with 0 skipped GeoTIFF tests, finite-value/mask
 diagnostics, 0-1 overlay-input enforcement with explicit override, per-layer mask-loss reporting,
 and a zonal scoring branch; 36 -> 51 tests passing, 0 skipped). Real-data overlay, scoring, and
-final interpretation remain blocked pending mentor decisions on modelling unit (Gate G2),
+final interpretation remain blocked pending mentor decisions on modelling unit (IFPM-D01),
 criteria, and final boundary; diagnostic/provisional/sensitivity scoring is executable when
 inputs are labelled and metadata are recorded. Boundary discovery and metadata-only inspection can
 proceed under their own gate rules.
@@ -361,12 +368,12 @@ proceed under their own gate rules.
 
 General real-data download may proceed only when all of these are true:
 
-- Gate G1 boundary acceptance is complete.
-- Gate G2 modelling unit is selected.
-- Gate G3 CHIRPS temporal/product decision is complete, or CHIRPS is explicitly deferred.
-- Gate G4 selected dataset preflight has no unchecked pre-download blocker.
-- Gate G5 authorization entry is written before download.
-- Gate G7 engineering readiness is complete before overlay or interpretation.
+- IFPM-D06 boundary acceptance is complete.
+- IFPM-D01 modelling unit is selected.
+- Step S1 CHIRPS temporal/product decision is complete, or CHIRPS is explicitly deferred.
+- Step S2 selected dataset preflight has no unchecked pre-download blocker.
+- Step S3 authorization entry is written before download.
+- Step S5 engineering readiness is complete before overlay or interpretation.
 - The target dataset directory is under ignored `data/`.
 - The reviewer confirms the download is small and scoped.
 
@@ -383,7 +390,7 @@ Stop before download if any of these appears:
 - command would write outside `data/` or overwrite unrelated local files;
 - selected artifact names are not recorded;
 - the workflow would imply CHIRPS has 30 m spatial detail;
-- final real-data overlay interpretation would run without the Gate G7 engineering readiness
+- final real-data overlay interpretation would run without the Step S5 engineering readiness
   checks;
 - credentials, cookies, tokens, or private cloud links would be written to a committed file.
 

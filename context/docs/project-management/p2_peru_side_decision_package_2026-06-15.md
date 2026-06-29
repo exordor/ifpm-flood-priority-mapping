@@ -39,7 +39,7 @@ class of risk flagged for Zimbabwe). Options:
    the named region's footprint while using hydrological boundaries for analysis.
 
 Each option needs the same kind of boundary-acceptance evidence the Zimbabwe side required
-(Gate G1 equivalent). None is currently documented.
+(IFPM-D06 equivalent). None is currently documented.
 
 ## Peru Data Holders
 
@@ -94,7 +94,7 @@ resolution, and validation, which would invalidate the comparison.
    timeline. If Peru is required, record the boundary option preference (1/2/3 above) so the
    Peru preflight can be drafted when the time comes.
 3. When Peru starts: reuse the same public-source families (SRTM, CHIRPS, WorldCover, etc.) and
-   the same governance (registry + preflight + Gate G5 authorization per dataset).
+   the same governance (registry + preflight + Step S3 authorization per dataset).
 4. Peru mining data: INGEMMET/GEOCATMIN is the one Peru-specific source with better public
    access than Zimbabwe; it should be the first Peru-specific dataset considered when Peru
    begins.

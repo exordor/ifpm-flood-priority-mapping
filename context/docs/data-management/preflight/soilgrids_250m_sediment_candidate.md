@@ -1,7 +1,7 @@
 # Download Preflight: SoilGrids 250m Sediment Candidate
 
 Status: DRAFT. Pre-download blockers not yet checked. No download authorized. Created as P2 R2.1
-scaffolding. The `[ ]` items below must be checked, and Gate G5 authorization recorded, before any
+scaffolding. The `[ ]` items below must be checked, and Step S3 authorization recorded, before any
 real download attempt.
 
 ## Scope
@@ -47,7 +47,7 @@ real download attempt.
 - [ ] Partial or failed downloads can be identified and cleaned.
 - [ ] SoilGrids will NOT be resampled to the V1 30 m terrain grid as pixel-level truth; it stays
       at native 250 m or as a V1/sub-basin zonal summary.
-- [ ] Gate G5 authorization entry is written before download.
+- [ ] Step S3 authorization entry is written before download.
 
 ## Open Blockers Before Authorization
 

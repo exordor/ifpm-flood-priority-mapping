@@ -119,7 +119,7 @@ If the full USLE chain cannot be completed in time:
 
 ## Boundaries And Blockers
 
-- No new download is authorized by this document. SoilGrids download needs Gate G5 authorization
+- No new download is authorized by this document. SoilGrids download needs Step S3 authorization
   and mentor scope confirmation first.
 - SoilGrids must NOT be resampled to 30 m as pixel-level truth; 250 m diagnostics or V1/sub-basin
   zonal summary only.

@@ -10,7 +10,7 @@ directly comparable to the terrain ones for mentor review.
 Both candidates are flood-susceptibility / exposure diagnostics. They are CANDIDATE EVIDENCE for
 mentor review, NOT overlay-ready criteria: per AGENTS.md and the V1 terrain reference grid rule, no
 criterion enters AHP overlay, scoring, or interpretation until the mentor confirms the criteria
-hierarchy (IFPM-D01/D04) and modelling unit (Gate G2).
+hierarchy (IFPM-D01/D04) and modelling unit (IFPM-D01).
 
 Candidates:
   v1_twi_high_wetness_0_1.tif
@@ -167,7 +167,7 @@ lower raw values mean higher diagnostic value. NoData preserved as -9999.0.
 CANDIDATE EVIDENCE for mentor review. NOT overlay-ready and NOT a flood-risk criterion. Per
 AGENTS.md and the V1 terrain reference grid rule, no criterion enters AHP overlay, scoring, or
 interpretation until the mentor confirms the criteria hierarchy (IFPM-D01/D04) and modelling unit
-(Gate G2). Run `bin/check_v1_raster_grid.py` before any future overlay use.
+(IFPM-D01). Run `bin/check_v1_raster_grid.py` before any future overlay use.
 """
     (OUT_DIR / "v1_hydrology_standardization_handoff.md").write_text(note, encoding="utf-8")
     print(f"wrote {OUT_DIR / 'v1_hydrology_standardization_handoff.md'}")

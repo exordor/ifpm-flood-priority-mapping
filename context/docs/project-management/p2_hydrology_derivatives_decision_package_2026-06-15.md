@@ -147,7 +147,7 @@ assumptions, not data access.
 - Derivatives are diagnostic candidates; they do not authorize AHP overlay, flood-risk
   interpretation, or intervention-priority interpretation.
 - All derivatives must pass the V1 raster grid gate.
-- This package does not close Gate G2 (modelling unit); it only prepares the terrain derivatives
+- This package does not close IFPM-D01 (modelling unit); it only prepares the terrain derivatives
   that either modelling-unit branch would use.
 
 ## Cross-References

@@ -168,7 +168,7 @@ recommended default unless the mentor closes Tier A access.
 - Tier B literature search is read-only and produces no data until a candidate is licence-checked.
 - Tier C processing must not begin until an ASM-disturbance rule and validation sample exist.
 - Claim-boundary fallback applies to public docs and interpretation only; it does not authorize
-  real-data AHP overlay, which remains blocked by Gates G1/G2/G7 and IFPM-D01/D04/D05.
+  real-data AHP overlay, which remains blocked by IFPM-D01/D06 and Step S5 and IFPM-D04/D05.
 
 ## Cross-References
 

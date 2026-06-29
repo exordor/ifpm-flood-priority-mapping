@@ -59,14 +59,14 @@ and the recommended order in one place.
   comparison claims, not to Peru readiness diagnostics.
 - Default fallback: reframe as single-site Zimbabwe study with Peru as documented future work.
 
-### R2.4 Modelling Unit Undecided (Gate G2)
+### R2.4 Modelling Unit Undecided (IFPM-D01)
 
 - Risk: pixel vs sub-basin vs mixed not chosen; controls normalization, aggregation,
   comparability, and how multi-resolution evidence is reconciled.
 - Decision package: `p2_modelling_unit_decision_package_2026-06-15.md`.
 - Dependencies: none upstream; Branch 2 (sub-basin) downstream needs accepted final boundary
   (R2.5) and accepted sub-basin layer.
-- Self-resolvable: decision-only. Engineering ready for all three branches (Gate G7 closed).
+- Self-resolvable: decision-only. Engineering ready for all three branches (Step S5 closed).
 - Recommendation: Branch 1 (terrain-only raster screening, rainfall as context) for first V1
   prototype; Branch 2 as natural upgrade once boundary and sub-basin layer accepted.
 - Default fallback: Branch 1 by default; Branch 3 (mixed) if Branch 1 rejected.
@@ -146,7 +146,7 @@ Present these after the P1 bundle, in the dependency order above:
 - IFPM-065: P2 R2.2 hydrology derivatives decision package (hydro-conditioning assumptions
   A1-A5). Status: assumptions drafted; awaits mentor confirmation; engineering unblocked after
   acceptance.
-- IFPM-066: P2 R2.4 modelling-unit decision package (Gate G2). Status: trade-off matrix and
+- IFPM-066: P2 R2.4 modelling-unit decision package (IFPM-D01). Status: trade-off matrix and
   Branch-1 recommendation complete; awaits mentor selection.
 - IFPM-067: P2 R2.3 Peru side decision package. Status: scope and data-holder inventory
   complete; awaits mentor confirmation of comparative requirement and timeline.
@@ -155,12 +155,12 @@ Present these after the P1 bundle, in the dependency order above:
 
 ## What This Package Does NOT Do
 
-- It does not authorize any real download. SoilGrids preflight is a draft requiring Gate G5
+- It does not authorize any real download. SoilGrids preflight is a draft requiring Step S3
   authorization.
 - It does not authorize any hydrology-derivative production. That requires accepted R2.2
   assumptions A1-A5.
-- It does not authorize AHP overlay on real data. That remains blocked by Gates G1/G2/G7 and the
-  P1 decision gates.
+- It does not authorize AHP overlay on real data. That remains blocked by IFPM-D01/D06 and Step S5
+  and the P1 decision gates.
 - It does not accept any boundary or start Peru work.
 - It does not promote any V1 terrain standardization or CHIRPS summary into overlay.
 

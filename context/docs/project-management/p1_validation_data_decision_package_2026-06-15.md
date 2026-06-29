@@ -138,17 +138,17 @@ It is the recommended default unless a mentor decision explicitly closes the val
 
 ## Boundaries And Blockers
 
-- No new real download is authorized by this document. Tier A downloads require Gate G5
+- No new real download is authorized by this document. Tier A downloads require Step S3
   authorization records and mentor scope confirmation first.
 - Tier B SAR processing must not begin until a confirmed V1 event date exists.
 - Tier C access requires explicit mentor/data-holder introduction.
 - Claim-boundary fallback applies to public docs and interpretation only; it does not authorize
-  real-data AHP overlay, which remains blocked by Gates G1/G2/G7 and IFPM-D01/D04.
+  real-data AHP overlay, which remains blocked by IFPM-D01/D06 and Step S5 and IFPM-D04.
 
 ## Cross-References
 
 - Risk source: `p1_risk_overview_2026-06-15.md`.
-- Preflight gate: `real_data_execution_preflight_gate.md` (Gate G4 dataset-specific preflight,
+- Preflight gate: `real_data_execution_preflight_gate.md` (Step S2 dataset-specific preflight,
   IFPM-033 backlog).
 - Existing context: `srtm_v1_terrain_preprocessing_2026-06-12.md`,
   `chirps_v1_rainfall_comparison_2026-06-13.md`,

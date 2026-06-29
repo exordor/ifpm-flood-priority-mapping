@@ -59,14 +59,14 @@ preferred because they would reconcile the V1 working boundary with the literatu
 
 ## Relationship To The Real-Data Gate
 
-Per `real_data_execution_preflight_gate.md` Gate G1:
+Per `real_data_execution_preflight_gate.md` IFPM-D06:
 
 - V1 is `closed with waiver for controlled prototype SRTM terrain diagnostics only`.
 - Final boundary acceptance remains open.
 - The waiver does not authorize 30 m CHIRPS resampling, overlay, flood-risk interpretation, or
   intervention-priority interpretation.
 
-Closing this P2 risk means closing Gate G1 for the final boundary, which in turn unblocks
+Closing this P2 risk means closing IFPM-D06 for the final boundary, which in turn unblocks
 sub-basin aggregation (R2.4 Branch 2) and any area-dependent reporting.
 
 ## Recommended Action
@@ -103,7 +103,7 @@ request, not more analysis):
 ## Cross-References
 
 - Risk overview: `p2_risk_overview_2026-06-15.md`.
-- Preflight gate: `real_data_execution_preflight_gate.md` (Gate G1).
+- Preflight gate: `real_data_execution_preflight_gate.md` (IFPM-D06).
 - Source hunt (exhausted): `upper_mzingwane_boundary_source_hunt_2026-06-10.md`,
   `upper_mzingwane_boundary_fact_check_2026-06-10.md`.
 - V1 working boundary decision: `v1_working_boundary_decision_2026-06-12.md`.
