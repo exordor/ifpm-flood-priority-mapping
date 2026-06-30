@@ -761,6 +761,36 @@ or Zimbabwe-Peru comparison is authorized.
   mining + exposure criteria; or present the Zimbabwe-Peru structural comparison to the mentor
   with explicit claim-level limits.
 
+### IFPM-094 Peru PE1 Mining + Exposure Criteria (OSM) And Full 5-Criteria Priority Map
+
+- Status: complete. PE1 now has all 5 criteria comparable to Zimbabwe v0.2, including the mentor-
+  slide-mapped priority scenario.
+- Evidence:
+  `context/docs/data-management/registry/geofabrik_osm_peru_pilot.md`,
+  `bin/build_pe1_osm_proximity_criteria.py`, `bin/build_pe1_criteria_stack.py`,
+  `bin/run_pe1_priority_scenarios.py`, ignored raw under
+  `data/raw/geofabrik_osm_peru_pilot/`, ignored outputs under
+  `outputs/geofabrik_osm_peru_pilot/pe1_proximity/` and
+  `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/`.
+- Key results:
+  - Downloaded Geofabrik Peru OSM (597 MB, SHA-256 recorded) under the same ODbL license as the
+    Zimbabwe extract.
+  - Built two proximity criteria: `mining_pressure` (32 quarry/industrial polygons in PE1+5km —
+    stronger than Zimbabwe V1's 2 polygons) and `socioeconomic_exposure` (6210 roads).
+  - PE1 criteria stack now has 5 criteria: flood_hazard, erosion_structure, land_cover,
+    mining_pressure, socioeconomic_exposure.
+  - Priority scenarios (equal + mentor_slide_mapped CR=0.022 + flood_erosion_heavy): top-20%
+    stable hotspot across all 3 scenarios `368.411 km2` (Zimbabwe V1 v0.2 ref `431.907 km2`).
+    PE1 priority board produced.
+- Impact: Peru PE1 is now methodologically symmetric to Zimbabwe V1 v0.2 — same 5-criteria
+  structure, same slide-matrix scenario, comparable hotspot-stability output. The two countries
+  can now be structurally compared with the same weighting. Still diagnostic_only /
+  engineering_pilot: not a validated flood-risk map, not an intervention plan, PE1 not a
+  research-selected boundary, no harmonized final comparison claim yet.
+- Next action: present the Zimbabwe-Peru structural comparison (5-criteria priority maps, slide-
+  matrix scenarios, hotspot stability) to the mentor with explicit claim-level limits; or upgrade
+  the mining criterion from OSM proxy to INGEMMET/GEOCATMIN official cadastre.
+
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
 - Status: complete as 30 m diagnostic rasters; all grid_compatible.

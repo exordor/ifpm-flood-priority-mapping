@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""Build grid-compatible PE1 criteria-stack rasters for the engineering pilot.
+"""Build grid-compatible PE1 criteria-stack rasters (5 criteria) for the engineering pilot.
 
-Mirrors `build_boundary_v1_criteria_stack_v0_2.py` but adapted to PE1's currently-available
-evidence. PE1 has flood_hazard (TWI + drainage), erosion_structure, and land_cover_pressure.
-Mining/exposure criteria are NOT included because no Peru OSM/INGEMMET data has been processed
-yet — those are deferred (documented as gaps), NOT invented.
+Mirrors `build_boundary_v1_criteria_stack_v0_2.py`. PE1 now has all 5 criteria comparable to
+Zimbabwe v0.2: flood_hazard (TWI + drainage), erosion_structure, land_cover_pressure,
+mining_pressure (OSM quarry/industrial proxy), socioeconomic_exposure (OSM roads proxy).
 
 Outputs standardized 0-1 criteria rasters on the PE1 30m reference grid (EPSG:32718).
-claim_level: provisional (flood/landcover) or diagnostic_only (erosion structure).
 """
 
 from __future__ import annotations
@@ -35,6 +33,8 @@ INPUTS = {
     "drainage": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_distance_to_drainage_t500.tif",
     "structure": ROOT / "outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/a_structure_K_LS_C_30m.tif",
     "c_factor": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
+    "roads": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
+    "mining": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_mining_proxy_0_1.tif",
 }
 
 
@@ -141,11 +141,16 @@ def main() -> None:
     drain_std, drain_lo, drain_hi = normalize_2_98(rasters["drainage"], mask, invert=True)
     structure_std, s_lo, s_hi = normalize_2_98(rasters["structure"], mask, invert=False)
     c_std, c_lo, c_hi = normalize_2_98(rasters["c_factor"], mask, invert=False)
+    # roads + mining are already 0-1 proximity rasters from build_pe1_osm_proximity_criteria.py
+    roads_std = rasters["roads"]
+    mining_std = rasters["mining"]
 
     criteria = {
         "flood_hazard_proxy": weighted_average([(twi_std, 0.5), (drain_std, 0.5)], mask),
         "erosion_structure_proxy": structure_std,
         "land_cover_pressure": c_std,
+        "mining_pressure": mining_std,
+        "socioeconomic_exposure": roads_std,
     }
 
     manifest_rows = []
@@ -153,11 +158,15 @@ def main() -> None:
         "flood_hazard_proxy": "TWI high-wetness + drainage proximity (inverted)",
         "erosion_structure_proxy": "K_LS_C structure standardized 2-98; R-invariant",
         "land_cover_pressure": "WorldCover C-factor pressure",
+        "mining_pressure": "OSM landuse quarry/industrial proximity (inverted); weak proxy",
+        "socioeconomic_exposure": "OSM roads proximity (inverted); access/exposure proxy",
     }
     claim_map = {
         "flood_hazard_proxy": "provisional",
         "erosion_structure_proxy": "diagnostic_only",
         "land_cover_pressure": "provisional",
+        "mining_pressure": "provisional",
+        "socioeconomic_exposure": "provisional",
     }
     for name, arr in criteria.items():
         path = CRITERIA_DIR / f"{name}_0_1.tif"
@@ -172,14 +181,13 @@ def main() -> None:
             "grid_compatible": "true", **stats(arr, mask),
         })
 
-    # readiness table: record what PE1 is missing vs Zimbabwe v0.2
+    # readiness table: PE1 now has all 5 criteria comparable to Zimbabwe v0.2.
     readiness = manifest_rows + [
-        {"criterion": "mining_pressure", "path": "", "components": "INGEMMET/GEOCATMIN (not yet processed)",
-         "status": "deferred — Peru mining cadastre identified but not downloaded", "grid_compatible": "n/a"},
-        {"criterion": "socioeconomic_exposure", "path": "", "components": "Peru OSM roads/places (not yet processed)",
-         "status": "deferred — Peru OSM identified but not downloaded", "grid_compatible": "n/a"},
         {"criterion": "rainfall_r_factor", "path": "", "components": "provisional R=238.6 (LOW family, shared default)",
          "status": "scalar R in soil-loss; not a 30m criterion", "grid_compatible": "not_applicable"},
+        {"criterion": "mining_pressure_official", "path": "", "components": "INGEMMET/GEOCATMIN (not yet processed)",
+         "status": "upgrade path: OSM proxy is weak; INGEMMET official cadastre identified but not downloaded",
+         "grid_compatible": "n/a"},
     ]
 
     write_csv(OUT_DIR / "criteria_stack_manifest.csv", manifest_rows)
@@ -191,7 +199,7 @@ def main() -> None:
         {"component": "c_factor", "method": "percentile_clip_minmax_2_98", "clip_low": c_lo, "clip_high": c_hi},
     ])
     print(f"wrote {len(manifest_rows)} PE1 criteria to {rel(CRITERIA_DIR)}")
-    print("(mining_pressure + socioeconomic_exposure deferred: no Peru OSM/INGEMMET data yet)")
+    print("(5 criteria: flood, erosion, landcover, mining, exposure — comparable to Zimbabwe v0.2)")
 
 
 if __name__ == "__main__":

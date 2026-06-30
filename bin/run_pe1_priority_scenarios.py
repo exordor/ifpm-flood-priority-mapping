@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Run priority scenarios for the PE1 engineering-pilot criteria stack.
+"""Run priority scenarios for the PE1 engineering-pilot criteria stack (5 criteria).
 
-Mirrors `run_boundary_v1_priority_scenarios.py` but for PE1's 3 available criteria
-(flood_hazard, erosion_structure, land_cover). No mining/exposure criteria because no Peru
-OSM/INGEMMET data has been processed yet.
+Mirrors `run_boundary_v1_priority_scenarios.py`. PE1 now has 5 criteria (flood_hazard,
+erosion_structure, land_cover, mining, exposure), comparable to Zimbabwe v0.2. Three scenarios:
+equal, mentor-slide-mapped (the slide matrix mapped to PE1's 5 criteria), and flood/erosion heavy.
 
 Sediment normalization note: the erosion_structure criterion is max-normalized to [0,1] for
 MCDA scoring, so its 0-1 value is a relative hotspot intensity, not absolute t/ha/yr. Rank is
@@ -40,20 +40,60 @@ CRITERIA_PATHS = {
     "flood_hazard_proxy": CRITERIA_DIR / "flood_hazard_proxy_0_1.tif",
     "erosion_structure_proxy": CRITERIA_DIR / "erosion_structure_proxy_0_1.tif",
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
+    "mining_pressure": CRITERIA_DIR / "mining_pressure_0_1.tif",
+    "socioeconomic_exposure": CRITERIA_DIR / "socioeconomic_exposure_0_1.tif",
 }
 
-# Two scenarios: equal-weight (neutral) and hazard-erosion heavy (stress test for flood+sedi).
-# No AHP slide scenario because the mentor slide matrix has 5 criteria; PE1 only has 3.
+# Mentor-slide pairwise matrix (CR 0.022) mapped to PE1's 5 criteria. The slide's 5 criteria
+# (Flood, Sediment, LandUse/ASM, Environmental, Socioeconomic) map: Flood->flood_hazard,
+# Sediment->erosion_structure, LandUse/ASM->land_cover + mining (split), Environmental->(no direct
+# PE1 equivalent; folded into flood as terrain-context proxy), Socioeconomic->exposure.
+# Slide weights derived from principal eigenvector (same computation as Zimbabwe v0.2 runner).
+SLIDE_ORDER = ["flood", "sediment", "landuse_asm", "environmental", "socioeconomic"]
+SLIDE_MATRIX = np.array([
+    [1, 3, 5, 4, 6],
+    [1/3, 1, 3, 2, 4],
+    [1/5, 1/3, 1, 1/2, 2],
+    [1/4, 1/2, 2, 1, 3],
+    [1/6, 1/4, 1/2, 1/3, 1],
+], dtype="float64")
+
+
+def slide_weights() -> tuple[dict[str, float], float]:
+    vals, vecs = np.linalg.eig(SLIDE_MATRIX)
+    idx = int(np.argmax(vals.real))
+    lam = float(vals.real[idx])
+    w = np.abs(vecs[:, idx].real)
+    w = w / w.sum()
+    ci = (lam - len(SLIDE_ORDER)) / (len(SLIDE_ORDER) - 1)
+    cr = ci / 1.12
+    base = dict(zip(SLIDE_ORDER, w.tolist(), strict=True))
+    landuse_half = base["landuse_asm"] / 2.0
+    # environmental folded into flood (no separate PE1 environmental criterion)
+    return {
+        "flood_hazard_proxy": base["flood"] + base["environmental"],
+        "erosion_structure_proxy": base["sediment"],
+        "land_cover_pressure": landuse_half,
+        "mining_pressure": landuse_half,
+        "socioeconomic_exposure": base["socioeconomic"],
+    }, float(cr)
+
+
+# Three scenarios: equal (neutral), slide-mapped (mentor matrix), flood/erosion heavy (stress).
 SCENARIOS = {
     "equal": {
-        "flood_hazard_proxy": 1 / 3,
-        "erosion_structure_proxy": 1 / 3,
-        "land_cover_pressure": 1 / 3,
+        "flood_hazard_proxy": 0.20,
+        "erosion_structure_proxy": 0.20,
+        "land_cover_pressure": 0.20,
+        "mining_pressure": 0.20,
+        "socioeconomic_exposure": 0.20,
     },
     "flood_erosion_heavy": {
-        "flood_hazard_proxy": 0.45,
-        "erosion_structure_proxy": 0.45,
+        "flood_hazard_proxy": 0.35,
+        "erosion_structure_proxy": 0.35,
         "land_cover_pressure": 0.10,
+        "mining_pressure": 0.10,
+        "socioeconomic_exposure": 0.10,
     },
 }
 
@@ -161,7 +201,11 @@ def main() -> None:
     top20_masks: list[np.ndarray] = []
     valid_any = np.logical_or.reduce([np.isfinite(arr) for arr in criteria.values()])
 
-    for scenario, weights in SCENARIOS.items():
+    # Inject the mentor-slide-mapped scenario (weights + CR).
+    slide_w, slide_cr = slide_weights()
+    all_scenarios = dict(SCENARIOS)
+    all_scenarios["mentor_slide_mapped"] = slide_w
+    for scenario, weights in all_scenarios.items():
         total = round(sum(weights.values()), 10)
         if total != 1.0:
             raise ValueError(f"weights for {scenario} sum to {total}")
@@ -210,7 +254,8 @@ def main() -> None:
 
     cell_km2 = 30.0 * 30.0 / 1e6
     stability_rows = [
-        {"metric": "scenario_count", "value": len(SCENARIOS)},
+        {"metric": "scenario_count", "value": len(all_scenarios)},
+        {"metric": "mentor_slide_consistency_ratio", "value": round(slide_cr, 6)},
         {"metric": "top20_all_scenarios_cells", "value": int(np.nansum(top20_frequency == 1.0))},
         {"metric": "top20_any_scenario_cells", "value": int(np.nansum(top20_frequency > 0.0))},
         {"metric": "top20_all_scenarios_area_km2", "value": round(float(np.nansum(top20_frequency == 1.0) * cell_km2), 3)},
@@ -219,14 +264,15 @@ def main() -> None:
         {"metric": "priority_std_p95", "value": round(float(np.nanpercentile(priority_std, 95)), 6)},
         {"metric": "zimbabwe_v1_top20_all_ref_km2", "value": 431.907},
         {"metric": "criteria_count", "value": len(CRITERIA_PATHS)},
-        {"metric": "missing_criteria", "value": "mining_pressure, socioeconomic_exposure (no Peru OSM/INGEMMET yet)"},
+        {"metric": "criteria", "value": "flood, erosion_structure, land_cover, mining, exposure"},
     ]
     write_csv(OUT_DIR / "scenario_weights.csv", weight_rows)
     write_csv(OUT_DIR / "scenario_priority_summary.csv", summary_rows)
     write_csv(OUT_DIR / "hotspot_stability_summary.csv", stability_rows)
     print(f"wrote PE1 priority scenarios to {rel(OUT_DIR)}")
-    print(f"  top-20% stable across all scenarios: {stability_rows[3]['value']} km2")
-    print(f"  (Zimbabwe V1 ref: 431.907 km2; PE1 uses 3 criteria, ZW v0.2 used 4-6)")
+    print(f"  top-20% stable across all scenarios: {stability_rows[4]['value']} km2")
+    print(f"  mentor slide CR: {round(slide_cr, 6)}")
+    print(f"  (Zimbabwe V1 v0.2 ref: 431.907 km2; PE1 now uses 5 criteria, comparable)")
 
 
 if __name__ == "__main__":
