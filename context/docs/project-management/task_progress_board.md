@@ -816,6 +816,32 @@ or Zimbabwe-Peru comparison is authorized.
 - Next action: present the full PE1 5-criteria prototype (now with official mining) alongside the
   Zimbabwe V1 v0.2 prototype for the structural Zimbabwe-Peru comparison.
 
+### IFPM-096 Peru PE1 Rainfall Criterion (CHIRPS Coarse-To-Grid) And Full 6-Criteria Symmetry
+
+- Status: complete. PE1 now has a rainfall criterion, reaching full 6-criteria symmetry with the
+  merged Zimbabwe v0.3 (which added rainfall_sensitivity_v0_3).
+- Evidence: `bin/build_pe1_rainfall_criterion.py`, `bin/build_pe1_criteria_stack.py`,
+  `bin/run_pe1_priority_scenarios.py`, ignored outputs under
+  `outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/` and
+  `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/`.
+- Key results:
+  - Built PE1 rainfall_climatology_proxy from CHIRPS v3 latam Dec-Mar rainy-season mean
+    (HTTP windowed read, 2014/15-2023/24), bilinear-resampled to the PE1 30m grid. Coarse-to-grid
+    governance identical to Zimbabwe A-010 (PE1 = A-012): IFPM_NOTE band tag,
+    `sensitivity_scenario`, effective resolution ~5 km, not pixel-level 30 m rainfall.
+  - PE1 raw rainfall: 37.6-292.9 mm/season, mean ~78 (arid Andean Pacific slope; Zimbabwe V1 is
+    wetter — another real physical-contrast signal).
+  - PE1 criteria stack now 6 criteria: flood, erosion_structure, land_cover, mining, exposure,
+    rainfall. Priority scenarios (equal + mentor_slide CR=0.022 + flood_erosion_heavy):
+    top-20% stable hotspot 299.57 km2.
+- Impact: PE1 is now methodologically symmetric to the merged Zimbabwe V1 v0.3 — same 6-criteria
+  structure including the coarse-to-grid rainfall criterion. The two prototypes can be compared
+  with identical weighting and identical criterion families. Still diagnostic_only /
+  engineering_pilot / sensitivity_scenario: no validated risk, PE1 not research-selected, no
+  harmonized final comparison claim.
+- Next action: present the Zimbabwe (V1 v0.3) vs Peru (PE1) structural comparison to the mentor;
+  both sides now share the full 6-criteria methodology.
+
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
 - Status: complete as 30 m diagnostic rasters; all grid_compatible.

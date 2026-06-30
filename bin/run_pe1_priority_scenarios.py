@@ -42,6 +42,7 @@ CRITERIA_PATHS = {
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
     "mining_pressure": CRITERIA_DIR / "mining_pressure_0_1.tif",
     "socioeconomic_exposure": CRITERIA_DIR / "socioeconomic_exposure_0_1.tif",
+    "rainfall_climatology_proxy": CRITERIA_DIR / "rainfall_climatology_proxy_0_1.tif",
 }
 
 # Mentor-slide pairwise matrix (CR 0.022) mapped to PE1's 5 criteria. The slide's 5 criteria
@@ -76,24 +77,27 @@ def slide_weights() -> tuple[dict[str, float], float]:
         "land_cover_pressure": landuse_half,
         "mining_pressure": landuse_half,
         "socioeconomic_exposure": base["socioeconomic"],
+        "rainfall_climatology_proxy": 0.0,  # slide matrix has no rainfall criterion; set 0 there
     }, float(cr)
 
 
 # Three scenarios: equal (neutral), slide-mapped (mentor matrix), flood/erosion heavy (stress).
 SCENARIOS = {
     "equal": {
-        "flood_hazard_proxy": 0.20,
-        "erosion_structure_proxy": 0.20,
-        "land_cover_pressure": 0.20,
-        "mining_pressure": 0.20,
-        "socioeconomic_exposure": 0.20,
+        "flood_hazard_proxy": 1/6,
+        "erosion_structure_proxy": 1/6,
+        "land_cover_pressure": 1/6,
+        "mining_pressure": 1/6,
+        "socioeconomic_exposure": 1/6,
+        "rainfall_climatology_proxy": 1/6,
     },
     "flood_erosion_heavy": {
-        "flood_hazard_proxy": 0.35,
-        "erosion_structure_proxy": 0.35,
-        "land_cover_pressure": 0.10,
+        "flood_hazard_proxy": 0.30,
+        "erosion_structure_proxy": 0.25,
+        "land_cover_pressure": 0.05,
         "mining_pressure": 0.10,
-        "socioeconomic_exposure": 0.10,
+        "socioeconomic_exposure": 0.05,
+        "rainfall_climatology_proxy": 0.25,
     },
 }
 
@@ -264,7 +268,7 @@ def main() -> None:
         {"metric": "priority_std_p95", "value": round(float(np.nanpercentile(priority_std, 95)), 6)},
         {"metric": "zimbabwe_v1_top20_all_ref_km2", "value": 431.907},
         {"metric": "criteria_count", "value": len(CRITERIA_PATHS)},
-        {"metric": "criteria", "value": "flood, erosion_structure, land_cover, mining, exposure"},
+        {"metric": "criteria", "value": "flood, erosion_structure, land_cover, mining, exposure, rainfall"},
     ]
     write_csv(OUT_DIR / "scenario_weights.csv", weight_rows)
     write_csv(OUT_DIR / "scenario_priority_summary.csv", summary_rows)
@@ -272,7 +276,7 @@ def main() -> None:
     print(f"wrote PE1 priority scenarios to {rel(OUT_DIR)}")
     print(f"  top-20% stable across all scenarios: {stability_rows[4]['value']} km2")
     print(f"  mentor slide CR: {round(slide_cr, 6)}")
-    print(f"  (Zimbabwe V1 v0.2 ref: 431.907 km2; PE1 now uses 5 criteria, comparable)")
+    print(f"  (Zimbabwe V1 v0.2 ref: 431.907 km2; PE1 now uses 6 criteria incl. rainfall)")
 
 
 if __name__ == "__main__":

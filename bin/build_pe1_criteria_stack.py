@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Build grid-compatible PE1 criteria-stack rasters (5 criteria) for the engineering pilot.
+"""Build grid-compatible PE1 criteria-stack rasters (6 criteria) for the engineering pilot.
 
-Mirrors `build_boundary_v1_criteria_stack_v0_2.py`. PE1 now has all 5 criteria comparable to
-Zimbabwe v0.2: flood_hazard (TWI + drainage), erosion_structure, land_cover_pressure,
-mining_pressure (OSM quarry/industrial proxy), socioeconomic_exposure (OSM roads proxy).
+Mirrors `build_boundary_v1_criteria_stack_v0_2.py` + the v0.3 rainfall criterion. PE1 has 6
+criteria: flood_hazard, erosion_structure, land_cover_pressure, mining_pressure (INGEMMET),
+socioeconomic_exposure (OSM roads), rainfall_climatology_proxy (CHIRPS coarse-to-grid, sensitivity).
 
 Outputs standardized 0-1 criteria rasters on the PE1 30m reference grid (EPSG:32718).
 """
@@ -35,6 +35,7 @@ INPUTS = {
     "c_factor": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
     "roads": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
     "mining": ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif",
+    "rainfall": ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_proxy_0_1_PROVISIONAL_30m.tif",
 }
 
 
@@ -151,6 +152,7 @@ def main() -> None:
         "land_cover_pressure": c_std,
         "mining_pressure": mining_std,
         "socioeconomic_exposure": roads_std,
+        "rainfall_climatology_proxy": rasters["rainfall"],
     }
 
     manifest_rows = []
@@ -160,6 +162,7 @@ def main() -> None:
         "land_cover_pressure": "WorldCover C-factor pressure",
         "mining_pressure": "INGEMMET Pequeña Minería ASM-point proximity (inverted); official source",
         "socioeconomic_exposure": "OSM roads proximity (inverted); access/exposure proxy",
+        "rainfall_climatology_proxy": "CHIRPS latam Dec-Mar mean coarse-to-grid (sensitivity_scenario)",
     }
     claim_map = {
         "flood_hazard_proxy": "provisional",
@@ -167,6 +170,7 @@ def main() -> None:
         "land_cover_pressure": "provisional",
         "mining_pressure": "provisional",
         "socioeconomic_exposure": "provisional",
+        "rainfall_climatology_proxy": "sensitivity_scenario",
     }
     for name, arr in criteria.items():
         path = CRITERIA_DIR / f"{name}_0_1.tif"
@@ -184,10 +188,8 @@ def main() -> None:
     # readiness table: PE1 now has all 5 criteria comparable to Zimbabwe v0.2.
     readiness = manifest_rows + [
         {"criterion": "rainfall_r_factor", "path": "", "components": "provisional R=238.6 (LOW family, shared default)",
-         "status": "scalar R in soil-loss; not a 30m criterion", "grid_compatible": "not_applicable"},
-        {"criterion": "mining_pressure_official", "path": "", "components": "INGEMMET/GEOCATMIN (not yet processed)",
-         "status": "upgrade path: OSM proxy is weak; INGEMMET official cadastre identified but not downloaded",
-         "grid_compatible": "n/a"},
+         "status": "scalar R in soil-loss (absolute magnitude); the rainfall_climatology_proxy criterion handles the spatial overlay role",
+         "grid_compatible": "not_applicable"},
     ]
 
     write_csv(OUT_DIR / "criteria_stack_manifest.csv", manifest_rows)
@@ -199,7 +201,7 @@ def main() -> None:
         {"component": "c_factor", "method": "percentile_clip_minmax_2_98", "clip_low": c_lo, "clip_high": c_hi},
     ])
     print(f"wrote {len(manifest_rows)} PE1 criteria to {rel(CRITERIA_DIR)}")
-    print("(5 criteria: flood, erosion, landcover, mining, exposure — comparable to Zimbabwe v0.2)")
+    print("(6 criteria: flood, erosion, landcover, mining, exposure, rainfall — comparable to Zimbabwe v0.3)")
 
 
 if __name__ == "__main__":
