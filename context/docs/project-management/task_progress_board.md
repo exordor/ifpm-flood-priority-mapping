@@ -791,6 +791,31 @@ or Zimbabwe-Peru comparison is authorized.
   matrix scenarios, hotspot stability) to the mentor with explicit claim-level limits; or upgrade
   the mining criterion from OSM proxy to INGEMMET/GEOCATMIN official cadastre.
 
+### IFPM-095 Peru PE1 Mining Criterion Upgrade (INGEMMET Official ASM Points)
+
+- Status: complete. Upgraded the PE1 mining criterion from the weak OSM quarry/industrial proxy
+  to official INGEMMET Pequeña Minería (small-scale/ASM mining) point evidence.
+- Evidence:
+  `context/docs/data-management/registry/ingemmet_catastro_minero_peru_pilot.md`,
+  `bin/extract_pe1_ingemmet_mining.py`, `bin/build_pe1_criteria_stack.py` (mining input switched
+  to INGEMMET), ignored raw under
+  `data/raw/ingemmet_catastro_minero_peru_pilot/`, ignored outputs under
+  `outputs/ingemmet_catastro_minero_peru_pilot/`.
+- Key results:
+  - Verified INGEMMET GEOCATMIN is publicly queryable via ArcGIS REST
+    (`/arcgis/rest/services/SERV_PEQUENA_MINERIA/MapServer/0`), no login.
+  - Queried 11 official ASM mining points inside the PE1 envelope (mineral codes, e.g. Au; mine
+    codes; lab assays) — official-source evidence, strictly stronger than the OSM proxy.
+  - Rebuilt the PE1 mining_pressure criterion from INGEMMET point proximity; reran the 5-criteria
+    priority scenarios. Stable top-20% hotspot shifted to `307.356 km2` (was 368 with the OSM
+    proxy) — the official ASM locations produce a more precise, defensible pressure pattern.
+- Impact: PE1's mining criterion is now `provisional` official-source evidence, not a weak land-use
+  proxy. This is the one criterion where Peru is strictly better evidenced than Zimbabwe (Zimbabwe
+  still has only the OSM proxy; its official mining data remains ungated/awaited via mentor).
+  Still point-proximity, not active-disturbance polygons; not a validated mining truth.
+- Next action: present the full PE1 5-criteria prototype (now with official mining) alongside the
+  Zimbabwe V1 v0.2 prototype for the structural Zimbabwe-Peru comparison.
+
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
 - Status: complete as 30 m diagnostic rasters; all grid_compatible.

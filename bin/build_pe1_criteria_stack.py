@@ -34,7 +34,7 @@ INPUTS = {
     "structure": ROOT / "outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/a_structure_K_LS_C_30m.tif",
     "c_factor": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
     "roads": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
-    "mining": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_mining_proxy_0_1.tif",
+    "mining": ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif",
 }
 
 
@@ -158,7 +158,7 @@ def main() -> None:
         "flood_hazard_proxy": "TWI high-wetness + drainage proximity (inverted)",
         "erosion_structure_proxy": "K_LS_C structure standardized 2-98; R-invariant",
         "land_cover_pressure": "WorldCover C-factor pressure",
-        "mining_pressure": "OSM landuse quarry/industrial proximity (inverted); weak proxy",
+        "mining_pressure": "INGEMMET Pequeña Minería ASM-point proximity (inverted); official source",
         "socioeconomic_exposure": "OSM roads proximity (inverted); access/exposure proxy",
     }
     claim_map = {
