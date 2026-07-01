@@ -76,7 +76,7 @@ context use. No real data has been downloaded for this dataset id.
 - Known limitations: country-level / admin-1 spatial precision; cannot validate V1 catchment
   flood extent; entry criteria changed over EM-DAT history (older entries have higher thresholds).
 - Validation role: Tier A temporal context per
-  `p1_validation_data_decision_package_2026-06-15.md`. Not a spatial validation layer.
+  `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p1_validation_data_decision_package_2026-06-15.md`. Not a spatial validation layer.
 
 ## Release Boundary
 

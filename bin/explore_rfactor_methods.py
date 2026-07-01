@@ -326,7 +326,7 @@ def main() -> None:
         "purpose": (
             "Exploratory comparison of four literature-based R-factor methods on V1 CHIRPS inputs, "
             "to support the mentor decision on the correct R method for semi-arid Zimbabwe after "
-            "the V1 formula error (see formula_integrity_audit_2026-06-19.md)."
+            "the V1 formula error (see rfactor_investigation_consolidated.md)."
         ),
         "inputs": {
             "mfi_v1_zonal": zonal_stats(mfi, v1_bool),

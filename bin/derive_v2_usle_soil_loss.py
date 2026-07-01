@@ -169,6 +169,12 @@ def class_transition_matrix(cls_a: np.ndarray, cls_b: np.ndarray) -> dict:
 
 
 def main() -> None:
+    raise SystemExit(
+        "DEPRECATED: do not regenerate V2 USLE A products from the old R-factor. "
+        "See outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md "
+        "and context/docs/project-management/rfactor_investigation_consolidated.md."
+    )
+
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     # Upfront input validation so a fresh checkout fails with a clear message, not a raw traceback.

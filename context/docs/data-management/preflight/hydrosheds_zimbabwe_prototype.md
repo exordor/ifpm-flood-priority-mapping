@@ -91,4 +91,4 @@ Current status: not downloaded for the 2026-06-11 candidate outlet first pass.
 - Extraction completed: yes
 - Extracted file count: 85
 - Boundary result:
-  `context/docs/project-management/hydrosheds_boundary_discovery_result_2026-06-10.md`
+  `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/hydrosheds_boundary_discovery_result_2026-06-10.md`

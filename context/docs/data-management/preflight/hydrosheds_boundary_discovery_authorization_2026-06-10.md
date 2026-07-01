@@ -96,7 +96,7 @@ the existing file before doing anything else.
 - Extraction completed: yes
 - Extracted file count: 85
 - Boundary result note:
-  `context/docs/project-management/hydrosheds_boundary_discovery_result_2026-06-10.md`
+  `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/hydrosheds_boundary_discovery_result_2026-06-10.md`
 
 ## Discovery Outputs To Record After Download
 

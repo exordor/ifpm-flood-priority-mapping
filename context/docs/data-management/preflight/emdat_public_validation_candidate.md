@@ -51,7 +51,7 @@ real download attempt.
 ## Open Blockers Before Authorization
 
 - Mentor has not confirmed Tier A context use (see
-  `p1_validation_data_decision_package_2026-06-15.md` decision questions).
+  `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p1_validation_data_decision_package_2026-06-15.md` decision questions).
 - HDX resource id must be re-verified at access time.
 - Exact licence field must be confirmed at access time.
 

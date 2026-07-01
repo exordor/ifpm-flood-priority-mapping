@@ -77,7 +77,7 @@ this dataset id.
 - Known limitations: 250 m resolution is much coarser than the V1 30 m terrain grid; must not be
   resampled to 30 m as pixel-level truth; pedotransfer function choice changes absolute K values;
   SoilGrids uncertainty bands exist and should be reported.
-- Validation role: sediment-risk factor K per `p2_sediment_risk_decision_package_2026-06-15.md`;
+- Validation role: sediment-risk factor K per `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p2_sediment_risk_decision_package_2026-06-15.md`;
   also supports infiltration-capacity and environmental-sensitivity context.
 
 ## Release Boundary

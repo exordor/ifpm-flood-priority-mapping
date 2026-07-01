@@ -179,7 +179,7 @@ project findings.
 ## 7. Fallback
 
 If no elicitation is completed before the deadline, follow the claim-boundary fallback in
-`p1_ahp_weighting_decision_package_2026-06-15.md`: keep the pipeline runnable on synthetic data
+`context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p1_ahp_weighting_decision_package_2026-06-15.md`: keep the pipeline runnable on synthetic data
 only and label all outputs as workflow diagnostics.
 
 ## Next Step

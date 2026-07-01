@@ -1,6 +1,8 @@
 # IFPM Task Progress And Plan Board
 
-Updated: 2026-06-30
+Updated: 2026-07-02
+
+Board restructured 2026-07-02: completed and superseded tasks moved from In Progress to Done (byte-for-byte, no content change); the ten mentor-gated decision packages (IFPM-061..070) compressed to a one-line index under "Awaiting mentor decisions" (full text in `_archive/p1_p2_decision_packages_2026-06-15/`); In Progress now holds only the four active tasks. No task was deleted. Prior layout preserved in `task_progress_board.md.bak` until verified.
 
 Scope: private project planning for the IFPM comparative flood-risk modelling workspace.
 
@@ -144,172 +146,12 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: done
 - Evidence: this task progress board exists under `context/docs/project-management/`.
 
-## In Progress
-
-### IFPM-011 First Controlled Data Slice
-
-- Status: V1 accepted with waiver for controlled prototype use; scoped SRTM raw-tile download and
-  inventory, DEM/slope preprocessing, grid gate, and terrain-only standardization diagnostics are
-  complete.
-- Next action: decide whether the next controlled slice is mentor-facing terrain explanation,
-  modelling-unit selection, or rainfall preflight. Keep overlay and interpretation blocked.
-
-### IFPM-012 Raster Preprocessing Design
-
-- Status: design drafted; real-data execution remains blocked until mentor decisions and
-  preflight blockers are closed.
-- Evidence: `context/docs/project-management/real_data_preprocessing_design.md`.
-- Next action: use the execution preflight gate to close outlet, boundary, modelling-unit,
-  temporal-window, and dataset-specific blockers before downloading or processing source data.
-
-### IFPM-013 Real-Data Execution Preflight Gate
-
-- Status: gate revised; scoped SRTM raw-tile download, inventory, DEM/slope preprocessing, grid
-  gate, and terrain-only standardization diagnostics are complete. Current verdict remains
-  `NO-GO` for CHIRPS, overlay, and interpretation.
-- Evidence: `context/docs/project-management/real_data_execution_preflight_gate.md`.
-- Next action: choose the modelling-unit branch and decide whether rainfall should stay as
-  native-resolution/zonal summary context. Keep CHIRPS, overlay, and interpretation blocked until
-  their own gates are closed.
-
 ### IFPM-014 Multi-Level Progress Review
 
 - Status: done; no P1 was found, but P2 gates remain before real-data overlay.
 - Evidence: `context/docs/project-management/multi_level_progress_review_2026-06-10.md`.
 - Next action: fix the boundary-discovery and engineering-readiness blockers recorded in the
   review report.
-
-### IFPM-061 P1 R1.1 Validation Data Decision Package
-
-- Status: decision package and public-safe preflight scaffolding complete; awaits mentor answers;
-  Tier A downloads still gated.
-- Evidence:
-  `context/docs/project-management/p1_validation_data_decision_package_2026-06-15.md`,
-  `context/docs/project-management/p1_risk_overview_2026-06-15.md`,
-  `context/docs/data-management/registry/emdat_public_validation_candidate.md`,
-  `context/docs/data-management/preflight/emdat_public_validation_candidate.md`,
-  `context/docs/data-management/registry/glofas_public_validation_candidate.md`,
-  `context/docs/data-management/preflight/glofas_public_validation_candidate.md`.
-- Next action: surface R1.1 mentor decision questions; if validated evidence cannot be closed,
-  apply the claim-boundary fallback (reframe to priority/suitability map with acknowledged
-  validation gap).
-
-### IFPM-062 P1 R1.2 Mining Data Decision Package
-
-- Status: decision package and mentor request template complete; awaits mentor introduction or
-  fallback confirmation.
-- Evidence:
-  `context/docs/project-management/p1_mining_data_decision_package_2026-06-15.md`,
-  `context/docs/mentor-explanation/Mining_Data_Access_Request_Template_2026-06-15.md`,
-  `context/docs/project-management/p1_risk_overview_2026-06-15.md`.
-- Next action: surface R1.2 mentor decision questions; if Tier A mining access is denied or
-  delayed, apply the fallback (demote Mining and Rehabilitation to qualitative/context evidence
-  in a reduced-criteria V1 hierarchy).
-
-### IFPM-063 P1 R1.3 AHP Weighting Decision Package
-
-- Status: partially advanced. A mentor-provided candidate pairwise matrix now exists but is not
-  yet authorised as final. Decision package and elicitation instrument still await mentor
-  confirmation; the 2026-06-16 candidate matrix is a conversation start, not an authorisation.
-- Evidence:
-  `context/docs/project-management/p1_ahp_weighting_decision_package_2026-06-15.md`,
-  `context/docs/mentor-explanation/AHP_Elicitation_Protocol_And_Template_2026-06-15.md`,
-  `context/docs/project-management/p1_risk_overview_2026-06-15.md`,
-  `context/docs/mentor-explanation/Mentor_Methodology_Slide_Record_2026-06-16.md` (mentor-provided
-  candidate matrix).
-- Key result: the non-authoritative illustrative structural prior (derived from the methodology
-  figure's three-tier decomposition) was verified at CR 0.0406; it is a conversation starter only
-  and must not enter `configs/` or generate interpretable outputs. The 2026-06-16 mentor slide
-  adds a different, mentor-provided candidate matrix at CR 0.022 (Flood 0.490, Sediment 0.226,
-  Environmental 0.141, Land Use/ASM 0.087, Socioeconomic 0.056), but it is slide-labelled as an
-  example and still requires explicit mentor authorisation before use.
-- Next action: surface the R1.3 mentor confirmation question (is the slide matrix an example or an
-  authorisable weight matrix?); until confirmed, the fallback stands (keep the pipeline runnable on
-  synthetic data only and label all outputs as workflow diagnostics).
-
-### IFPM-064 P2 R2.1 Sediment Risk Decision Package
-
-- Status: decision package and SoilGrids preflight scaffolding complete; awaits R-factor formula,
-  K-factor source, and C-factor mapping decisions; LS factor blocked on R2.2.
-- Evidence:
-  `context/docs/project-management/p2_sediment_risk_decision_package_2026-06-15.md`,
-  `context/docs/data-management/registry/soilgrids_250m_sediment_candidate.md`,
-  `context/docs/data-management/preflight/soilgrids_250m_sediment_candidate.md`,
-  `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
-- Next action: surface R2.1 mentor decision questions; close R2.2 before LS-factor engineering.
-
-### IFPM-065 P2 R2.2 Hydrology Derivatives Decision Package
-
-- Status: hydrological-conditioning assumptions A1-A5 drafted; awaits mentor confirmation;
-  engineering unblocked after acceptance (no new download needed).
-- Evidence:
-  `context/docs/project-management/p2_hydrology_derivatives_decision_package_2026-06-15.md`,
-  `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
-- Next action: surface R2.2 mentor decision questions; on acceptance, implement V1 flow
-  direction, flow accumulation, drainage network, TWI, and distance-to-drainage diagnostics from
-  the existing V1 DEM.
-
-### IFPM-066 P2 R2.4 Modelling Unit Decision Package (IFPM-D01)
-
-- Status: trade-off matrix and Branch-1 recommendation complete; awaits mentor selection.
-- Evidence:
-  `context/docs/project-management/p2_modelling_unit_decision_package_2026-06-15.md`,
-  `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
-- Key result: recommended Branch 1 (terrain-only raster screening, rainfall as context) for the
-  first V1 prototype; Branch 2 (sub-basin aggregation) as natural upgrade once boundary and
-  sub-basin layer accepted.
-- Next action: surface R2.4 mentor decision questions; close IFPM-D01 by recording the selected
-  branch, rationale, and the CHIRPS-30m exclusion statement.
-
-### IFPM-067 P2 R2.3 Peru Side Decision Package
-
-- Status: scope and data-holder inventory complete; awaits mentor confirmation of comparative
-  requirement and timeline.
-- Evidence:
-  `context/docs/project-management/p2_peru_side_decision_package_2026-06-15.md`,
-  `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
-- Next action: surface R2.3 mentor decision questions; do NOT start Peru downloads until the
-  Zimbabwe methodology is locked.
-
-### IFPM-068 P2 R2.5 Final Boundary Acceptance Decision Package
-
-- Status: public-source hunt consolidated as exhausted; awaits mentor polygon or V1 promotion
-  decision.
-- Evidence:
-  `context/docs/project-management/p2_boundary_acceptance_decision_package_2026-06-15.md`,
-  `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
-- Next action: surface R2.5 mentor decision questions as a single explicit ask; promote V1 only
-  with explicit sign-off and a recorded area-discrepancy note.
-
-### IFPM-069 Mentor Decision Briefing (Compressed)
-
-- Status: the ~35 individual mentor questions across P1/P2 packages are compressed into eight
-  dependency-ordered key decisions in three batches; complete as a mentor-facing briefing.
-- Evidence:
-  `context/docs/mentor-explanation/Mentor_Decision_Briefing_2026-06-15.md`.
-- Key result: Batch A (3 decisions) defines project viability and mentor contribution; Batch B
-  (3 decisions) locks methodology via HiWi-recommendation confirmations; Batch C (2 decisions)
-  is conditional refinement. Each decision records what it unblocks and its fallback. Revised
-  2026-06-15 to mark thesis-level decisions as the mentor's domain; data processing does not
-  pause on them.
-- Next action: present Batch A in the next mentor meeting; do not infer answers if the mentor
-  cannot respond. Data production proceeds on already-authorized data regardless; only
-  interpretation and mentor-mediated data access wait.
-
-### IFPM-070 Data-Processor Scope Split In Governance
-
-- Status: complete. Separated the HiWi data-processing scope from the mentor/thesis claim scope
-  in the three governance docs that were over-gating data work.
-- Evidence: revised `real_data_execution_preflight_gate.md` (new Scope section + revised Current
-  Verdict + revised Immediate Next Action), revised `Mentor_Decision_Briefing_2026-06-15.md`
-  (Scope Note + Decision 1 reframed as mentor's call + How-To revision), this board entry.
-- Key result: data production (download of authorized public datasets, preprocessing, indicator
-  derivation, standardization, diagnostic overlays with documented weights) is now explicitly GO
-  and self-authorizing via documented defaults. Interpretable claims (validated flood-risk map,
-  intervention priority, comparison, publication) remain NO-GO and are the mentor's calls.
-- Next action: proceed with hydrology derivatives, LS/R/K/C factors from existing data, each with
-  a processing note recording the chosen defaults; do not wait for mentor sign-off on
-  preprocessing parameters.
 
 ### IFPM-071 CDP Data Portal Verification
 
@@ -344,8 +186,9 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: superseded by the 2026-06-19 formula audit. The old 0.05 deg diagnostic is retained only
   as an error trace; it must not be used as R evidence.
 - Evidence: `bin/derive_v1_chirps_rfactor.py`,
-  `outputs/chirps_v3_zimbabwe_prototype/r_factor/r_factor_modified_fournier_0p05deg.tif`,
   `usle_factor_batch_processing_2026-06-15.md`.
+  (The deprecated `outputs/chirps_v3_zimbabwe_prototype/r_factor/` products were removed
+  2026-07-01; see `outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md`.)
 - Current interpretation: the old pattern was produced by a wrong Renard-Freimund
   predictor/break-point setup. All old V1/V2 R and A products are deprecated.
 - Next action: do not regenerate the old V1 R/A workflow. Use the verified R-factor send packet
@@ -356,13 +199,14 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: deprecated as an R/A communication package. The structure-test numbers may be revisited
   later, but the old board and causal framing must not be sent.
 - Evidence:
-  `context/docs/project-management/v2_rfactor_processing_2026-06-16.md` (includes the
+  `context/docs/project-management/rfactor_investigation_consolidated.md` (includes the
   literature-integrity correction section),
   `bin/derive_v2_rfactor_candidates.py`, `bin/derive_v2_usle_soil_loss.py`,
-  `bin/plot_v2_rfactor_comparison_board.py`, `bin/compare_v2_rfactor_candidates.py`,
-  `outputs/chirps_v3_zimbabwe_prototype/r_factor_v2/v2_rfactor_diagnostics.json`,
-  `outputs/v1_usle_soil_loss/v2_rfactor/v2_hotspot_survival_diagnostics.json`,
-  `outputs/v1_usle_soil_loss/v2_rfactor/mentor_v2_rfactor_comparison_board.png`.
+  `bin/plot_v2_rfactor_comparison_board.py`, `bin/compare_v2_rfactor_candidates.py`.
+  (The deprecated `outputs/.../r_factor_v2/` and `outputs/v1_usle_soil_loss/v2_rfactor/`
+  products were removed 2026-07-01; the survival numbers are recorded in the consolidated
+  note §5, and the full deprecation list is in
+  `outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md`.)
 - Current safe reading:
   - The old board is blocked.
   - The hotspot-survival numbers remain usable only as a possible future R-invariant structure
@@ -406,7 +250,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: complete as an internal audit record. A defensive sweep of every USLE/RUSLE formula,
   coefficient, unit, and citation in the V1 and V2 USLE tooling, after a spot-check found an
   unverified R-factor coefficient.
-- Evidence: `context/docs/project-management/formula_integrity_audit_2026-06-19.md`,
+- Evidence: `context/docs/project-management/rfactor_investigation_consolidated.md`,
   `bin/verify_ls_factor_exponents.py`, `outputs/literature_verification/` (capture records).
 - Key results (REVISED 2026-06-19 after a deeper pass against the original PDF):
   - FABRICATED and removed: the "Lo et al. (1985)" V2 R candidate (0.0737*MFI^1.81) had no
@@ -436,9 +280,8 @@ or Zimbabwe-Peru comparison is authorized.
 - Deprecation markers (2026-06-19): all V1/V2 R-factor and USLE A products are marked DEPRECATED
   in their output directories. Markers (local, not git-tracked since `outputs/` is ignored):
   - `outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md` (main notice + full product
-    list)
-  - `outputs/chirps_v3_zimbabwe_prototype/r_factor/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md` (pointer)
-  - `outputs/chirps_v3_zimbabwe_prototype/r_factor_v2/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md` (pointer)
+    list). The per-directory pointer markers under `r_factor/` and `r_factor_v2/` were removed
+    with those deprecated directories on 2026-07-01; this main notice is the surviving record.
   NOT deprecated and safe as a re-derivation base: `a_structure_K_LS_C_30m.tif` (R-invariant,
   K and LS verified correct). The V2 hotspot-survival NUMBERS remain valid as a structure test
   only. Re-run of R and A waits on the mentor's R-method decision.
@@ -449,7 +292,7 @@ or Zimbabwe-Peru comparison is authorized.
   the V1 CHIRPS inputs and compares them to measured Zimbabwe R values, to turn the R-method
   question into an evidence-backed decision rather than an abstract choice.
 - Evidence:
-  `context/docs/project-management/rfactor_method_exploration_2026-06-19.md`,
+  `context/docs/project-management/rfactor_investigation_consolidated.md`,
   `bin/explore_rfactor_methods.py`, `bin/plot_rfactor_exploration_board.py`,
   `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/rfactor_method_exploration_diagnostics.json`,
   `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/mentor_rfactor_exploration_board.png`.
@@ -482,7 +325,7 @@ or Zimbabwe-Peru comparison is authorized.
   ERA5 hourly precipitation (open-meteo, no auth) to arbitrate the HIGH vs LOW R-families from
   IFPM-081 with INDEPENDENT (non-circular) data.
 - Evidence:
-  `context/docs/project-management/rfactor_empirical_era5_2026-06-19.md`,
+  `context/docs/project-management/rfactor_investigation_consolidated.md`,
   `bin/compute_era5_empirical_rfactor.py`, `bin/plot_era5_empirical_rfactor_board.py`,
   `outputs/v1_usle_soil_loss/rfactor_empirical_era5/era5_empirical_rfactor_diagnostics.json`,
   `outputs/v1_usle_soil_loss/rfactor_empirical_era5/mentor_era5_empirical_rfactor_board.png`,
@@ -512,7 +355,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: superseded by the 2026-06-19 send/no-send verification pass. The older briefing remains
   as a work log, but should not be sent as-is.
 - Evidence:
-  `context/docs/project-management/rfactor_formula_data_workflow_full_verification_2026-06-19.md`
+  `context/docs/project-management/rfactor_investigation_consolidated.md`
   and `context/docs/mentor-explanation/Mentor_RFactor_Figure_Send_Packet_2026-06-19.md`.
 - Current send decision: Figure 1 (R-method comparison) and Figure 2 (ERA5 lower-bound check) are
   conditionally sendable with the safer captions. Figure 3 and all V1/V2 R/A boards are blocked.
@@ -548,7 +391,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: complete. A first-principles re-check of every formula, coefficient, and headline number
   in IFPM-079..082, by hand-calculating each method from the primary sources and comparing to the
   script output.
-- Evidence: `context/docs/project-management/rfactor_investigation_verification_2026-06-19.md`.
+- Evidence: `context/docs/project-management/rfactor_investigation_consolidated.md`.
 - Key results:
   - Renard-Freimund Eq 11-14 coefficients and break points (850/55 mm) re-extracted from the
     original PDF: confirmed.
@@ -632,22 +475,6 @@ or Zimbabwe-Peru comparison is authorized.
 - Next action: turn the package into the exact Teams reply or a one-page printable checklist if
   requested.
 
-### IFPM-089 V1 v0.2 Weakest-Criteria Hardening Plan
-
-- Status: first inventory complete; hotspot comparison and revised maps not yet implemented.
-- Evidence:
-  `context/docs/project-management/v1_v0_2_weakest_criteria_hardening_2026-06-29.md`,
-  `bin/prepare_v1_v0_2_weakest_criteria_inventory.py`, and ignored outputs under
-  `outputs/v1_autonomous_prototype_v0_2/`.
-- Key result: V1 v0.2 should not repeat broad experiments. It should preserve V1 v0.1 as baseline
-  and harden the two weakest criteria:
-  - `landuse_asm_pressure`: currently C-factor plus weak OSM mining proxy;
-  - `socioeconomic_exposure`: currently road/access proximity, not observed exposure.
-- Impact: this keeps the project moving autonomously while still aligning with the mentor's data
-  trip. Missing data becomes a concrete request list rather than a blocker.
-- Next action: compare the v0.1 stable hotspots against road-river crossings, OSM places,
-  GHSL/WorldPop native summaries, and mining proxy without calling the comparison validation.
-
 ### IFPM-090 Defensive Gate Surgery / Execution Status Policy
 
 - Status: complete as policy and gate-document update.
@@ -658,9 +485,9 @@ or Zimbabwe-Peru comparison is authorized.
   `context/docs/project-management/real_data_execution_preflight_gate.md`,
   `context/docs/data-management/v1_terrain_reference_grid_rule.md`,
   `context/docs/data-management/preflight/chirps_v3_zimbabwe_prototype.md`,
-  `context/docs/project-management/p1_ahp_weighting_decision_package_2026-06-15.md`,
-  `context/docs/project-management/rfactor_formula_data_workflow_full_verification_2026-06-19.md`,
-  and `context/docs/project-management/p2_risk_overview_2026-06-15.md`.
+  `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p1_ahp_weighting_decision_package_2026-06-15.md`,
+  `context/docs/project-management/rfactor_investigation_consolidated.md`,
+  and `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p2_risk_overview_2026-06-15.md`.
 - Key result: CHIRPS/rainfall, AHP matrices, new R-factor families, and Peru readiness work are
   no longer treated as globally paused. They may proceed as `diagnostic_only`, `provisional`, or
   `sensitivity_scenario` outputs with metadata and claim-level limits.
@@ -869,7 +696,8 @@ or Zimbabwe-Peru comparison is authorized.
   baseline, V2 uses a smoother R, and the LS x C x K hotspot structure is re-tested under V2.
 - Evidence: `bin/derive_v1_ls_factor.py`, `bin/derive_v1_usle_soil_loss.py`,
   `outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor/`,
-  `outputs/v1_usle_soil_loss/` (a_mean / a_low_R50 / a_high_R510 / a_structure / a_mean_classes),
+  `outputs/v1_usle_soil_loss/a_structure_K_LS_C_30m.tif` (R-invariant base; the deprecated
+  a_mean / a_low_R50 / a_high_R510 / a_mean_classes products were removed 2026-07-01),
   `ls_factor_and_usle_soil_loss_processing_2026-06-15.md`.
 - Key results: LS hillslope mean 1.563, p95 5.511 (Moore-Nieber, channel-masked, capped 50). USLE
   A-mean 0.50 t/ha/yr; ~87% of V1 < 1 t/ha/yr (very low); erosion hotspots where steep slopes
@@ -906,6 +734,64 @@ or Zimbabwe-Peru comparison is authorized.
   Potential role). Do not promote the candidate matrix to `configs/`, do not run real-data overlay,
   and do not interpret outputs until the matrix and hierarchy are confirmed.
 
+## In Progress
+
+### IFPM-011 First Controlled Data Slice
+
+- Status: V1 accepted with waiver for controlled prototype use; scoped SRTM raw-tile download and
+  inventory, DEM/slope preprocessing, grid gate, and terrain-only standardization diagnostics are
+  complete.
+- Next action: decide whether the next controlled slice is mentor-facing terrain explanation,
+  modelling-unit selection, or rainfall preflight. Keep overlay and interpretation blocked.
+
+### IFPM-012 Raster Preprocessing Design
+
+- Status: design drafted; real-data execution remains blocked until mentor decisions and
+  preflight blockers are closed.
+- Evidence: `context/docs/project-management/real_data_preprocessing_design.md`.
+- Next action: use the execution preflight gate to close outlet, boundary, modelling-unit,
+  temporal-window, and dataset-specific blockers before downloading or processing source data.
+
+### IFPM-013 Real-Data Execution Preflight Gate
+
+- Status: gate revised; scoped SRTM raw-tile download, inventory, DEM/slope preprocessing, grid
+  gate, and terrain-only standardization diagnostics are complete. Current verdict remains
+  `NO-GO` for CHIRPS, overlay, and interpretation.
+- Evidence: `context/docs/project-management/real_data_execution_preflight_gate.md`.
+- Next action: choose the modelling-unit branch and decide whether rainfall should stay as
+  native-resolution/zonal summary context. Keep CHIRPS, overlay, and interpretation blocked until
+  their own gates are closed.
+
+### IFPM-089 V1 v0.2 Weakest-Criteria Hardening Plan
+
+- Status: first inventory complete; hotspot comparison and revised maps not yet implemented.
+- Evidence:
+  `context/docs/project-management/v1_v0_2_weakest_criteria_hardening_2026-06-29.md`,
+  `bin/prepare_v1_v0_2_weakest_criteria_inventory.py`, and ignored outputs under
+  `outputs/v1_autonomous_prototype_v0_2/`.
+- Key result: V1 v0.2 should not repeat broad experiments. It should preserve V1 v0.1 as baseline
+  and harden the two weakest criteria:
+  - `landuse_asm_pressure`: currently C-factor plus weak OSM mining proxy;
+  - `socioeconomic_exposure`: currently road/access proximity, not observed exposure.
+- Impact: this keeps the project moving autonomously while still aligning with the mentor's data
+  trip. Missing data becomes a concrete request list rather than a blocker.
+- Next action: compare the v0.1 stable hotspots against road-river crossings, OSM places,
+  GHSL/WorldPop native summaries, and mining proxy without calling the comparison validation.
+
+### Awaiting mentor decisions (gate-blocked)
+
+The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor briefing (IFPM-069) and the data-processor scope split (IFPM-070) are all `decision package complete; awaits mentor`. Their full text lives in `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/`; this subsection is a one-line index, not the decision content.
+
+- **IFPM-061** P1 R1.1 Validation Data Decision Package — decision package and public-safe preflight scaffolding complete
+- **IFPM-062** P1 R1.2 Mining Data Decision Package — decision package and mentor request template complete
+- **IFPM-063** P1 R1.3 AHP Weighting Decision Package — partially advanced. A mentor-provided candidate pairwise matrix now exists but is not yet authorised as final. Decision package and elicitation instrument still await mentor confirmation
+- **IFPM-064** P2 R2.1 Sediment Risk Decision Package — decision package and SoilGrids preflight scaffolding complete
+- **IFPM-065** P2 R2.2 Hydrology Derivatives Decision Package — hydrological-conditioning assumptions A1-A5 drafted
+- **IFPM-066** P2 R2.4 Modelling Unit Decision Package (IFPM-D01) — trade-off matrix and Branch-1 recommendation complete
+- **IFPM-067** P2 R2.3 Peru Side Decision Package — scope and data-holder inventory complete
+- **IFPM-068** P2 R2.5 Final Boundary Acceptance Decision Package — public-source hunt consolidated as exhausted
+- **IFPM-069** Mentor Decision Briefing (Compressed) — the ~35 individual mentor questions across P1/P2 packages are compressed into eight dependency-ordered key decisions in three batches
+- **IFPM-070** Data-Processor Scope Split In Governance — complete
 ## Current Milestones And Gates
 
 ### IFPM-020 Select Prototype Study Slice
@@ -914,7 +800,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Task: choose Zimbabwe or Peru, exact boundary rule, and output resolution.
 - Status: done for controlled prototype boundary; final thesis boundary remains open.
 - Completion evidence:
-  `context/docs/project-management/v1_working_boundary_decision_2026-06-12.md`.
+  `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/v1_working_boundary_decision_2026-06-12.md`.
 
 ### IFPM-021 Create First Dataset Registry Notes
 
@@ -958,7 +844,7 @@ or Zimbabwe-Peru comparison is authorized.
   HYBAS/PFAF ids without running SRTM, CHIRPS, overlay, or map interpretation.
 - Status: done; boundary not accepted.
 - Completion evidence:
-  `context/docs/project-management/hydrosheds_boundary_discovery_result_2026-06-10.md`.
+  `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/hydrosheds_boundary_discovery_result_2026-06-10.md`.
 
 ### IFPM-040 Prepare Upper Mzingwane Boundary Decision Package
 
@@ -969,7 +855,7 @@ or Zimbabwe-Peru comparison is authorized.
   planning after mentor feedback.
 - Completion evidence:
   `context/docs/mentor-explanation/Upper_Mzingwane_Boundary_Decision_Package_2026-06-10.md`
-  and `context/docs/project-management/upper_mzingwane_boundary_decision_record_2026-06-10.md`.
+  and `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/upper_mzingwane_boundary_decision_record_2026-06-10.md`.
 
 ### IFPM-041 Execute Zimbabwe Geoportal Sub-Catchments Boundary Comparison
 
@@ -993,7 +879,7 @@ or Zimbabwe-Peru comparison is authorized.
   whether it supplies usable boundary geometry.
 - Status: done; area reference is reported but source/geometry-unresolved.
 - Completion evidence:
-  `context/docs/project-management/upper_mzingwane_boundary_fact_check_2026-06-10.md`.
+  `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/upper_mzingwane_boundary_fact_check_2026-06-10.md`.
 - Key result: external sources support `~2138 km2`, but no checked source supplied a reusable GIS
   boundary, outlet point, projection, or area method. Boundary acceptance remains blocked.
 
@@ -1004,7 +890,7 @@ or Zimbabwe-Peru comparison is authorized.
   official water-management GIS source, feasibility-study map, or author-held study-area polygon.
 - Status: done for public-source hunt; boundary still not accepted.
 - Completion evidence:
-  `context/docs/project-management/upper_mzingwane_boundary_source_hunt_2026-06-10.md`.
+  `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/upper_mzingwane_boundary_source_hunt_2026-06-10.md`.
 - Key result: modern papers repeatedly report or use the `~2138 km2` study area but do not expose
   reusable geometry. The strongest source leads are ZINWA's unpublished National catchment
   database, older Bulawayo/Matabeleland-Zambezi feasibility-study maps, Surveyor General map
@@ -1020,7 +906,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: done as planning update; superseded by V1 working boundary waiver.
 - Completion evidence:
   `context/docs/project-management/outlet_based_catchment_research_plan_2026-06-11.md`,
-  revised `context/docs/project-management/prototype_study_slice_decision.md`, and revised
+  revised `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/prototype_study_slice_decision.md`, and revised
   `context/docs/project-management/real_data_execution_preflight_gate.md`.
 - Key result: `Upper Mzingwane` is now treated as the regional context, while the operational
   prototype boundary should be the upstream catchment of a mentor-selected or mentor-provisional
@@ -1035,7 +921,7 @@ or Zimbabwe-Peru comparison is authorized.
   Zimbabwe Geoportal data, without accepting a boundary or downloading SRTM/CHIRPS.
 - Status: done for first pass; needs domain validation and optional river/flood/mining evidence.
 - Completion evidence:
-  `context/docs/project-management/candidate_outlet_exploration_2026-06-11.md`,
+  `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/candidate_outlet_exploration_2026-06-11.md`,
   `bin/discover_candidate_outlets.py`, and local ignored outputs under
   `outputs/candidate_outlet_discovery/`.
 - Key result: `HB_L8_1081522660_literature_near` was the first script-ranked machine prior with
@@ -1071,7 +957,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: done for mentor-review evidence package; V1 accepted with waiver for controlled
   prototype use, but final thesis boundary still not accepted.
 - Completion evidence:
-  `context/docs/project-management/professional_map_outlet_review_2026-06-12.md`,
+  `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/professional_map_outlet_review_2026-06-12.md`,
   `bin/prepare_outlet_review_sources.py`, `bin/compare_visual_outlets.py`,
   `bin/plot_professional_outlet_review.py`,
   `outputs/professional_outlet_review/mentor_outlet_evidence_board.png`, and
@@ -1091,7 +977,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: done; prototype-only waiver, not final thesis boundary.
 - Completion evidence:
   `bin/export_v1_working_boundary.py`,
-  `context/docs/project-management/v1_working_boundary_decision_2026-06-12.md`,
+  `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/v1_working_boundary_decision_2026-06-12.md`,
   `outputs/v1_working_boundary/v1_working_boundary.gpkg`,
   `outputs/v1_working_boundary/v1_working_boundary_manifest.csv`,
   `outputs/v1_working_boundary/v1_anchor_check.csv`, and

@@ -75,6 +75,12 @@ def spearman(a: np.ndarray, b: np.ndarray):
 
 
 def main() -> None:
+    raise SystemExit(
+        "DEPRECATED: do not regenerate V2 R-factor comparison outputs. "
+        "See outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md "
+        "and context/docs/project-management/rfactor_investigation_consolidated.md."
+    )
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     with open(V2_R_DIAG) as f:

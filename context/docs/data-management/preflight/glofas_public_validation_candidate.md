@@ -53,7 +53,7 @@ real download attempt.
 ## Open Blockers Before Authorization
 
 - Mentor has not confirmed Tier A context use (see
-  `p1_validation_data_decision_package_2026-06-15.md` decision questions).
+  `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p1_validation_data_decision_package_2026-06-15.md` decision questions).
 - V1 outlet should be accepted or provisionally fixed before extraction is meaningful; the V1
   working boundary is currently `accepted_with_waiver_for_controlled_prototype` only.
 - CDS account and local API key must be set up by the operator; key must never be committed.

@@ -52,7 +52,7 @@ real download attempt.
 ## Open Blockers Before Authorization
 
 - Mentor has not confirmed a SoilGrids-based K-factor (see
-  `p2_sediment_risk_decision_package_2026-06-15.md` decision questions).
+  `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p2_sediment_risk_decision_package_2026-06-15.md` decision questions).
 - The pedotransfer function for computing K from soil properties has not been chosen.
 - The exact SoilGrids properties and depth slices to download have not been finalized.
 - WCS endpoint or COG URLs must be re-verified at access time.

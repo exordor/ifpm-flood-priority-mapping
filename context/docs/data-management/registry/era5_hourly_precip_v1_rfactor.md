@@ -12,7 +12,7 @@ Dataset id: `era5_hourly_precip_v1_rfactor`
 ## Purpose
 Exploratory experiment to compute an empirical USLE/RUSLE R-factor (EI30) from hourly rainfall,
 in order to arbitrate the two incompatible literature R-families (HIGH ~1400-3700 vs LOW ~240-320)
-identified in `rfactor_method_exploration_2026-06-19.md`. CHIRPS daily is not storm-resolved and
+identified in `context/docs/project-management/rfactor_investigation_consolidated.md`. CHIRPS daily is not storm-resolved and
 cannot yield EI30; GPM IMERG (half-hourly) requires a NASA Earthdata account that is not available,
 so ERA5 hourly via open-meteo is the best no-authentication high-temporal-resolution option.
 

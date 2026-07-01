@@ -144,7 +144,7 @@ Treat V1 as `accepted_with_waiver_for_controlled_prototype`. The earlier C1 /
   outlet. V1 is now the working candidate with prototype-only waiver. HydroBASINS, Geoportal, and
   the reported but source/geometry-unresolved `~2138 km2` reference remain comparison layers for
   final-boundary discussion.
-  Evidence: `v1_working_boundary_decision_2026-06-12.md`.
+  Evidence: `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/v1_working_boundary_decision_2026-06-12.md`.
 - Modelling unit: blocked.
   Raster-first, sub-basin aggregation, or mixed workflow is not selected.
   Evidence: `real_data_preprocessing_design.md`.
@@ -195,7 +195,7 @@ Current state: closed with waiver for controlled prototype SRTM terrain diagnost
 - Working boundary: V1 / `HB_L8_1081528840_full_l7_chain`.
 - Decision status: `accepted_with_waiver_for_controlled_prototype`.
 - Evidence:
-  `context/docs/project-management/v1_working_boundary_decision_2026-06-12.md`.
+  `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/v1_working_boundary_decision_2026-06-12.md`.
 - Outputs:
   `outputs/v1_working_boundary/v1_working_boundary.gpkg`,
   `outputs/v1_working_boundary/v1_working_boundary_manifest.csv`, and

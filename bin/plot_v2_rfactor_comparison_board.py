@@ -119,7 +119,7 @@ def main() -> None:
     raise SystemExit(
         "DEPRECATED: do not regenerate or send this board. "
         "See outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md "
-        "and context/docs/project-management/formula_integrity_audit_2026-06-19.md."
+        "and context/docs/project-management/rfactor_investigation_consolidated.md."
     )
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)

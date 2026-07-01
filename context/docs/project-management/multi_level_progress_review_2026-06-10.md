@@ -117,7 +117,7 @@ fractions, intersection valid fraction, and dropped-cell counts.
 
 ## Lower-Severity Findings
 
-- P3: `prototype_study_slice_decision.md` had stale wording that made raster diagnostics sound
+- P3: `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/prototype_study_slice_decision.md` had stale wording that made raster diagnostics sound
   wholly unimplemented. It now separates completed scaffolding from remaining real-data blockers.
 - P3: the HydroBASINS discovery gate was slightly circular because candidate ids are partly the
   output of discovery. The current exception remains valid, but the HydroSHEDS preflight should

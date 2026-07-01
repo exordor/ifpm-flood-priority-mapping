@@ -97,6 +97,6 @@ Then complete the preflight checklist under
 
 ## Cross-References
 
-- Source package: `p1_mining_data_decision_package_2026-06-15.md`.
+- Source package: `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p1_mining_data_decision_package_2026-06-15.md`.
 - Preflight gate: `real_data_execution_preflight_gate.md` (IFPM-D05).
 - Templates: `dataset_registry_template.md`, `download_preflight_checklist.md`.

@@ -78,7 +78,7 @@ outlet-scale discharge context use. No real data has been downloaded for this da
   GloFAS is reanalysis (modelled), not gauge observation; requires the V1 outlet to be accepted
   or provisionally fixed before extraction is meaningful.
 - Validation role: Tier A outlet-scale context per
-  `p1_validation_data_decision_package_2026-06-15.md`. Not a spatial inundation validation layer.
+  `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p1_validation_data_decision_package_2026-06-15.md`. Not a spatial inundation validation layer.
 
 ## Release Boundary
 
