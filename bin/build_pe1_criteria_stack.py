@@ -27,6 +27,10 @@ OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
 CRITERIA_DIR = OUT_DIR / "criteria"
 REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
 PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+# PE1 erosion_structure intentionally inherits hillslope LS NoData on main-channel cells
+# (about 3.8% of PE1). A 0.95 gate catches tile/data gaps such as the old C-factor seam
+# while allowing this documented channel mask to remain NoData instead of being filled.
+MIN_VALID_FRACTION = 0.95
 
 INPUTS = {
     "twi": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_twi.tif",
@@ -108,6 +112,13 @@ def weighted_average(parts: list[tuple[np.ndarray, float]], mask: np.ndarray) ->
     return out.astype("float32")
 
 
+def valid_fraction(data: np.ndarray, mask: np.ndarray) -> float:
+    inside = int(mask.sum())
+    if inside == 0:
+        return 0.0
+    return float((mask & np.isfinite(data)).sum() / inside)
+
+
 def stats(data: np.ndarray, mask: np.ndarray) -> dict[str, object]:
     inside = int(mask.sum())
     valid = mask & np.isfinite(data)
@@ -176,16 +187,24 @@ def main() -> None:
         path = CRITERIA_DIR / f"{name}_0_1.tif"
         arr = np.clip(arr, 0.0, 1.0).astype("float32")
         arr[~mask] = np.nan
+        frac = valid_fraction(arr, mask)
         write_raster(path, arr, profile)
         manifest_rows.append({
             "boundary_id": BOUNDARY_ID, "experiment_id": EXPERIMENT_ID,
             "criterion": name, "path": rel(path),
             "components": components_map[name], "claim_level": claim_map[name],
             "status": "provisional PE1 engineering-pilot criterion",
-            "grid_compatible": "true", **stats(arr, mask),
+            "grid_compatible": "true" if frac >= MIN_VALID_FRACTION else "false",
+            "coverage_threshold": MIN_VALID_FRACTION,
+            "nodata_policy": (
+                "preserve NoData; erosion_structure inherits intentional channel mask from hillslope LS"
+                if name == "erosion_structure_proxy" else "preserve NoData; no score imputation"
+            ),
+            **stats(arr, mask),
         })
 
-    # readiness table: PE1 now has all 5 criteria comparable to Zimbabwe v0.2.
+    # Readiness table: PE1 now has six active criteria comparable to the current
+    # Zimbabwe boundary_v1 / rainfall_exposure_v0_4 comparison run.
     readiness = manifest_rows + [
         {"criterion": "rainfall_r_factor", "path": "", "components": "provisional R=238.6 (LOW family, shared default)",
          "status": "scalar R in soil-loss (absolute magnitude); the rainfall_climatology_proxy criterion handles the spatial overlay role",
@@ -200,8 +219,15 @@ def main() -> None:
         {"component": "structure", "method": "percentile_clip_minmax_2_98", "clip_low": s_lo, "clip_high": s_hi},
         {"component": "c_factor", "method": "percentile_clip_minmax_2_98", "clip_low": c_lo, "clip_high": c_hi},
     ])
+    low_coverage = [
+        row for row in manifest_rows
+        if float(row["valid_fraction"]) < MIN_VALID_FRACTION
+    ]
+    if low_coverage:
+        details = ", ".join(f"{row['criterion']}={row['valid_fraction']}" for row in low_coverage)
+        raise RuntimeError(f"PE1 active criterion coverage below {MIN_VALID_FRACTION}: {details}")
     print(f"wrote {len(manifest_rows)} PE1 criteria to {rel(CRITERIA_DIR)}")
-    print("(6 criteria: flood, erosion, landcover, mining, exposure, rainfall — comparable to Zimbabwe v0.3)")
+    print("(6 criteria: flood, erosion, landcover, mining, exposure, rainfall)")
 
 
 if __name__ == "__main__":

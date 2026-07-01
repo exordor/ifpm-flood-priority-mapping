@@ -340,6 +340,37 @@ mentor-facing documents reading as the HiWi's own work. It does not apply to int
 notes under `project-management/` or `data-management/`, where full step-by-step evidence chains
 are wanted.
 
+## Report-Friendly Figure And Briefing Rule
+
+Mentor-facing and boss-facing outputs must be understandable by a reader who did not follow the
+technical details. Treat this as a core project goal, not a cosmetic polish step.
+
+For every mentor/boss-facing map, board, slide, or figure package:
+
+- lead with the one-sentence takeaway before details;
+- use plain criterion names and human-readable captions, not internal task ids, gate names, file
+  ids, or unexplained dataset codes;
+- show why a map matters, not only what the model produced;
+- include driver explanation when producing priority, risk, susceptibility, or suitability maps:
+  dominant-criterion pixel maps, contribution maps, or another clear "why this area is high"
+  explanation;
+- separate presentation figures from internal diagnostics when needed. Internal figures may show
+  dense QA information; reporting figures should be clean, legible, and captioned;
+- avoid long paragraphs inside the figure. Put method notes, limitations, and claim level in the
+  caption, handoff, or accompanying note;
+- explicitly state the output status in simple language, for example `prototype map`,
+  `sensitivity scenario`, `data gap`, or `not final flood-risk result`;
+- prefer one clear question or decision request from each package, rather than many abstract
+  methodology questions.
+
+Before calling a mentor/boss-facing figure done, preview the rendered image/PDF and check:
+
+- a non-participant can identify the study area, the main result, and the key driver within
+  30 seconds;
+- legends, colorbars, labels, and captions do not overlap or hide map evidence;
+- color coding makes priority criteria or drivers clearer, not just more decorative;
+- the wording does not read like an internal experiment log.
+
 ## V1 Terrain Reference Grid Rule
 
 For V1 controlled prototype terrain preprocessing, follow the internal rule file:
