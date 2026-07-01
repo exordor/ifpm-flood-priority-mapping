@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
+from _lib.ifpm_tools import raster_stats as stats
 OUT_DIR = ROOT / "outputs/v1_autonomous_prototype_v0_1"
 CRITERIA_DIR = OUT_DIR / "criteria"
 REF = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif"
@@ -100,20 +101,6 @@ def fill_inside(data: np.ndarray, mask: np.ndarray, value: float) -> np.ndarray:
     out = data.copy()
     out[mask & ~np.isfinite(out)] = value
     return out
-
-
-def stats(data: np.ndarray, mask: np.ndarray) -> dict[str, object]:
-    vals = data[mask & np.isfinite(data)]
-    inside = int(mask.sum())
-    if vals.size == 0:
-        return {"valid_cells": 0, "valid_fraction": 0.0, "min": "", "mean": "", "max": ""}
-    return {
-        "valid_cells": int(vals.size),
-        "valid_fraction": round(float(vals.size / inside), 6),
-        "min": round(float(vals.min()), 6),
-        "mean": round(float(vals.mean()), 6),
-        "max": round(float(vals.max()), 6),
-    }
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
     fields: list[str] = []
     for row in rows:

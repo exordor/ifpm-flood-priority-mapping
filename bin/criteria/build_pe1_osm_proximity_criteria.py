@@ -30,6 +30,7 @@ sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
+from _lib.ifpm_tools import raster_stats as stats
 OSM_DIR = ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted"
 OUT_DIR = ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity"
 REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
@@ -112,19 +113,6 @@ def normalize_inverted(data: np.ndarray, mask: np.ndarray, clip_low: float | Non
     out = np.clip(1.0 - (data - low) / (high - low), 0.0, 1.0).astype("float32")
     out[~mask] = np.nan
     return out, float(low), float(high)
-def stats(data: np.ndarray, mask: np.ndarray) -> dict[str, object]:
-    inside = int(mask.sum())
-    valid = mask & np.isfinite(data)
-    values = data[valid]
-    return {
-        "valid_cells": int(values.size),
-        "valid_fraction": round(float(values.size / inside), 6) if inside else 0.0,
-        "min": round(float(values.min()), 6) if values.size else "",
-        "mean": round(float(values.mean()), 6) if values.size else "",
-        "max": round(float(values.max()), 6) if values.size else "",
-    }
-
-
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     profile, mask = load_reference()

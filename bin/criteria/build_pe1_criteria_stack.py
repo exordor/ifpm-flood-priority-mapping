@@ -26,6 +26,7 @@ sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
+from _lib.ifpm_tools import raster_stats as stats
 BOUNDARY_ID = "pe1"
 EXPERIMENT_ID = "criteria_stack"
 OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
@@ -122,21 +123,6 @@ def valid_fraction(data: np.ndarray, mask: np.ndarray) -> float:
     if inside == 0:
         return 0.0
     return float((mask & np.isfinite(data)).sum() / inside)
-
-
-def stats(data: np.ndarray, mask: np.ndarray) -> dict[str, object]:
-    inside = int(mask.sum())
-    valid = mask & np.isfinite(data)
-    values = data[valid]
-    if values.size == 0:
-        return {"valid_cells": 0, "valid_fraction": 0.0, "min": "", "mean": "", "max": ""}
-    return {
-        "valid_cells": int(values.size),
-        "valid_fraction": round(float(values.size / inside), 6),
-        "min": round(float(values.min()), 6),
-        "mean": round(float(values.mean()), 6),
-        "max": round(float(values.max()), 6),
-    }
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     CRITERIA_DIR.mkdir(parents=True, exist_ok=True)

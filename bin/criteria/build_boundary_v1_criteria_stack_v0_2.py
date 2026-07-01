@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
+from _lib.ifpm_tools import raster_stats as stats
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "criteria_stack_v0_2"
 OUT_DIR = ROOT / f"outputs/{BOUNDARY_ID}/{EXPERIMENT_ID}"
@@ -135,21 +136,6 @@ def weighted_average(parts: list[tuple[np.ndarray, float]], mask: np.ndarray) ->
     out = np.divide(numerator, denominator, out=np.full(mask.shape, np.nan, dtype="float32"), where=denominator > 0)
     out[~mask] = np.nan
     return out.astype("float32")
-
-
-def stats(data: np.ndarray, mask: np.ndarray) -> dict[str, object]:
-    inside = int(mask.sum())
-    valid = mask & np.isfinite(data)
-    values = data[valid]
-    if values.size == 0:
-        return {"valid_cells": 0, "valid_fraction": 0.0, "min": "", "mean": "", "max": ""}
-    return {
-        "valid_cells": int(values.size),
-        "valid_fraction": round(float(values.size / inside), 6),
-        "min": round(float(values.min()), 6),
-        "mean": round(float(values.mean()), 6),
-        "max": round(float(values.max()), 6),
-    }
 def plot_preview(criteria: dict[str, np.ndarray], mask: np.ndarray, path: Path) -> None:
     names = [name for name in criteria if name in {"erosion_structure_proxy", "land_cover_pressure", "mining_pressure"}]
     fig, axes = plt.subplots(1, len(names), figsize=(12, 4), constrained_layout=True)
