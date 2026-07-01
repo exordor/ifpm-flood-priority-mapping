@@ -19,6 +19,9 @@ from rasterio.windows import Window, transform as window_transform
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import load_boundary
 DATASET_ID = "srtm_1arcsec_peru_pilot"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_preprocessing"
 PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
@@ -27,15 +30,6 @@ PE1_DEM = OUT_DIR / "pe1_dem_utm18s_30m.tif"
 SLOPE = OUT_DIR / "pe1_slope_degrees_utm18s_30m.tif"
 DST_CRS = "EPSG:32718"
 NODATA = -9999.0
-
-
-def load_pe1() -> object:
-    boundary = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs(DST_CRS)
-    if len(boundary) != 1:
-        raise ValueError("Expected one PE1 boundary")
-    return boundary.geometry.iloc[0]
-
-
 def crop_to_geometry(data: np.ndarray, transform, geometry) -> tuple[np.ndarray, object]:
     mask = geometry_mask([geometry], out_shape=data.shape, transform=transform, invert=True)
     rows, cols = np.where(mask)
@@ -88,7 +82,7 @@ def assert_matches_dem() -> None:
 
 
 def main() -> None:
-    geometry = load_pe1()
+    geometry = load_boundary(PE1_GPKG, "peru_pilot_boundary", DST_CRS)
     with rasterio.open(BUFFERED_DEM) as src:
         if str(src.crs) != DST_CRS:
             raise ValueError(f"Expected {DST_CRS}, got {src.crs}")

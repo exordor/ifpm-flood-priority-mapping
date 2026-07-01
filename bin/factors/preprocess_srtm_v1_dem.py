@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster
+from _lib.ifpm_tools import load_boundary_df
 DATASET_ID = "srtm_1arcsec_zimbabwe_prototype"
 RAW_DIR = ROOT / f"data/raw/{DATASET_ID}"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_preprocessing"
@@ -52,15 +53,6 @@ def hgt_member(path: Path) -> str:
 
 def raster_uri(path: Path) -> str:
     return f"zip://{path.resolve()}!{hgt_member(path)}"
-
-
-def load_v1() -> gpd.GeoDataFrame:
-    boundary = gpd.read_file(V1_GPKG, layer="v1_working_boundary").to_crs(DST_CRS)
-    if len(boundary) != 1 or boundary.geometry.iloc[0].is_empty:
-        raise ValueError("Expected one non-empty V1 boundary")
-    return boundary
-
-
 def crop_to_geometry(data: np.ndarray, transform, geometry) -> tuple[np.ndarray, object]:
     mask = geometry_mask([geometry], out_shape=data.shape, transform=transform, invert=True)
     rows, cols = np.where(mask)
@@ -125,7 +117,7 @@ def build_buffered_mosaic(v1: gpd.GeoDataFrame) -> tuple[np.ndarray, object]:
 
 
 def main() -> None:
-    v1 = load_v1()
+    v1 = load_boundary_df(V1_GPKG, "v1_working_boundary", DST_CRS)
     buffered_data, buffered_transform = build_buffered_mosaic(v1)
     write_raster(BUFFERED_DEM, buffered_data, transform=buffered_transform, crs=DST_CRS)
 

@@ -72,15 +72,6 @@ def rel(path: Path) -> str:
 def run_grid_gate(paths: list[Path], output: Path) -> None:
     cmd = [sys.executable, str(GRID_GATE), "--rasters", *map(str, paths), "--output", str(output)]
     subprocess.run(cmd, cwd=ROOT, check=True)
-
-
-def load_boundary(crs) -> object:
-    boundary = gpd.read_file(V1_GPKG, layer="v1_working_boundary")
-    if len(boundary) != 1 or boundary.geometry.iloc[0].is_empty:
-        raise ValueError("Expected one non-empty V1 working boundary")
-    return boundary.to_crs(crs).geometry.iloc[0]
-
-
 def valid_values(data: np.ndarray, nodata: float) -> np.ndarray:
     mask = np.isfinite(data) & (data != nodata)
     values = data[mask]

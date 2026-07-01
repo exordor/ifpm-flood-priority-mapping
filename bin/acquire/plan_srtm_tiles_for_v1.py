@@ -13,6 +13,9 @@ from shapely.geometry import box
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import load_boundary_df
 OUT_DIR = ROOT / "outputs/v1_working_boundary"
 V1_GPKG = OUT_DIR / "v1_working_boundary.gpkg"
 OUT_GPKG = OUT_DIR / "srtm_v1_tile_plan.gpkg"
@@ -28,17 +31,6 @@ def tile_name(lat: int, lon: int) -> str:
     ns = "N" if lat >= 0 else "S"
     ew = "E" if lon >= 0 else "W"
     return f"{ns}{abs(lat):02d}{ew}{abs(lon):03d}"
-
-
-def load_v1_boundary() -> gpd.GeoDataFrame:
-    if not V1_GPKG.exists():
-        raise FileNotFoundError(f"Run bin/package/export_v1_working_boundary.py first: {V1_GPKG}")
-    boundary = gpd.read_file(V1_GPKG, layer="v1_working_boundary").to_crs("EPSG:4326")
-    if len(boundary) != 1 or boundary.geometry.iloc[0].is_empty:
-        raise ValueError("Expected exactly one non-empty V1 boundary geometry")
-    return boundary
-
-
 def buffered_bbox(boundary: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     buffered = boundary.to_crs(METRIC_CRS).buffer(BUFFER_M).to_crs("EPSG:4326")
     minx, miny, maxx, maxy = buffered.total_bounds
@@ -123,7 +115,7 @@ def write_outputs(bbox_gdf: gpd.GeoDataFrame, tiles: gpd.GeoDataFrame) -> None:
 
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    boundary = load_v1_boundary()
+    boundary = load_boundary_df(V1_GPKG, "v1_working_boundary", None)
     bbox_gdf = buffered_bbox(boundary)
     tiles = build_tile_plan(bbox_gdf)
     write_outputs(bbox_gdf, tiles)
