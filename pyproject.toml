@@ -1,0 +1,43 @@
+# Workspace pyproject.toml for the IFPM root context repository.
+#
+# This declares the dependencies of the bin/ exploration scripts (the local
+# TOOLING layer), so the .venv can be reproduced with `uv sync` or
+# `uv pip install -e .`. It is intentionally minimal: it does NOT define a
+# buildable package (there is no src/ at the root) — it is purely a dependency
+# manifest and tool config holder.
+#
+# The independent deliverable repository ifpm-flood-pipeline/ has its OWN
+# pyproject.toml and is not affected by this file. The two are deliberately
+# separate (see AGENTS.md "Public-Safe Gate").
+
+[project]
+name = "ifpm-workspace"
+version = "0.1.0"
+description = "IFPM flood-risk modelling workspace: private context, exploration scripts, and local tooling."
+requires-python = ">=3.11"
+
+dependencies = [
+    "numpy>=1.26",
+    "rasterio>=1.3",
+    "geopandas>=0.14",
+    "matplotlib>=3.8",
+    "scipy>=1.12",
+    "shapely>=2.0",
+    "pandas>=2.1",
+]
+
+[project.optional-dependencies]
+# WhiteboxTools is only needed by the two hydrology-derivation scripts
+# (derive_v1_hydrology, derive_peru_pilot_hydrology). Kept optional so a
+# minimal env can still run 73/75 scripts.
+hydrology = ["whitebox>=2.3"]
+
+# Playwright (used by check_data_portals.py for CDP-based portal checks).
+portals = ["playwright>=1.40"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+extend-select = ["I", "UP"]
