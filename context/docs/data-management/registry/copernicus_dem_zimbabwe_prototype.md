@@ -74,7 +74,7 @@ Status: planned; not downloaded.
 ## Processing And Use
 
 - Raw data path: `data/raw/copernicus_dem_zimbabwe_prototype/`
-- Derived output path: `outputs/candidate_outlet_discovery/` or a DEM-specific output directory
+- Derived output path: `outputs/_archive/superseded_outlet_exploration_2026-06/candidate_outlet_discovery/` or a DEM-specific output directory
 - Scripts or commands used:
 - Standardization/preprocessing notes: Copernicus DEM is a DSM; document hydrological
   conditioning before using it for flow direction or outlet snapping

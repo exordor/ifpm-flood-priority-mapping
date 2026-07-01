@@ -102,9 +102,9 @@ Status: downloaded and verified for visual review.
 ## Processing And Use
 
 - Raw data path: `data/raw/zimbabwe_geoportal_candidate_outlet_layers/`
-- Derived output path: `outputs/professional_outlet_review/`
+- Derived output path: `outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/`
 - Scripts or commands used: authenticated page inspection via temporary browser session material,
-  guarded `curl`, `shasum -a 256`, `unzip`, `bin/prepare_outlet_review_sources.py`
+  guarded `curl`, `shasum -a 256`, `unzip`, `bin/_archive/superseded_outlet_exploration_2026-06/prepare_outlet_review_sources.py`
 - Standardization/preprocessing notes: use as outlet plausibility evidence, not model scoring
 - Known limitations: portal pages report missing/unknown source metadata for some layers; Flood
   Prone Zones page explicitly asks users to verify before use; the downloaded flood-prone layer

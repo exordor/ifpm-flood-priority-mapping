@@ -26,7 +26,8 @@ LAYER_MISSING = (pyogrio.errors.DataLayerError,)
 ROOT = Path(__file__).resolve().parents[1]
 OUT_DIR = ROOT / "outputs/v1_working_boundary"
 V1_GPKG = OUT_DIR / "v1_working_boundary.gpkg"
-REVIEW_GPKG = ROOT / "outputs/professional_outlet_review/professional_outlet_review_layers.gpkg"
+# Archived 2026-07-02: see outputs/_archive/superseded_outlet_exploration_2026-06/.
+REVIEW_GPKG = ROOT / "outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/professional_outlet_review_layers.gpkg"
 FIG_BASE = OUT_DIR / "v1_boundary_paper"
 GEOD = Geod(ellps="WGS84")
 

@@ -922,8 +922,8 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
 - Status: done for first pass; needs domain validation and optional river/flood/mining evidence.
 - Completion evidence:
   `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/candidate_outlet_exploration_2026-06-11.md`,
-  `bin/discover_candidate_outlets.py`, and local ignored outputs under
-  `outputs/candidate_outlet_discovery/`.
+  `bin/_archive/superseded_outlet_exploration_2026-06/discover_candidate_outlets.py`, and local ignored outputs under
+  `outputs/_archive/superseded_outlet_exploration_2026-06/candidate_outlet_discovery/`.
 - Key result: `HB_L8_1081522660_literature_near` was the first script-ranked machine prior with
   area about `1879.9 km2`; after the 2026-06-12 mentor cue it is no longer the primary
   recommendation.
@@ -938,11 +938,11 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
 - Status: done for explanation package; C1 later demoted by mentor-driven visual review and
   boundary still not accepted.
 - Completion evidence:
-  `bin/export_candidate_topology.py`, revised `bin/plot_candidate_outlets.py`,
-  `outputs/candidate_outlet_discovery/diagnostic_map_explained.png`,
-  `outputs/candidate_outlet_discovery/diagnostic_c1_flow_explainer.png`,
-  `outputs/candidate_outlet_discovery/diagnostic_topology_table.png`, and
-  `outputs/candidate_outlet_discovery/candidate_topology_edges.csv`.
+  `bin/_archive/superseded_outlet_exploration_2026-06/export_candidate_topology.py`, revised `bin/_archive/superseded_outlet_exploration_2026-06/plot_candidate_outlets.py`,
+  `outputs/_archive/superseded_outlet_exploration_2026-06/candidate_outlet_discovery/diagnostic_map_explained.png`,
+  `outputs/_archive/superseded_outlet_exploration_2026-06/candidate_outlet_discovery/diagnostic_c1_flow_explainer.png`,
+  `outputs/_archive/superseded_outlet_exploration_2026-06/candidate_outlet_discovery/diagnostic_topology_table.png`, and
+  `outputs/_archive/superseded_outlet_exploration_2026-06/candidate_outlet_discovery/candidate_topology_edges.csv`.
 - Key result: the package separates overview, C1 flow/topology explanation, and topology table
   views. It explicitly labels all C-points as outlet proxies, not measured outlets or accepted
   thesis boundaries.
@@ -958,10 +958,10 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   prototype use, but final thesis boundary still not accepted.
 - Completion evidence:
   `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/professional_map_outlet_review_2026-06-12.md`,
-  `bin/prepare_outlet_review_sources.py`, `bin/compare_visual_outlets.py`,
-  `bin/plot_professional_outlet_review.py`,
-  `outputs/professional_outlet_review/mentor_outlet_evidence_board.png`, and
-  `outputs/professional_outlet_review/visual_outlet_candidates.csv`.
+  `bin/_archive/superseded_outlet_exploration_2026-06/prepare_outlet_review_sources.py`, `bin/_archive/superseded_outlet_exploration_2026-06/compare_visual_outlets.py`,
+  `bin/_archive/superseded_outlet_exploration_2026-06/plot_professional_outlet_review.py`,
+  `outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/mentor_outlet_evidence_board.png`, and
+  `outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/visual_outlet_candidates.csv`.
 - Key result: V1 / `HB_L8_1081528840_full_l7_chain` is now
   `accepted_with_waiver_for_controlled_prototype`. C1 /
   `HB_L8_1081522660_literature_near` is demoted to machine prior only.

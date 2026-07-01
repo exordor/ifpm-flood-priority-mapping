@@ -77,9 +77,9 @@ Status: downloaded and verified for visual review.
 ## Processing And Use
 
 - Raw data path: `data/raw/geofabrik_osm_zimbabwe_prototype/`
-- Derived output path: `outputs/professional_outlet_review/`
+- Derived output path: `outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/`
 - Scripts or commands used: guarded `curl`, `shasum -a 256`, `unzip`,
-  `bin/prepare_outlet_review_sources.py`
+  `bin/_archive/superseded_outlet_exploration_2026-06/prepare_outlet_review_sources.py`
 - Standardization/preprocessing notes: filter to search envelope before analysis
 - Known limitations: OSM completeness varies; tags do not prove active mining or flood impact
 - Replacement or update rule: replace with newer dated extract only if needed and documented

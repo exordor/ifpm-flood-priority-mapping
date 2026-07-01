@@ -23,7 +23,7 @@ Status: complete.
 
 - [x] Raw downloaded data will go under `data/raw/hydrorivers_africa_visual_review/`.
 - [x] Temporary downloads will go under `data/tmp/hydrorivers_africa_visual_review/`.
-- [x] Processed diagnostics will go under `outputs/professional_outlet_review/`.
+- [x] Processed diagnostics will go under `outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/`.
 - [x] No real downloaded data will be copied into `context/` or `ifpm-flood-pipeline/`.
 
 ## Registry

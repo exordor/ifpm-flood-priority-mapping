@@ -30,9 +30,14 @@ LAYER_MISSING = (pyogrio.errors.DataLayerError,)
 ROOT = Path(__file__).resolve().parents[1]
 OUT_DIR = ROOT / "outputs/v1_working_boundary"
 OUT_GPKG = OUT_DIR / "v1_working_boundary.gpkg"
-SOURCE_CATCHMENTS = ROOT / "outputs/candidate_outlet_discovery/candidate_catchments.gpkg"
-VISUAL_GPKG = ROOT / "outputs/professional_outlet_review/visual_outlet_candidates.gpkg"
-REVIEW_GPKG = ROOT / "outputs/professional_outlet_review/professional_outlet_review_layers.gpkg"
+# Input outlet-exploration products were archived 2026-07-02 to
+# outputs/_archive/superseded_outlet_exploration_2026-06/ (the V1 boundary they
+# produced is already in OUT_GPKG and is the active boundary). These paths point
+# at the archive so the script stays re-runnable if the boundary ever needs
+# regenerating; the directory must be restored from _archive first.
+SOURCE_CATCHMENTS = ROOT / "outputs/_archive/superseded_outlet_exploration_2026-06/candidate_outlet_discovery/candidate_catchments.gpkg"
+VISUAL_GPKG = ROOT / "outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/visual_outlet_candidates.gpkg"
+REVIEW_GPKG = ROOT / "outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/professional_outlet_review_layers.gpkg"
 V1_ID = "HB_L8_1081528840_full_l7_chain"
 GEOD = Geod(ellps="WGS84")
 

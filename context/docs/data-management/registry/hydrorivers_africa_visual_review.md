@@ -72,9 +72,9 @@ Status: downloaded and verified for visual review.
 ## Processing And Use
 
 - Raw data path: `data/raw/hydrorivers_africa_visual_review/`
-- Derived output path: `outputs/professional_outlet_review/`
+- Derived output path: `outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/`
 - Scripts or commands used: guarded `curl`, `shasum -a 256`, `unzip`,
-  `bin/prepare_outlet_review_sources.py`
+  `bin/_archive/superseded_outlet_exploration_2026-06/prepare_outlet_review_sources.py`
 - Standardization/preprocessing notes: clip to review envelope and use as river-line evidence;
   do not treat generalized river lines as field-survey river positions
 - Known limitations: generalized product; not local survey data
