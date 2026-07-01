@@ -1,9 +1,13 @@
 # Dataset Registry: SoilGrids 250m Sediment Candidate
 
-Status: DRAFT candidate registry. Not authorized for download. Created as P2 R2.1 preflight
-scaffolding so a scoped download can be authorized quickly once the mentor confirms a
-SoilGrids-based K-factor and the R-factor formula decision. No real data has been downloaded for
-this dataset id.
+Status: used for V1 K-factor derivation via ISRIC online VRT windowed read (no local
+download). The K-factor products in `outputs/soilgrids_250m_sediment_candidate/` were derived
+2026-06-15 by reading the SoilGrids 250m VRT collection at
+`https://files.isric.org/soilgrids/latest/data/` over HTTP for the V1 bounding box only (clay /
+silt / sand / SOC at six depth slices). No global raster was bulk-downloaded to `data/raw/`; the
+VRT was read remotely. The original "draft, not authorized" framing below is superseded for V1
+K-factor use, but a local archive download remains unplanned. See
+`context/docs/project-management/soilgrids_v1_kfactor_processing_2026-06-15.md` for the method.
 
 ## Dataset Identity
 
