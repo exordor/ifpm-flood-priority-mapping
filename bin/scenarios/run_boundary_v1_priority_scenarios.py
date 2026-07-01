@@ -30,6 +30,11 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "priority_scenarios_v0_2"
 CRITERIA_ID = "criteria_stack_v0_2"
@@ -110,16 +115,6 @@ def normalize_if_needed(name: str, data: np.ndarray) -> np.ndarray:
         raise ValueError(f"non-positive criterion range: {name}")
     out = data / max_value
     return np.clip(out, 0.0, 1.0).astype("float32")
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict, dtype: str = "float32", nodata: float | int = -9999.0) -> None:
-    out_profile = profile.copy()
-    out_profile.update(driver="GTiff", count=1, dtype=dtype, nodata=nodata, compress="deflate", tiled=True)
-    encoded = np.where(np.isfinite(data), data, nodata).astype(dtype)
-    with rasterio.open(path, "w", **out_profile) as dst:
-        dst.write(encoded, 1)
-
-
 def ahp_slide_weights() -> tuple[dict[str, float], float]:
     vals, vecs = np.linalg.eig(SLIDE_MATRIX)
     idx = int(np.argmax(vals.real))

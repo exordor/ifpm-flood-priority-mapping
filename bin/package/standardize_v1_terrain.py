@@ -18,6 +18,9 @@ from rasterio.features import geometry_mask
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster
 DATASET_ID = "srtm_1arcsec_zimbabwe_prototype"
 PREPROCESS_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_preprocessing"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_standardization"
@@ -100,27 +103,6 @@ def standardize(data: np.ndarray, nodata: float, invert: bool) -> tuple[np.ndarr
         scaled = 1.0 - scaled
     output[valid] = scaled.astype("float32")
     return output, low, high
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict) -> None:
-    output_profile = profile.copy()
-    output_profile.update(
-        {
-            "driver": "GTiff",
-            "dtype": "float32",
-            "count": 1,
-            "nodata": NODATA,
-            "compress": "deflate",
-            "tiled": True,
-            "blockxsize": 256,
-            "blockysize": 256,
-        }
-    )
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with rasterio.open(path, "w", **output_profile) as dst:
-        dst.write(data.astype("float32"), 1)
-
-
 def raster_stats(path: Path, geometry) -> dict[str, object]:
     with rasterio.open(path) as src:
         data = src.read(1).astype("float32")

@@ -12,6 +12,11 @@ import rasterio
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "sediment_r_factor_scenarios"
 CONFIG = ROOT / "context/configs/boundary_v1_sediment_r_factor_scenarios.csv"
@@ -45,16 +50,6 @@ def read_structure() -> tuple[np.ndarray, dict]:
             data[data == src.nodata] = np.nan
     data[~np.isfinite(data)] = np.nan
     return data, profile
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict) -> None:
-    out_profile = profile.copy()
-    out_profile.update(driver="GTiff", count=1, dtype="float32", nodata=-9999.0, compress="deflate", tiled=True)
-    encoded = np.where(np.isfinite(data), data, -9999.0).astype("float32")
-    with rasterio.open(path, "w", **out_profile) as dst:
-        dst.write(encoded, 1)
-
-
 def stats(data: np.ndarray) -> dict[str, object]:
     values = data[np.isfinite(data)]
     if values.size == 0:

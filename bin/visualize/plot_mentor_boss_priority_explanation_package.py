@@ -21,6 +21,11 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 OUT_DIR = ROOT / "outputs/mentor_boss_priority_explanation"
 NODATA = -9999.0
 
@@ -150,17 +155,6 @@ def normalize_if_needed(data: np.ndarray) -> np.ndarray:
     if high <= 0:
         raise ValueError("non-positive criterion")
     return np.clip(data / high, 0.0, 1.0).astype("float32")
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict, dtype: str = "float32") -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    out_profile = profile.copy()
-    out_profile.update(driver="GTiff", count=1, dtype=dtype, nodata=NODATA, compress="deflate", tiled=True)
-    encoded = np.where(np.isfinite(data), data, NODATA).astype(dtype)
-    with rasterio.open(path, "w", **out_profile) as dst:
-        dst.write(encoded, 1)
-
-
 def build_site_products(site: Site) -> tuple[dict[str, object], list[dict[str, object]]]:
     weights = read_weights(site.weights_csv, site.experiment_id)
     arrays: list[np.ndarray] = []

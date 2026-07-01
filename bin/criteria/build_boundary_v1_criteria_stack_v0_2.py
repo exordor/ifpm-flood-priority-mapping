@@ -16,6 +16,11 @@ from rasterio.features import geometry_mask
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "criteria_stack_v0_2"
 OUT_DIR = ROOT / f"outputs/{BOUNDARY_ID}/{EXPERIMENT_ID}"
@@ -145,16 +150,6 @@ def stats(data: np.ndarray, mask: np.ndarray) -> dict[str, object]:
         "mean": round(float(values.mean()), 6),
         "max": round(float(values.max()), 6),
     }
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict) -> None:
-    out_profile = profile.copy()
-    out_profile.update(driver="GTiff", count=1, dtype="float32", nodata=-9999.0, compress="deflate", tiled=True)
-    encoded = np.where(np.isfinite(data), data, -9999.0).astype("float32")
-    with rasterio.open(path, "w", **out_profile) as dst:
-        dst.write(encoded, 1)
-
-
 def plot_preview(criteria: dict[str, np.ndarray], mask: np.ndarray, path: Path) -> None:
     names = [name for name in criteria if name in {"erosion_structure_proxy", "land_cover_pressure", "mining_pressure"}]
     fig, axes = plt.subplots(1, len(names), figsize=(12, 4), constrained_layout=True)

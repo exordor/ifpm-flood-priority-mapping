@@ -14,6 +14,11 @@ from rasterio.mask import mask
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 DATASET_ID = "chirps_v3_zimbabwe_prototype"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}/rainfall_comparison"
 MANIFEST_CSV = OUT_DIR / "chirps_v1_raw_file_manifest.csv"
@@ -80,17 +85,6 @@ def season_sum(records: list[dict[str, str]], season_start: int, geometry: list[
     valid = np.isfinite(data)
     summed = np.where(valid.any(axis=0), np.nansum(data, axis=0), np.nan).astype("float32")
     return summed, profile
-
-
-def write_raster(path: Path, array: np.ndarray, profile: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    output = np.where(np.isfinite(array), array, NODATA).astype("float32")
-    profile = profile.copy()
-    profile.update(driver="GTiff", dtype="float32", nodata=NODATA, compress="deflate", tiled=True, blockxsize=256, blockysize=256)
-    with rasterio.open(path, "w", **profile) as dst:
-        dst.write(output, 1)
-
-
 def nanmean_axis0(data: np.ndarray) -> np.ndarray:
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=RuntimeWarning)

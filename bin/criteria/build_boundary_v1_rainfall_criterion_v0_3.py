@@ -41,6 +41,11 @@ from rasterio.warp import reproject, Resampling
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "rainfall_sensitivity_v0_3"
 OUT_DIR = ROOT / f"outputs/{BOUNDARY_ID}/{EXPERIMENT_ID}/criteria"
@@ -181,25 +186,6 @@ def resample_to_reference(src_path: Path, ref_profile: dict) -> np.ndarray:
         )
     dst[~np.isfinite(dst)] = np.nan
     return dst
-
-
-def write_raster(
-    path: Path,
-    data: np.ndarray,
-    profile: dict,
-    dtype: str = "float32",
-    nodata: float = -9999.0,
-    ifpm_note: str = "",
-) -> None:
-    out_profile = profile.copy()
-    out_profile.update(driver="GTiff", count=1, dtype=dtype, nodata=nodata, compress="deflate", tiled=True)
-    encoded = np.where(np.isfinite(data), data, nodata).astype(dtype)
-    with rasterio.open(path, "w", **out_profile) as dst:
-        dst.write(encoded, 1)
-        if ifpm_note:
-            dst.update_tags(1, IFPM_NOTE=ifpm_note)
-
-
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     ref_profile = read_reference()

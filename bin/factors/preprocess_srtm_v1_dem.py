@@ -18,6 +18,9 @@ from rasterio.windows import Window, transform as window_transform
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster
 DATASET_ID = "srtm_1arcsec_zimbabwe_prototype"
 RAW_DIR = ROOT / f"data/raw/{DATASET_ID}"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_preprocessing"
@@ -70,28 +73,6 @@ def crop_to_geometry(data: np.ndarray, transform, geometry) -> tuple[np.ndarray,
     cropped_mask = mask[row_start:row_stop, col_start:col_stop]
     cropped[~cropped_mask] = DST_NODATA
     return cropped.astype("float32"), window_transform(window, transform)
-
-
-def write_raster(path: Path, data: np.ndarray, transform, crs: str) -> None:
-    profile = {
-        "driver": "GTiff",
-        "height": data.shape[0],
-        "width": data.shape[1],
-        "count": 1,
-        "dtype": "float32",
-        "crs": crs,
-        "transform": transform,
-        "nodata": DST_NODATA,
-        "compress": "deflate",
-        "tiled": True,
-        "blockxsize": 256,
-        "blockysize": 256,
-    }
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with rasterio.open(path, "w", **profile) as dst:
-        dst.write(data, 1)
-
-
 def _output_grid(bounds: tuple, res: float) -> tuple[object, int, int]:
     """Target grid matching rasterio.merge's ``bounds``+``res`` layout.
 
@@ -146,10 +127,10 @@ def build_buffered_mosaic(v1: gpd.GeoDataFrame) -> tuple[np.ndarray, object]:
 def main() -> None:
     v1 = load_v1()
     buffered_data, buffered_transform = build_buffered_mosaic(v1)
-    write_raster(BUFFERED_DEM, buffered_data, buffered_transform, DST_CRS)
+    write_raster(BUFFERED_DEM, buffered_data, transform=buffered_transform, crs=DST_CRS)
 
     v1_data, v1_transform = crop_to_geometry(buffered_data, buffered_transform, v1.geometry.iloc[0])
-    write_raster(V1_DEM, v1_data, v1_transform, DST_CRS)
+    write_raster(V1_DEM, v1_data, transform=v1_transform, crs=DST_CRS)
 
     print(f"wrote {BUFFERED_DEM.relative_to(ROOT)}")
     print(f"wrote {V1_DEM.relative_to(ROOT)}")

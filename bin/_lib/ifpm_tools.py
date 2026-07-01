@@ -49,9 +49,7 @@ def _rasterio():
     """Lazy rasterio import with a clear error."""
     try:
         import rasterio
-        from rasterio.features import geometry_mask
-        from rasterio.windows import Window, window_transform
-        return rasterio, geometry_mask, Window, window_transform
+        return rasterio
     except ImportError as exc:
         raise ImportError(
             "rasterio is required for raster I/O. Install it in .venv."
@@ -128,6 +126,8 @@ def write_raster(
     crs: str | None = None,
     dtype: str = "float32",
     nodata: float = NODATA,
+    ifpm_note: str = "",
+    sanitize: bool = False,
 ) -> None:
     """Write a single-band GeoTIFF.
 
@@ -143,9 +143,20 @@ def write_raster(
 
     The output is always float32, deflate-compressed, tiled 256x256, nodata set,
     matching the convention every script already used independently.
+
+    Extra options absorbed from the criteria/rainfall scripts:
+    - ``ifpm_note``: if non-empty, written as a per-band IFPM_NOTE tag (governance
+      metadata embedded in the GeoTIFF).
+    - ``sanitize``: if True, replace non-finite values (NaN/inf) with ``nodata``
+      before writing. Some callers computed arrays that may contain NaN; others
+      pre-cleaned their data. Default False preserves the original behaviour of
+      the majority of scripts.
     """
-    rasterio = _rasterio()[0]
+    rasterio = _rasterio()
     np = _np()
+
+    if sanitize:
+        data = np.where(np.isfinite(data), data, nodata)
 
     if profile is not None:
         out_profile = dict(profile)
@@ -175,6 +186,8 @@ def write_raster(
     )
     with rasterio.open(str(path), "w", **out_profile) as dst:
         dst.write(data.astype(dtype), 1)
+        if ifpm_note:
+            dst.update_tags(1, IFPM_NOTE=ifpm_note)
 
 
 # ---------------------------------------------------------------------------

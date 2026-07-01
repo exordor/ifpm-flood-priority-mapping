@@ -21,6 +21,11 @@ import rasterio
 from rasterio.features import geometry_mask
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "pe1"
 EXPERIMENT_ID = "criteria_stack"
 OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
@@ -132,16 +137,6 @@ def stats(data: np.ndarray, mask: np.ndarray) -> dict[str, object]:
         "mean": round(float(values.mean()), 6),
         "max": round(float(values.max()), 6),
     }
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict) -> None:
-    out_profile = profile.copy()
-    out_profile.update(driver="GTiff", count=1, dtype="float32", nodata=-9999.0, compress="deflate", tiled=True)
-    encoded = np.where(np.isfinite(data), data, -9999.0).astype("float32")
-    with rasterio.open(path, "w", **out_profile) as dst:
-        dst.write(encoded, 1)
-
-
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     CRITERIA_DIR.mkdir(parents=True, exist_ok=True)

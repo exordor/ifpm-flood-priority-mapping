@@ -27,6 +27,11 @@ from rasterio.warp import reproject, Resampling
 from scipy.ndimage import distance_transform_edt, label as ndimage_label
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "pe1"
 EXPERIMENT_ID = "rainfall_criterion"
 OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
@@ -140,18 +145,6 @@ def fill_edge_nodata(data: np.ndarray, inside: np.ndarray) -> tuple[np.ndarray, 
     filled = work[row_idx, col_idx]
     filled[~inside] = np.nan
     return filled, {"hole_cells": int(holes.sum()), "interior_holes": interior, "edge_sliver_holes": edge_sliver}
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict, ifpm_note: str = "") -> None:
-    out_profile = profile.copy()
-    out_profile.update(driver="GTiff", count=1, dtype="float32", nodata=-9999.0, compress="deflate", tiled=True)
-    encoded = np.where(np.isfinite(data), data, -9999.0).astype("float32")
-    with rasterio.open(path, "w", **out_profile) as dst:
-        dst.write(encoded, 1)
-        if ifpm_note:
-            dst.update_tags(1, IFPM_NOTE=ifpm_note)
-
-
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     with rasterio.open(REF) as ref:

@@ -23,6 +23,11 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "rainfall_exposure_v0_4"
 OUT_DIR = ROOT / f"outputs/{BOUNDARY_ID}/{EXPERIMENT_ID}"
@@ -93,24 +98,6 @@ def normalize_if_needed(data: np.ndarray) -> np.ndarray:
     if max_value <= 0:
         raise ValueError("non-positive criterion range")
     return np.clip(data / max_value, 0.0, 1.0).astype("float32")
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict) -> None:
-    out_profile = profile.copy()
-    out_profile.update(
-        driver="GTiff",
-        count=1,
-        dtype="float32",
-        nodata=-9999.0,
-        compress="deflate",
-        tiled=True,
-    )
-    encoded = np.where(np.isfinite(data), data, -9999.0).astype("float32")
-    with rasterio.open(path, "w", **out_profile) as dst:
-        dst.write(encoded, 1)
-        dst.update_tags(1, IFPM_NOTE=CLAIM_NOTE)
-
-
 def scenario_weights() -> dict[str, dict[str, float]]:
     return {
         "equal_6": {name: 1 / 6 for name in CRITERIA_PATHS},

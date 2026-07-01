@@ -11,6 +11,11 @@ import rasterio
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 OUT_DIR = ROOT / "outputs/v1_autonomous_prototype_v0_1"
 CRITERIA_DIR = OUT_DIR / "criteria"
 SCENARIO_DIR = OUT_DIR / "scenarios"
@@ -56,16 +61,6 @@ def read_band(path: Path, profile: dict) -> np.ndarray:
             data[data == src.nodata] = np.nan
     data[~np.isfinite(data)] = np.nan
     return data
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict, dtype: str = "float32", nodata: float | int = -9999.0) -> None:
-    out_profile = profile.copy()
-    out_profile.update(driver="GTiff", count=1, dtype=dtype, nodata=nodata, compress="deflate", tiled=True)
-    encoded = np.where(np.isfinite(data), data, nodata).astype(dtype)
-    with rasterio.open(path, "w", **out_profile) as dst:
-        dst.write(encoded, 1)
-
-
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
     fields: list[str] = []
     for row in rows:

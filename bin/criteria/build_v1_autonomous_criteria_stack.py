@@ -13,6 +13,11 @@ from rasterio.features import geometry_mask
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 OUT_DIR = ROOT / "outputs/v1_autonomous_prototype_v0_1"
 CRITERIA_DIR = OUT_DIR / "criteria"
 REF = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif"
@@ -109,16 +114,6 @@ def stats(data: np.ndarray, mask: np.ndarray) -> dict[str, object]:
         "mean": round(float(vals.mean()), 6),
         "max": round(float(vals.max()), 6),
     }
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict) -> None:
-    out_profile = profile.copy()
-    out_profile.update(driver="GTiff", count=1, dtype="float32", nodata=-9999.0, compress="deflate", tiled=True)
-    encoded = np.where(np.isfinite(data), data, -9999.0).astype("float32")
-    with rasterio.open(path, "w", **out_profile) as dst:
-        dst.write(encoded, 1)
-
-
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
     fields: list[str] = []
     for row in rows:

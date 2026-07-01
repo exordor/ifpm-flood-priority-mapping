@@ -44,6 +44,9 @@ except ImportError as exc:
     raise SystemExit(f"missing dependency: {exc}") from exc
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster
 TWI = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_twi.tif"
 DIST = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_distance_to_drainage_t500.tif"
 V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
@@ -71,16 +74,6 @@ def standardize(data: np.ndarray, nodata: float, invert: bool, inside: np.ndarra
         scaled = 1.0 - scaled
     out[valid] = scaled.astype("float32")
     return out, low, high, float(np.nanmean(out[valid])), valid.sum()
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict):
-    prof = profile.copy()
-    prof.update(dtype="float32", nodata=NODATA, compress="deflate", tiled=True,
-                blockxsize=256, blockysize=256)
-    with rasterio.open(path, "w", **prof) as ds:
-        ds.write(data.astype("float32"), 1)
-
-
 def main() -> None:
     boundary = gpd.read_file(V1_GPKG, layer=V1_LAYER)
     rows = []

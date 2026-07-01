@@ -25,6 +25,11 @@ from rasterio.features import geometry_mask, rasterize
 from scipy.ndimage import distance_transform_edt
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import write_raster as _write_raster
+from functools import partial
+write_raster = partial(_write_raster, sanitize=True)
 OSM_DIR = ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted"
 OUT_DIR = ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity"
 REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
@@ -107,16 +112,6 @@ def normalize_inverted(data: np.ndarray, mask: np.ndarray, clip_low: float | Non
     out = np.clip(1.0 - (data - low) / (high - low), 0.0, 1.0).astype("float32")
     out[~mask] = np.nan
     return out, float(low), float(high)
-
-
-def write_raster(path: Path, data: np.ndarray, profile: dict) -> None:
-    out_profile = profile.copy()
-    out_profile.update(driver="GTiff", count=1, dtype="float32", nodata=-9999.0, compress="deflate", tiled=True)
-    encoded = np.where(np.isfinite(data), data, -9999.0).astype("float32")
-    with rasterio.open(path, "w", **out_profile) as dst:
-        dst.write(encoded, 1)
-
-
 def stats(data: np.ndarray, mask: np.ndarray) -> dict[str, object]:
     inside = int(mask.sum())
     valid = mask & np.isfinite(data)
