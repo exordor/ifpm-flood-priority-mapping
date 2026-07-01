@@ -22,7 +22,9 @@ from urllib.parse import urlparse
 
 from playwright.sync_api import sync_playwright
 
-OUTPUT_DIR = Path("outputs/data_portal_check")
+ROOT = Path(__file__).resolve().parents[2]
+
+OUTPUT_DIR = ROOT / "outputs/data_portal_check"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Portals to verify. Grouped by the dataset family they relate to.

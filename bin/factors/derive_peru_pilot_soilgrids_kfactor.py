@@ -22,6 +22,8 @@ import rasterio
 from rasterio.features import rasterize
 from rasterio.windows import from_bounds as window_from_bounds
 
+ROOT = Path(__file__).resolve().parents[2]
+
 try:
     import geopandas as gpd
     from pyproj import Transformer
@@ -33,7 +35,7 @@ SOILGRIDS_CRS = "ESRI:54017"  # Interrupted Goode Homolosine
 
 # PE1 bounding box in EPSG:4326 (from peru_pilot_boundary)
 PE1_LON_MIN, PE1_LAT_MIN, PE1_LON_MAX, PE1_LAT_MAX = -72.3083, -16.8547, -71.5875, -16.1411
-PE1_BOUNDARY_GPKG = Path("outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg")
+PE1_BOUNDARY_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 
 DEPTH_SLICES = ["0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"]
 DEPTH_THICKNESS_CM = {"0-5cm": 5, "5-15cm": 10, "15-30cm": 15, "30-60cm": 30, "60-100cm": 40, "100-200cm": 100}
@@ -43,7 +45,7 @@ PROPERTIES = ["clay", "silt", "sand", "soc"]
 SCALE_TO_PERCENT = {"clay": 10.0, "silt": 10.0, "sand": 10.0, "soc": 100.0}
 SOILGRIDS_NODATA = -32768
 
-OUTPUT_DIR = Path("outputs/soilgrids_250m_peru_pilot")
+OUTPUT_DIR = ROOT / "outputs/soilgrids_250m_peru_pilot"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 

@@ -21,7 +21,9 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-OUTPUT_DIR = Path("outputs/literature_verification")
+ROOT = Path(__file__).resolve().parents[2]
+
+OUTPUT_DIR = ROOT / "outputs/literature_verification"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Authoritative-ish sources. Goal: find the explicit LS exponents (m, n) in the Moore & Nieber

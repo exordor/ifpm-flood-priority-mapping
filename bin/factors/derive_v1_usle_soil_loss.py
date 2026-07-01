@@ -19,12 +19,14 @@ from pathlib import Path
 import numpy as np
 import rasterio
 
-LS = Path("outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor/v1_ls_factor_capped50_hillslope_30m.tif")
-C = Path("outputs/esa_worldcover_2021_v1_methodology/c_factor/c_factor_v1_30m.tif")
-K_DIAG = Path("outputs/soilgrids_250m_sediment_candidate/k_factor_diagnostics.json")
-R_DIAG = Path("outputs/chirps_v3_zimbabwe_prototype/r_factor/r_factor_diagnostics.json")
+ROOT = Path(__file__).resolve().parents[2]
 
-OUTPUT_DIR = Path("outputs/v1_usle_soil_loss")
+LS = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor/v1_ls_factor_capped50_hillslope_30m.tif"
+C = ROOT / "outputs/esa_worldcover_2021_v1_methodology/c_factor/c_factor_v1_30m.tif"
+K_DIAG = ROOT / "outputs/soilgrids_250m_sediment_candidate/k_factor_diagnostics.json"
+R_DIAG = ROOT / "outputs/chirps_v3_zimbabwe_prototype/r_factor/r_factor_diagnostics.json"
+
+OUTPUT_DIR = ROOT / "outputs/v1_usle_soil_loss"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # R bimodal modes (from R-factor diagnostics): approximate low and high cluster centres.

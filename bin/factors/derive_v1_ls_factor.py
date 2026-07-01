@@ -31,13 +31,15 @@ from pathlib import Path
 import numpy as np
 import rasterio
 
-SLOPE_DEG = Path("outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_slope_degrees_utm35s_30m.tif")
-SCA = Path("outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_flow_accumulation_sca.tif")
-FLOW_ACCUM = Path("outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_flow_accumulation.tif")
+ROOT = Path(__file__).resolve().parents[2]
+
+SLOPE_DEG = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_slope_degrees_utm35s_30m.tif"
+SCA = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_flow_accumulation_sca.tif"
+FLOW_ACCUM = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_flow_accumulation.tif"
 CHANNEL_THRESHOLD_CELLS = 500  # t500 chosen in the hydrology step
 LS_CAP = 50.0
 
-OUTPUT_DIR = Path("outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor")
+OUTPUT_DIR = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 

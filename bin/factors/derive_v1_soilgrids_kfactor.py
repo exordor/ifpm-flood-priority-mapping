@@ -36,6 +36,8 @@ from rasterio.features import rasterize
 from rasterio.transform import from_bounds
 from rasterio.windows import from_bounds as window_from_bounds
 
+ROOT = Path(__file__).resolve().parents[2]
+
 try:
     import geopandas as gpd
     from pyproj import Transformer
@@ -47,7 +49,7 @@ SOILGRIDS_CRS = "ESRI:54017"  # Interrupted Goode Homolosine
 
 # V1 bounding box in EPSG:4326 (from srtm_v1_tile_plan / v1_working_boundary)
 V1_LON_MIN, V1_LAT_MIN, V1_LON_MAX, V1_LAT_MAX = 28.514, -21.008, 29.398, -19.984
-V1_BOUNDARY_GPKG = Path("outputs/v1_working_boundary/v1_working_boundary.gpkg")
+V1_BOUNDARY_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
 
 # SoilGrids depth slices (cm) and depth-weighted average target for 0-30 cm
 DEPTH_SLICES = ["0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"]
@@ -60,7 +62,7 @@ PROPERTIES = ["clay", "silt", "sand", "soc"]
 SCALE_TO_PERCENT = {"clay": 10.0, "silt": 10.0, "sand": 10.0, "soc": 100.0}
 SOILGRIDS_NODATA = -32768
 
-OUTPUT_DIR = Path("outputs/soilgrids_250m_sediment_candidate")
+OUTPUT_DIR = ROOT / "outputs/soilgrids_250m_sediment_candidate"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
