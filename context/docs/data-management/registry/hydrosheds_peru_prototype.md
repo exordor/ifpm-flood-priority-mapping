@@ -62,7 +62,7 @@ Status: downloaded for Peru boundary discovery; no Peru boundary accepted.
 
 - Raw data path: `data/raw/hydrosheds_peru_prototype/`
 - Derived output path: `outputs/peru_boundary_discovery/`
-- Scripts or commands used: `bin/discover_peru_candidate_basins.py`
+- Scripts or commands used: `bin/acquire/discover_peru_candidate_basins.py`
 - Authorization: `context/docs/data-management/preflight/peru_hydrobasins_boundary_discovery_authorization_2026-06-30.md`
 - Known limitations: the three-department envelope mixes Pacific-slope and highland drainage;
   candidate basins need catchment-vs-region bias review before acceptance

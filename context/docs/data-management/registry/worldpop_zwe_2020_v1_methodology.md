@@ -33,7 +33,7 @@ authorize AHP overlay, flood-risk interpretation, or final thesis boundary claim
 - Expected file count: 1 raster
 - Expected byte size: about 192 MB
 - Download command or manual steps:
-  1. Run `.venv/bin/python bin/download_v1_methodology_inputs.py`.
+  1. Run `.venv/bin/python bin/acquire/download_v1_methodology_inputs.py`.
   2. Record file size and SHA-256 in the full methodology source manifest.
 - Temporary path, if any: `data/tmp/worldpop_zwe_2020_v1_methodology/`
 
@@ -55,8 +55,8 @@ authorize AHP overlay, flood-risk interpretation, or final thesis boundary claim
 - Raw data path: `data/raw/worldpop_zwe_2020_v1_methodology/`
 - Derived output path: `outputs/v1_full_methodology_evidence_sweep/`
 - Scripts or commands used:
-  - `.venv/bin/python bin/download_v1_methodology_inputs.py`
-  - `.venv/bin/python bin/prepare_v1_full_methodology_evidence.py`
+  - `.venv/bin/python bin/acquire/download_v1_methodology_inputs.py`
+  - `.venv/bin/python bin/package/prepare_v1_full_methodology_evidence.py`
 - Planned/actual use: V1 population count and exposure summaries
 - Known limitations: 2020 population count is an exposure proxy, not direct flood vulnerability
   or poverty evidence

@@ -22,7 +22,7 @@ product, not an interpretable sediment-risk claim. Produced under the data-proce
   standard SoilGrids depth slices.
 - Access verified 2026-06-15 via CDP: directory listing, no login required.
 - K-factor formula: Williams (1995) EPIC/RUSLE pedotransfer function (see
-  `bin/derive_v1_soilgrids_kfactor.py` docstring for the full equation).
+  `bin/factors/derive_v1_soilgrids_kfactor.py` docstring for the full equation).
 - Units: K in US units; multiply by 0.1317 for SI (t ha h / ha MJ mm).
 - SoilGrids storage convention applied: texture raw / 10 = percent; soc raw / 100 = percent C.
 
@@ -60,5 +60,5 @@ is recorded here, not locked.
 
 ## Script
 
-`bin/derive_v1_soilgrids_kfactor.py` (root `.venv`; uses rasterio, geopandas, pyproj; playwright
+`bin/factors/derive_v1_soilgrids_kfactor.py` (root `.venv`; uses rasterio, geopandas, pyproj; playwright
 was used only for the upstream portal check, not for this derivation).

@@ -16,7 +16,7 @@ represented before any AHP-MCDA overlay or flood-risk interpretation.
 - V1 standardized terrain rasters under
   `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_standardization/`
 - V1 working boundary under `outputs/v1_working_boundary/`
-- V1 raster grid gate script: `bin/check_v1_raster_grid.py`
+- V1 raster grid gate script: `bin/package/check_v1_raster_grid.py`
 
 No new data was downloaded.
 

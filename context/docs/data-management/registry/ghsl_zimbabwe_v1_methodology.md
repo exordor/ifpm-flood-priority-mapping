@@ -33,7 +33,7 @@ flood-risk interpretation, or final thesis boundary claims.
 - Expected file types: GeoTIFF
 - Expected file count: 2 rasters
 - Download command or manual steps:
-  1. Run `.venv/bin/python bin/download_v1_methodology_inputs.py`.
+  1. Run `.venv/bin/python bin/acquire/download_v1_methodology_inputs.py`.
   2. Record file size and SHA-256 in the full methodology source manifest.
 - Temporary path, if any: `data/tmp/ghsl_zimbabwe_v1_methodology/`
 
@@ -60,8 +60,8 @@ flood-risk interpretation, or final thesis boundary claims.
 - Raw data path: `data/raw/ghsl_zimbabwe_v1_methodology/`
 - Derived output path: `outputs/v1_full_methodology_evidence_sweep/`
 - Scripts or commands used:
-  - `.venv/bin/python bin/download_v1_methodology_inputs.py`
-  - `.venv/bin/python bin/prepare_v1_full_methodology_evidence.py`
+  - `.venv/bin/python bin/acquire/download_v1_methodology_inputs.py`
+  - `.venv/bin/python bin/package/prepare_v1_full_methodology_evidence.py`
 - Planned/actual use: built-up surface and population exposure cross-check
 - Known limitations: GHSL is exposure context only; it does not encode poverty, coping capacity,
   damage, or observed flood vulnerability.

@@ -36,8 +36,8 @@ authorize AHP overlay, flood-risk interpretation, or final thesis boundary claim
 - Expected file types: GeoPackage
 - Expected file count: 1
 - Download command or manual steps:
-  1. Run `.venv/bin/python bin/download_v1_methodology_inputs.py`.
-  2. Run `.venv/bin/python bin/prepare_v1_full_methodology_evidence.py`.
+  1. Run `.venv/bin/python bin/acquire/download_v1_methodology_inputs.py`.
+  2. Run `.venv/bin/python bin/package/prepare_v1_full_methodology_evidence.py`.
 - Temporary path, if any: `data/tmp/wdpca_zimbabwe_v1_methodology/`
 
 ## Verification

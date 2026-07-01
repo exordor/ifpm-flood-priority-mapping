@@ -18,7 +18,7 @@ intervention-priority maps, and does not make V1 the final thesis boundary.
 - Slope:
   `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_slope_degrees_utm35s_30m.tif`
 - Required gate:
-  `bin/check_v1_raster_grid.py`
+  `bin/package/check_v1_raster_grid.py`
 
 ## Standardization Rule
 
@@ -35,7 +35,7 @@ documented thresholds.
 
 ## Output Candidates
 
-The script `bin/standardize_v1_terrain.py` writes:
+The script `bin/package/standardize_v1_terrain.py` writes:
 
 - `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_standardization/v1_elevation_lowland_context_0_1.tif`
   - Direction: lower elevation gives a higher diagnostic value.

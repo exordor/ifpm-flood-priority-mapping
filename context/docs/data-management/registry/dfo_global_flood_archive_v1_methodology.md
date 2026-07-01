@@ -38,8 +38,8 @@ authorize AHP overlay, flood-risk interpretation, or local flood validation clai
 - Intended destination: `data/raw/dfo_global_flood_archive_v1_methodology/`
 - Expected file types: ZIP containing shapefile components
 - Download command or manual steps:
-  1. Run `.venv/bin/python bin/download_v1_methodology_inputs.py`.
-  2. Run `.venv/bin/python bin/prepare_v1_full_methodology_evidence.py`.
+  1. Run `.venv/bin/python bin/acquire/download_v1_methodology_inputs.py`.
+  2. Run `.venv/bin/python bin/package/prepare_v1_full_methodology_evidence.py`.
 - Temporary path, if any: `data/tmp/dfo_global_flood_archive_v1_methodology/`
 
 ## Verification

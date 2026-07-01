@@ -161,5 +161,5 @@ before any Peru terrain standardization or overlay; the Zimbabwe rule is Zimbabw
 - Peru decision package: `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p2_peru_side_decision_package_2026-06-15.md`
 - Zimbabwe analogue (result): `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/hydrosheds_boundary_discovery_result_2026-06-10.md`
 - Execution status policy Peru Rule: `execution_status_policy.md`
-- Discovery script: `bin/discover_peru_candidate_basins.py`
+- Discovery script: `bin/acquire/discover_peru_candidate_basins.py`
 - Discovery outputs: `outputs/peru_boundary_discovery/`

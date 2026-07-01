@@ -58,7 +58,7 @@ semantics.
 
 Implemented gate script:
 
-`bin/check_v1_raster_grid.py`
+`bin/package/check_v1_raster_grid.py`
 
 Latest manifest:
 

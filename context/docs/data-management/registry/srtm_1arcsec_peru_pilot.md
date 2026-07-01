@@ -38,8 +38,8 @@ Status: downloaded and processed for Peru engineering-pilot (PE1) terrain diagno
 - PE1 preflight bbox EPSG:4326 with buffer: covers the PE1 pacific-slope catchment
 - Expected file count: 2 SRTM 1x1 degree tiles
 - Download command or manual steps:
-  `.venv/bin/python bin/plan_srtm_tiles_for_peru_pilot.py` then
-  `.venv/bin/python bin/preprocess_srtm_peru_pilot_dem.py`
+  `.venv/bin/python bin/acquire/plan_srtm_tiles_for_peru_pilot.py` then
+  `.venv/bin/python bin/factors/preprocess_srtm_peru_pilot_dem.py`
 - Rate limits or quotas: none encountered
 - Authentication handling: no credentials used
 
@@ -74,11 +74,11 @@ Status: downloaded and processed for Peru engineering-pilot (PE1) terrain diagno
 - Raw data path: `data/raw/srtm_1arcsec_peru_pilot/`
 - Derived output path: `outputs/srtm_1arcsec_peru_pilot/`
 - Scripts or commands used:
-  `bin/plan_srtm_tiles_for_peru_pilot.py`,
-  `bin/preprocess_srtm_peru_pilot_dem.py`,
-  `bin/derive_peru_pilot_slope.py`,
-  `bin/derive_peru_pilot_hydrology.py`,
-  `bin/derive_peru_pilot_ls_factor.py`
+  `bin/acquire/plan_srtm_tiles_for_peru_pilot.py`,
+  `bin/factors/preprocess_srtm_peru_pilot_dem.py`,
+  `bin/factors/derive_peru_pilot_slope.py`,
+  `bin/factors/derive_peru_pilot_hydrology.py`,
+  `bin/factors/derive_peru_pilot_ls_factor.py`
 - Reference-grid rule: `context/docs/data-management/peru_pilot_terrain_reference_grid_rule.md`
   (PE1 DEM is the Peru reference grid, separate from Zimbabwe's EPSG:32735 reference)
 - Known limitations: some SRTM tiles may contain voids; hydrological conditioning not guaranteed

@@ -190,19 +190,19 @@ equation misuse); Elwell & Stocking 1973/1976 (Zimbabwe erosivity, SLEMSA); Moor
 ## Outputs and tooling
 
 Method comparison: `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/` (diagnostics,
-rasters, board, caption); `bin/explore_rfactor_methods.py`, `bin/plot_rfactor_exploration_board.py`.
+rasters, board, caption); `bin/investigate/explore_rfactor_methods.py`, `bin/visualize/plot_rfactor_exploration_board.py`.
 
 ERA5 empirical: `outputs/v1_usle_soil_loss/rfactor_empirical_era5/` (point diagnostics, R
-rasters, A diagnostics, boards, captions); `bin/compute_era5_empirical_rfactor.py`,
-`bin/build_era5_rfactor_raster.py`, `bin/plot_era5_empirical_rfactor_board.py`,
-`bin/plot_era5_rfactor_raster_board.py`.
+rasters, A diagnostics, boards, captions); `bin/investigate/compute_era5_empirical_rfactor.py`,
+`bin/criteria/build_era5_rfactor_raster.py`, `bin/visualize/plot_era5_empirical_rfactor_board.py`,
+`bin/visualize/plot_era5_rfactor_raster_board.py`.
 
 V2 hotspot-survival (V2 A-factor outputs removed 2026-07-01 as deprecated; survival numbers
 retained as recorded values in §5, not as re-runnable files):
-`bin/derive_v2_rfactor_candidates.py`,
-`bin/derive_v2_usle_soil_loss.py`, `bin/compare_v2_rfactor_candidates.py`.
+`bin/factors/derive_v2_rfactor_candidates.py`,
+`bin/factors/derive_v2_usle_soil_loss.py`, `bin/investigate/compare_v2_rfactor_candidates.py`.
 
-Verification tooling: `bin/verify_ls_factor_exponents.py`; literature captures under
+Verification tooling: `bin/investigate/verify_ls_factor_exponents.py`; literature captures under
 `outputs/literature_verification/`.
 
 ## Lineage

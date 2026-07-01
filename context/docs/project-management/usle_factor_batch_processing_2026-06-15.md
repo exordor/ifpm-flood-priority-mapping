@@ -20,7 +20,7 @@ methodological items needing mentor awareness.
 
 ## R-Factor (CHIRPS Modified Fournier)
 
-- Script: `bin/derive_v1_chirps_rfactor.py`. Native CHIRPS 0.05 deg grid, V1 window, 132 cells.
+- Script: `bin/factors/derive_v1_chirps_rfactor.py`. Native CHIRPS 0.05 deg grid, V1 window, 132 cells.
 - P_annual mean 583 mm/yr (1981-2024 climatology, matches expected).
 - Modified Fournier Index (Nov-Mar 5 months) mean 92.9, range 70-117.
 - R-factor: mean 408, range 45-517 MJ mm ha-1 h-1 yr-1.
@@ -46,8 +46,8 @@ JSON. CHIRPS was NOT resampled to 30 m.
 
 ## Hydrology Derivatives (whitebox on V1 DEM)
 
-- Script: `bin/derive_v1_hydrology.py`. All 10 outputs on the V1 30 m grid (EPSG:32735), all
-  grid_compatible=true per `bin/check_v1_raster_grid.py`.
+- Script: `bin/factors/derive_v1_hydrology.py`. All 10 outputs on the V1 30 m grid (EPSG:32735), all
+  grid_compatible=true per `bin/package/check_v1_raster_grid.py`.
 - Outputs: filled DEM, D8 flow direction, flow accumulation (cells + SCA), streams at thresholds
   100/500/1000/5000, distance-to-drainage (t500 primary), TWI.
 - Max flow accumulation: 4,036,878 cells = 3633 km2 (~98.5% of V1 reaches the main outlet, sane).
@@ -69,7 +69,7 @@ note.
 
 ## C-Factor (WorldCover lookup)
 
-- Script: `bin/derive_v1_worldcover_cfactor.py`. Native 10m + V1 30m outputs, grid-compatible.
+- Script: `bin/factors/derive_v1_worldcover_cfactor.py`. Native 10m + V1 30m outputs, grid-compatible.
 - Lookup applied AFTER mode (majority-class) resampling from 10m to 30m; C-values are discrete
   lookup values, not cross-class averages.
 - V1 class fractions match the methodology sweep: shrubland 55%, tree 23%, grassland 15%,

@@ -61,10 +61,10 @@ Individual metric panels are also saved as `panel_<metric_id>.png/pdf` in the sa
 
 Scripts:
 
-- `bin/plan_chirps_v1_rainfall_metrics.py`
-- `bin/download_chirps_v1_rainfall_inputs.py`
-- `bin/compare_chirps_v1_rainfall_metrics.py`
-- `bin/plot_chirps_v1_rainfall_comparison.py`
+- `bin/acquire/plan_chirps_v1_rainfall_metrics.py`
+- `bin/acquire/download_chirps_v1_rainfall_inputs.py`
+- `bin/investigate/compare_chirps_v1_rainfall_metrics.py`
+- `bin/visualize/plot_chirps_v1_rainfall_comparison.py`
 
 ## Key Results
 

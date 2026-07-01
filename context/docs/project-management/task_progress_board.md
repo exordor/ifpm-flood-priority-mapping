@@ -158,7 +158,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: complete. Verified reachability, login, and download mechanism for candidate and
   existing portals via Chrome DevTools Protocol.
 - Evidence: `context/docs/project-management/_archive/superseded_process_notes_2026-06/cdp_data_portal_verification_2026-06-15.md`,
-  `bin/check_data_portals.py`, `outputs/data_portal_check/portal_check_report.json` + screenshots.
+  `bin/acquire/check_data_portals.py`, `outputs/data_portal_check/portal_check_report.json` + screenshots.
 - Key results: SoilGrids is a VRT directory listing (no login, windowed HTTP read, no bulk
   download); EM-DAT HDX route changed to per-country profiles (Zimbabwe downloaded); GloFAS is
   NOT on CDS and its historical reanalysis is not publicly accessible (downgraded).
@@ -166,7 +166,7 @@ or Zimbabwe-Peru comparison is authorized.
 ### IFPM-072 V1 SoilGrids K-Factor (USLE)
 
 - Status: complete as a 250 m diagnostic data product.
-- Evidence: `bin/derive_v1_soilgrids_kfactor.py`,
+- Evidence: `bin/factors/derive_v1_soilgrids_kfactor.py`,
   `context/docs/project-management/soilgrids_v1_kfactor_processing_2026-06-15.md`,
   `outputs/soilgrids_250m_sediment_candidate/k_factor_0_5cm_250m.tif`,
   `k_factor_0_30cm_avg_250m.tif`, `k_factor_diagnostics.json`.
@@ -185,7 +185,7 @@ or Zimbabwe-Peru comparison is authorized.
 
 - Status: superseded by the 2026-06-19 formula audit. The old 0.05 deg diagnostic is retained only
   as an error trace; it must not be used as R evidence.
-- Evidence: `bin/derive_v1_chirps_rfactor.py`,
+- Evidence: `bin/factors/derive_v1_chirps_rfactor.py`,
   `usle_factor_batch_processing_2026-06-15.md`.
   (The deprecated `outputs/chirps_v3_zimbabwe_prototype/r_factor/` products were removed
   2026-07-01; see `outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md`.)
@@ -201,8 +201,8 @@ or Zimbabwe-Peru comparison is authorized.
 - Evidence:
   `context/docs/project-management/rfactor_investigation_consolidated.md` (includes the
   literature-integrity correction section),
-  `bin/derive_v2_rfactor_candidates.py`, `bin/derive_v2_usle_soil_loss.py`,
-  `bin/plot_v2_rfactor_comparison_board.py`, `bin/compare_v2_rfactor_candidates.py`.
+  `bin/factors/derive_v2_rfactor_candidates.py`, `bin/factors/derive_v2_usle_soil_loss.py`,
+  `bin/visualize/plot_v2_rfactor_comparison_board.py`, `bin/investigate/compare_v2_rfactor_candidates.py`.
   (The deprecated `outputs/.../r_factor_v2/` and `outputs/v1_usle_soil_loss/v2_rfactor/`
   products were removed 2026-07-01; the survival numbers are recorded in the consolidated
   note §5, and the full deprecation list is in
@@ -251,7 +251,7 @@ or Zimbabwe-Peru comparison is authorized.
   coefficient, unit, and citation in the V1 and V2 USLE tooling, after a spot-check found an
   unverified R-factor coefficient.
 - Evidence: `context/docs/project-management/rfactor_investigation_consolidated.md`,
-  `bin/verify_ls_factor_exponents.py`, `outputs/literature_verification/` (capture records).
+  `bin/investigate/verify_ls_factor_exponents.py`, `outputs/literature_verification/` (capture records).
 - Key results (REVISED 2026-06-19 after a deeper pass against the original PDF):
   - FABRICATED and removed: the "Lo et al. (1985)" V2 R candidate (0.0737*MFI^1.81) had no
     traceable source. (See IFPM-079 for the removal.)
@@ -293,7 +293,7 @@ or Zimbabwe-Peru comparison is authorized.
   question into an evidence-backed decision rather than an abstract choice.
 - Evidence:
   `context/docs/project-management/rfactor_investigation_consolidated.md`,
-  `bin/explore_rfactor_methods.py`, `bin/plot_rfactor_exploration_board.py`,
+  `bin/investigate/explore_rfactor_methods.py`, `bin/visualize/plot_rfactor_exploration_board.py`,
   `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/rfactor_method_exploration_diagnostics.json`,
   `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/mentor_rfactor_exploration_board.png`.
 - Key results (V1 MFI mean 92.92, P_annual mean 583.5 mm; measured Zimbabwe R ~330, semi-arid
@@ -326,7 +326,7 @@ or Zimbabwe-Peru comparison is authorized.
   IFPM-081 with INDEPENDENT (non-circular) data.
 - Evidence:
   `context/docs/project-management/rfactor_investigation_consolidated.md`,
-  `bin/compute_era5_empirical_rfactor.py`, `bin/plot_era5_empirical_rfactor_board.py`,
+  `bin/investigate/compute_era5_empirical_rfactor.py`, `bin/visualize/plot_era5_empirical_rfactor_board.py`,
   `outputs/v1_usle_soil_loss/rfactor_empirical_era5/era5_empirical_rfactor_diagnostics.json`,
   `outputs/v1_usle_soil_loss/rfactor_empirical_era5/mentor_era5_empirical_rfactor_board.png`,
   `context/docs/data-management/registry/era5_hourly_precip_v1_rfactor.md`.
@@ -369,7 +369,7 @@ or Zimbabwe-Peru comparison is authorized.
 
 - Status: complete as candidate evidence for mentor review (no overlay). Fills the gap left by
   IFPM-055: terrain had three 0-1 candidates but hydrology had none.
-- Evidence: `bin/standardize_v1_hydrology.py`, `bin/plot_v1_hydrology_evidence_board.py`,
+- Evidence: `bin/package/standardize_v1_hydrology.py`, `bin/visualize/plot_v1_hydrology_evidence_board.py`,
   `outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/` (two 0-1 candidates +
   diagnostics CSV + handoff + mentor board),
   `outputs/v1_full_methodology_evidence_sweep/v1_full_methodology_evidence_matrix.csv` (updated).
@@ -414,7 +414,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Evidence:
   `context/docs/data-management/registry/mentor_voi_rainfall_measurements_2026-06-24.md`,
   `context/docs/project-management/mentor_voi_rainfall_intake_2026-06-24.md`,
-  `bin/inventory_mentor_voi_rainfall_archive.py`, `bin/intake_mentor_voi_rainfall.py`, and ignored
+  `bin/acquire/inventory_mentor_voi_rainfall_archive.py`, `bin/acquire/intake_mentor_voi_rainfall.py`, and ignored
   outputs under `outputs/mentor_voi_rainfall_intake/`.
 - Key results:
   - Managed raw archive:
@@ -438,9 +438,9 @@ or Zimbabwe-Peru comparison is authorized.
   intervention-priority result.
 - Evidence:
   `context/docs/project-management/v1_autonomous_prototype_v0_1_2026-06-25.md`,
-  `bin/build_v1_autonomous_criteria_stack.py`,
-  `bin/run_v1_autonomous_priority_scenarios.py`,
-  `bin/plot_v1_autonomous_prototype_board.py`, and ignored outputs under
+  `bin/criteria/build_v1_autonomous_criteria_stack.py`,
+  `bin/scenarios/run_v1_autonomous_priority_scenarios.py`,
+  `bin/visualize/plot_v1_autonomous_prototype_board.py`, and ignored outputs under
   `outputs/v1_autonomous_prototype_v0_1/`.
 - Key results:
   - Five criteria were built on the V1 reference grid: flood/hydrology, sediment structure,
@@ -504,7 +504,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Evidence:
   `context/docs/data-management/preflight/peru_hydrobasins_boundary_discovery_authorization_2026-06-30.md`,
   `context/docs/project-management/peru_diagnostic_readiness_report_2026-06-30.md`,
-  `bin/discover_peru_candidate_basins.py`, ignored raw under
+  `bin/acquire/discover_peru_candidate_basins.py`, ignored raw under
   `data/raw/hydrosheds_peru_prototype/`, ignored outputs under
   `outputs/peru_boundary_discovery/`.
 - Key results:
@@ -537,8 +537,8 @@ or Zimbabwe-Peru comparison is authorized.
 - Evidence:
   `context/docs/project-management/peru_pilot_boundary_decision_2026-06-30.md`,
   `context/docs/data-management/peru_pilot_terrain_reference_grid_rule.md`,
-  `bin/export_peru_pilot_boundary.py`, `bin/plan_srtm_tiles_for_peru_pilot.py`,
-  `bin/preprocess_srtm_peru_pilot_dem.py`, ignored raw under
+  `bin/package/export_peru_pilot_boundary.py`, `bin/acquire/plan_srtm_tiles_for_peru_pilot.py`,
+  `bin/factors/preprocess_srtm_peru_pilot_dem.py`, ignored raw under
   `data/raw/srtm_1arcsec_peru_pilot/`, ignored outputs under
   `outputs/peru_pilot_boundary/` and `outputs/srtm_1arcsec_peru_pilot/`.
 - Key results:
@@ -561,8 +561,8 @@ or Zimbabwe-Peru comparison is authorized.
 
 - Status: complete as `diagnostic_only` / `engineering_pilot` prototype. PE1 now has a full
   evidence stack and a priority map comparable to Zimbabwe V1 v0.2.
-- Evidence: `bin/derive_peru_pilot_usle_soil_loss.py`, `bin/build_pe1_criteria_stack.py`,
-  `bin/run_pe1_priority_scenarios.py`, ignored outputs under
+- Evidence: `bin/factors/derive_peru_pilot_usle_soil_loss.py`, `bin/criteria/build_pe1_criteria_stack.py`,
+  `bin/scenarios/run_pe1_priority_scenarios.py`, ignored outputs under
   `outputs/srtm_1arcsec_peru_pilot/{ls_factor,usle_soil_loss,criteria_stack,priority_scenarios}/`
   and `outputs/esa_worldcover_2021_peru_pilot/`, `outputs/soilgrids_250m_peru_pilot/`.
 - Key results:
@@ -594,8 +594,8 @@ or Zimbabwe-Peru comparison is authorized.
   slide-mapped priority scenario.
 - Evidence:
   `context/docs/data-management/registry/geofabrik_osm_peru_pilot.md`,
-  `bin/build_pe1_osm_proximity_criteria.py`, `bin/build_pe1_criteria_stack.py`,
-  `bin/run_pe1_priority_scenarios.py`, ignored raw under
+  `bin/criteria/build_pe1_osm_proximity_criteria.py`, `bin/criteria/build_pe1_criteria_stack.py`,
+  `bin/scenarios/run_pe1_priority_scenarios.py`, ignored raw under
   `data/raw/geofabrik_osm_peru_pilot/`, ignored outputs under
   `outputs/geofabrik_osm_peru_pilot/pe1_proximity/` and
   `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/`.
@@ -624,7 +624,7 @@ or Zimbabwe-Peru comparison is authorized.
   to official INGEMMET Pequeña Minería (small-scale/ASM mining) point evidence.
 - Evidence:
   `context/docs/data-management/registry/ingemmet_catastro_minero_peru_pilot.md`,
-  `bin/extract_pe1_ingemmet_mining.py`, `bin/build_pe1_criteria_stack.py` (mining input switched
+  `bin/acquire/extract_pe1_ingemmet_mining.py`, `bin/criteria/build_pe1_criteria_stack.py` (mining input switched
   to INGEMMET), ignored raw under
   `data/raw/ingemmet_catastro_minero_peru_pilot/`, ignored outputs under
   `outputs/ingemmet_catastro_minero_peru_pilot/`.
@@ -647,8 +647,8 @@ or Zimbabwe-Peru comparison is authorized.
 
 - Status: complete. PE1 now has a rainfall criterion, reaching full 6-criteria symmetry with the
   merged Zimbabwe v0.3 (which added rainfall_sensitivity_v0_3).
-- Evidence: `bin/build_pe1_rainfall_criterion.py`, `bin/build_pe1_criteria_stack.py`,
-  `bin/run_pe1_priority_scenarios.py`, ignored outputs under
+- Evidence: `bin/criteria/build_pe1_rainfall_criterion.py`, `bin/criteria/build_pe1_criteria_stack.py`,
+  `bin/scenarios/run_pe1_priority_scenarios.py`, ignored outputs under
   `outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/` and
   `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/`.
 - Key results:
@@ -672,7 +672,7 @@ or Zimbabwe-Peru comparison is authorized.
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)
 
 - Status: complete as 30 m diagnostic rasters; all grid_compatible.
-- Evidence: `bin/derive_v1_hydrology.py`,
+- Evidence: `bin/factors/derive_v1_hydrology.py`,
   `outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/` (filled DEM, D8 flow dir,
   flow accumulation cells+SCA, streams at t100/500/1000/5000, distance-to-drainage, TWI),
   `hydrology_grid_check.csv`, `usle_factor_batch_processing_2026-06-15.md`.
@@ -683,7 +683,7 @@ or Zimbabwe-Peru comparison is authorized.
 ### IFPM-076 V1 USLE C-Factor (WorldCover lookup)
 
 - Status: complete as 10m + 30m V1-grid diagnostic; grid_compatible.
-- Evidence: `bin/derive_v1_worldcover_cfactor.py`,
+- Evidence: `bin/factors/derive_v1_worldcover_cfactor.py`,
   `outputs/esa_worldcover_2021_v1_methodology/c_factor/c_factor_v1_30m.tif`,
   `usle_factor_batch_processing_2026-06-15.md`.
 - Key result: V1 area-weighted mean C 0.0429 (within expected 0.03-0.06); lookup applied after
@@ -694,7 +694,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: complete as a 30 m diagnostic; A absolute values flagged (R-dependent). The R-dependence
   caveat now has a mentor-directed resolution path (2026-06-16, see IFPM-074): V1 stays as
   baseline, V2 uses a smoother R, and the LS x C x K hotspot structure is re-tested under V2.
-- Evidence: `bin/derive_v1_ls_factor.py`, `bin/derive_v1_usle_soil_loss.py`,
+- Evidence: `bin/factors/derive_v1_ls_factor.py`, `bin/factors/derive_v1_usle_soil_loss.py`,
   `outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor/`,
   `outputs/v1_usle_soil_loss/a_structure_K_LS_C_30m.tif` (R-invariant base; the deprecated
   a_mean / a_low_R50 / a_high_R510 / a_mean_classes products were removed 2026-07-01),
@@ -976,7 +976,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   downloading DEM or running overlay.
 - Status: done; prototype-only waiver, not final thesis boundary.
 - Completion evidence:
-  `bin/export_v1_working_boundary.py`,
+  `bin/package/export_v1_working_boundary.py`,
   `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/v1_working_boundary_decision_2026-06-12.md`,
   `outputs/v1_working_boundary/v1_working_boundary.gpkg`,
   `outputs/v1_working_boundary/v1_working_boundary_manifest.csv`,
@@ -992,7 +992,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
 - Task: compute SRTM tile names from the V1 boundary plus 5 km buffer, without downloading data.
 - Status: done for pre-download planning; superseded by IFPM-051.
 - Completion evidence:
-  `bin/plan_srtm_tiles_for_v1.py`,
+  `bin/acquire/plan_srtm_tiles_for_v1.py`,
   `outputs/v1_working_boundary/srtm_v1_tile_plan.csv`,
   `outputs/v1_working_boundary/srtm_v1_tile_plan.gpkg`, and
   `outputs/v1_working_boundary/srtm_v1_preflight_summary.md`.
@@ -1008,8 +1008,8 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   checksums, and verify raw raster metadata without deriving terrain indicators.
 - Status: done for raw download and inventory; no terrain preprocessing or overlay was run.
 - Completion evidence:
-  `bin/download_srtm_v1_tiles.py`,
-  `bin/inventory_srtm_v1_tiles.py`,
+  `bin/acquire/download_srtm_v1_tiles.py`,
+  `bin/acquire/inventory_srtm_v1_tiles.py`,
   `context/docs/project-management/srtm_v1_download_and_inventory_2026-06-12.md`,
   `outputs/srtm_1arcsec_zimbabwe_prototype/srtm_raw_file_manifest.csv`,
   `outputs/srtm_1arcsec_zimbabwe_prototype/srtm_tile_inventory.csv`, and
@@ -1027,9 +1027,9 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   hydrological conditioning, rainfall, overlay, or interpretation.
 - Status: done for DEM, QA hillshade visualization, and slope diagnostics.
 - Completion evidence:
-  `bin/preprocess_srtm_v1_dem.py`,
-  `bin/derive_srtm_v1_slope.py`,
-  `bin/plot_srtm_v1_terrain_qa.py`,
+  `bin/factors/preprocess_srtm_v1_dem.py`,
+  `bin/factors/derive_srtm_v1_slope.py`,
+  `bin/visualize/plot_srtm_v1_terrain_qa.py`,
   `context/docs/project-management/srtm_v1_terrain_preprocessing_2026-06-12.md`, and
   `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_terrain_preprocessing_diagnostics.csv`.
 - Key result: final DEM and slope rasters are `EPSG:32735`, `30 m`, single-band `float32`, NoData
@@ -1050,7 +1050,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   Overlay is blocked unless candidate terrain rasters match its CRS, transform, resolution,
   shape, band count, dtype, NoData, and V1 valid-cell coverage. CHIRPS is explicitly excluded
   from pixel-level 30 m terrain-grid overlay.
-- Next action: add or run `bin/check_v1_raster_grid.py` before any future V1 standardization,
+- Next action: add or run `bin/package/check_v1_raster_grid.py` before any future V1 standardization,
   scoring, or weighted overlay.
 
 ### IFPM-054 V1 Raster Grid Gate
@@ -1060,7 +1060,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   DEM before any standardization, scoring, or overlay.
 - Status: done for current final V1 DEM and slope rasters.
 - Completion evidence:
-  `bin/check_v1_raster_grid.py` and
+  `bin/package/check_v1_raster_grid.py` and
   `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_raster_grid_check.csv`.
 - Key result: the final V1 DEM and final V1 slope are `grid_compatible=true`. A buffered-DEM
   failure probe correctly failed on transform, width, height, and bounds mismatch.
@@ -1074,7 +1074,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   the raster grid gate, without CHIRPS, AHP weights, overlay, or interpretation.
 - Status: done for prototype diagnostic candidates.
 - Completion evidence:
-  `bin/standardize_v1_terrain.py`,
+  `bin/package/standardize_v1_terrain.py`,
   `context/docs/project-management/v1_terrain_standardization_rule_2026-06-13.md`, and
   `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_standardization/v1_terrain_standardization_diagnostics.csv`.
 - Key result: elevation lowland context, low-slope susceptibility, and high-slope runoff-pressure
@@ -1091,7 +1091,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   evidence table, and handoff without adding CHIRPS, AHP weights, overlay, or interpretation.
 - Status: done for mentor review package.
 - Completion evidence:
-  `bin/plot_v1_terrain_mentor_package.py`,
+  `bin/visualize/plot_v1_terrain_mentor_package.py`,
   `context/docs/project-management/v1_terrain_mentor_package_2026-06-13.md`, and
   `outputs/v1_terrain_mentor_package/mentor_v1_terrain_diagnostic_board.png`.
 - Key result: the package presents lowland context, low-slope susceptibility, and high-slope
@@ -1108,8 +1108,8 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   AHP weights, overlay, or interpretation.
 - Status: done for first mentor review package.
 - Completion evidence:
-  `bin/prepare_v1_multicriteria_evidence.py`,
-  `bin/plot_v1_multicriteria_evidence_board.py`,
+  `bin/package/prepare_v1_multicriteria_evidence.py`,
+  `bin/visualize/plot_v1_multicriteria_evidence_board.py`,
   `context/docs/project-management/v1_multicriteria_evidence_package_2026-06-13.md`, and
   `outputs/v1_multicriteria_evidence_package/mentor_v1_multicriteria_evidence_board.png`.
 - Key result: the evidence package covers terrain, hydro/flood context, exposure, mining proxy,
@@ -1127,10 +1127,10 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   daily RNL-derived peak without choosing a final rainfall criterion.
 - Status: done for mentor-review sensitivity package.
 - Completion evidence:
-  `bin/plan_chirps_v1_rainfall_metrics.py`,
-  `bin/download_chirps_v1_rainfall_inputs.py`,
-  `bin/compare_chirps_v1_rainfall_metrics.py`,
-  `bin/plot_chirps_v1_rainfall_comparison.py`,
+  `bin/acquire/plan_chirps_v1_rainfall_metrics.py`,
+  `bin/acquire/download_chirps_v1_rainfall_inputs.py`,
+  `bin/investigate/compare_chirps_v1_rainfall_metrics.py`,
+  `bin/visualize/plot_chirps_v1_rainfall_comparison.py`,
   `context/docs/project-management/chirps_v1_rainfall_comparison_2026-06-13.md`,
   and
   `outputs/chirps_v3_zimbabwe_prototype/rainfall_comparison/mentor_v1_chirps_rainfall_comparison_board.png`.
@@ -1149,12 +1149,12 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   layers without creating AHP weights, weighted overlay, flood-risk maps, or intervention maps.
 - Status: done for mentor-review evidence package.
 - Completion evidence:
-  `bin/download_v1_methodology_inputs.py`,
-  `bin/prepare_v1_full_methodology_evidence.py`,
-  `bin/prepare_v1_methodology_raster_layers.py`,
-  `bin/prepare_v1_methodology_vector_layers.py`,
-  `bin/build_v1_full_methodology_evidence_matrix.py`,
-  `bin/plot_v1_full_methodology_evidence.py`,
+  `bin/acquire/download_v1_methodology_inputs.py`,
+  `bin/package/prepare_v1_full_methodology_evidence.py`,
+  `bin/package/prepare_v1_methodology_raster_layers.py`,
+  `bin/package/prepare_v1_methodology_vector_layers.py`,
+  `bin/criteria/build_v1_full_methodology_evidence_matrix.py`,
+  `bin/visualize/plot_v1_full_methodology_evidence.py`,
   `context/docs/project-management/v1_full_methodology_evidence_sweep_2026-06-13.md`,
   `context/docs/project-management/_archive/superseded_process_notes_2026-06/v1_full_methodology_adversarial_review_2026-06-13.md`, and
   `outputs/v1_full_methodology_evidence_sweep/v1_full_methodology_evidence_matrix.csv`.

@@ -38,7 +38,7 @@ authorize AHP overlay, flood-risk interpretation, or final thesis boundary claim
 - Expected file count: 5 tile layers
 - Expected byte size: about 80 MB total from checked tile sizes
 - Download command or manual steps:
-  1. Run `.venv/bin/python bin/download_v1_methodology_inputs.py`.
+  1. Run `.venv/bin/python bin/acquire/download_v1_methodology_inputs.py`.
   2. Record file size and SHA-256 in the full methodology source manifest.
 - Temporary path, if any: `data/tmp/jrc_global_surface_water_v1_methodology/`
 
@@ -60,8 +60,8 @@ authorize AHP overlay, flood-risk interpretation, or final thesis boundary claim
 - Raw data path: `data/raw/jrc_global_surface_water_v1_methodology/`
 - Derived output path: `outputs/v1_full_methodology_evidence_sweep/`
 - Scripts or commands used:
-  - `.venv/bin/python bin/download_v1_methodology_inputs.py`
-  - `.venv/bin/python bin/prepare_v1_full_methodology_evidence.py`
+  - `.venv/bin/python bin/acquire/download_v1_methodology_inputs.py`
+  - `.venv/bin/python bin/package/prepare_v1_full_methodology_evidence.py`
 - Planned/actual use: V1 water occurrence, seasonality, recurrence, change, and transition
   summaries
 - Known limitations: surface-water history is not event flood depth or hazard frequency; it is

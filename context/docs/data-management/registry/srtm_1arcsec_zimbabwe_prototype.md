@@ -47,7 +47,7 @@ Status: downloaded and inventoried for controlled V1 terrain diagnostics only.
 - Expected byte size: bounded local download; actual source archive size is `41,162,741` bytes
   across six ZIP files.
 - Download command or manual steps:
-  `.venv/bin/python bin/download_srtm_v1_tiles.py`
+  `.venv/bin/python bin/acquire/download_srtm_v1_tiles.py`
 - Rate limits or quotas: none encountered during the ESA STEP mirror download
 - Authentication handling: no credentials, cookies, tokens, or private links were used
 - Temporary path, if any: `data/tmp/srtm_1arcsec_zimbabwe_prototype/`
@@ -71,8 +71,8 @@ Status: downloaded and inventoried for controlled V1 terrain diagnostics only.
 - Verification date: 2026-06-12
 - Checksum scope: downloaded source ZIP archives
 - Checksum algorithm: SHA-256 preferred
-- Checksum command: `.venv/bin/python bin/download_srtm_v1_tiles.py` and
-  `.venv/bin/python bin/inventory_srtm_v1_tiles.py`
+- Checksum command: `.venv/bin/python bin/acquire/download_srtm_v1_tiles.py` and
+  `.venv/bin/python bin/acquire/inventory_srtm_v1_tiles.py`
 - Checksum value: see `outputs/srtm_1arcsec_zimbabwe_prototype/srtm_raw_file_manifest.csv`
 - Expected files or manifest:
   `outputs/v1_working_boundary/srtm_v1_tile_plan.csv`
@@ -106,12 +106,12 @@ Downloaded file evidence:
 - Derived output path: `outputs/srtm_1arcsec_zimbabwe_prototype/` for future terrain products;
   pre-download tile planning output is under `outputs/v1_working_boundary/`
 - Scripts or commands used:
-  `.venv/bin/python bin/plan_srtm_tiles_for_v1.py`,
-  `.venv/bin/python bin/download_srtm_v1_tiles.py`,
-  `.venv/bin/python bin/inventory_srtm_v1_tiles.py`,
-  `.venv/bin/python bin/preprocess_srtm_v1_dem.py`,
-  `.venv/bin/python bin/derive_srtm_v1_slope.py`, and
-  `.venv/bin/python bin/plot_srtm_v1_terrain_qa.py`
+  `.venv/bin/python bin/acquire/plan_srtm_tiles_for_v1.py`,
+  `.venv/bin/python bin/acquire/download_srtm_v1_tiles.py`,
+  `.venv/bin/python bin/acquire/inventory_srtm_v1_tiles.py`,
+  `.venv/bin/python bin/factors/preprocess_srtm_v1_dem.py`,
+  `.venv/bin/python bin/factors/derive_srtm_v1_slope.py`, and
+  `.venv/bin/python bin/visualize/plot_srtm_v1_terrain_qa.py`
 - Standardization/preprocessing notes: V1 DEM and slope diagnostics now exist under
   `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/`; terrain standardization for
   scoring is not started

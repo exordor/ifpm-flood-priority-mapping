@@ -194,14 +194,14 @@ missing dataset in the mentor trip request list.
 
 Inventory script implemented:
 
-`bin/prepare_boundary_v1_criteria_stack_v0_2_inventory.py`
+`bin/package/prepare_boundary_v1_criteria_stack_v0_2_inventory.py`
 
 Single responsibility: inspect existing local outputs and produce gap/upgrade tables for
 mining/ASM and exposure. It should not download new data, plot maps, or run overlay.
 
 Criteria repair script implemented:
 
-`bin/build_boundary_v1_criteria_stack_v0_2.py`
+`bin/criteria/build_boundary_v1_criteria_stack_v0_2.py`
 
 Single responsibility: read the `criteria_stack_v0_2` config, build honest-label grid-compatible
 criteria rasters, preserve NoData, and write a NoData coverage report plus a small preview map.

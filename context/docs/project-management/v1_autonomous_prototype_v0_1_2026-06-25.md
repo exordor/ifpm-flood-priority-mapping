@@ -30,16 +30,16 @@ so it remains an optional external R-range sanity check only.
 ## Commands
 
 ```bash
-.venv/bin/python bin/build_v1_autonomous_criteria_stack.py
-.venv/bin/python bin/check_v1_raster_grid.py --rasters \
+.venv/bin/python bin/criteria/build_v1_autonomous_criteria_stack.py
+.venv/bin/python bin/package/check_v1_raster_grid.py --rasters \
   outputs/v1_autonomous_prototype_v0_1/criteria/flood_hydrology_0_1.tif \
   outputs/v1_autonomous_prototype_v0_1/criteria/sediment_structure_0_1.tif \
   outputs/v1_autonomous_prototype_v0_1/criteria/landuse_asm_pressure_0_1.tif \
   outputs/v1_autonomous_prototype_v0_1/criteria/environmental_sensitivity_0_1.tif \
   outputs/v1_autonomous_prototype_v0_1/criteria/socioeconomic_exposure_0_1.tif \
   --output outputs/v1_autonomous_prototype_v0_1/criteria_stack_grid_check.csv
-.venv/bin/python bin/run_v1_autonomous_priority_scenarios.py
-.venv/bin/python bin/check_v1_raster_grid.py --rasters \
+.venv/bin/python bin/scenarios/run_v1_autonomous_priority_scenarios.py
+.venv/bin/python bin/package/check_v1_raster_grid.py --rasters \
   outputs/v1_autonomous_prototype_v0_1/priority_mean_0_1.tif \
   outputs/v1_autonomous_prototype_v0_1/priority_std_0_1.tif \
   outputs/v1_autonomous_prototype_v0_1/top20_frequency_0_1.tif \
@@ -48,7 +48,7 @@ so it remains an optional external R-range sanity check only.
   outputs/v1_autonomous_prototype_v0_1/scenarios/priority_flood_sediment_heavy_0_1.tif \
   outputs/v1_autonomous_prototype_v0_1/scenarios/priority_exposure_heavy_0_1.tif \
   --output outputs/v1_autonomous_prototype_v0_1/priority_grid_check.csv
-.venv/bin/python bin/plot_v1_autonomous_prototype_board.py
+.venv/bin/python bin/visualize/plot_v1_autonomous_prototype_board.py
 ```
 
 ## Outputs

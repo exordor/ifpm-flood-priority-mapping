@@ -16,7 +16,7 @@ thesis boundary.
 - Working boundary: V1 / `HB_L8_1081528840_full_l7_chain`
 - Tile source used: `https://step.esa.int/auxdata/dem/SRTMGL1/`
 - Original product reference: SRTM 1 Arc-Second Global, DOI `10.5066/F7PR7TFT`
-- Command: `.venv/bin/python bin/download_srtm_v1_tiles.py`
+- Command: `.venv/bin/python bin/acquire/download_srtm_v1_tiles.py`
 - Raw destination: `data/raw/srtm_1arcsec_zimbabwe_prototype/`
 - Output destination: `outputs/srtm_1arcsec_zimbabwe_prototype/`
 - Authentication: no login, cookie, token, or private link was used.
@@ -36,7 +36,7 @@ Total source archive size: `41,162,741` bytes.
 
 ## Inventory
 
-Command: `.venv/bin/python bin/inventory_srtm_v1_tiles.py`
+Command: `.venv/bin/python bin/acquire/inventory_srtm_v1_tiles.py`
 
 Inventory outputs:
 

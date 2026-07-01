@@ -9,7 +9,7 @@ structure (where erosion is relatively higher) is trustworthy.
 
 ## LS-Factor
 
-- Script: `bin/derive_v1_ls_factor.py`. Formula: Moore & Nieber (1989) raster LS:
+- Script: `bin/factors/derive_v1_ls_factor.py`. Formula: Moore & Nieber (1989) raster LS:
   `LS = (As / 22.13)^0.4 * (sin(theta) / 0.0896)^1.2`, As = specific contributing area (m),
   theta = slope angle. Both inputs on the V1 30 m grid.
 - Outputs in `outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor/`:
@@ -20,7 +20,7 @@ structure (where erosion is relatively higher) is trustworthy.
 
 ## USLE Annual Soil Loss Diagnostic (A = R x K x LS x C x P)
 
-- Script: `bin/derive_v1_usle_soil_loss.py`. Outputs in `outputs/v1_usle_soil_loss/`.
+- Script: `bin/factors/derive_v1_usle_soil_loss.py`. Outputs in `outputs/v1_usle_soil_loss/`.
 - Scalars (V1 zonal means): K_SI = 0.02232, R_mean = 408 (bimodal), P = 1.
 - Spatially varying at 30 m: LS (capped50 hillslope) and C.
 - A is reported in three R scenarios because the V1 R-factor is bimodal:
@@ -73,5 +73,5 @@ with cropland or bare ground (high C).
 
 ## Scripts
 
-- `bin/derive_v1_ls_factor.py`
-- `bin/derive_v1_usle_soil_loss.py`
+- `bin/factors/derive_v1_ls_factor.py`
+- `bin/factors/derive_v1_usle_soil_loss.py`

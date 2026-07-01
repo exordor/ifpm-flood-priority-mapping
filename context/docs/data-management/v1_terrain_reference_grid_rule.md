@@ -99,7 +99,7 @@ Only rasters with `grid-compatible=true` may enter a later standardization or sc
 
 Before any V1 terrain standardization, scoring, or weighted overlay, run the dedicated grid gate:
 
-`bin/check_v1_raster_grid.py`
+`bin/package/check_v1_raster_grid.py`
 
 The gate must do one job only: compare every candidate terrain raster against the reference DEM.
 If any raster differs in CRS, transform, width, height, band count, dtype, NoData, or V1 valid-cell
@@ -139,7 +139,7 @@ Blocked CHIRPS claims:
 
 ## Documented Diagnostic Waiver (V2 R-factor hotspot survival test, 2026-06-16)
 
-The V2 R-factor hotspot survival test (`bin/derive_v2_usle_soil_loss.py`, IFPM-079) resamples the
+The V2 R-factor hotspot survival test (`bin/factors/derive_v2_usle_soil_loss.py`, IFPM-079) resamples the
 0.05 deg CHIRPS-derived R-factor raster to the V1 30 m grid for ONE purpose only: to quantify how
 much R's spatial heterogeneity perturbs the LS x C x K erosion-hotspot pattern. This is a
 diagnostic-only resample, not pixel-level 30 m evidence.

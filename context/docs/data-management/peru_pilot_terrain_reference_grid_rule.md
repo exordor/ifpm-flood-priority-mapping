@@ -59,7 +59,7 @@ accepted. This is the same binding data-quality rule as the Zimbabwe V1 rule.
 Rebuild the reference DEM with:
 
 ```bash
-.venv/bin/python bin/preprocess_srtm_peru_pilot_dem.py
+.venv/bin/python bin/factors/preprocess_srtm_peru_pilot_dem.py
 ```
 
 Source tiles: `S17W073`, `S17W072` under `data/raw/srtm_1arcsec_peru_pilot/`.

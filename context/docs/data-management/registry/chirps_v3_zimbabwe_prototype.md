@@ -43,8 +43,8 @@ not authorize AHP overlay, flood-risk interpretation, or 30 m CHIRPS resampling.
 - Expected byte size: controlled but non-trivial; annual/monthly/pentad Africa files plus small
   daily V1 bbox clips, not a full daily mirror
 - Download command or manual steps:
-  1. Run `.venv/bin/python bin/plan_chirps_v1_rainfall_metrics.py`.
-  2. Run `.venv/bin/python bin/download_chirps_v1_rainfall_inputs.py`.
+  1. Run `.venv/bin/python bin/acquire/plan_chirps_v1_rainfall_metrics.py`.
+  2. Run `.venv/bin/python bin/acquire/download_chirps_v1_rainfall_inputs.py`.
   3. Record filenames, date range, size, and SHA-256 in the raw file manifest.
 - Rate limits or quotas: unknown; avoid broad mirror downloads
 - Authentication handling: no credentials expected
@@ -90,10 +90,10 @@ not authorize AHP overlay, flood-risk interpretation, or 30 m CHIRPS resampling.
 - Raw data path: `data/raw/chirps_v3_zimbabwe_prototype/`
 - Derived output path: `outputs/chirps_v3_zimbabwe_prototype/`
 - Scripts or commands used:
-  - `.venv/bin/python bin/plan_chirps_v1_rainfall_metrics.py`
-  - `.venv/bin/python bin/download_chirps_v1_rainfall_inputs.py`
-  - `.venv/bin/python bin/compare_chirps_v1_rainfall_metrics.py`
-  - `.venv/bin/python bin/plot_chirps_v1_rainfall_comparison.py`
+  - `.venv/bin/python bin/acquire/plan_chirps_v1_rainfall_metrics.py`
+  - `.venv/bin/python bin/acquire/download_chirps_v1_rainfall_inputs.py`
+  - `.venv/bin/python bin/investigate/compare_chirps_v1_rainfall_metrics.py`
+  - `.venv/bin/python bin/visualize/plot_chirps_v1_rainfall_comparison.py`
 - Standardization/preprocessing notes: keep CHIRPS at native rainfall scale and compute V1
   zonal summaries; do not resample to the V1 30 m terrain grid for pixel-level overlay
 - Known limitations: 0.05 degree rainfall grid is much coarser than 30 m terrain layers; use
