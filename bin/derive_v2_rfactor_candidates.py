@@ -244,6 +244,13 @@ def continuity_at_break(mfi: np.ndarray, mask: np.ndarray, r_fn) -> dict:
 
 
 def main() -> None:
+    raise SystemExit(
+        "DEPRECATED: do not regenerate V2 R-factor candidates. The V1 bimodality this was built "
+        "to resolve was an artifact of the wrong break point, so the premise does not hold. "
+        "See outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md "
+        "and context/docs/project-management/rfactor_investigation_consolidated.md."
+    )
+
     OUT_RASTER_DIR.mkdir(parents=True, exist_ok=True)
 
     win, transform, crs, h, w = compute_v1_window()

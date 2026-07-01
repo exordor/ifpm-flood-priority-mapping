@@ -169,6 +169,13 @@ def zonal_stats(arr: np.ndarray, mask: np.ndarray) -> dict:
 
 
 def main() -> None:
+    raise SystemExit(
+        "DEPRECATED: do not regenerate V1 R-factor from the wrong Renard-Freimund setup "
+        "(P-based coefficients on MFI with invented break at 80). "
+        "See outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md "
+        "and context/docs/project-management/rfactor_investigation_consolidated.md."
+    )
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     win, transform, crs, h, w = compute_v1_window()
