@@ -149,7 +149,7 @@ or Zimbabwe-Peru comparison is authorized.
 ### IFPM-014 Multi-Level Progress Review
 
 - Status: done; no P1 was found, but P2 gates remain before real-data overlay.
-- Evidence: `context/docs/project-management/multi_level_progress_review_2026-06-10.md`.
+- Evidence: `context/docs/project-management/_archive/superseded_process_notes_2026-06/multi_level_progress_review_2026-06-10.md`.
 - Next action: fix the boundary-discovery and engineering-readiness blockers recorded in the
   review report.
 
@@ -157,7 +157,7 @@ or Zimbabwe-Peru comparison is authorized.
 
 - Status: complete. Verified reachability, login, and download mechanism for candidate and
   existing portals via Chrome DevTools Protocol.
-- Evidence: `context/docs/project-management/cdp_data_portal_verification_2026-06-15.md`,
+- Evidence: `context/docs/project-management/_archive/superseded_process_notes_2026-06/cdp_data_portal_verification_2026-06-15.md`,
   `bin/check_data_portals.py`, `outputs/data_portal_check/portal_check_report.json` + screenshots.
 - Key results: SoilGrids is a VRT directory listing (no login, windowed HTTP read, no bulk
   download); EM-DAT HDX route changed to per-country profiles (Zimbabwe downloaded); GloFAS is
@@ -864,7 +864,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   local named-boundary check, without downloading SRTM/CHIRPS or running overlay.
 - Status: done; boundary still not accepted.
 - Completion evidence:
-  `context/docs/project-management/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`,
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`,
   `context/docs/data-management/registry/zimbabwe_geoportal_subcatchments_2025.md`, and
   `context/docs/data-management/preflight/zimbabwe_geoportal_subcatchments_2025.md`.
 - Key result: the Geoportal `Upper Mzingwane` polygon contains Mzingwane Dam and Esigodini and
@@ -905,7 +905,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   outlet-based catchment definition instead of choosing only between existing named boundaries.
 - Status: done as planning update; superseded by V1 working boundary waiver.
 - Completion evidence:
-  `context/docs/project-management/outlet_based_catchment_research_plan_2026-06-11.md`,
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/outlet_based_catchment_research_plan_2026-06-11.md`,
   revised `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/prototype_study_slice_decision.md`, and revised
   `context/docs/project-management/real_data_execution_preflight_gate.md`.
 - Key result: `Upper Mzingwane` is now treated as the regional context, while the operational
@@ -1156,7 +1156,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   `bin/build_v1_full_methodology_evidence_matrix.py`,
   `bin/plot_v1_full_methodology_evidence.py`,
   `context/docs/project-management/v1_full_methodology_evidence_sweep_2026-06-13.md`,
-  `context/docs/project-management/v1_full_methodology_adversarial_review_2026-06-13.md`, and
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/v1_full_methodology_adversarial_review_2026-06-13.md`, and
   `outputs/v1_full_methodology_evidence_sweep/v1_full_methodology_evidence_matrix.csv`.
 - Key result: the matrix now covers flood hazard, rainfall, terrain, land use / ASM,
   environmental sensitivity, socioeconomic vulnerability, and rehabilitation potential. New

@@ -48,13 +48,13 @@ ifpm-flood-pipeline/
 - `context/docs/project-management/task_progress_board.md`
 - `context/docs/project-management/rfactor_investigation_consolidated.md`
 - `context/docs/project-management/rfactor_investigation_consolidated.md`
-- `context/docs/project-management/outlet_based_catchment_research_plan_2026-06-11.md`
+- `context/docs/project-management/_archive/superseded_process_notes_2026-06/outlet_based_catchment_research_plan_2026-06-11.md`
 - `context/docs/project-management/real_data_preprocessing_design.md`
 - `context/docs/project-management/real_data_execution_preflight_gate.md`
-- `context/docs/project-management/multi_level_progress_review_2026-06-10.md`
+- `context/docs/project-management/_archive/superseded_process_notes_2026-06/multi_level_progress_review_2026-06-10.md`
 - `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/hydrosheds_boundary_discovery_result_2026-06-10.md`
 - `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/upper_mzingwane_boundary_decision_record_2026-06-10.md`
-- `context/docs/project-management/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`
+- `context/docs/project-management/_archive/superseded_process_notes_2026-06/zimbabwe_geoportal_subcatchments_boundary_comparison_2026-06-10.md`
 - `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/upper_mzingwane_boundary_fact_check_2026-06-10.md`
 - `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p1_risk_overview_2026-06-15.md`
 - `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p1_validation_data_decision_package_2026-06-15.md`
