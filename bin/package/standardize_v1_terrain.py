@@ -20,7 +20,7 @@ from rasterio.features import geometry_mask
 ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
-from _lib.ifpm_tools import write_raster
+from _lib.ifpm_tools import write_raster, standardize, load_boundary
 DATASET_ID = "srtm_1arcsec_zimbabwe_prototype"
 PREPROCESS_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_preprocessing"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_standardization"
@@ -80,20 +80,6 @@ def valid_values(data: np.ndarray, nodata: float) -> np.ndarray:
     return values
 
 
-def standardize(data: np.ndarray, nodata: float, invert: bool) -> tuple[np.ndarray, float, float]:
-    values = valid_values(data, nodata)
-    low = float(np.nanpercentile(values, CLIP_LOW))
-    high = float(np.nanpercentile(values, CLIP_HIGH))
-    if not high > low:
-        raise ValueError(f"Invalid percentile bounds: low={low}, high={high}")
-
-    output = np.full(data.shape, nodata, dtype="float32")
-    valid = np.isfinite(data) & (data != nodata)
-    scaled = (np.clip(data[valid], low, high) - low) / (high - low)
-    if invert:
-        scaled = 1.0 - scaled
-    output[valid] = scaled.astype("float32")
-    return output, low, high
 def raster_stats(path: Path, geometry) -> dict[str, object]:
     with rasterio.open(path) as src:
         data = src.read(1).astype("float32")
@@ -116,7 +102,7 @@ def process_one(spec: dict[str, object]) -> dict[str, object]:
         input_values = valid_values(source_data, src.nodata)
         standardized, clip_low, clip_high = standardize(source_data, src.nodata, bool(spec["invert"]))
         write_raster(spec["path"], standardized, src.profile)
-        stats = raster_stats(spec["path"], load_boundary(src.crs))
+        stats = raster_stats(spec["path"], load_boundary(V1_GPKG, "v1_working_boundary", src.crs))
 
     return {
         "output": rel(spec["path"]),
