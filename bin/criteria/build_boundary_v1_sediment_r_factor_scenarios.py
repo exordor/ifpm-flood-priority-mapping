@@ -12,6 +12,8 @@ import rasterio
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/erosion_structure_proxy_0_1.tif"]
+OUTPUTS = [ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args

@@ -29,6 +29,8 @@ from matplotlib.ticker import FuncFormatter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_hazard_proxy_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/erosion_structure_proxy_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/socioeconomic_exposure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_proxy_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/hotspot_stability_summary.csv"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args

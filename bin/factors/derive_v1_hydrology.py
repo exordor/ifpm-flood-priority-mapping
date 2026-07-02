@@ -41,6 +41,8 @@ from rasterio.features import geometry_mask
 import whitebox
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_flow_accumulation_sca.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_twi.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_distance_to_drainage_t500.tif"]
 DATASET_ID = "srtm_1arcsec_zimbabwe_prototype"
 TERRAIN_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_preprocessing"
 HYDRO_DIR = ROOT / f"outputs/{DATASET_ID}/hydrology_derivatives"
@@ -73,7 +75,7 @@ DENSITY_PNG = HYDRO_DIR / "v1_drainage_density_by_threshold.png"
 GRID_CHECK_CSV = HYDRO_DIR / "hydrology_grid_check.csv"
 NOTE_MD = HYDRO_DIR / "hydrology_processing_note.md"
 
-GRID_GATE = ROOT / "bin" / "check_v1_raster_grid.py"
+GRID_GATE = ROOT / "bin" / "package" / "check_v1_raster_grid.py"
 
 
 # --------------------------------------------------------------------------- #

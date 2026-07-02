@@ -37,6 +37,8 @@ from rasterio.transform import from_bounds
 from rasterio.windows import from_bounds as window_from_bounds
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/soilgrids_250m_sediment_candidate/k_factor_diagnostics.json"]
 
 try:
     import geopandas as gpd

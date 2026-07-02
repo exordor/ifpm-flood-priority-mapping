@@ -30,6 +30,8 @@ from scipy.ndimage import distance_transform_edt
 from shapely.geometry import Point
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"]
+OUTPUTS = [ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif"]
 SERVICE = "https://geocatminnube.ingemmet.gob.pe/arcgis/rest/services/SERV_PEQUENA_MINERIA/MapServer/0"
 RAW_DIR = ROOT / "data/raw/ingemmet_catastro_minero_peru_pilot"
 RAW_GPKG = RAW_DIR / "pe1_pequena_mineria.gpkg"

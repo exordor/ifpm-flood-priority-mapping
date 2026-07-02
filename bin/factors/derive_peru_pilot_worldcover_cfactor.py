@@ -29,6 +29,8 @@ from rasterio.merge import merge
 from rasterio.warp import reproject
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"]
+OUTPUTS = [ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif"]
 
 WORLDCOVER_RAW_DIR = ROOT / "data/raw/esa_worldcover_2021_peru_pilot"
 WORLDCOVER_GLOB = "ESA_WorldCover_10m_2021_v200_*_Map.tif"

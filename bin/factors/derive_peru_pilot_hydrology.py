@@ -30,6 +30,8 @@ from rasterio.features import geometry_mask
 import whitebox
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_flow_accumulation_sca.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_twi.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_distance_to_drainage_t500.tif"]
 DATASET_ID = "srtm_1arcsec_peru_pilot"
 TERRAIN_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_preprocessing"
 HYDRO_DIR = ROOT / f"outputs/{DATASET_ID}/hydrology_derivatives"
@@ -60,7 +62,7 @@ DENSITY_CSV = HYDRO_DIR / "pe1_drainage_density_by_threshold.csv"
 DENSITY_PNG = HYDRO_DIR / "pe1_drainage_density_by_threshold.png"
 GRID_CHECK_CSV = HYDRO_DIR / "hydrology_grid_check.csv"
 
-GRID_GATE = ROOT / "bin" / "check_v1_raster_grid.py"
+GRID_GATE = ROOT / "bin" / "package" / "check_v1_raster_grid.py"
 
 
 def rel(p: Path) -> str:

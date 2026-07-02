@@ -23,6 +23,8 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_hazard_proxy_0_1.tif", ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/road_accessibility_proxy_0_1.tif", ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria/rainfall_climatology_proxy_0_1_PROVISIONAL_30m.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/priority_mean.tif", ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/top20_frequency.tif", ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/hotspot_stability_summary.csv"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args

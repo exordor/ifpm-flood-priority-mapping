@@ -140,7 +140,12 @@ def _scan_io(path: Path) -> tuple[list[Path], list[Path]]:
 
 
 def _extract_lists(tree: ast.Module) -> tuple[list[Path], list[Path]]:
-    """Extract INPUTS and OUTPUTS module-level assignments from an AST."""
+    """Extract INPUTS and OUTPUTS module-level assignments from an AST.
+
+    Supports both list format (``[ROOT / "...", ...]``) and dict format
+    (``{"key": ROOT / "...", ...}``) -- the latter is used by criteria-stack
+    builders that need named criteria. For dicts, the values are extracted.
+    """
     result: dict[str, list[Path]] = {"INPUTS": [], "OUTPUTS": []}
     for node in ast.iter_child_nodes(tree):
         if not isinstance(node, ast.Assign):
@@ -148,7 +153,13 @@ def _extract_lists(tree: ast.Module) -> tuple[list[Path], list[Path]]:
         for target in node.targets:
             if not isinstance(target, ast.Name) or target.id not in result:
                 continue
-            result[target.id] = _eval_path_list(node.value)
+            if isinstance(node.value, ast.Dict):
+                # Dict format: extract values.
+                result[target.id] = [
+                    p for v in node.value.values if (p := _eval_path_expr(v)) is not None
+                ]
+            else:
+                result[target.id] = _eval_path_list(node.value)
     return result["INPUTS"], result["OUTPUTS"]
 
 

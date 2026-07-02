@@ -17,6 +17,8 @@ from rasterio.windows import from_bounds
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/chirps_v3_zimbabwe_prototype/rainfall_comparison/chirps_v1_download_plan.csv"]
+OUTPUTS = [ROOT / "outputs/chirps_v3_zimbabwe_prototype/rainfall_comparison/chirps_v1_raw_file_manifest.csv"]
 DATASET_ID = "chirps_v3_zimbabwe_prototype"
 PLAN_SCRIPT = ROOT / "bin/acquire/plan_chirps_v1_rainfall_metrics.py"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}/rainfall_comparison"

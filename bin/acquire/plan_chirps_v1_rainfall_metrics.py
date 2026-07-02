@@ -9,6 +9,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = []
+OUTPUTS = [ROOT / "outputs/chirps_v3_zimbabwe_prototype/rainfall_comparison/chirps_v1_download_plan.csv"]
 DATASET_ID = "chirps_v3_zimbabwe_prototype"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}/rainfall_comparison"
 PLAN_CSV = OUT_DIR / "chirps_v1_download_plan.csv"

@@ -18,6 +18,8 @@ from rasterio.windows import Window, transform as window_transform
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster

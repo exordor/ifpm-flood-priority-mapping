@@ -23,6 +23,8 @@ import matplotlib.pyplot as plt
 from pyproj import Geod
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "data/raw/hydrosheds_peru_prototype/extracted/hybas_sa_lev07_v1c.shp"]
+OUTPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
 OUT_DIR = ROOT / "outputs/peru_pilot_boundary"
 OUT_GPKG = OUT_DIR / "peru_pilot_boundary.gpkg"
 

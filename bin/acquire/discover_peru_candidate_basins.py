@@ -24,6 +24,8 @@ from pyproj import Geod
 from shapely.geometry import box
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "data/raw/hydrosheds_peru_prototype/extracted/hybas_sa_lev07_v1c.shp"]
+OUTPUTS = [ROOT / "outputs/peru_boundary_discovery/peru_candidate_basins.csv"]
 HYDRO_DIR = ROOT / "data/raw/hydrosheds_peru_prototype/extracted"
 OUT_DIR = ROOT / "outputs/peru_boundary_discovery"
 

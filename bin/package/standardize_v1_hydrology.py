@@ -44,6 +44,8 @@ except ImportError as exc:
     raise SystemExit(f"missing dependency: {exc}") from exc
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_twi.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_distance_to_drainage_t500.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/v1_twi_high_wetness_0_1.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/v1_drainage_proximity_0_1.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster

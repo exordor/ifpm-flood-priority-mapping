@@ -13,6 +13,8 @@ from shapely.geometry import box
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/v1_working_boundary/srtm_v1_tile_plan.gpkg", ROOT / "outputs/v1_working_boundary/srtm_v1_tile_plan.csv"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import load_boundary_df

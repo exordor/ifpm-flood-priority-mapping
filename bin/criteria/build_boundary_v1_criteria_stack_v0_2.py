@@ -16,6 +16,17 @@ from rasterio.features import geometry_mask
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = {
+    "twi": ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/v1_twi_high_wetness_0_1.tif",
+    "drainage": ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/v1_drainage_proximity_0_1.tif",
+    "structure": ROOT / "outputs/v1_usle_soil_loss/a_structure_K_LS_C_30m.tif",
+    "c_factor": ROOT / "outputs/esa_worldcover_2021_v1_methodology/c_factor/c_factor_v1_30m.tif",
+    "mining": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_mining_proxy_0_1_utm35s_30m.tif",
+    "rivers": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_rivers_0_1_utm35s_30m.tif",
+    "roads": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_roads_0_1_utm35s_30m.tif",
+}
+
+OUTPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_hazard_proxy_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/erosion_structure_proxy_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/road_accessibility_proxy_0_1.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
@@ -29,16 +40,6 @@ CRITERIA_DIR = OUT_DIR / "criteria"
 CONFIG = ROOT / "context/configs/boundary_v1_criteria_stack_v0_2.csv"
 REF = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif"
 V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
-
-INPUTS = {
-    "twi": ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/v1_twi_high_wetness_0_1.tif",
-    "drainage": ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/v1_drainage_proximity_0_1.tif",
-    "structure": ROOT / "outputs/v1_usle_soil_loss/a_structure_K_LS_C_30m.tif",
-    "c_factor": ROOT / "outputs/esa_worldcover_2021_v1_methodology/c_factor/c_factor_v1_30m.tif",
-    "mining": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_mining_proxy_0_1_utm35s_30m.tif",
-    "rivers": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_rivers_0_1_utm35s_30m.tif",
-    "roads": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_roads_0_1_utm35s_30m.tif",
-}
 
 V01_TO_V02 = [
     {

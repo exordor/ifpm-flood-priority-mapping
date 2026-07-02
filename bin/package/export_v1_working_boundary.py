@@ -28,6 +28,8 @@ LAYER_MISSING = (pyogrio.errors.DataLayerError,)
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/_archive/superseded_outlet_exploration_2026-06/candidate_outlet_discovery/candidate_catchments.gpkg"]
+OUTPUTS = [ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
 OUT_DIR = ROOT / "outputs/v1_working_boundary"
 OUT_GPKG = OUT_DIR / "v1_working_boundary.gpkg"
 # Input outlet-exploration products were archived 2026-07-02 to

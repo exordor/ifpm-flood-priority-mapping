@@ -21,6 +21,18 @@ import rasterio
 from rasterio.features import geometry_mask
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = {
+    "twi": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_twi.tif",
+    "drainage": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_distance_to_drainage_t500.tif",
+    "structure": ROOT / "outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/a_structure_K_LS_C_30m.tif",
+    "c_factor": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
+    "roads": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
+    "mining": ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif",
+    "rainfall": ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_proxy_0_1_PROVISIONAL_30m.tif",
+}
+
+
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_hazard_proxy_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/erosion_structure_proxy_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/socioeconomic_exposure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_proxy_0_1.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
@@ -37,17 +49,6 @@ PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 # (about 3.8% of PE1). A 0.95 gate catches tile/data gaps such as the old C-factor seam
 # while allowing this documented channel mask to remain NoData instead of being filled.
 MIN_VALID_FRACTION = 0.95
-
-INPUTS = {
-    "twi": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_twi.tif",
-    "drainage": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_distance_to_drainage_t500.tif",
-    "structure": ROOT / "outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/a_structure_K_LS_C_30m.tif",
-    "c_factor": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
-    "roads": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
-    "mining": ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif",
-    "rainfall": ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_proxy_0_1_PROVISIONAL_30m.tif",
-}
-
 
 def rel(path: Path) -> str:
     return str(path.resolve().relative_to(ROOT))

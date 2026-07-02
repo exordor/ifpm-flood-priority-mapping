@@ -32,6 +32,8 @@ import numpy as np
 import rasterio
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_slope_degrees_utm35s_30m.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_flow_accumulation_sca.tif"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor/v1_ls_factor_capped50_hillslope_30m.tif"]
 
 SLOPE_DEG = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_slope_degrees_utm35s_30m.tif"
 SCA = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_flow_accumulation_sca.tif"

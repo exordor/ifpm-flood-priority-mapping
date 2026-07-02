@@ -18,6 +18,8 @@ from rasterio.features import geometry_mask
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_slope_degrees_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_standardization/v1_elevation_lowland_context_0_1.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_standardization/v1_slope_high_runoff_pressure_0_1.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster, standardize, load_boundary, run_grid_gate
@@ -30,33 +32,6 @@ SLOPE = PREPROCESS_DIR / "v1_slope_degrees_utm35s_30m.tif"
 NODATA = -9999.0
 CLIP_LOW = 2.0
 CLIP_HIGH = 98.0
-
-OUTPUTS = [
-    {
-        "path": OUT_DIR / "v1_elevation_lowland_context_0_1.tif",
-        "source": DEM,
-        "indicator": "elevation_lowland_context",
-        "direction": "lower elevation -> higher diagnostic value",
-        "invert": True,
-        "recommended": "no",
-    },
-    {
-        "path": OUT_DIR / "v1_slope_low_slope_susceptibility_0_1.tif",
-        "source": SLOPE,
-        "indicator": "slope_low_slope_susceptibility",
-        "direction": "lower slope -> higher diagnostic value",
-        "invert": True,
-        "recommended": "yes_for_mentor_review",
-    },
-    {
-        "path": OUT_DIR / "v1_slope_high_runoff_pressure_0_1.tif",
-        "source": SLOPE,
-        "indicator": "slope_high_runoff_pressure",
-        "direction": "higher slope -> higher diagnostic value",
-        "invert": False,
-        "recommended": "alternative_only",
-    },
-]
 
 DIAGNOSTICS = OUT_DIR / "v1_terrain_standardization_diagnostics.csv"
 GRID_CHECK = OUT_DIR / "v1_terrain_standardization_grid_check.csv"

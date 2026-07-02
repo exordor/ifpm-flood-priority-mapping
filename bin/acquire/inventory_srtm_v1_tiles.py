@@ -18,6 +18,8 @@ from matplotlib.patches import Patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/v1_working_boundary/srtm_v1_tile_plan.gpkg", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/srtm_tile_inventory.csv"]
 DATASET_ID = "srtm_1arcsec_zimbabwe_prototype"
 RAW_DIR = ROOT / f"data/raw/{DATASET_ID}"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}"

@@ -21,6 +21,8 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/scenario_weights.csv", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_weights.csv", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/mentor_boss_priority_explanation/dominant_priority_criterion_maps.png", ROOT / "outputs/mentor_boss_priority_explanation/mentor_boss_priority_explanation_handoff.md"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster

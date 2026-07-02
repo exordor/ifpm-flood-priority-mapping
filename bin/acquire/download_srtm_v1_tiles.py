@@ -16,6 +16,8 @@ from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/v1_working_boundary/srtm_v1_tile_plan.csv"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/srtm_raw_file_manifest.csv"]
 PLAN_CSV = ROOT / "outputs/v1_working_boundary/srtm_v1_tile_plan.csv"
 RAW_DIR = ROOT / "data/raw/srtm_1arcsec_zimbabwe_prototype"
 TMP_DIR = ROOT / "data/tmp/srtm_1arcsec_zimbabwe_prototype"

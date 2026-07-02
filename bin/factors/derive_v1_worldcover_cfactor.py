@@ -68,6 +68,8 @@ from rasterio.warp import reproject
 from rasterio.windows import from_bounds
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif"]
+OUTPUTS = [ROOT / "outputs/esa_worldcover_2021_v1_methodology/c_factor/c_factor_v1_30m.tif"]
 
 WORLDCOVER_TILE = ROOT / "data/raw/esa_worldcover_2021_v1_methodology/ESA_WorldCover_10m_2021_v200_S21E027_Map.tif"
 V1_BOUNDARY_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"

@@ -23,6 +23,8 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/hotspot_stability_summary.csv", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/revised_criteria_manifest.csv", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/hotspot_stability_summary.csv", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria_stack_manifest.csv", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/zimbabwe_peru_prototype_comparison/zimbabwe_peru_prototype_comparison_board.png", ROOT / "outputs/zimbabwe_peru_prototype_comparison/zimbabwe_peru_comparison_handoff.md"]
 OUT_DIR = ROOT / "outputs/zimbabwe_peru_prototype_comparison"
 
 

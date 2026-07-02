@@ -14,6 +14,8 @@ from rasterio.features import geometry_mask
 
 
 ROOT = Path(__file__).resolve().parents[2]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif"]
+OUTPUTS = []
 DATASET_ID = "srtm_1arcsec_zimbabwe_prototype"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_preprocessing"
 REFERENCE_DEM = OUT_DIR / "v1_dem_utm35s_30m.tif"
