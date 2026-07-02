@@ -278,10 +278,11 @@ def standardize(
 # ---------------------------------------------------------------------------
 
 def run_grid_gate(
-    reference: Path | str,
     rasters: list[Path | str],
     output: Path | str,
+    reference: Path | str | None = None,
     boundary: Path | str | None = None,
+    check: bool = True,
 ) -> int:
     """Run the V1 raster grid-gate check via subprocess.
 
@@ -290,20 +291,25 @@ def run_grid_gate(
     derive_peru_pilot_hydrology, derive_v1_worldcover_cfactor,
     derive_peru_pilot_worldcover_cfactor, and prepare_v1_full_methodology_evidence.
 
-    Returns the subprocess exit code.
+    ``reference`` is optional (the gate can run on rasters alone). ``check=True``
+    raises on non-zero exit (matching standardize/plot behaviour); use ``check=False``
+    to capture the return code instead.
+
+    Returns the subprocess exit code (0 when check=True and successful).
     """
     import subprocess
     import sys
 
-    grid_gate = ROOT / "bin" / "check_v1_raster_grid.py"
-    cmd = [sys.executable, str(grid_gate), "--reference", str(reference),
-           "--output", str(output)]
+    grid_gate = ROOT / "bin" / "package" / "check_v1_raster_grid.py"
+    cmd = [sys.executable, str(grid_gate), "--output", str(output)]
+    if reference is not None:
+        cmd += ["--reference", str(reference)]
     for r in rasters:
         cmd += ["--rasters", str(r)]
     if boundary is not None:
         cmd += ["--boundary", str(boundary)]
-    completed = subprocess.run(cmd, cwd=str(ROOT))
-    return completed.returncode
+    completed = subprocess.run(cmd, cwd=str(ROOT), check=check)
+    return completed.returncode if completed.returncode is not None else 0
 
 
 # ---------------------------------------------------------------------------

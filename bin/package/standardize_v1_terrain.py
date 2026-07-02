@@ -20,11 +20,10 @@ from rasterio.features import geometry_mask
 ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
-from _lib.ifpm_tools import write_raster, standardize, load_boundary
+from _lib.ifpm_tools import write_raster, standardize, load_boundary, run_grid_gate
 DATASET_ID = "srtm_1arcsec_zimbabwe_prototype"
 PREPROCESS_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_preprocessing"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_standardization"
-GRID_GATE = ROOT / "bin/package/check_v1_raster_grid.py"
 V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
 DEM = PREPROCESS_DIR / "v1_dem_utm35s_30m.tif"
 SLOPE = PREPROCESS_DIR / "v1_slope_degrees_utm35s_30m.tif"
@@ -69,9 +68,6 @@ def rel(path: Path) -> str:
     return str(path.resolve().relative_to(ROOT))
 
 
-def run_grid_gate(paths: list[Path], output: Path) -> None:
-    cmd = [sys.executable, str(GRID_GATE), "--rasters", *map(str, paths), "--output", str(output)]
-    subprocess.run(cmd, cwd=ROOT, check=True)
 def valid_values(data: np.ndarray, nodata: float) -> np.ndarray:
     mask = np.isfinite(data) & (data != nodata)
     values = data[mask]

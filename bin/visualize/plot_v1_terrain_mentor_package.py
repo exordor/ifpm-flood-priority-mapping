@@ -18,9 +18,11 @@ from matplotlib.ticker import FuncFormatter
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import run_grid_gate, load_boundary_df
 STD_DIR = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_standardization"
 OUT_DIR = ROOT / "outputs/v1_terrain_mentor_package"
-GRID_GATE = ROOT / "bin/package/check_v1_raster_grid.py"
 V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
 NODATA = -9999.0
 
@@ -84,9 +86,6 @@ def rel(path: Path) -> str:
     return str(path.resolve().relative_to(ROOT))
 
 
-def run_grid_gate() -> None:
-    cmd = [sys.executable, str(GRID_GATE), "--rasters", *[str(layer["path"]) for layer in LAYERS], "--output", str(GRID_CHECK)]
-    subprocess.run(cmd, cwd=ROOT, check=True)
 def raster_extent(bounds) -> list[float]:
     return [bounds.left, bounds.right, bounds.bottom, bounds.top]
 
@@ -127,7 +126,7 @@ def plot_panel(ax, layer: dict[str, object]) -> None:
     with rasterio.open(layer["path"]) as src:
         data = src.read(1).astype("float32")
         shown = np.where(data == src.nodata, np.nan, data)
-        boundary = load_boundary(src.crs)
+        boundary = load_boundary_df(V1_GPKG, "v1_working_boundary", src.crs)
         img = ax.imshow(shown, cmap="viridis", extent=raster_extent(src.bounds), origin="upper", vmin=0, vmax=1)
     boundary.boundary.plot(ax=ax, color="#111111", linewidth=0.9, zorder=10)
     ax.set_title(str(layer["title"]), pad=7)
@@ -233,7 +232,7 @@ def write_caption_and_handoff() -> None:
 
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    run_grid_gate()
+    run_grid_gate([layer["path"] for layer in LAYERS], GRID_CHECK)
     plot_board()
     write_evidence_table()
     write_caption_and_handoff()
