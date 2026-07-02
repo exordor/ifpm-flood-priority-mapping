@@ -32,7 +32,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
-from _lib.ifpm_tools import write_raster as _write_raster
+from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "boundary_v1"
@@ -219,6 +219,9 @@ def plot_board(priority_mean: np.ndarray, top20_frequency: np.ndarray, mentor_sc
 
 
 def main() -> None:
+    opts = parse_script_args(boundary_id=BOUNDARY_ID, experiment_id=EXPERIMENT_ID)
+    boundary_id = opts.get("boundary_id", BOUNDARY_ID)
+    experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     SCENARIO_DIR.mkdir(parents=True, exist_ok=True)
     profile = read_reference()
@@ -247,8 +250,8 @@ def main() -> None:
             denominator[valid] += weight
             weight_rows.append(
                 {
-                    "boundary_id": BOUNDARY_ID,
-                    "experiment_id": EXPERIMENT_ID,
+                    "boundary_id": boundary_id,
+                    "experiment_id": experiment_id,
                     "scenario": scenario,
                     "criterion": criterion,
                     "weight": round(weight, 8),
@@ -266,8 +269,8 @@ def main() -> None:
         top20_masks.append(top20)
         summary_rows.append(
             {
-                "boundary_id": BOUNDARY_ID,
-                "experiment_id": EXPERIMENT_ID,
+                "boundary_id": boundary_id,
+                "experiment_id": experiment_id,
                 "scenario": scenario,
                 "top20_threshold": round(threshold, 6),
                 **raster_stats(score),
@@ -316,7 +319,7 @@ def main() -> None:
     write_csv(OUT_DIR / "scenario_weights.csv", weight_rows)
     write_csv(OUT_DIR / "scenario_priority_summary.csv", summary_rows)
     write_csv(OUT_DIR / "hotspot_stability_summary.csv", stability_rows)
-    print(f"wrote {BOUNDARY_ID} / {EXPERIMENT_ID} to {rel(OUT_DIR)}")
+    print(f"wrote {boundary_id} / {experiment_id} to {rel(OUT_DIR)}")
 
 
 if __name__ == "__main__":

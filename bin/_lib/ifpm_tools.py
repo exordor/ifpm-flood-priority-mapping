@@ -330,3 +330,59 @@ def write_manifest_csv(
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
+
+
+# ---------------------------------------------------------------------------
+# CLI parameter protocol
+# ---------------------------------------------------------------------------
+
+def parse_script_args(
+    *,
+    boundary_id: str | None = None,
+    experiment_id: str | None = None,
+    claim_level: str | None = None,
+    description: str = "",
+) -> dict:
+    """Parse the standard IFPM script CLI parameters.
+
+    Returns a dict of the overrides actually given on the command line; keys
+    not passed are absent from the dict so callers can do::
+
+        opts = parse_script_args(boundary_id=BOUNDARY_ID)
+        boundary_id = opts.get("boundary_id", BOUNDARY_ID)
+
+    Every parameter defaults to the script's own hardcoded constant, so
+    running with no arguments is fully backward-compatible.
+
+    Usage in a script::
+
+        from _lib.ifpm_tools import parse_script_args
+        # ... after BOUNDARY_ID / EXPERIMENT_ID constants ...
+        opts = parse_script_args(boundary_id=BOUNDARY_ID, experiment_id=EXPERIMENT_ID)
+        BOUNDARY_ID = opts.get("boundary_id", BOUNDARY_ID)
+        EXPERIMENT_ID = opts.get("experiment_id", EXPERIMENT_ID)
+    """
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description=description or "IFPM pipeline script.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    if boundary_id is not None:
+        parser.add_argument("--boundary-id", default=boundary_id,
+                            help="study-area / boundary version id")
+    if experiment_id is not None:
+        parser.add_argument("--experiment-id", default=experiment_id,
+                            help="criteria-stack / experiment version id")
+    if claim_level is not None:
+        parser.add_argument("--claim-level", default=claim_level,
+                            help="output claim level (diagnostic_only/provisional/sensitivity_scenario)")
+    # Allow scripts to add their own extra args without breaking.
+    args, _unknown = parser.parse_known_args()
+    result = {}
+    for key in ("boundary_id", "experiment_id", "claim_level"):
+        val = getattr(args, key, None)
+        if val is not None:
+            result[key] = val
+    return result
+

@@ -25,7 +25,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
-from _lib.ifpm_tools import write_raster as _write_raster
+from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "boundary_v1"
@@ -223,6 +223,10 @@ more cleanly with the current Peru PE1 six-criteria pilot.
 
 
 def main() -> None:
+    opts = parse_script_args(boundary_id=BOUNDARY_ID, experiment_id=EXPERIMENT_ID,
+                             description="Run boundary_v1 six-criteria rainfall + exposure priority scenarios.")
+    boundary_id = opts.get("boundary_id", BOUNDARY_ID)
+    experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     SCENARIO_DIR.mkdir(parents=True, exist_ok=True)
     profile = read_reference()
@@ -248,8 +252,8 @@ def main() -> None:
             numerator[valid] += layer[valid] * weight
             denominator[valid] += weight
             weight_rows.append({
-                "boundary_id": BOUNDARY_ID,
-                "experiment_id": EXPERIMENT_ID,
+                "boundary_id": boundary_id,
+                "experiment_id": experiment_id,
                 "scenario": scenario,
                 "criterion": criterion,
                 "weight": round(weight, 8),
@@ -265,8 +269,8 @@ def main() -> None:
         threshold = float(np.percentile(values, 80))
         top20_masks.append(score >= threshold)
         summary_rows.append({
-            "boundary_id": BOUNDARY_ID,
-            "experiment_id": EXPERIMENT_ID,
+            "boundary_id": boundary_id,
+            "experiment_id": experiment_id,
             "scenario": scenario,
             "top20_threshold": round(threshold, 6),
             **raster_stats(score),
@@ -305,7 +309,7 @@ def main() -> None:
     )
     plot_board(priority_mean, top20_frequency, profile)
     write_handoff(hotspot_summary)
-    print(f"Wrote {EXPERIMENT_ID} outputs to {OUT_DIR}")
+    print(f"Wrote {experiment_id} outputs to {OUT_DIR}")
 
 
 if __name__ == "__main__":

@@ -29,7 +29,7 @@ from scipy.ndimage import distance_transform_edt, label as ndimage_label
 ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
-from _lib.ifpm_tools import write_raster as _write_raster
+from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "pe1"
@@ -146,6 +146,9 @@ def fill_edge_nodata(data: np.ndarray, inside: np.ndarray) -> tuple[np.ndarray, 
     filled[~inside] = np.nan
     return filled, {"hole_cells": int(holes.sum()), "interior_holes": interior, "edge_sliver_holes": edge_sliver}
 def main() -> None:
+    opts = parse_script_args(boundary_id=BOUNDARY_ID, experiment_id=EXPERIMENT_ID)
+    boundary_id = opts.get("boundary_id", BOUNDARY_ID)
+    experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     with rasterio.open(REF) as ref:
         ref_profile = ref.profile.copy()

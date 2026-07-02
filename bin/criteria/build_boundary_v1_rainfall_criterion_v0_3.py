@@ -43,7 +43,7 @@ from rasterio.warp import reproject, Resampling
 ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
-from _lib.ifpm_tools import write_raster as _write_raster
+from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "boundary_v1"
@@ -187,6 +187,9 @@ def resample_to_reference(src_path: Path, ref_profile: dict) -> np.ndarray:
     dst[~np.isfinite(dst)] = np.nan
     return dst
 def main() -> None:
+    opts = parse_script_args(boundary_id=BOUNDARY_ID, experiment_id=EXPERIMENT_ID)
+    boundary_id = opts.get("boundary_id", BOUNDARY_ID)
+    experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     ref_profile = read_reference()
     inside = v1_inside_mask(ref_profile)
@@ -281,7 +284,7 @@ def main() -> None:
           f"({fill_stats['edge_sliver_holes']} edge slivers, {fill_stats['interior_holes']} interior)")
     print(f"edge-filled {int(filled_cells)} resampling-edge sliver cells inside V1")
     print(f"valid inside V1: {raw_frac_before:.4f} -> {raw_frac_after:.4f} after edge fill")
-    print(f"wrote {BOUNDARY_ID} / {EXPERIMENT_ID} / criteria to {rel(OUT_DIR)}")
+    print(f"wrote {boundary_id} / {experiment_id} / criteria to {rel(OUT_DIR)}")
 
 
 if __name__ == "__main__":

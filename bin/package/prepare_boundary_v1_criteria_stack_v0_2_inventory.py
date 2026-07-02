@@ -10,6 +10,9 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import parse_script_args
 SWEEP = ROOT / "outputs/v1_full_methodology_evidence_sweep"
 V01 = ROOT / "outputs/v1_autonomous_prototype_v0_1"
 BOUNDARY_ID = "boundary_v1"
@@ -241,6 +244,9 @@ datasets before the 18 July trip.
 
 
 def main() -> None:
+    opts = parse_script_args(boundary_id=BOUNDARY_ID, experiment_id=EXPERIMENT_ID)
+    boundary_id = opts.get("boundary_id", BOUNDARY_ID)
+    experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT.mkdir(parents=True, exist_ok=True)
     layer_summary = read_csv(SWEEP / "v1_full_methodology_layer_summary.csv")
     raster_summary = read_csv(SWEEP / "v1_raster_layer_summary.csv")
@@ -257,7 +263,7 @@ def main() -> None:
     write_csv(paths["upgrade"], build_upgrade_matrix(layer_summary, raster_summary))
     write_csv(paths["manifest"], build_manifest())
     write_handoff(paths)
-    print(f"wrote {BOUNDARY_ID} / {EXPERIMENT_ID} inventory to {rel(OUT)}")
+    print(f"wrote {boundary_id} / {experiment_id} inventory to {rel(OUT)}")
 
 
 if __name__ == "__main__":

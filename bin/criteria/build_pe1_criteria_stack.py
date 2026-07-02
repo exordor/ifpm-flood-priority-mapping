@@ -23,7 +23,7 @@ from rasterio.features import geometry_mask
 ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
-from _lib.ifpm_tools import write_raster as _write_raster
+from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 from _lib.ifpm_tools import raster_stats as stats
@@ -124,6 +124,9 @@ def valid_fraction(data: np.ndarray, mask: np.ndarray) -> float:
         return 0.0
     return float((mask & np.isfinite(data)).sum() / inside)
 def main() -> None:
+    opts = parse_script_args(boundary_id=BOUNDARY_ID, experiment_id=EXPERIMENT_ID)
+    boundary_id = opts.get("boundary_id", BOUNDARY_ID)
+    experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     CRITERIA_DIR.mkdir(parents=True, exist_ok=True)
     profile, mask = read_reference()
@@ -171,7 +174,7 @@ def main() -> None:
         frac = valid_fraction(arr, mask)
         write_raster(path, arr, profile)
         manifest_rows.append({
-            "boundary_id": BOUNDARY_ID, "experiment_id": EXPERIMENT_ID,
+            "boundary_id": boundary_id, "experiment_id": experiment_id,
             "criterion": name, "path": rel(path),
             "components": components_map[name], "claim_level": claim_map[name],
             "status": "provisional PE1 engineering-pilot criterion",

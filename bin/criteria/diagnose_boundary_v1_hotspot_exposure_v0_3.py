@@ -34,6 +34,9 @@ from rasterio.mask import mask
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.ifpm_tools import parse_script_args
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "hotspot_exposure_diagnostic_v0_3"
 OUT_DIR = ROOT / f"outputs/{BOUNDARY_ID}/{EXPERIMENT_ID}"
@@ -230,6 +233,9 @@ def plot_board(freq: np.ndarray, inside: np.ndarray, profile: dict) -> None:
 
 
 def main() -> None:
+    opts = parse_script_args(boundary_id=BOUNDARY_ID, experiment_id=EXPERIMENT_ID)
+    boundary_id = opts.get("boundary_id", BOUNDARY_ID)
+    experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     profile = read_reference()
     inside = v1_inside_mask(profile)
@@ -287,7 +293,7 @@ def main() -> None:
     write_csv(OUT_DIR / "point_evidence_by_hotspot_band.csv", point_rows)
     write_csv(OUT_DIR / "raster_evidence_correlation.csv", raster_rows)
     write_csv(OUT_DIR / "population_zonal_summary.csv", pop_rows)
-    print(f"wrote {BOUNDARY_ID} / {EXPERIMENT_ID} to {rel(OUT_DIR)}")
+    print(f"wrote {boundary_id} / {experiment_id} to {rel(OUT_DIR)}")
     print(f"stable hotspot: {stable_cells} cells ({stable_area:.1f} km^2)")
     print(f"mining-proximity Pearson r vs priority_mean: {pearson_r:.4f}")
     for row in point_rows:

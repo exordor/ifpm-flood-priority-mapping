@@ -18,7 +18,7 @@ from rasterio.features import geometry_mask
 ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
-from _lib.ifpm_tools import write_raster as _write_raster
+from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 from _lib.ifpm_tools import raster_stats as stats
@@ -151,6 +151,9 @@ def plot_preview(criteria: dict[str, np.ndarray], mask: np.ndarray, path: Path) 
 
 
 def main() -> None:
+    opts = parse_script_args(boundary_id=BOUNDARY_ID, experiment_id=EXPERIMENT_ID)
+    boundary_id = opts.get("boundary_id", BOUNDARY_ID)
+    experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     CRITERIA_DIR.mkdir(parents=True, exist_ok=True)
     profile, mask = read_reference()
@@ -198,12 +201,12 @@ def main() -> None:
         )
 
     coverage_rows = [
-        {"boundary_id": BOUNDARY_ID, "experiment_id": EXPERIMENT_ID, "layer": key, "path": rel(path), **stats(data, mask)}
+        {"boundary_id": boundary_id, "experiment_id": experiment_id, "layer": key, "path": rel(path), **stats(data, mask)}
         for key, path, data in ((key, INPUTS[key], rasters[key]) for key in INPUTS)
     ] + [
         {
-            "boundary_id": BOUNDARY_ID,
-            "experiment_id": EXPERIMENT_ID,
+            "boundary_id": boundary_id,
+            "experiment_id": experiment_id,
             "layer": row["criterion"],
             "path": row["path"],
             **{k: row[k] for k in ["valid_cells", "valid_fraction", "min", "mean", "max"]},
@@ -222,7 +225,7 @@ def main() -> None:
         ],
     )
     plot_preview(criteria, mask, OUT_DIR / "criteria_preview.png")
-    print(f"wrote {BOUNDARY_ID} / {EXPERIMENT_ID} to {rel(OUT_DIR)}")
+    print(f"wrote {boundary_id} / {experiment_id} to {rel(OUT_DIR)}")
 
 
 if __name__ == "__main__":
