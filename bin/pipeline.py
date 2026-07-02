@@ -374,8 +374,11 @@ def cmd_run(
     stage: str | None,
     no_deps: bool,
     force: bool,
+    config: dict | None,
 ) -> int:
     by_name = {s.name: s for s in scripts}
+
+    # --- determine which scripts to run ---
     if target:
         if target not in by_name:
             print(f"error: script '{target}' not found", file=sys.stderr)
@@ -383,7 +386,6 @@ def cmd_run(
         if no_deps:
             order = [by_name[target]]
         else:
-            # Resolve full upstream + target, in topo order.
             full = {target}
             stack = list(deps.get(target, []))
             while stack:
@@ -398,9 +400,23 @@ def cmd_run(
         if not order:
             print(f"error: stage '{stage}' has no scripts", file=sys.stderr)
             return 1
+    elif config:
+        # Full pipeline from YAML config.
+        cfg_stages = set(config.get("stages", []))
+        cfg_exclude = set(config.get("exclude", []))
+        order = [
+            s for s in topo_sort(scripts, deps)
+            if s.stage in cfg_stages
+            and s.name not in cfg_exclude
+        ]
+        # Apply config-level force override only if CLI didn't set it.
+        if not force:
+            force = config.get("force", False)
     else:
-        print("error: provide --target <name> or a stage name", file=sys.stderr)
+        print("error: provide --target <name>, a stage name, or --config", file=sys.stderr)
         return 1
+
+    stop_on_failure = config.get("stop_on_failure", True) if config else True
 
     print(f"Running {len(order)} script(s):")
     failures = 0
@@ -408,8 +424,9 @@ def cmd_run(
         rc = run_script(s, force=force)
         if rc != 0:
             failures += 1
-            print(f"  stopping: {s.name} failed", file=sys.stderr)
-            break
+            if stop_on_failure:
+                print(f"  stopping: {s.name} failed", file=sys.stderr)
+                break
     print(f"\nDone: {len(order) - failures} ok, {failures} failed")
     return 1 if failures else 0
 
@@ -417,6 +434,19 @@ def cmd_run(
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
+
+def _load_config(path: Path | None) -> dict | None:
+    """Load a YAML pipeline config. Returns None if file is missing or yaml absent."""
+    try:
+        import yaml
+    except ImportError:
+        print("warning: pyyaml not installed; --config ignored", file=sys.stderr)
+        return None
+    if path is None or not path.exists():
+        return None
+    with open(path) as f:
+        return yaml.safe_load(f)
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(
@@ -432,11 +462,14 @@ def main() -> int:
     p_deps = sub.add_parser("deps", help="show upstream dependencies of a script")
     p_deps.add_argument("name", help="script name (without .py)")
 
-    p_run = sub.add_parser("run", help="run scripts in dependency order")
-    p_run.add_argument("stage", nargs="?", help="stage name (acquire/factors/...)")
+    p_run = sub.add_parser("run", help="run the full pipeline, a stage, or a target + upstream")
+    p_run.add_argument("stage", nargs="?", help="stage name (acquire/factors/...). "
+                        "If omitted with no --target, runs the full pipeline from config.")
     p_run.add_argument("--target", help="run this script and its full upstream")
     p_run.add_argument("--no-deps", action="store_true", help="run only the target, not its upstream")
     p_run.add_argument("--force", action="store_true", help="re-run even if outputs are fresh")
+    p_run.add_argument("--config", default="pipeline.yaml",
+                       help="pipeline config YAML (default: pipeline.yaml)")
 
     args = parser.parse_args()
 
@@ -450,7 +483,18 @@ def main() -> int:
     if args.command == "deps":
         return cmd_deps(scripts, deps, args.name)
     if args.command == "run":
-        return cmd_run(scripts, deps, args.target, args.stage, args.no_deps, args.force)
+        config = None
+        # Load config when running the full pipeline (no target, no stage).
+        if not args.target and not args.stage:
+            config = _load_config(Path(args.config))
+            if config is None:
+                print(f"error: no config found at {args.config} "
+                      f"(needed for full-pipeline run). "
+                      f"Use --target or a stage name, or create the config.",
+                      file=sys.stderr)
+                return 1
+        return cmd_run(scripts, deps, args.target, args.stage, args.no_deps,
+                       args.force, config)
     return 1
 
 

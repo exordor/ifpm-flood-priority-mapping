@@ -1,0 +1,46 @@
+# IFPM pipeline configuration.
+#
+# Running `python bin/pipeline.py run` (no arguments) executes the full
+# pipeline from this config: all stages, in dependency order, skipping
+# scripts whose outputs are already fresh.
+#
+# Override on the command line:
+#   python bin/pipeline.py run                      # full pipeline (this file)
+#   python bin/pipeline.py run --target <name>      # one script + upstream
+#   python bin/pipeline.py run factors              # one stage
+#   python bin/pipeline.py run --force              # re-run everything
+#   python bin/pipeline.py run --config other.yaml  # use a different config
+
+# Stages to run, in canonical pipeline order. Omit a stage to skip it.
+stages:
+  - acquire
+  - factors
+  - criteria
+  - scenarios
+  - visualize
+  - package
+  - investigate
+
+# Scripts to exclude (by name, without .py). These are skipped even if their
+# stage is listed above. Use this to skip DEPRECATED or one-off scripts.
+exclude:
+  - derive_v1_chirps_rfactor          # DEPRECATED hard-stop
+  - derive_v1_usle_soil_loss          # DEPRECATED hard-stop
+  - derive_v2_rfactor_candidates      # DEPRECATED hard-stop
+  - derive_v2_usle_soil_loss          # DEPRECATED hard-stop
+  - compare_v2_rfactor_candidates     # DEPRECATED hard-stop
+  - plot_v1_usle_soil_loss_board      # DEPRECATED hard-stop
+  - plot_v2_rfactor_comparison_board  # DEPRECATED hard-stop
+  - check_data_portals                # needs Chrome CDP, manual
+  - download_srtm_v1_tiles            # needs raw data already planned
+  - download_chirps_v1_rainfall_inputs # needs raw data already planned
+  - download_v1_methodology_inputs    # needs raw data already planned
+  - intake_mentor_voi_rainfall        # needs mentor zip
+  - inventory_mentor_voi_rainfall_archive  # needs mentor zip
+
+# When true, re-run scripts even if their outputs are newer than inputs.
+force: false
+
+# When true, stop at the first failed script. When false, continue and
+# report all failures at the end.
+stop_on_failure: true
