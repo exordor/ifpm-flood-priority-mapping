@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Run priority scenarios for the PE1 engineering-pilot criteria stack (6 criteria).
 
-Mirrors `run_boundary_v1_priority_scenarios.py`. PE1 now has 6 criteria (flood_hazard,
-erosion_structure, land_cover, mining, exposure, rainfall), comparable to Zimbabwe 6-criteria
+Mirrors `run_boundary_v1_priority_scenarios.py`. PE1 now has 6 criteria (flood conditioning,
+soil erosion factors, land cover, mining, exposure, rainfall), comparable to Zimbabwe 6-criteria
 prototype runs. Three scenarios: equal, mentor-slide-mapped, and flood/erosion/rainfall heavy.
 
-Sediment normalization note: the erosion_structure criterion is max-normalized to [0,1] for
+Soil-erosion normalization note: the soil_erosion_factors criterion is max-normalized to [0,1] for
 MCDA scoring, so its 0-1 value is a relative hotspot intensity, not absolute t/ha/yr. Rank is
-R-invariant.
+not affected by the chosen scalar R-factor.
 
 Outputs (gitignored under outputs/srtm_1arcsec_peru_pilot/priority_scenarios/):
 priority mean/std/top20-frequency rasters, per-scenario rasters, weights + summary CSVs,
@@ -29,7 +29,7 @@ from matplotlib.ticker import FuncFormatter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_hazard_proxy_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/erosion_structure_proxy_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/socioeconomic_exposure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_proxy_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
 OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/hotspot_stability_summary.csv"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
@@ -49,18 +49,18 @@ PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 MIN_COMMON_VALID_FRACTION = 0.95
 
 CRITERIA_PATHS = {
-    "flood_hazard_proxy": CRITERIA_DIR / "flood_hazard_proxy_0_1.tif",
-    "erosion_structure_proxy": CRITERIA_DIR / "erosion_structure_proxy_0_1.tif",
+    "flood_conditioning_factors": CRITERIA_DIR / "flood_conditioning_factors_0_1.tif",
+    "soil_erosion_factors": CRITERIA_DIR / "soil_erosion_factors_0_1.tif",
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
     "mining_pressure": CRITERIA_DIR / "mining_pressure_0_1.tif",
-    "socioeconomic_exposure": CRITERIA_DIR / "socioeconomic_exposure_0_1.tif",
-    "rainfall_climatology_proxy": CRITERIA_DIR / "rainfall_climatology_proxy_0_1.tif",
+    "exposure_indicators": CRITERIA_DIR / "exposure_indicators_0_1.tif",
+    "rainfall_climatology": CRITERIA_DIR / "rainfall_climatology_0_1.tif",
 }
 
 # Mentor-slide pairwise matrix (CR 0.022) mapped to PE1's six active criteria. The slide's 5 criteria
 # (Flood, Sediment, LandUse/ASM, Environmental, Socioeconomic) map: Flood->flood_hazard,
 # Sediment->erosion_structure, LandUse/ASM->land_cover + mining (split), Environmental->(no direct
-# PE1 equivalent; folded into flood as terrain-context proxy), Socioeconomic->exposure, and rainfall
+# PE1 equivalent; folded into flood as terrain context), Socioeconomic->exposure, and rainfall
 # receives zero weight in the slide-mapped scenario because the slide matrix has no rainfall criterion.
 # Slide weights derived from principal eigenvector.
 SLIDE_ORDER = ["flood", "sediment", "landuse_asm", "environmental", "socioeconomic"]
@@ -85,32 +85,32 @@ def slide_weights() -> tuple[dict[str, float], float]:
     landuse_half = base["landuse_asm"] / 2.0
     # environmental folded into flood (no separate PE1 environmental criterion)
     return {
-        "flood_hazard_proxy": base["flood"] + base["environmental"],
-        "erosion_structure_proxy": base["sediment"],
+        "flood_conditioning_factors": base["flood"] + base["environmental"],
+        "soil_erosion_factors": base["sediment"],
         "land_cover_pressure": landuse_half,
         "mining_pressure": landuse_half,
-        "socioeconomic_exposure": base["socioeconomic"],
-        "rainfall_climatology_proxy": 0.0,  # slide matrix has no rainfall criterion; set 0 there
+        "exposure_indicators": base["socioeconomic"],
+        "rainfall_climatology": 0.0,  # slide matrix has no rainfall criterion; set 0 there
     }, float(cr)
 
 
 # Three scenarios: equal (neutral), slide-mapped (mentor matrix), flood/erosion/rainfall heavy (stress).
 SCENARIOS = {
     "equal": {
-        "flood_hazard_proxy": 1/6,
-        "erosion_structure_proxy": 1/6,
+        "flood_conditioning_factors": 1/6,
+        "soil_erosion_factors": 1/6,
         "land_cover_pressure": 1/6,
         "mining_pressure": 1/6,
-        "socioeconomic_exposure": 1/6,
-        "rainfall_climatology_proxy": 1/6,
+        "exposure_indicators": 1/6,
+        "rainfall_climatology": 1/6,
     },
     "flood_erosion_heavy": {
-        "flood_hazard_proxy": 0.30,
-        "erosion_structure_proxy": 0.25,
+        "flood_conditioning_factors": 0.30,
+        "soil_erosion_factors": 0.25,
         "land_cover_pressure": 0.05,
         "mining_pressure": 0.10,
-        "socioeconomic_exposure": 0.05,
-        "rainfall_climatology_proxy": 0.25,
+        "exposure_indicators": 0.05,
+        "rainfall_climatology": 0.25,
     },
 }
 

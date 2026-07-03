@@ -23,7 +23,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_hazard_proxy_0_1.tif", ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/road_accessibility_proxy_0_1.tif", ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria/rainfall_climatology_proxy_0_1_PROVISIONAL_30m.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria/rainfall_climatology_0_1_PROVISIONAL_30m.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
 OUTPUTS = [ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/priority_mean.tif", ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/top20_frequency.tif", ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/hotspot_stability_summary.csv"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
@@ -42,18 +42,18 @@ SEDIMENT_DIR = ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios"
 RAINFALL_DIR = ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria"
 
 CRITERIA_PATHS = {
-    "flood_hazard_proxy": CRITERIA_DIR / "flood_hazard_proxy_0_1.tif",
+    "flood_conditioning_factors": CRITERIA_DIR / "flood_conditioning_factors_0_1.tif",
     "sediment_risk_lowR_provisional": SEDIMENT_DIR / "sediment_risk_lowR_provisional_30m.tif",
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
     "mining_pressure": CRITERIA_DIR / "mining_pressure_0_1.tif",
-    "road_accessibility_proxy": CRITERIA_DIR / "road_accessibility_proxy_0_1.tif",
-    "rainfall_climatology_proxy": RAINFALL_DIR / "rainfall_climatology_proxy_0_1_PROVISIONAL_30m.tif",
+    "exposure_indicators": CRITERIA_DIR / "exposure_indicators_0_1.tif",
+    "rainfall_climatology": RAINFALL_DIR / "rainfall_climatology_0_1_PROVISIONAL_30m.tif",
 }
 
 CELL_AREA_KM2 = 0.0009
 CLAIM_NOTE = (
     "SENSITIVITY SCENARIO: boundary_v1 six-criteria prototype overlay. "
-    "Uses rainfall and exposure/access proxies. Not a validated flood-risk or "
+    "Uses rainfall and exposure/access indicators. Not a validated flood-risk or "
     "intervention-priority map."
 )
 
@@ -104,20 +104,20 @@ def scenario_weights() -> dict[str, dict[str, float]]:
     return {
         "equal_6": {name: 1 / 6 for name in CRITERIA_PATHS},
         "rainfall_exposure_balanced": {
-            "flood_hazard_proxy": 0.20,
+            "flood_conditioning_factors": 0.20,
             "sediment_risk_lowR_provisional": 0.20,
             "land_cover_pressure": 0.15,
             "mining_pressure": 0.15,
-            "road_accessibility_proxy": 0.15,
-            "rainfall_climatology_proxy": 0.15,
+            "exposure_indicators": 0.15,
+            "rainfall_climatology": 0.15,
         },
         "flood_erosion_rainfall_heavy": {
-            "flood_hazard_proxy": 0.30,
+            "flood_conditioning_factors": 0.30,
             "sediment_risk_lowR_provisional": 0.25,
             "land_cover_pressure": 0.05,
             "mining_pressure": 0.10,
-            "road_accessibility_proxy": 0.05,
-            "rainfall_climatology_proxy": 0.25,
+            "exposure_indicators": 0.05,
+            "rainfall_climatology": 0.25,
         },
     }
 
@@ -202,12 +202,12 @@ more cleanly with the current Peru PE1 six-criteria pilot.
 
 ## Active criteria
 
-1. flood_hazard_proxy
+1. flood_conditioning_factors
 2. sediment_risk_lowR_provisional
 3. land_cover_pressure
 4. mining_pressure
-5. road_accessibility_proxy
-6. rainfall_climatology_proxy
+5. exposure_indicators
+6. rainfall_climatology
 
 ## Headline result
 
@@ -218,7 +218,7 @@ more cleanly with the current Peru PE1 six-criteria pilot.
 ## Limits
 
 - Rainfall is CHIRPS coarse-to-grid context, not native 30 m rainfall.
-- Road accessibility is an exposure/access proxy, not observed vulnerability.
+- Road accessibility is an exposure/access indicator, not observed vulnerability.
 - This is not a validated flood-risk map and not an intervention-priority map.
 """
     (OUT_DIR / "handoff.md").write_text(text, encoding="utf-8")

@@ -61,7 +61,7 @@ SITES = [
         boundary_layer="v1_working_boundary",
         crs_label="EPSG:32735",
         status_note="controlled prototype boundary, not final thesis boundary",
-        active_criteria_note="displayed v0.4 run uses 6 active criteria, including exposure and rainfall",
+        active_criteria_note="displayed v0.4 run uses 6 criterion families, including exposure indicators and rainfall",
     ),
     Site(
         label="Peru",
@@ -77,7 +77,7 @@ SITES = [
         boundary_layer="peru_pilot_boundary",
         crs_label="EPSG:32718",
         status_note="engineering-pilot site, replace if mentor names a Peru site",
-        active_criteria_note="displayed PE1 priority run uses 6 active criteria, including exposure and rainfall",
+        active_criteria_note="displayed PE1 priority run uses 6 criterion families, including exposure indicators and rainfall",
     ),
 ]
 
@@ -93,40 +93,40 @@ CRITERIA_FIELDS = [
 ]
 
 CRITERIA_SPECS = [
-    ("Zimbabwe", "boundary_v1", "flood", "flood_hazard_proxy",
-     "terrain wetness / drainage proxy from local DEM derivatives", "provisional",
-     "susceptibility proxy, not hydraulic inundation depth"),
-    ("Zimbabwe", "boundary_v1", "sediment", "sediment_risk_lowR_provisional",
+    ("Zimbabwe", "boundary_v1", "flood conditioning", "flood_conditioning_factors",
+     "DEM-derived TWI and distance-to-drainage flood conditioning factors", "provisional",
+     "not hydraulic inundation depth"),
+    ("Zimbabwe", "boundary_v1", "soil erosion", "sediment_risk_lowR_provisional",
      "K x LS x C structure with provisional low-range R scenario", "provisional",
      "not a final accepted R-factor product"),
-    ("Zimbabwe", "boundary_v1", "land use", "land_cover_pressure",
+    ("Zimbabwe", "boundary_v1", "land use/land cover", "land_cover_pressure",
      "WorldCover / C-factor style land-cover pressure", "provisional",
      "land-cover pressure only, not observed damage"),
-    ("Zimbabwe", "boundary_v1", "mining", "mining_pressure",
-     "OSM / proxy mining and quarry evidence", "diagnostic_only",
+    ("Zimbabwe", "boundary_v1", "mining/ASM", "mining_pressure",
+     "OSM mining and quarry evidence", "diagnostic_only",
      "needs official Zimbabwe mining / ASM evidence"),
-    ("Zimbabwe", "boundary_v1", "exposure", "road_accessibility_proxy",
-     "OSM road proximity / access-exposure proxy", "diagnostic_only",
-     "proxy only, not observed flood impact or vulnerability"),
-    ("Zimbabwe", "boundary_v1", "rainfall", "rainfall_climatology_proxy",
+    ("Zimbabwe", "boundary_v1", "exposure indicators", "exposure_indicators",
+     "OSM road proximity / access-exposure indicator", "diagnostic_only",
+     "indicator only, not observed flood impact or vulnerability"),
+    ("Zimbabwe", "boundary_v1", "rainfall", "rainfall_climatology",
      "CHIRPS v3 Africa rainy-season climatology, coarse-to-grid", "sensitivity_scenario",
      "effective resolution about 5 km, not native 30 m rainfall"),
-    ("Peru", "PE1", "flood", "flood_hazard_proxy",
-     "terrain wetness / drainage proxy from PE1 DEM derivatives", "provisional",
-     "engineering-pilot susceptibility proxy"),
-    ("Peru", "PE1", "sediment", "erosion_structure_proxy",
+    ("Peru", "PE1", "flood conditioning", "flood_conditioning_factors",
+     "DEM-derived TWI and distance-to-drainage flood conditioning factors", "provisional",
+     "engineering-pilot susceptibility indicator"),
+    ("Peru", "PE1", "soil erosion", "soil_erosion_factors",
      "K x LS x C structure on PE1 reference grid", "diagnostic_only",
-     "R-invariant structure, not final soil-loss rate"),
-    ("Peru", "PE1", "land use", "land_cover_pressure",
+     "K x LS x C structure; rainfall erosivity not applied"),
+    ("Peru", "PE1", "land use/land cover", "land_cover_pressure",
      "WorldCover / C-factor style land-cover pressure", "provisional",
      "arid land cover dominates; interpretation needs site context"),
-    ("Peru", "PE1", "mining", "mining_pressure",
+    ("Peru", "PE1", "mining/ASM", "mining_pressure",
      "INGEMMET official small-mining point proximity", "provisional",
      "point proximity, not full active footprint"),
-    ("Peru", "PE1", "exposure", "socioeconomic_exposure",
-     "OSM road proximity / access-exposure proxy", "provisional",
-     "proxy only, not observed flood impact or vulnerability"),
-    ("Peru", "PE1", "rainfall", "rainfall_climatology_proxy",
+    ("Peru", "PE1", "exposure indicators", "exposure_indicators",
+     "OSM road proximity / access-exposure indicator", "provisional",
+     "indicator only, not observed flood impact or vulnerability"),
+    ("Peru", "PE1", "rainfall", "rainfall_climatology",
      "CHIRPS v3 LatAm Dec-Mar climatology, coarse-to-grid", "sensitivity_scenario",
      "effective resolution about 5 km, not native 30 m rainfall"),
 ]
@@ -266,7 +266,7 @@ def plot_board() -> None:
         axes[1, 0],
         SITES[0],
         SITES[0].top20_frequency,
-        "C. Zimbabwe Upper Mzingwane: hotspot frequency",
+        "C. Zimbabwe Upper Mzingwane: top-20% priority hotspot frequency",
         "Blues",
         "top-20% frequency",
     )
@@ -275,7 +275,7 @@ def plot_board() -> None:
         axes[1, 1],
         SITES[1],
         SITES[1].top20_frequency,
-        "D. Peru pilot site: hotspot frequency",
+        "D. Peru pilot site: top-20% priority hotspot frequency",
         "Blues",
         "top-20% frequency",
     )
@@ -307,8 +307,8 @@ claim, and not a final Zimbabwe-Peru thesis comparison.
   {zimbabwe['stable_top20_area_km2']} km2.
 - Peru `PE1` has a six-criteria engineering-pilot stack with a stable top-20% hotspot area of
   {peru['stable_top20_area_km2']} km2.
-- Both displayed runs now use six active criteria: flood, sediment/erosion structure, land cover,
-  mining, exposure/access, and rainfall.
+- Both displayed runs now use six active criterion families: flood conditioning factors, soil
+  erosion factors, land use/land cover, mining/ASM activity, exposure indicators, and rainfall.
 - This is a 6-vs-6 prototype workflow comparison, not a final scientific country comparison.
 - The method is now executable on both countries, but the evidence quality is not equal:
   Peru has official INGEMMET mining points, while Zimbabwe still needs stronger official mining or
@@ -356,8 +356,8 @@ final study sites and final claims open?
 For Zimbabwe, I used the Upper Mzingwane prototype catchment.
 For Peru, I used a temporary pilot catchment, only to test whether the same workflow runs there.
 
-The method now runs on both sides with six active criteria:
-flood, sediment/erosion structure, land cover, mining, exposure/access, and rainfall.
+The method now runs on both sides with six active criterion families:
+flood conditioning factors, soil erosion factors, land use/land cover, mining/ASM activity, exposure indicators, and rainfall.
 
 The important difference is data quality: Peru has official mining points, but Zimbabwe still needs better mining / ASM data.
 
