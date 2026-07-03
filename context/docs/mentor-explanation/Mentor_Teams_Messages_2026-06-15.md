@@ -98,7 +98,7 @@ decisions. Skip the attachment where it says "none".
 | Msg | Attach this file | Why |
 |---|---|---|
 | 1 Scope | `outputs/v1_multicriteria_evidence_package/mentor_v1_multicriteria_evidence_board.png` | Shows what evidence exists vs missing — mentor sees the full picture at once |
-| 2 Data | `outputs/v1_multicriteria_evidence_package/panel_c_v1_exposure_mining_proxy.png` | Shows mining evidence is thin (only 2 OSM proxies) — motivates the ask |
+| 2 Data | `outputs/v1_multicriteria_evidence_package/panel_c_v1_exposure_mining_indicator.png` | Shows mining evidence is thin (only 2 OSM mining indicators) — motivates the ask |
 | 3 AHP | none (if mentor wants the form, send `AHP_Elicitation_Protocol_And_Template_2026-06-15.md`) | Factual question; the 7 criteria are listed in the message |
 | 4 Boundary | `outputs/v1_working_boundary/v1_boundary_diagnostic.png` | Shows V1 on a map: Mzingwane Dam + Esigodini inside, Gwanda outside |
 | 5 Map approach | `outputs/v1_terrain_mentor_package/mentor_v1_terrain_diagnostic_board.png` | Shows what terrain-only scoring actually produces |

@@ -34,7 +34,7 @@ Dear [contact name / title],
 I am a research assistant working with [mentor name and affiliation] on a flood and sediment
 prioritization model for the Upper Mzingwane / Matabeleland South area. The study combines
 terrain, rainfall, land use, and environmental layers in a multi-criteria framework, and we would
-like the mining component to reflect real ASM and mining activity rather than generic proxies.
+like the mining component to reflect real ASM and mining activity rather than generic indirect indicators.
 
 To support this, may I request, subject to your data-sharing terms:
 

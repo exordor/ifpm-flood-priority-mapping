@@ -13,7 +13,7 @@ share the datasets below, or tell us who holds them.
 
 | priority | data to ask for | why I need it | minimum useful form |
 |---|---|---|---|
-| 1 | Official mining / ASM locations | My current mining layer is only an OSM quarry/industrial proxy, so it is weak. | Points, polygons, concession boundaries, or a table with coordinates. |
+| 1 | Official mining / ASM locations | My current mining layer is only an OSM quarry/industrial indicator, so it is weak. | Points, polygons, concession boundaries, or a table with coordinates. |
 | 2 | Active vs inactive mining status | A concession is not the same as active disturbance. I need a status field if available. | Status, year, mine type, commodity, operator/category if shareable. |
 | 3 | Rehabilitation or environmental records | The methodology includes rehabilitation potential, but I do not have a defensible layer yet. | EMA records, rehabilitation sites, EIA locations, disturbed/reclaimed areas. |
 | 4 | Observed flood-affected areas | The prototype currently has no local validation layer. | Flood extent polygons, affected villages/roads, event reports, photos with location, or points. |
@@ -21,7 +21,7 @@ share the datasets below, or tell us who holds them.
 | 6 | Local rainfall records | R/rainfall remains uncertain. Voi data is useful only as an outside sanity check, not as Upper Mzingwane rainfall. | Station data, preferably sub-daily; daily is still useful if sub-daily is not available. |
 | 7 | Station metadata | Rainfall without location and units is hard to use safely. | Coordinates, time zone, unit, time step, missing-value code, instrument notes. |
 | 8 | Catchment / outlet confirmation | V1 is accepted only as a controlled prototype boundary, not a final thesis boundary. | A marked outlet point/river section, catchment polygon, or written confirmation. |
-| 9 | Local exposure data | My socioeconomic layer is currently road/access proxy, not true exposure. | Settlements, population, critical roads, bridges, schools/clinics, flood-prone infrastructure. |
+| 9 | Local exposure data | My exposure layer is currently a road/access indicator, not true exposure. | Settlements, population, critical roads, bridges, schools/clinics, flood-prone infrastructure. |
 | 10 | Local land-use or land-cover data | WorldCover is useful, but local land-use/mining classes would be stronger. | GIS layer, map, report table, or management-zone layer. |
 
 ## Peru: highest priority

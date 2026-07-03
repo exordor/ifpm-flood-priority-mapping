@@ -80,7 +80,7 @@ Reason:
 
 What remains usable:
 
-- The R-invariant structure check (`K x LS x C`) is still useful internally.
+- The K x LS x C structure check is still useful internally.
 - I should only share that later as a separate structure-only figure, not as "V2 fixed R".
 
 Source anchors: [S1], [L1], [L3].
@@ -117,7 +117,7 @@ Source anchors: [S1], [L1], [L3].
   the Epworth District, Harare Metropolitan Province, Zimbabwe. Sustainability 12(20):8531:
   https://www.mdpi.com/2071-1050/12/20/8531
 - [S8] Hurni equation source status: secondary trace only in the current audit; use as a regional
-  proxy, not as a primary Zimbabwe calibration.
+  sanity check, not as a primary Zimbabwe calibration.
 - [L1] `context/docs/project-management/rfactor_investigation_consolidated.md`
 - [L2] `context/docs/project-management/rfactor_investigation_consolidated.md`
 - [L3] `outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md`
