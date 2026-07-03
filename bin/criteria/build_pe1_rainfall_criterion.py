@@ -28,7 +28,7 @@ from scipy.ndimage import distance_transform_edt, label as ndimage_label
 
 ROOT = Path(__file__).resolve().parents[2]
 INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
-OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_proxy_0_1_PROVISIONAL_30m.tif"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
@@ -47,7 +47,7 @@ CHIRPS_BASE = "https://data.chc.ucsb.edu/products/CHIRPS/v3.0/monthly/latam/tifs
 SEASON_YEARS = list(range(2014, 2024))  # each year y -> Dec(y), Jan(y+1), Feb(y+1), Mar(y+1)
 RAINY_MONTHS = [12, 1, 2, 3]
 
-CRITERION_NAME = "rainfall_climatology_proxy"
+CRITERION_NAME = "rainfall_climatology"
 CLAIM_LEVEL = "sensitivity_scenario"
 IFPM_NOTE = (
     "SENSITIVITY SCENARIO ONLY: 0.05 deg CHIRPS latam Dec-Mar rainy-season mean resampled to "
@@ -81,6 +81,7 @@ def read_chirps_month_window(year: int, month: int, win_bounds) -> tuple[np.ndar
         win_transform = src.window_transform(win)
     if nodata is not None:
         data[data == nodata] = np.nan
+    data[data < 0] = np.nan
     data[~np.isfinite(data)] = np.nan
     return data, {"transform": win_transform, "crs": "EPSG:4326", "width": win.width, "height": win.height}
 
@@ -96,9 +97,19 @@ def fetch_rainy_season_mean(win_bounds) -> tuple[np.ndarray, dict]:
             arr, meta = read_chirps_month_window(yy, m, win_bounds)
             months_data.append(arr)
             ref_meta = ref_meta or meta
-        season_total = np.nansum(months_data, axis=0)  # Dec+Jan+Feb+Mar accumulation
+        monthly_stack = np.stack(months_data)
+        complete_months = np.isfinite(monthly_stack).sum(axis=0) == len(RAINY_MONTHS)
+        season_total = np.where(complete_months, np.nansum(monthly_stack, axis=0), np.nan)
         season_means.append(season_total)
-    mean = np.nanmean(season_means, axis=0).astype("float32")
+    season_stack = np.stack(season_means)
+    valid_counts = np.isfinite(season_stack).sum(axis=0)
+    total = np.nansum(season_stack, axis=0)
+    mean = np.divide(
+        total,
+        valid_counts,
+        out=np.full(total.shape, np.nan, dtype="float32"),
+        where=valid_counts > 0,
+    ).astype("float32")
     return mean, ref_meta
 
 

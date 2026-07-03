@@ -21,12 +21,12 @@ INPUTS = {
     "drainage": ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/v1_drainage_proximity_0_1.tif",
     "structure": ROOT / "outputs/v1_usle_soil_loss/a_structure_K_LS_C_30m.tif",
     "c_factor": ROOT / "outputs/esa_worldcover_2021_v1_methodology/c_factor/c_factor_v1_30m.tif",
-    "mining": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_mining_proxy_0_1_utm35s_30m.tif",
+    "mining": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_mining_activity_indicator_0_1_utm35s_30m.tif",
     "rivers": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_rivers_0_1_utm35s_30m.tif",
     "roads": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_roads_0_1_utm35s_30m.tif",
 }
 
-OUTPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_hazard_proxy_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/erosion_structure_proxy_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/road_accessibility_proxy_0_1.tif"]
+OUTPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
@@ -44,30 +44,30 @@ V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
 V01_TO_V02 = [
     {
         "v0_1_name": "sediment_structure",
-        "issue": "R-invariant K x LS x C was too close to sediment-risk language and NoData was filled as 0.",
-        "v0_2_name": "erosion_structure_proxy",
-        "v0_2_meaning": "R-invariant erosion source structure; not final sediment risk.",
+        "issue": "The K x LS x C layer was too close to sediment-risk language and NoData was filled as 0.",
+        "v0_2_name": "soil_erosion_factors",
+        "v0_2_meaning": "K x LS x C erosion source structure; rainfall erosivity not applied.",
         "claim_level": "diagnostic_only",
     },
     {
         "v0_1_name": "landuse_asm_pressure",
-        "issue": "C-factor and mining proxy were averaged despite different process meanings.",
+        "issue": "C-factor and mining evidence were averaged despite different process meanings.",
         "v0_2_name": "land_cover_pressure + mining_pressure",
-        "v0_2_meaning": "Split land-cover pressure from weak mining proxy.",
+        "v0_2_meaning": "Split land-cover pressure from weak mining activity evidence.",
         "claim_level": "provisional",
     },
     {
         "v0_1_name": "environmental_sensitivity",
         "issue": "Layer was only river/water proximity.",
-        "v0_2_name": "river_proximity_proxy",
-        "v0_2_meaning": "Diagnostic river-proximity proxy; excluded from core environmental claim.",
+        "v0_2_name": "river_proximity_indicators",
+        "v0_2_meaning": "Diagnostic river-proximity indicator; excluded from core environmental claim.",
         "claim_level": "diagnostic_only",
     },
     {
-        "v0_1_name": "socioeconomic_exposure",
+        "v0_1_name": "old road-only exposure layer",
         "issue": "Layer was only road/access proximity.",
-        "v0_2_name": "road_accessibility_proxy",
-        "v0_2_meaning": "Diagnostic access proxy; excluded from socioeconomic-vulnerability claim.",
+        "v0_2_name": "exposure_indicators",
+        "v0_2_meaning": "Diagnostic access indicator; excluded from socioeconomic-vulnerability claim.",
         "claim_level": "diagnostic_only",
     },
 ]
@@ -138,7 +138,7 @@ def weighted_average(parts: list[tuple[np.ndarray, float]], mask: np.ndarray) ->
     out[~mask] = np.nan
     return out.astype("float32")
 def plot_preview(criteria: dict[str, np.ndarray], mask: np.ndarray, path: Path) -> None:
-    names = [name for name in criteria if name in {"erosion_structure_proxy", "land_cover_pressure", "mining_pressure"}]
+    names = [name for name in criteria if name in {"soil_erosion_factors", "land_cover_pressure", "mining_pressure"}]
     fig, axes = plt.subplots(1, len(names), figsize=(12, 4), constrained_layout=True)
     for ax, name in zip(np.atleast_1d(axes), names, strict=True):
         data = np.where(mask, criteria[name], np.nan)
@@ -146,7 +146,7 @@ def plot_preview(criteria: dict[str, np.ndarray], mask: np.ndarray, path: Path) 
         ax.set_title(name.replace("_", " "), fontsize=10)
         ax.set_axis_off()
         fig.colorbar(image, ax=ax, fraction=0.046, pad=0.04)
-    fig.suptitle("boundary_v1 / criteria_stack_v0_2: split proxies, NoData preserved", fontsize=12)
+    fig.suptitle("boundary_v1 / criteria_stack_v0_2: split indicators, NoData preserved", fontsize=12)
     fig.savefig(path, dpi=180)
     plt.close(fig)
 
@@ -221,7 +221,7 @@ def main() -> None:
     write_csv(
         OUT_DIR / "standardization_notes.csv",
         [
-            {"component": "erosion_structure_proxy", "method": "percentile_clip_minmax_2_98", "clip_low": structure_p02, "clip_high": structure_p98},
+            {"component": "soil_erosion_factors", "method": "percentile_clip_minmax_2_98", "clip_low": structure_p02, "clip_high": structure_p98},
             {"component": "land_cover_pressure", "method": "percentile_clip_minmax_2_98", "clip_low": c_p02, "clip_high": c_p98},
         ],
     )

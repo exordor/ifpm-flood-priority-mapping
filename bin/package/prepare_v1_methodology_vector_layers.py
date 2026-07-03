@@ -78,7 +78,7 @@ def base_layers(bnd: gpd.GeoDataFrame) -> dict[str, gpd.GeoDataFrame]:
         "osm_places_v1": read_layer("osm_places_v1"),
         "osm_roads_v1": read_layer("osm_roads_v1"),
         "osm_bridges_v1": read_layer("osm_bridges_v1"),
-        "osm_mining_proxy_v1": read_layer("osm_mining_proxy_v1"),
+        "osm_mining_indicator_v1": read_layer("osm_mining_indicator_v1"),
         "road_river_crossings_v1": read_layer("road_river_crossings_v1"),
     }
     if LAYERS_GPKG.exists():
@@ -191,7 +191,7 @@ def main() -> None:
     bnd = boundary()
     layers = base_layers(bnd)
     rows = vector_summary(layers)
-    for label, layer_name in {"rivers": "geoportal_rivers_v1", "roads": "osm_roads_v1", "mining_proxy": "osm_mining_proxy_v1"}.items():
+    for label, layer_name in {"rivers": "geoportal_rivers_v1", "roads": "osm_roads_v1", "mining_indicator": "osm_mining_indicator_v1"}.items():
         rows.extend(distance_rows(label, layers[layer_name]))
     rows.extend(dfo_rows(bnd))
     rows.extend(wdpca_rows(bnd))

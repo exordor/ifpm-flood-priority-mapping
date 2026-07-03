@@ -41,8 +41,8 @@ PANEL_A_PNG = OUT_DIR / "panel_a_v1_river_context.png"
 PANEL_A_PDF = OUT_DIR / "panel_a_v1_river_context.pdf"
 PANEL_B_PNG = OUT_DIR / "panel_b_v1_terrain_diagnostics.png"
 PANEL_B_PDF = OUT_DIR / "panel_b_v1_terrain_diagnostics.pdf"
-PANEL_C_PNG = OUT_DIR / "panel_c_v1_exposure_mining_proxy.png"
-PANEL_C_PDF = OUT_DIR / "panel_c_v1_exposure_mining_proxy.pdf"
+PANEL_C_PNG = OUT_DIR / "panel_c_v1_exposure_mining_indicator.png"
+PANEL_C_PDF = OUT_DIR / "panel_c_v1_exposure_mining_indicator.pdf"
 PANEL_D_PNG = OUT_DIR / "panel_d_v1_criteria_decision_table.png"
 PANEL_D_PDF = OUT_DIR / "panel_d_v1_criteria_decision_table.pdf"
 CAPTION_MD = OUT_DIR / "mentor_v1_multicriteria_caption.md"
@@ -209,8 +209,8 @@ def draw_exposure_mining(ax, legend_ax, layers: dict[str, gpd.GeoDataFrame]) -> 
     layers["geoportal_rivers_v1"].plot(ax=ax, color="#0072B2", linewidth=0.65)
     layers["road_river_crossings_v1"].plot(ax=ax, color="#E69F00", markersize=14, alpha=0.85)
     layers["osm_places_v1"].plot(ax=ax, color="#CC79A7", markersize=22, edgecolor="white", linewidth=0.4)
-    if not layers["osm_mining_proxy_v1"].empty:
-        layers["osm_mining_proxy_v1"].plot(ax=ax, color="#D55E00", alpha=0.45, edgecolor="#D55E00", linewidth=0.7)
+    if not layers["osm_mining_indicator_v1"].empty:
+        layers["osm_mining_indicator_v1"].plot(ax=ax, color="#D55E00", alpha=0.45, edgecolor="#D55E00", linewidth=0.7)
     boundary.boundary.plot(ax=ax, color="#111111", linewidth=1.2)
     style_map(ax, "C. Exposure and weak mining proxy evidence", boundary)
     add_north_arrow(ax)
@@ -240,7 +240,7 @@ def draw_decision_table(ax, evidence: pd.DataFrame, counts: pd.DataFrame) -> Non
         "flood_prone_zones": "Flood-prone zones",
         "settlement_places": "Settlement places",
         "roads_and_crossings": "Roads and crossings",
-        "osm_quarry_industrial_proxy": "OSM quarry / industrial proxy",
+        "osm_quarry_industrial_indicator": "OSM quarry / industrial proxy",
         "chirps_rainfall": "CHIRPS rainfall",
     }
     display["Family"] = display["Family"].str.replace("_", " ").str.title()
@@ -256,7 +256,7 @@ def draw_decision_table(ax, evidence: pd.DataFrame, counts: pd.DataFrame) -> Non
             cell.set_facecolor("#E8EDF2")
             cell.set_text_props(weight="bold")
     flood_count = int(counts.loc[counts["layer"] == "geoportal_flood_prone_zones_v1", "feature_count"].iloc[0])
-    mining_count = int(counts.loc[counts["layer"] == "osm_mining_proxy_v1", "feature_count"].iloc[0])
+    mining_count = int(counts.loc[counts["layer"] == "osm_mining_indicator_v1", "feature_count"].iloc[0])
     ax.set_title("D. Candidate criteria decision table", loc="left", weight="bold")
     ax.text(
         0,
@@ -277,7 +277,7 @@ def load_inputs() -> tuple[dict[str, gpd.GeoDataFrame], pd.DataFrame, pd.DataFra
         "geoportal_water_areas_v1",
         "osm_roads_v1",
         "osm_places_v1",
-        "osm_mining_proxy_v1",
+        "osm_mining_indicator_v1",
         "road_river_crossings_v1",
     ]
     return {name: layer(name) for name in names}, pd.read_csv(EVIDENCE_CSV), pd.read_csv(COUNTS_CSV)

@@ -25,7 +25,7 @@ standardization, AHP weighting, and weighted overlay can run in a traceable way.
   town, or map mark; then delineate the upstream catchment and compare it with Geoportal,
   HydroBASINS, and the literature `~2138 km2` reference.
 - First dataset candidates: SRTM 1 Arc-Second, HydroBASINS/HydroRIVERS, and CHIRPS v3.
-- First indicators: elevation, slope, drainage-distance or flow-accumulation proxy, rainfall
+- First indicators: elevation, slope, drainage-distance or flow-accumulation indicator, rainfall
   summary, and optional sub-basin id for aggregation.
 - Resolution boundary: terrain derivatives may use 30 m SRTM-compatible rasters, but CHIRPS
   rainfall is much coarser and should stay native, aggregated, or summarized by zones until the

@@ -42,7 +42,7 @@ def clip_to_v1(layer: str, boundary: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     return gdf[gdf.intersects(boundary.geometry.iloc[0])].copy()
 
 
-def mining_proxy(landuse: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+def mining_indicator(landuse: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     if landuse.empty:
         return landuse
     fclass = landuse["fclass"].fillna("").str.lower()
@@ -83,7 +83,7 @@ def count_rows(layers: dict[str, gpd.GeoDataFrame]) -> list[dict[str, object]]:
         "osm_roads_v1": "road exposure proxy",
         "osm_bridges_v1": "bridge exposure proxy",
         "road_river_crossings_v1": "possible crossing exposure proxy",
-        "osm_mining_proxy_v1": "weak mining pressure proxy",
+        "osm_mining_indicator_v1": "weak mining pressure indicator",
     }
     return [{"layer": name, "feature_count": len(gdf), "role": roles.get(name, "")} for name, gdf in layers.items()]
 
@@ -98,7 +98,7 @@ def evidence_rows(counts: dict[str, int]) -> list[dict[str, str]]:
         row("hydro_flood", "flood_prone_zones", "Zimbabwe Geoportal Flood Prone Zones", "vector polygons", "local overlap count", "weak", "gap", "Need alternative flood evidence?", f"Current V1/review overlap count is {counts.get('geoportal_flood_prone_zones_v1', 0)}", blocked),
         row("exposure", "settlement_places", "OSM places + anchors", "vector points", "mapped settlements", "medium", "candidate criterion", "Use settlement exposure?", f"{counts.get('osm_places_v1', 0)} OSM places inside V1; completeness uncertain", blocked),
         row("exposure", "roads_and_crossings", "OSM roads/bridges", "vector lines/points", "mapped transport network", "medium", "candidate criterion", "Use road/bridge exposure?", f"{counts.get('osm_roads_v1', 0)} roads and {counts.get('osm_bridges_v1', 0)} bridge-tagged roads inside V1", blocked),
-        row("mining_pressure", "osm_quarry_industrial_proxy", "OSM landuse", "vector polygons", "mapped OSM landuse", "weak", "context only", "Is proxy mining evidence acceptable?", f"{counts.get('osm_mining_proxy_v1', 0)} quarry/industrial polygons; not official mining truth", blocked),
+        row("mining_pressure", "osm_quarry_industrial_indicator", "OSM landuse", "vector polygons", "mapped OSM landuse", "weak", "context only", "Is mining indicator evidence acceptable?", f"{counts.get('osm_mining_indicator_v1', 0)} quarry/industrial polygons; not official mining truth", blocked),
         row("rainfall", "chirps_rainfall", "CHIRPS v3 rainfall comparison", "native grid rasters / V1 summaries", "0.05 degree / V1 zonal", "medium", "candidate criterion pending", "Choose rainfall interpretation?", "Comparison available separately; must remain native/zonal, not 30 m overlay", blocked),
     ]
 
@@ -140,7 +140,7 @@ def main() -> None:
         "osm_landuse_v1": clip_to_v1("osm_landuse", boundary),
     }
     layers["osm_bridges_v1"] = layers["osm_roads_v1"][layers["osm_roads_v1"]["bridge"] == "T"].copy()
-    layers["osm_mining_proxy_v1"] = mining_proxy(layers["osm_landuse_v1"])
+    layers["osm_mining_indicator_v1"] = mining_indicator(layers["osm_landuse_v1"])
     layers["road_river_crossings_v1"] = road_river_crossings(layers["osm_roads_v1"], layers["geoportal_rivers_v1"])
 
     counts = count_rows(layers)

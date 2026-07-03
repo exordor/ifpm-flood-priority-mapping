@@ -14,6 +14,50 @@ documents, figure captions, or anything the mentor reads.
 If a concept has both an internal name and a human name below, use the human name in
 mentor-facing text. Internal names appear in this file only so the author can map them.
 
+## Source-Backed Scope
+
+This glossary now separates three levels of terminology support:
+
+1. **External standard terms**: terms backed by disaster-risk, GIS, USLE/RUSLE, GDAL, or AHP
+   references.
+2. **Literature-aligned modelling terms**: terms commonly used in flood-susceptibility and
+   GIS-MCDA papers, but still dependent on the specific indicator set.
+3. **Project-specific communication terms**: terms used only to explain this prototype. These
+   must be defined on first use and must not be presented as field-standard terms.
+
+| Approved term | Deprecated / avoid | Project meaning | Source support | Allowed context | Not allowed context |
+|---|---|---|---|---|---|
+| Flood conditioning factors | `flood_hazard_proxy`; flood hazard | Terrain and drainage indicators that condition flood susceptibility, currently TWI high-wetness and drainage proximity | Flood-susceptibility GIS-MCDA papers commonly use "conditioning factors" for elevation, slope, rainfall, distance to river, TWI, LULC, soil and drainage factors [S10, S11] | Prototype susceptibility / priority criteria | Do not call it flood hazard unless inundation extent, depth, velocity, probability, or return period is modelled |
+| Flood susceptibility map | flood-risk map | A relative map of where flood-prone conditions are more likely under selected indicators | Flood-susceptibility GIS-MCDA literature [S10, S11] | Prototype output when validation is absent | Do not use for validated probability or impact claims |
+| Flood risk | susceptibility; priority | Potential adverse consequences from hazard interacting with exposure and vulnerability | UNDRR and IPCC frame risk through hazard, exposure and vulnerability [S1, S3] | Thesis title, conceptual framing, final validated risk discussion | Do not use for current unvalidated priority/susceptibility outputs |
+| Exposure indicators | `socioeconomic_exposure`; road-only vulnerability | Roads, settlements, assets, bridges or people potentially located in affected areas; current road/access layer is only a partial indicator | UNDRR/IPCC/PreventionWeb separate exposure from vulnerability and risk [S3, S4] | Data request, candidate criterion, exposure screening | Do not call road proximity alone socioeconomic vulnerability |
+| Vulnerability | road accessibility; exposure | Conditions that increase susceptibility to hazard impacts | UNDRR vulnerability terminology [S2] | Only when social, economic, physical, institutional, or adaptive-capacity evidence exists | Do not infer vulnerability from roads alone |
+| Soil erosion factors | `sediment_structure`; `erosion_structure_proxy` | K x LS x C source structure and related erosion-screening factors; rainfall erosivity must be handled separately | USLE/RUSLE component factors are standard in FAO soil-erosion material [S5, S6] | Erosion-screening criterion or RUSLE factor discussion | Do not call it observed sediment delivery or final sediment risk |
+| Rainfall erosivity (R-factor) | generic rainfall; `R-invariant` | USLE/RUSLE rainfall energy term, ideally derived from storm energy and intensity | FAO and ESDAC define R-factor / rainfall erosivity through rainfall kinetic energy and 30-minute intensity [S5, S7] | RUSLE/USLE discussion, sensitivity scenario | Do not use monthly rainfall directly as true EI30 without method caveat |
+| Rainfall climatology | `rainfall_climatology_proxy` | Coarse rainfall pattern used as a sensitivity-scenario criterion | CHIRPS is a 0.05 degree gridded rainfall time series; resampling must retain the effective-resolution warning [S13] | Scenario comparison with source/resolution caveat | Do not present as native 30 m rainfall evidence |
+| Land use/land cover | broad land-use risk | WorldCover/LULC-derived pressure or context | LULC is commonly used as a flood-conditioning factor in susceptibility studies [S10, S11] | Candidate criterion, context layer | Do not combine with mining unless the component weights are explicit |
+| Mining / ASM activity | mining truth from OSM only | Mining-related mapped features or official mining/ASM data, with source strength stated | Project-specific criterion; source strength depends on OSM vs official cadastre | Mining-pressure criterion or data gap | Do not imply official ASM footprint when only OSM quarry/industrial evidence is used |
+| NoData | zero risk; low score | Raster cells without valid data, represented by a NoData value or mask | GDAL and Rasterio document NoData values/masks as raster metadata and masks [S8, S9] | Raster QA, coverage, grid compatibility | Never fill NoData with 0 for scoring unless a documented imputation method is approved |
+| AHP pairwise comparison | final approved weights | Expert judgement method using pairwise comparison and the Saaty scale | AHP literature uses pairwise comparisons and 1-9 scale [S12] | Sensitivity-scenario weights, mentor review | Do not call slide/example weights final approved weights |
+| Dominant priority driver | standard MCDA term | The criterion contributing the largest share of a pixel's weighted score | Project-specific explanation term derived from weighted overlay math | Mentor/boss figure explaining "why high" | Must be defined on first use; do not present as a standard algorithm name |
+| Stable hotspot | final priority area | Cells that remain in the top-20% priority set across tested weighting scenarios | Project-specific sensitivity-analysis term | Sensitivity-scenario comparison | Do not imply temporal stability or validated hotspot persistence |
+
+### Source List
+
+- **S1** UNDRR. Disaster risk terminology. https://www.undrr.org/terminology/disaster-risk
+- **S2** UNDRR. Vulnerability terminology. https://www.undrr.org/terminology/vulnerability
+- **S3** IPCC AR6 WGII Annex II Glossary. https://www.ipcc.ch/report/ar6/wg2/downloads/report/IPCC_AR6_WGII_Annex-II.pdf
+- **S4** PreventionWeb. Exposure, Understanding Disaster Risk. https://www.preventionweb.net/understanding-disaster-risk/component-risk/exposure
+- **S5** FAO. Universal Soil Loss Equation. https://www.fao.org/land-water/land/land-governance/land-resources-planning-toolbox/category/details/en/c/1236441/
+- **S6** FAO. Global Soil Erosion Modelling. https://www.fao.org/land-water/land/land-governance/land-resources-planning-toolbox/category/details/en/c/1236446/
+- **S7** ESDAC. Rainfall erosivity. https://esdac.jrc.ec.europa.eu/themes/rainfall-erosivity-europe
+- **S8** GDAL. Raster Data Model. https://gdal.org/en/stable/user/raster_data_model.html
+- **S9** Rasterio. Nodata masks. https://rasterio.readthedocs.io/en/stable/topics/masks.html
+- **S10** Example flood-susceptibility GIS-MCDA paper. https://www.mdpi.com/2073-4441/17/7/937
+- **S11** Example flood-conditioning-factor terminology in flood susceptibility mapping. https://www.sciencedirect.com/science/article/pii/S0921818125001407
+- **S12** Saaty, T. L. "How to make a decision: The Analytic Hierarchy Process." European Journal of Operational Research, 1990. DOI: https://doi.org/10.1016/0377-2217(90)90057-I
+- **S13** Climate Hazards Center. CHIRPS rainfall data. https://www.chc.ucsb.edu/data/chirps
+
 ---
 
 ## 1. The Study Area: One Name Outside
@@ -46,19 +90,20 @@ The criteria were renamed in v0.2 to describe what the data actually measure. Wh
 about the current state, use the **v0.2 (new) names**. The old names appear here only so old
 references can be translated.
 
-| v0.1 name (old, deprecated) | v0.2 name (current) | What it actually is | In core overlay? |
+| v0.1 name (old, deprecated) | Current name | What it actually is | In current comparison? |
 |---|---|---|---|
-| `sediment_structure` | `erosion_structure_proxy` | R-invariant erosion *source structure* (K x LS x C); not sediment risk, magnitude needs an R value | yes |
+| `sediment_structure` | `soil_erosion_factors` | K x LS x C erosion source structure; rainfall erosivity must be documented separately | yes |
 | `landuse_asm_pressure` | split into `land_cover_pressure` + `mining_pressure` | land-cover pressure and mining pressure are now **separate** criteria, not averaged together | both yes |
-| `environmental_sensitivity` | `river_proximity_proxy` | distance-to-river proxy; **demoted out of the core overlay** (too thin to be an environmental claim) | no |
-| `socioeconomic_exposure` | `road_accessibility_proxy` | distance-to-road proxy; **demoted out of the core overlay** (not true exposure) | no |
-| `flood_hydrology` | `flood_hazard_proxy` | TWI high-wetness + drainage proximity; terrain flood-susceptibility proxy | yes |
+| `environmental_sensitivity` | `river_proximity_indicators` | distance-to-river evidence; **not used as a standalone environmental-sensitivity claim** | no |
+| road-only exposure layer | `exposure_indicators` | road/access proximity evidence; not observed vulnerability | yes |
+| `flood_hydrology` | `flood_conditioning_factors` | TWI high-wetness + drainage proximity; terrain flood-conditioning evidence | yes |
 
-Current v0.2 **core** criteria (the five that enter a weighted overlay): `flood_hazard_proxy`,
-`erosion_structure_proxy`, `land_cover_pressure`, `mining_pressure`, plus rainfall when added.
+Current comparison criteria: `flood_conditioning_factors`, `soil_erosion_factors`,
+`land_cover_pressure`, `mining_pressure`, `exposure_indicators`, and
+`rainfall_climatology`.
 
 Never write "sediment_structure" in a mentor document as if it means sediment loss — it does
-not. Use "erosion structure proxy" and note that magnitude depends on the R-factor.
+not. Use "soil erosion factors" and note that the erosion magnitude depends on the R-factor.
 
 ---
 
@@ -67,7 +112,7 @@ not. Use "erosion structure proxy" and note that magnitude depends on the R-fact
 | Term | Meaning | Mentor-friendly wording |
 |---|---|---|
 | R-factor / rainfall erosivity | the rainfall energy term in USLE/RUSLE that drives erosion | "rainfall erosivity (the R-factor)" |
-| `R-invariant` | the spatial structure that does not depend on the R value (K x LS x C) | "the erosion pattern that stays the same no matter which R value we pick" |
+| K x LS x C erosion source structure | the spatial part of USLE/RUSLE before applying rainfall erosivity | "the erosion pattern before we choose the R value" |
 | MFI | Modified Fournier Index, a monthly-rainfall summary used to estimate R | "a standard rainfall-intensity index" |
 | EI30 / I30 | storm kinetic energy times 30-minute intensity; the true R definition | "storm-level rainfall energy" |
 | LOW R-family | R ~ 240-320 (Hurni, Epworth); matches ERA5 hourly lower-bound check | "the lower R estimate" |
@@ -91,7 +136,7 @@ straight. The project currently produces **only the first two**, never a validat
 
 | Word | Means | Does the project have this? |
 |---|---|---|
-| **susceptibility map** | where flooding/erosion is *likely* based on terrain and proxies, no probability | yes (what the prototype is) |
+| **susceptibility map** | where flooding/erosion is *likely* based on conditioning indicators, no probability | yes (what the prototype is) |
 | **priority / suitability map** | relative ranking of where intervention matters, under chosen weights | yes (with documented AHP weights) |
 | **flood-risk map** | validated probability/magnitude of flood impact | **no** — no validation data |
 | **intervention-priority map** | authoritative plan of where to act | **no** — needs validation + official weights |
@@ -164,6 +209,6 @@ result, defensible but not yet validated").
 | `diagnostic_only` | "an internal diagnostic, not a result" |
 | `provisional` | "a working result, defensible but not yet validated" |
 | `sensitivity_scenario` | "a what-if check under different assumptions" |
-| `R-invariant` | "the erosion pattern that does not depend on the R value" |
-| `sediment_structure` (old) | "erosion structure proxy" |
+| old R-independent shorthand | "the K x LS x C erosion structure before applying R" |
+| `sediment_structure` (old) | "soil erosion factors" |
 | `landuse_asm_pressure` (old) | "land-cover pressure and mining pressure" |

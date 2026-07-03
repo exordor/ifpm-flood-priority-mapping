@@ -2,8 +2,8 @@
 """Build grid-compatible PE1 criteria-stack rasters (6 criteria) for the engineering pilot.
 
 Mirrors `build_boundary_v1_criteria_stack_v0_2.py` + the v0.3 rainfall criterion. PE1 has 6
-criteria: flood_hazard, erosion_structure, land_cover_pressure, mining_pressure (INGEMMET),
-socioeconomic_exposure (OSM roads), rainfall_climatology_proxy (CHIRPS coarse-to-grid, sensitivity).
+criteria: flood_conditioning, soil_erosion_factors, land_cover_pressure, mining_pressure (INGEMMET),
+exposure_indicators (OSM roads), rainfall_climatology (CHIRPS coarse-to-grid, sensitivity).
 
 Outputs standardized 0-1 criteria rasters on the PE1 30m reference grid (EPSG:32718).
 """
@@ -28,11 +28,11 @@ INPUTS = {
     "c_factor": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
     "roads": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
     "mining": ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif",
-    "rainfall": ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_proxy_0_1_PROVISIONAL_30m.tif",
+    "rainfall": ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif",
 }
 
 
-OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_hazard_proxy_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/erosion_structure_proxy_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/socioeconomic_exposure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_proxy_0_1.tif"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
@@ -143,30 +143,30 @@ def main() -> None:
     mining_std = rasters["mining"]
 
     criteria = {
-        "flood_hazard_proxy": weighted_average([(twi_std, 0.5), (drain_std, 0.5)], mask),
-        "erosion_structure_proxy": structure_std,
+        "flood_conditioning_factors": weighted_average([(twi_std, 0.5), (drain_std, 0.5)], mask),
+        "soil_erosion_factors": structure_std,
         "land_cover_pressure": c_std,
         "mining_pressure": mining_std,
-        "socioeconomic_exposure": roads_std,
-        "rainfall_climatology_proxy": rasters["rainfall"],
+        "exposure_indicators": roads_std,
+        "rainfall_climatology": rasters["rainfall"],
     }
 
     manifest_rows = []
     components_map = {
-        "flood_hazard_proxy": "TWI high-wetness + drainage proximity (inverted)",
-        "erosion_structure_proxy": "K_LS_C structure standardized 2-98; R-invariant",
+        "flood_conditioning_factors": "TWI high-wetness + drainage proximity (inverted)",
+        "soil_erosion_factors": "K x LS x C erosion source structure standardized 2-98; rainfall erosivity not applied",
         "land_cover_pressure": "WorldCover C-factor pressure",
         "mining_pressure": "INGEMMET Pequeña Minería ASM-point proximity (inverted); official source",
-        "socioeconomic_exposure": "OSM roads proximity (inverted); access/exposure proxy",
-        "rainfall_climatology_proxy": "CHIRPS latam Dec-Mar mean coarse-to-grid (sensitivity_scenario)",
+        "exposure_indicators": "OSM roads proximity (inverted); access/exposure indicator",
+        "rainfall_climatology": "CHIRPS latam Dec-Mar mean coarse-to-grid (sensitivity_scenario)",
     }
     claim_map = {
-        "flood_hazard_proxy": "provisional",
-        "erosion_structure_proxy": "diagnostic_only",
+        "flood_conditioning_factors": "provisional",
+        "soil_erosion_factors": "diagnostic_only",
         "land_cover_pressure": "provisional",
         "mining_pressure": "provisional",
-        "socioeconomic_exposure": "provisional",
-        "rainfall_climatology_proxy": "sensitivity_scenario",
+        "exposure_indicators": "provisional",
+        "rainfall_climatology": "sensitivity_scenario",
     }
     for name, arr in criteria.items():
         path = CRITERIA_DIR / f"{name}_0_1.tif"
@@ -183,7 +183,7 @@ def main() -> None:
             "coverage_threshold": MIN_VALID_FRACTION,
             "nodata_policy": (
                 "preserve NoData; erosion_structure inherits intentional channel mask from hillslope LS"
-                if name == "erosion_structure_proxy" else "preserve NoData; no score imputation"
+                if name == "soil_erosion_factors" else "preserve NoData; no score imputation"
             ),
             **stats(arr, mask),
         })
@@ -192,7 +192,7 @@ def main() -> None:
     # Zimbabwe boundary_v1 / rainfall_exposure_v0_4 comparison run.
     readiness = manifest_rows + [
         {"criterion": "rainfall_r_factor", "path": "", "components": "provisional R=238.6 (LOW family, shared default)",
-         "status": "scalar R in soil-loss (absolute magnitude); the rainfall_climatology_proxy criterion handles the spatial overlay role",
+         "status": "scalar R in soil-loss (absolute magnitude); the rainfall_climatology criterion handles the spatial overlay role",
          "grid_compatible": "not_applicable"},
     ]
 

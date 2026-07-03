@@ -14,7 +14,7 @@ Three scenarios, all `sensitivity_scenario` under the execution status policy:
 The headline output is the Top-20% hotspot overlap between each rainfall-included
 scenario and the v0.2 baseline hotspot, quantifying how much the pattern moves.
 
-GOVERNANCE: the rainfall criterion is a coarse-to-reference-grid CHIRPS proxy
+GOVERNANCE: the rainfall criterion is coarse-to-reference-grid CHIRPS climatology
 (effective resolution ~5 km, NOT native 30 m rainfall). Outputs are
 sensitivity_scenario, not final flood-risk or intervention-priority claims.
 """
@@ -54,14 +54,14 @@ V02_BASELINE = MAIN_OUTPUTS / f"{BOUNDARY_ID}/priority_scenarios_v0_2"
 
 # Rainfall criterion built by build_boundary_v1_rainfall_criterion_v0_3.py
 # (lives in this worktree's outputs/).
-RAINFALL_CRITERION = OUT_DIR / "criteria/rainfall_climatology_proxy_0_1_PROVISIONAL_30m.tif"
+RAINFALL_CRITERION = OUT_DIR / "criteria/rainfall_climatology_0_1_PROVISIONAL_30m.tif"
 
 CRITERIA_PATHS = {
-    "flood_hazard_proxy": V02_CRITERIA / "flood_hazard_proxy_0_1.tif",
+    "flood_conditioning_factors": V02_CRITERIA / "flood_conditioning_factors_0_1.tif",
     "sediment_risk_lowR_provisional": SEDIMENT_DIR / "sediment_risk_lowR_provisional_30m.tif",
     "land_cover_pressure": V02_CRITERIA / "land_cover_pressure_0_1.tif",
     "mining_pressure": V02_CRITERIA / "mining_pressure_0_1.tif",
-    "rainfall_climatology_proxy": RAINFALL_CRITERION,
+    "rainfall_climatology": RAINFALL_CRITERION,
 }
 
 # v0.2 baseline Top-20% frequency (0-1: fraction of v0.2 scenarios in which the
@@ -128,12 +128,12 @@ CLAIM_NOTE = (
 def scenario_weights() -> dict[str, dict[str, float]]:
     """Three scenarios. Rainfall-included scenarios keep the 4 core criteria and
     insert rainfall, re-scaling the core so weights sum to 1.0."""
-    core = ["flood_hazard_proxy", "sediment_risk_lowR_provisional", "land_cover_pressure", "mining_pressure"]
+    core = ["flood_conditioning_factors", "sediment_risk_lowR_provisional", "land_cover_pressure", "mining_pressure"]
 
     def with_rainfall(rain_w: float) -> dict[str, float]:
         core_w = (1.0 - rain_w) / len(core)
         weights = {c: core_w for c in core}
-        weights["rainfall_climatology_proxy"] = rain_w
+        weights["rainfall_climatology"] = rain_w
         return weights
 
     return {
@@ -371,7 +371,7 @@ def main() -> None:
         {"metric": "top20_any_scenario_cells", "value": int(np.nansum(top20_frequency > 0.0))},
         {"metric": "top20_all_scenarios_area_km2", "value": round(float(np.nansum(top20_frequency == 1.0) * CELL_AREA_KM2), 3)},
         {"metric": "top20_any_scenario_area_km2", "value": round(float(np.nansum(top20_frequency > 0.0) * CELL_AREA_KM2), 3)},
-        {"metric": "rainfall_score_mean_inside_v1", "value": round(float(np.nanmean(criteria["rainfall_climatology_proxy"])), 6)},
+        {"metric": "rainfall_score_mean_inside_v1", "value": round(float(np.nanmean(criteria["rainfall_climatology"])), 6)},
     ]
 
     write_csv(OUT_DIR / "scenario_weights.csv", weight_rows)

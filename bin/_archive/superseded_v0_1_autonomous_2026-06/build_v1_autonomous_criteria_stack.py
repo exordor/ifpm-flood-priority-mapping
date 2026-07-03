@@ -29,7 +29,7 @@ INPUTS = {
     "drainage": ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/v1_drainage_proximity_0_1.tif",
     "structure": ROOT / "outputs/v1_usle_soil_loss/a_structure_K_LS_C_30m.tif",
     "c_factor": ROOT / "outputs/esa_worldcover_2021_v1_methodology/c_factor/c_factor_v1_30m.tif",
-    "mining": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_mining_proxy_0_1_utm35s_30m.tif",
+    "mining": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_mining_activity_indicator_0_1_utm35s_30m.tif",
     "rivers": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_rivers_0_1_utm35s_30m.tif",
     "roads": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_roads_0_1_utm35s_30m.tif",
 }

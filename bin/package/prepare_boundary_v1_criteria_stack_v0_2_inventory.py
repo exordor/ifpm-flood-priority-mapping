@@ -66,24 +66,24 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
 def build_gap_table() -> list[dict[str, object]]:
     return [
         {
-            "criterion_family": "landuse_asm_pressure",
-            "current_v0_1_evidence": "WorldCover C-factor pressure plus OSM mining-proxy proximity",
+            "criterion_family": "land_cover_and_mining",
+            "current_v0_1_evidence": "WorldCover C-factor pressure plus OSM mining activity indicator",
             "current_strength": "weak_to_medium",
-            "hardening_gap": "OSM quarry/industrial proxy is not official active ASM evidence.",
+            "hardening_gap": "OSM quarry/industrial evidence is not official active ASM evidence.",
             "requested_dataset": "official ASM sites, concessions/claims with active status, active disturbance polygons",
             "trip_priority": "must_ask_zimbabwe",
-            "candidate_update_rule": "replace or supplement OSM proxy only if source is official, dated, spatial, and overlaps boundary_v1",
-            "if_missing": "keep mining as weak proxy/context; do not claim official mining pressure",
+            "candidate_update_rule": "replace or supplement OSM evidence only if source is official, dated, spatial, and overlaps boundary_v1",
+            "if_missing": "keep mining as weak indicator/context; do not claim official mining pressure",
         },
         {
-            "criterion_family": "socioeconomic_exposure",
+            "criterion_family": "exposure_indicators",
             "current_v0_1_evidence": "OSM road/access proximity",
-            "current_strength": "medium_proxy",
+            "current_strength": "medium_indicator",
             "hardening_gap": "Road proximity does not encode observed damage, vulnerable people, or exposed assets.",
             "requested_dataset": "affected settlements, flood-damaged roads/bridges, critical infrastructure, local population/asset data",
             "trip_priority": "must_ask_zimbabwe_and_peru",
-            "candidate_update_rule": "separate access proxy from true exposure; keep coarse population as context unless aggregation rule is accepted",
-            "if_missing": "keep road/access proxy and label it as access/exposure proxy, not socioeconomic vulnerability",
+            "candidate_update_rule": "separate access indicators from true exposure; keep coarse population as context unless aggregation rule is accepted",
+            "if_missing": "keep road/access indicator and label it as access/exposure evidence, not socioeconomic vulnerability",
         },
         {
             "criterion_family": "flood_validation",
@@ -122,11 +122,11 @@ def build_upgrade_matrix(layer_summary: pd.DataFrame, raster_summary: pd.DataFra
     layer = lambda name: row_by_layer(layer_summary, name)
     raster = lambda name: row_by_layer(raster_summary, name)
     candidates = [
-        ("OSM mining proxy", layer("osm_mining_proxy_v1"), "mining", "weak_proxy", "context_or_proxy_only"),
-        ("Mining-proxy proximity raster", layer("closeness_to_mining_proxy_0_1"), "mining", "weak_proxy_grid", "v0_1_retained_if_no_official_data"),
-        ("OSM roads", layer("osm_roads_v1"), "exposure", "medium_access_proxy", "access_proxy"),
-        ("OSM bridges", layer("osm_bridges_v1"), "exposure", "medium_infrastructure_proxy", "context_or_crossing_input"),
-        ("Road-river crossings", layer("road_river_crossings_v1"), "exposure", "medium_flood_exposure_proxy", "candidate_v0_2_exposure_component"),
+        ("OSM mining indicator", layer("osm_mining_indicator_v1"), "mining", "weak_indicator", "context_or_indicator_only"),
+        ("Mining activity proximity raster", layer("closeness_to_mining_indicator_0_1"), "mining", "weak_indicator_grid", "v0_1_retained_if_no_official_data"),
+        ("OSM roads", layer("osm_roads_v1"), "exposure", "medium_access_indicator", "access_indicator"),
+        ("OSM bridges", layer("osm_bridges_v1"), "exposure", "medium_infrastructure_indicator", "context_or_crossing_input"),
+        ("Road-river crossings", layer("road_river_crossings_v1"), "exposure", "medium_flood_exposure_indicator", "candidate_v0_2_exposure_component"),
         ("OSM places", layer("osm_places_v1"), "exposure", "medium_settlement_context", "context_or_zonal_summary"),
         ("WorldPop 2020", raster("worldpop_2020_unadj"), "exposure", "medium_population_context", "native_or_zonal_context"),
         ("GHSL population 2025", raster("ghsl_population_2025"), "exposure", "medium_population_context", "native_or_zonal_context"),
@@ -156,7 +156,7 @@ def build_upgrade_matrix(layer_summary: pd.DataFrame, raster_summary: pd.DataFra
 
 def action_for(family: str, strength: str) -> str:
     if family == "mining":
-        return "keep as proxy until official ASM/mining data are obtained"
+        return "keep as indicator until official ASM/mining data are obtained"
     if family == "exposure" and "population" in strength:
         return "use as context/zonal summary; avoid false 30 m precision"
     if family == "exposure":
@@ -177,9 +177,9 @@ def build_manifest() -> list[dict[str, object]]:
         },
         {
             "criterion": "mining_pressure",
-            "v0_1_input": "OSM mining-proxy proximity inside old landuse_asm_pressure average",
-            "candidate_status": "weak_proxy_until_official_mining_data",
-            "proposed_change": "keep as separate mining proxy; do not merge with C-factor",
+            "v0_1_input": "OSM mining activity indicator inside old land-use/mining average",
+            "candidate_status": "weak_indicator_until_official_mining_data",
+            "proposed_change": "keep as separate mining indicator; do not merge with C-factor",
             "reason": "OSM quarry/industrial evidence is not official active ASM evidence",
         },
         {
@@ -190,22 +190,22 @@ def build_manifest() -> list[dict[str, object]]:
             "reason": "not one of the weakest criteria in current review",
         },
         {
-            "criterion": "erosion_structure_proxy",
-            "v0_1_input": "R-invariant K x LS x C structure",
+            "criterion": "soil_erosion_factors",
+            "v0_1_input": "K x LS x C erosion source structure",
             "candidate_status": "renamed_and_masked",
             "proposed_change": "preserve NoData and avoid sediment-risk label",
             "reason": "K x LS x C is only erosion structure without accepted R",
         },
         {
-            "criterion": "road_accessibility_proxy",
-            "v0_1_input": "road/access proximity inside old socioeconomic_exposure",
+            "criterion": "exposure_indicators",
+            "v0_1_input": "road/access proximity inside old road-only exposure layer",
             "candidate_status": "diagnostic_only",
             "proposed_change": "exclude from socioeconomic vulnerability claims",
             "reason": "road proximity is access/infrastructure context, not observed vulnerability",
         },
         {
-            "criterion": "river_proximity_proxy",
-            "v0_1_input": "river/water proximity proxy",
+            "criterion": "river_proximity_indicators",
+            "v0_1_input": "river/water proximity indicator",
             "candidate_status": "diagnostic_only",
             "proposed_change": "exclude from environmental sensitivity claims",
             "reason": "river proximity alone is not wetlands/protected-area/ecological sensitivity evidence",
@@ -232,8 +232,8 @@ Main outputs:
 
 Main reading:
 
-- Mining remains weak proxy evidence until official ASM/mining data are obtained.
-- Exposure should be split into access proxy and population/built-up context.
+- Mining remains weak indicator evidence until official ASM/mining data are obtained.
+- Exposure should be split into access indicators and population/built-up context.
 - Flood validation remains missing locally.
 - Rainfall/R remains an uncertainty module, not a 30 m pixel-level layer.
 

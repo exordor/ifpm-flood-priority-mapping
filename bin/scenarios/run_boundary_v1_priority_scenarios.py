@@ -8,11 +8,11 @@ under the execution status policy, not final flood-risk or intervention claims.
 
 Sediment criterion normalization note: `sediment_risk_lowR_provisional` is an
 absolute soil-loss raster (t/ha/yr, range 0-238.6) derived from
-erosion_structure_proxy x R=238.6. `normalize_if_needed` max-normalizes it to
+soil_erosion_factors x R=238.6. `normalize_if_needed` max-normalizes it to
 [0,1] for MCDA scoring, so its 0-1 value is a *relative hotspot intensity*, not
 an absolute erosion rate. The maximum-erosion cell becomes 1.0; the R-value
 choice shifts the absolute magnitude but, after normalization, does not change
-which cells rank highest (rank is R-invariant). Absolute t/ha/yr values remain
+which cells rank highest (rank is independent of the chosen R-factor). Absolute t/ha/yr values remain
 available in `sediment_r_factor_scenarios/`.
 """
 
@@ -30,7 +30,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_hazard_proxy_0_1.tif", ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/road_accessibility_proxy_0_1.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
 OUTPUTS = [ROOT / "outputs/boundary_v1/priority_scenarios_v0_2/priority_mean.tif", ROOT / "outputs/boundary_v1/priority_scenarios_v0_2/top20_frequency.tif", ROOT / "outputs/boundary_v1/priority_scenarios_v0_2/hotspot_stability_summary.csv"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
@@ -48,12 +48,12 @@ REF = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_d
 V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
 
 CRITERIA_PATHS = {
-    "flood_hazard_proxy": CRITERIA_DIR / "flood_hazard_proxy_0_1.tif",
+    "flood_conditioning_factors": CRITERIA_DIR / "flood_conditioning_factors_0_1.tif",
     "sediment_risk_lowR_provisional": SEDIMENT_DIR / "sediment_risk_lowR_provisional_30m.tif",
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
     "mining_pressure": CRITERIA_DIR / "mining_pressure_0_1.tif",
-    "river_proximity_proxy": CRITERIA_DIR / "river_proximity_proxy_0_1.tif",
-    "road_accessibility_proxy": CRITERIA_DIR / "road_accessibility_proxy_0_1.tif",
+    "river_proximity_indicators": CRITERIA_DIR / "river_proximity_indicators_0_1.tif",
+    "exposure_indicators": CRITERIA_DIR / "exposure_indicators_0_1.tif",
 }
 
 SLIDE_MATRIX = np.array(
@@ -129,12 +129,12 @@ def ahp_slide_weights() -> tuple[dict[str, float], float]:
     landuse_half = base["landuse_asm"] / 2.0
     return (
         {
-            "flood_hazard_proxy": base["flood"],
+            "flood_conditioning_factors": base["flood"],
             "sediment_risk_lowR_provisional": base["sediment"],
             "land_cover_pressure": landuse_half,
             "mining_pressure": landuse_half,
-            "river_proximity_proxy": base["environmental"],
-            "road_accessibility_proxy": base["socioeconomic"],
+            "river_proximity_indicators": base["environmental"],
+            "exposure_indicators": base["socioeconomic"],
         },
         float(cr),
     )
@@ -145,19 +145,19 @@ def scenario_weights() -> tuple[dict[str, dict[str, float]], float]:
     return (
         {
             "equal_core": {
-                "flood_hazard_proxy": 0.25,
+                "flood_conditioning_factors": 0.25,
                 "sediment_risk_lowR_provisional": 0.25,
                 "land_cover_pressure": 0.25,
                 "mining_pressure": 0.25,
             },
             "default_weighted": slide,
             "mining_exposure_stress": {
-                "flood_hazard_proxy": 0.25,
+                "flood_conditioning_factors": 0.25,
                 "sediment_risk_lowR_provisional": 0.20,
                 "land_cover_pressure": 0.10,
                 "mining_pressure": 0.25,
-                "river_proximity_proxy": 0.05,
-                "road_accessibility_proxy": 0.15,
+                "river_proximity_indicators": 0.05,
+                "exposure_indicators": 0.15,
             },
         },
         cr,

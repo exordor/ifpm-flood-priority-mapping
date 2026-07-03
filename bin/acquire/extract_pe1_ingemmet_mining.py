@@ -11,7 +11,7 @@ Outputs (gitignored):
 - data/raw/ingemmet_catastro_minero_peru_pilot/pe1_pequena_mineria.gpkg (raw points)
 - outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif (criterion)
 
-The criterion replaces the OSM-based closeness_to_mining_proxy in the PE1 criteria stack.
+The criterion replaces the OSM-based closeness_to_mining_indicator in the PE1 criteria stack.
 """
 
 from __future__ import annotations

@@ -199,7 +199,7 @@ def plot_rehab() -> None:
     rasters = [
         ("River proximity", RASTER_DIR / "v1_closeness_to_rivers_0_1_utm35s_30m.tif"),
         ("Road accessibility", RASTER_DIR / "v1_closeness_to_roads_0_1_utm35s_30m.tif"),
-        ("Mining-proxy proximity", RASTER_DIR / "v1_closeness_to_mining_proxy_0_1_utm35s_30m.tif"),
+        ("Mining activity proximity", RASTER_DIR / "v1_mining_activity_indicator_0_1_utm35s_30m.tif"),
     ]
     fig, axes = plt.subplots(1, 3, figsize=(9.4, 3.9), constrained_layout=True)
     for ax, (title, path) in zip(axes, rasters, strict=True):
@@ -271,7 +271,7 @@ flood-risk map, and not final thesis boundary evidence.
 - Land-cover class table: `{rel(LANDCOVER)}`.
 - JRC surface-water summary: `{rel(GSW)}`.
 - GHSL built-up/population summary: `{rel(OUT_DIR / 'v1_ghsl_summary.csv')}`.
-- Rehabilitation proxy components: `{rel(OUT_DIR / 'v1_rehabilitation_proxy_components.csv')}`.
+- Rehabilitation proxy components: `{rel(OUT_DIR / 'v1_rehabilitation_indicator_components.csv')}`.
 - DFO Zimbabwe historical flood records: `{rel(OUT_DIR / 'v1_dfo_zimbabwe_flood_events.csv')}`.
 - WDPCA protected/conserved-area summary: `{rel(OUT_DIR / 'v1_wdpca_protected_area_summary.csv')}`.
 - Separate figure panels:

@@ -40,7 +40,7 @@ TABLE_SOURCES = [
     "v1_worldcover_class_area.csv",
     "v1_ghsl_summary.csv",
     "v1_jrc_surface_water_summary.csv",
-    "v1_rehabilitation_proxy_components.csv",
+    "v1_rehabilitation_indicator_components.csv",
     "v1_wdpca_protected_area_summary.csv",
     "v1_dfo_zimbabwe_flood_events.csv",
 ]

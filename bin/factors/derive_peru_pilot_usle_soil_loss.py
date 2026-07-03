@@ -2,13 +2,14 @@
 """Derive PE1 USLE/RUSLE soil-loss structure and provisional sediment scenarios.
 
 Mirrors `derive_v1_usle_soil_loss.py` but uses the verified-safe structure layer only
-(K_SI x LS x C x P, R-invariant) and applies provisional R scalars. The old Zimbabwe
-workflow's R-dependent absolute A values are deprecated; this PE1 script follows the
-2026-06-19 audit's corrected approach: structure is trustworthy, R is a labelled scalar.
+(K_SI x LS x C x P, independent of the rainfall-erosivity factor R) and applies
+provisional R scalars. The old Zimbabwe workflow's R-dependent absolute A values are
+deprecated; this PE1 script follows the 2026-06-19 audit's corrected approach: the
+erosion structure is trustworthy, R is a labelled scalar.
 
 PE1 structure = K_SI_scalar x LS(hillslope, capped-50) x C(30m) x P(=1.0).
 Provisional sediment scenarios = structure x R_mean for a LOW and HIGH R family.
-The hotspot RANK is R-invariant; R only scales magnitude.
+The hotspot RANK does not depend on the chosen R value; R only scales magnitude.
 """
 
 from __future__ import annotations
@@ -38,7 +39,7 @@ K_SI_MEAN = K_US_MEAN_0_5CM * 0.1317  # = 0.0239
 # LOW: same provisional value used for Zimbabwe (Arnoldus 1980 LOW family, applied as a
 # labelled provisional default until a PE1-specific CHIRPS/ERA5 R is derived). Peru PE1 is
 # a drier Pacific-slope basin; the true R is likely lower, but the LOW-family provisional
-# is a defensible conservative screening value, and the hotspot rank is R-invariant.
+# is a defensible conservative screening value, and the hotspot rank does not depend on R.
 R_LOW_DEFAULT = 238.6
 R_HIGH_SENSITIVITY = 408.0
 
@@ -64,7 +65,8 @@ def main() -> None:
         ref_crs = ref.crs
         ref_shape = (ref.height, ref.width)
 
-    # Structure = K_SI x LS x C x P (everything except R). R-invariant spatial structure.
+    # Structure = K_SI x LS x C x P (everything except R). The spatial structure is
+    # independent of the chosen R value; R only scales the absolute magnitude.
     structure = K_SI_MEAN * ls * c * P
     invalid = ~np.isfinite(ls) | ~np.isfinite(c)
     structure = np.where(invalid, np.nan, structure)
@@ -108,9 +110,10 @@ def main() -> None:
             "P": P,
         },
         "boundary_status": "engineering_pilot_not_research_selected",
-        "r_invariance_note": ("The hotspot RANK is R-invariant; R only scales absolute magnitude. "
-                              "The LOW R is a provisional screening default; a PE1-specific CHIRPS/"
-                              "ERA5 R should be derived for any magnitude claim."),
+        "r_invariance_note": ("The hotspot RANK does not depend on the chosen R value; R only "
+                              "scales the absolute magnitude. The LOW R is a provisional screening "
+                              "default; a PE1-specific CHIRPS/ERA5 R should be derived for any "
+                              "magnitude claim."),
         "zimbabwe_v1_reference": {
             "K_SI_mean": 0.022319,
             "R_low_default": 238.6,

@@ -2,7 +2,7 @@
 
 Updated: 2026-07-02
 
-Board restructured 2026-07-02: completed and superseded tasks moved from In Progress to Done (byte-for-byte, no content change); the ten mentor-gated decision packages (IFPM-061..070) compressed to a one-line index under "Awaiting mentor decisions" (full text in `_archive/p1_p2_decision_packages_2026-06-15/`); In Progress now holds only the four active tasks. No task was deleted. Prior layout preserved in `task_progress_board.md.bak` until verified.
+Board restructured 2026-07-02: completed and superseded tasks moved from In Progress to Done (byte-for-byte, no content change); the ten mentor-gated decision packages (IFPM-061..070) compressed to a one-line index under "Awaiting mentor decisions" (full text in `_archive/p1_p2_decision_packages_2026-06-15/`); In Progress now holds the active implementation tasks. No task was deleted. Prior layout preserved in `task_progress_board.md.bak` until verified.
 
 Scope: private project planning for the IFPM comparative flood-risk modelling workspace.
 
@@ -652,13 +652,13 @@ or Zimbabwe-Peru comparison is authorized.
   `outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/` and
   `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/`.
 - Key results:
-  - Built PE1 rainfall_climatology_proxy from CHIRPS v3 latam Dec-Mar rainy-season mean
+  - Built PE1 rainfall_climatology from CHIRPS v3 latam Dec-Mar rainy-season mean
     (HTTP windowed read, 2014/15-2023/24), bilinear-resampled to the PE1 30m grid. Coarse-to-grid
     governance identical to Zimbabwe A-010 (PE1 = A-012): IFPM_NOTE band tag,
     `sensitivity_scenario`, effective resolution ~5 km, not pixel-level 30 m rainfall.
   - PE1 raw rainfall: 37.6-292.9 mm/season, mean ~78 (arid Andean Pacific slope; Zimbabwe V1 is
     wetter — another real physical-contrast signal).
-  - PE1 criteria stack now 6 criteria: flood, erosion_structure, land_cover, mining, exposure,
+  - PE1 criteria stack now 6 criteria: flood conditioning, soil erosion factors, land cover, mining, exposure,
     rainfall. Priority scenarios (equal + mentor_slide CR=0.022 + flood_erosion_heavy):
     top-20% stable hotspot 299.57 km2.
 - Impact: PE1 is now methodologically symmetric to the merged Zimbabwe V1 v0.3 — same 6-criteria
@@ -777,6 +777,20 @@ or Zimbabwe-Peru comparison is authorized.
   trip. Missing data becomes a concrete request list rather than a blocker.
 - Next action: compare the v0.1 stable hotspots against road-river crossings, OSM places,
   GHSL/WorldPop native summaries, and mining proxy without calling the comparison validation.
+
+### IFPM-097 July 18 Mentor/Boss Comparison Pack
+
+- Status: mentor/boss-facing visual package generated for final review. The package integrates the
+  two-country prototype comparison with pixel-level dominant-criterion colouring and a short boss
+  process figure.
+- Evidence:
+  `bin/visualize/plot_july18_integrated_priority_board.py` and ignored outputs under
+  `outputs/zimbabwe_peru_prototype_comparison/`.
+- Key result: the 7/18 package now has one main figure with four readable panels, a claim-level
+  note on the figure face, a separate process figure, captions, and a short Teams draft. It uses
+  existing Zimbabwe/Peru sensitivity-scenario outputs only.
+- Next action: final visual QA and send-pack selection with the user. Do not open new modelling
+  work before this packet is reviewed.
 
 ### Awaiting mentor decisions (gate-blocked)
 
@@ -1110,7 +1124,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
 - Completion evidence:
   `bin/package/prepare_v1_multicriteria_evidence.py`,
   `bin/visualize/plot_v1_multicriteria_evidence_board.py`,
-  `context/docs/project-management/v1_multicriteria_evidence_package_2026-06-13.md`, and
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/v1_multicriteria_evidence_package_2026-06-13.md`, and
   `outputs/v1_multicriteria_evidence_package/mentor_v1_multicriteria_evidence_board.png`.
 - Key result: the evidence package covers terrain, hydro/flood context, exposure, mining proxy,
   and rainfall readiness. Rainfall is marked as a CHIRPS preflight gap, Geoportal Flood Prone
@@ -1155,7 +1169,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   `bin/package/prepare_v1_methodology_vector_layers.py`,
   `bin/criteria/build_v1_full_methodology_evidence_matrix.py`,
   `bin/visualize/plot_v1_full_methodology_evidence.py`,
-  `context/docs/project-management/v1_full_methodology_evidence_sweep_2026-06-13.md`,
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/v1_full_methodology_evidence_sweep_2026-06-13.md`,
   `context/docs/project-management/_archive/superseded_process_notes_2026-06/v1_full_methodology_adversarial_review_2026-06-13.md`, and
   `outputs/v1_full_methodology_evidence_sweep/v1_full_methodology_evidence_matrix.csv`.
 - Key result: the matrix now covers flood hazard, rainfall, terrain, land use / ASM,

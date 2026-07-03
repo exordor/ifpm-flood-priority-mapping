@@ -48,7 +48,7 @@ REF = MAIN_OUTPUTS / "srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_d
 V1_GPKG = MAIN_OUTPUTS / "v1_working_boundary/v1_working_boundary.gpkg"
 V02_BASELINE = MAIN_OUTPUTS / f"{BOUNDARY_ID}/priority_scenarios_v0_2"
 EVIDENCE_GPKG = MAIN_OUTPUTS / "v1_full_methodology_evidence_sweep/v1_full_methodology_review_layers.gpkg"
-MINING_PROX_RASTER = MAIN_OUTPUTS / "v1_full_methodology_evidence_sweep/rasters/v1_closeness_to_mining_proxy_0_1_utm35s_30m.tif"
+MINING_PROX_RASTER = MAIN_OUTPUTS / "v1_full_methodology_evidence_sweep/rasters/v1_mining_activity_indicator_0_1_utm35s_30m.tif"
 WORLDPOP_RASTER = MAIN_OUTPUTS / "v1_full_methodology_evidence_sweep/rasters/v1_worldpop_2020_unadj_native.tif"
 GHSL_BUILT_RASTER = MAIN_OUTPUTS / "v1_full_methodology_evidence_sweep/rasters/v1_ghsl_built_surface_2025_native.tif"
 

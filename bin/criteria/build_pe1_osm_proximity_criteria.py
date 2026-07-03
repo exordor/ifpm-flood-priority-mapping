@@ -6,8 +6,8 @@ rasters on the PE1 30m reference grid (EPSG:32718):
 
 - mining_pressure: proximity to OSM landuse quarry/industrial polygons (inverted distance ->
   closer = higher mining pressure). Weak proxy, same logic as Zimbabwe.
-- socioeconomic_exposure: proximity to OSM roads (inverted distance -> closer = more accessible/
-  exposed). Same logic as Zimbabwe's road_accessibility_proxy.
+- exposure_indicators: proximity to OSM roads (inverted distance -> closer = more accessible/
+  exposed). Same logic as Zimbabwe's exposure_indicators.
 
 Both standardized 0-1 via 2-98 percentile min-max (inverted), masked to PE1. These fill the two
 deferred PE1 criteria so the PE1 stack reaches 5 criteria, comparable to Zimbabwe v0.2.
@@ -140,7 +140,7 @@ def main() -> None:
     print(f"  mining proxy features (quarry/industrial) inside PE1+5km: {len(mining)}")
     mining_dist = proximity_raster(mining, profile, mask)
     mining_01, m_lo, m_hi = normalize_inverted(mining_dist, mask)
-    write_raster(OUT_DIR / "closeness_to_mining_proxy_0_1.tif", mining_01, profile)
+    write_raster(OUT_DIR / "mining_activity_indicator_0_1.tif", mining_01, profile)
 
     # --- places (context, for diagnostics) ---
     print("clipping places to PE1 ...")
@@ -151,7 +151,7 @@ def main() -> None:
         {"layer": "closeness_to_roads_0_1", "path": rel(OUT_DIR / "closeness_to_roads_0_1.tif"),
          "components": "OSM roads proximity (inverted); exposure/access proxy",
          "source_features": len(roads), "claim_level": "diagnostic_only", **stats(roads_01, mask)},
-        {"layer": "closeness_to_mining_proxy_0_1", "path": rel(OUT_DIR / "closeness_to_mining_proxy_0_1.tif"),
+        {"layer": "mining_activity_indicator_0_1", "path": rel(OUT_DIR / "mining_activity_indicator_0_1.tif"),
          "components": "OSM landuse quarry/industrial proximity (inverted); weak mining proxy",
          "source_features": len(mining), "claim_level": "diagnostic_only", **stats(mining_01, mask)},
         {"layer": "osm_places_count", "path": "", "components": "OSM places (context only, not a criterion)",

@@ -12,7 +12,7 @@ import rasterio
 
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/erosion_structure_proxy_0_1.tif"]
+INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif"]
 OUTPUTS = [ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
@@ -22,7 +22,7 @@ write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "sediment_r_factor_scenarios"
 CONFIG = ROOT / "context/configs/boundary_v1_sediment_r_factor_scenarios.csv"
-STRUCTURE = ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/erosion_structure_proxy_0_1.tif"
+STRUCTURE = ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif"
 OUT_DIR = ROOT / f"outputs/{BOUNDARY_ID}/{EXPERIMENT_ID}"
 
 
@@ -44,7 +44,7 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
 
 def read_structure() -> tuple[np.ndarray, dict]:
     if not STRUCTURE.exists():
-        raise FileNotFoundError(f"Missing erosion structure proxy: {STRUCTURE}")
+        raise FileNotFoundError(f"Missing soil erosion factors raster: {STRUCTURE}")
     with rasterio.open(STRUCTURE) as src:
         data = src.read(1).astype("float32")
         profile = src.profile.copy()
@@ -87,13 +87,13 @@ def main() -> None:
                 "experiment_id": experiment_id,
                 "scenario_id": scenario_id,
                 "path": rel(output),
-                "formula": "sediment_scenario = erosion_structure_proxy * R_mean",
+                "formula": "sediment_scenario = soil_erosion_factors * R_mean",
                 "r_source_key": record["r_source_key"],
                 "r_mean": r_mean,
                 "claim_level": record["claim_level"],
                 "role": record["role"],
                 "use_as_default": record["use_as_default"],
-                "nodata_policy": "inherits erosion_structure_proxy mask; no zero fill",
+                "nodata_policy": "inherits soil_erosion_factors mask; no zero fill",
                 "notes": record["notes"],
                 **stats(sediment),
             }

@@ -201,7 +201,7 @@ Prefer scoped experiments with:
 
 Allowed first-pass indicators include elevation, slope, TWI/flow accumulation or distance to
 drainage, distance to rivers, land-cover/bare-ground classes, road/access proximity, and explicitly
-labelled mining/ASM proxies.
+labelled mining/ASM indicators.
 
 Avoid unless explicitly requested or already scoped in a current plan:
 
@@ -220,7 +220,7 @@ Do not stop implementation solely because a scientific decision is uncertain. In
 - record the assumption in the relevant project note, registry, preflight file, handoff, or a
   cross-cutting `context/docs/project-management/assumptions_log.md` if one is needed;
 - expose uncertain values as config/table parameters where practical;
-- continue with clearly labelled placeholder, candidate, proxy, or context evidence;
+- continue with clearly labelled placeholder, candidate, indicator, or context evidence;
 - never claim scientific validity, validation, final flood-risk status, or intervention priority
   from placeholder evidence.
 
@@ -231,22 +231,22 @@ Examples:
 - Demo boundaries or bounding boxes are allowed only for pipeline testing and must be labelled
   non-scientific or prototype-only.
 - Missing local data should become a blocker or data-request entry, not a reason to stop coding.
-- Proxy evidence such as OSM quarry, road proximity, or coarse population data must remain labelled
-  as proxy/context until stronger source data or an accepted modelling rule exists.
+- Indirect evidence such as OSM quarry, road proximity, or coarse population data must remain
+  labelled as indicator/context until stronger source data or an accepted modelling rule exists.
 
 ## Criteria Design Rules
 
 Criterion names must describe what the data actually measure. Do not use broad scientific labels
-when the layer is only a narrow proxy.
+when the layer is only a narrow indicator.
 
-- `K x LS x C` without an accepted rainfall erosivity factor is `erosion_structure_proxy`, not
+- `K x LS x C` without an accepted rainfall erosivity factor is `soil_erosion_factors`, not
   final sediment risk.
-- River or water proximity alone is `river_proximity_proxy`, not environmental sensitivity.
-- Road proximity alone is `road_accessibility_proxy`, not socioeconomic vulnerability.
+- River or water proximity alone is `river_proximity_indicators`, not environmental sensitivity.
+- Road proximity alone is `exposure_indicators`, not socioeconomic vulnerability.
 - C-factor / vegetation / bare-ground evidence is `land_cover_pressure`.
 - Mining or quarry proximity/footprint evidence is `mining_pressure`.
 - Population, built-up, schools, health facilities, bridges, damaged roads, or affected places are
-  exposure evidence; road distance alone is only an access proxy.
+  exposure evidence; road distance alone is only an access indicator.
 
 Do not hide within-criterion equal-weight averaging in code. If components are combined, put the
 component names, weights, direction, and `claim_level` in a config, manifest, or scenario table.
