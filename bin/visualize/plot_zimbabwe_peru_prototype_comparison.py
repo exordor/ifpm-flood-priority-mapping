@@ -8,6 +8,7 @@ download data, or make final flood-risk claims.
 from __future__ import annotations
 
 import csv
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -23,6 +24,9 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "bin/package"))
+from write_zimbabwe_peru_source_tables import write_source_tables
+
 INPUTS = [ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/hotspot_stability_summary.csv", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/revised_criteria_manifest.csv", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/hotspot_stability_summary.csv", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria_stack_manifest.csv", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
 OUTPUTS = [ROOT / "outputs/zimbabwe_peru_prototype_comparison/zimbabwe_peru_prototype_comparison_board.png", ROOT / "outputs/zimbabwe_peru_prototype_comparison/zimbabwe_peru_comparison_handoff.md"]
 OUT_DIR = ROOT / "outputs/zimbabwe_peru_prototype_comparison"
@@ -103,8 +107,8 @@ CRITERIA_SPECS = [
      "WorldCover / C-factor style land-cover pressure", "provisional",
      "land-cover pressure only, not observed damage"),
     ("Zimbabwe", "boundary_v1", "mining/ASM", "mining_pressure",
-     "OSM mining and quarry evidence", "diagnostic_only",
-     "needs official Zimbabwe mining / ASM evidence"),
+     "USGS mineral facilities/deposits with tiered distance-decay", "provisional",
+     "reference layer only; still needs local ASM mapping"),
     ("Zimbabwe", "boundary_v1", "exposure indicators", "exposure_indicators",
      "OSM road proximity / access-exposure indicator", "diagnostic_only",
      "indicator only, not observed flood impact or vulnerability"),
@@ -389,6 +393,7 @@ def main() -> None:
     summary_rows = build_summary_rows()
     write_csv(OUT_DIR / "zimbabwe_peru_summary.csv", summary_rows)
     write_csv(OUT_DIR / "zimbabwe_peru_criteria_source_table.csv", criteria_rows())
+    write_source_tables(OUT_DIR)
     plot_board()
     write_handoff(summary_rows)
     print(f"Wrote comparison pack to {OUT_DIR}")

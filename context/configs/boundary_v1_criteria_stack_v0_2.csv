@@ -3,6 +3,6 @@ boundary_v1,criteria_stack_v0_2,flood_conditioning_factors,twi_high_wetness,twi,
 boundary_v1,criteria_stack_v0_2,flood_conditioning_factors,drainage_proximity,drainage,0.5,true,provisional,wetness and drainage-prone terrain factors,masked_not_zero_filled
 boundary_v1,criteria_stack_v0_2,soil_erosion_factors,k_ls_c_structure,structure,1.0,true,diagnostic_only,K x LS x C erosion source structure; rainfall erosivity not applied,masked_not_zero_filled
 boundary_v1,criteria_stack_v0_2,land_cover_pressure,c_factor_pressure,c_factor,1.0,true,provisional,land-cover or vegetation protection pressure,masked_not_zero_filled
-boundary_v1,criteria_stack_v0_2,mining_pressure,osm_mining_indicator,mining,1.0,true,provisional,OSM mining or quarry activity indicator,masked_not_zero_filled
+boundary_v1,criteria_stack_v0_2,mining_pressure,usgs_mining_reference,mining,1.0,true,provisional,USGS mineral facilities and deposits with tiered distance-decay mining activity indicator; not official ASM footprint,masked_not_zero_filled
 boundary_v1,criteria_stack_v0_2,exposure_indicators,road_proximity,roads,1.0,false,diagnostic_only,accessibility and infrastructure proximity indicator,masked_not_zero_filled
 boundary_v1,criteria_stack_v0_2,river_proximity_indicators,river_proximity,rivers,1.0,false,diagnostic_only,river or water proximity indicator,masked_not_zero_filled

@@ -157,6 +157,20 @@ def scan_file(path: Path) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     path_rel = rel(path)
     terms = DEPRECATED_TERMS + GENERIC_TERMS
+    for term in terms:
+        if term not in path.name:
+            continue
+        status, reason = classify(path_rel, term, path.name)
+        rows.append(
+            {
+                "path": path_rel,
+                "line": "",
+                "term": term,
+                "status": status,
+                "reason": reason,
+                "excerpt": path.name,
+            }
+        )
     try:
         text = path.read_text(encoding="utf-8")
     except UnicodeDecodeError:

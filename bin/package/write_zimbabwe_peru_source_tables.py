@@ -1,0 +1,286 @@
+#!/usr/bin/env python3
+"""Write source and provenance tables for the Zimbabwe-Peru comparison pack."""
+
+from __future__ import annotations
+
+import csv
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[2]
+OUT_DIR = ROOT / "outputs/zimbabwe_peru_prototype_comparison"
+
+
+def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
+    fields: list[str] = []
+    for row in rows:
+        for key in row:
+            if key not in fields:
+                fields.append(key)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def criteria_rows() -> list[dict[str, str]]:
+    return [
+        row(
+            "Flood / drainage",
+            "SRTM-derived TWI high-wetness plus distance to drainage",
+            "30 m",
+            "standard terrain conditioning indicator",
+            "SRTM-derived TWI high-wetness plus distance to drainage",
+            "30 m",
+            "standard terrain conditioning indicator",
+            "NASA SRTM 1 Arc-Second",
+            "provisional",
+        ),
+        row(
+            "Soil erosion",
+            "SoilGrids K-factor, SRTM LS-factor, WorldCover C-factor, provisional low-range R",
+            "30-250 m",
+            "screening estimate; R still provisional",
+            "SoilGrids K-factor, SRTM LS-factor, WorldCover C-factor",
+            "30-250 m",
+            "factor structure only; rainfall erosivity not applied",
+            "SoilGrids + SRTM + ESA WorldCover",
+            "provisional",
+        ),
+        row(
+            "Land use/land cover",
+            "ESA WorldCover 2021 C-factor",
+            "10 m",
+            "standard land-cover source",
+            "ESA WorldCover 2021 C-factor",
+            "10 m",
+            "standard land-cover source; arid-zone interpretation needs site context",
+            "ESA WorldCover v200 (2021)",
+            "provisional",
+        ),
+        row(
+            "Mining / ASM activity",
+            "USGS Africa GIS mineral facilities and deposits; tiered distance-decay indicator",
+            "vector to 30 m grid",
+            "public reference layer; not local ASM mapping",
+            "INGEMMET official small-mining point data",
+            "point to 30 m grid",
+            "stronger official-source point evidence",
+            "Zimbabwe: USGS Africa GIS; Peru: INGEMMET GEOCATMIN",
+            "provisional",
+        ),
+        row(
+            "Exposure / access",
+            "OSM road proximity",
+            "vector to 30 m grid",
+            "access and infrastructure indicator",
+            "OSM road proximity",
+            "vector to 30 m grid",
+            "access and infrastructure indicator",
+            "Geofabrik OSM (ODbL)",
+            "diagnostic_only",
+        ),
+        row(
+            "Rainfall",
+            "CHIRPS v3 rainy-season mean, December-March",
+            "~5 km native grid; aligned for scenario compatibility",
+            "coarse rainfall sensitivity layer",
+            "CHIRPS v3 LatAm rainy-season mean, December-March",
+            "~5 km native grid; aligned for scenario compatibility",
+            "coarse rainfall sensitivity layer",
+            "CHIRPS v3 (UCSB Climate Hazards Center)",
+            "sensitivity_scenario",
+        ),
+    ]
+
+
+def row(
+    criterion: str,
+    zimbabwe_source: str,
+    zimbabwe_resolution: str,
+    zimbabwe_evidence_strength: str,
+    peru_source: str,
+    peru_resolution: str,
+    peru_evidence_strength: str,
+    shared_product: str,
+    claim_level: str,
+) -> dict[str, str]:
+    return {
+        "criterion": criterion,
+        "zimbabwe_source": zimbabwe_source,
+        "zimbabwe_resolution": zimbabwe_resolution,
+        "zimbabwe_evidence_strength": zimbabwe_evidence_strength,
+        "peru_source": peru_source,
+        "peru_resolution": peru_resolution,
+        "peru_evidence_strength": peru_evidence_strength,
+        "shared_product": shared_product,
+        "claim_level": claim_level,
+    }
+
+
+def provenance_rows() -> list[dict[str, str]]:
+    return [
+        provenance(
+            "SRTM 1 Arc-Second",
+            "NASA SRTM (2000)",
+            "USGS EROS / ESA STEP mirror",
+            "30 m",
+            "2000-02",
+            "public; cite DOI 10.5066/F7PR7TFT",
+            "flood conditioning and LS factor",
+            "context/docs/data-management/registry/srtm_1arcsec_zimbabwe_prototype.md",
+        ),
+        provenance(
+            "ESA WorldCover",
+            "v200 (2021)",
+            "ESA WorldCover consortium",
+            "10 m",
+            "2021 land cover",
+            "ESA terms; cite before release",
+            "land use/land cover and C-factor",
+            "context/docs/data-management/registry/esa_worldcover_2021_v1_methodology.md",
+        ),
+        provenance(
+            "SoilGrids 250 m",
+            "2017/2020 release",
+            "ISRIC - World Soil Information",
+            "250 m",
+            "contemporary",
+            "CC BY 4.0; attribute ISRIC",
+            "K-factor",
+            "context/docs/data-management/registry/soilgrids_250m_sediment_candidate.md",
+        ),
+        provenance(
+            "CHIRPS v3",
+            "v3",
+            "UCSB Climate Hazards Center",
+            "~5 km (0.05 degree)",
+            "2014/15-2023/24 rainy seasons",
+            "CC0 / CC BY 4.0",
+            "rainfall sensitivity layer",
+            "context/docs/data-management/registry/chirps_v3_zimbabwe_prototype.md",
+        ),
+        provenance(
+            "USGS Africa GIS mineral industries",
+            "USGS data release, 2021",
+            "U.S. Geological Survey",
+            "vector",
+            "compiled 2008-2019",
+            "public domain; cite DOI 10.5066/P97EQWXP",
+            "Zimbabwe mining / ASM activity indicator",
+            "context/docs/data-management/registry/usgs_africa_gis_mineral_zimbabwe_prototype.md",
+        ),
+        provenance(
+            "Geofabrik OSM",
+            "download-time extract",
+            "Geofabrik / OpenStreetMap contributors",
+            "vector",
+            "current at download",
+            "ODbL",
+            "roads and access indicators",
+            "context/docs/data-management/registry/geofabrik_osm_zimbabwe_prototype.md",
+        ),
+        provenance(
+            "INGEMMET ASM",
+            "catastro minero",
+            "INGEMMET (Peru)",
+            "point",
+            "Memorando N 0738-2014",
+            "referential, consultation only",
+            "Peru mining / ASM activity indicator",
+            "context/docs/data-management/registry/ingemmet_catastro_minero_peru_pilot.md",
+        ),
+    ]
+
+
+def provenance(
+    dataset: str,
+    version: str,
+    provider: str,
+    native_resolution: str,
+    temporal_coverage: str,
+    license_text: str,
+    used_for: str,
+    registry: str,
+) -> dict[str, str]:
+    return {
+        "dataset": dataset,
+        "version": version,
+        "provider": provider,
+        "native_resolution": native_resolution,
+        "temporal_coverage": temporal_coverage,
+        "license": license_text,
+        "used_for": used_for,
+        "registry": registry,
+    }
+
+
+def write_source_tables(out_dir: Path = OUT_DIR) -> None:
+    criteria = criteria_rows()
+    provenance_data = provenance_rows()
+    write_csv(out_dir / "criteria_data_sources_bilateral.csv", criteria)
+    write_csv(out_dir / "core_datasets_provenance.csv", provenance_data)
+    write_criteria_markdown(out_dir / "criteria_data_sources_bilateral.md", criteria)
+    write_provenance_markdown(out_dir / "core_datasets_provenance.md", provenance_data)
+
+
+def write_criteria_markdown(path: Path, rows: list[dict[str, str]]) -> None:
+    lines = [
+        "# Core Criteria Sources: Zimbabwe and Peru Prototype Comparison",
+        "",
+        "Status: `sensitivity_scenario` / `provisional` — used for prototype priority scoring, not final flood-risk claims.",
+        "",
+        "Each row is one criterion family used in the weighted prototype map. The two sites use the same criterion families, but the mining evidence is stronger for Peru because it has official-source point data.",
+        "",
+        "| Criterion | Zimbabwe source | Resolution | Evidence strength | Peru source | Resolution | Evidence strength | Shared product |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    for item in rows:
+        lines.append(
+            f"| **{item['criterion']}** | {item['zimbabwe_source']} | {item['zimbabwe_resolution']} | "
+            f"{item['zimbabwe_evidence_strength']} | {item['peru_source']} | {item['peru_resolution']} | "
+            f"{item['peru_evidence_strength']} | {item['shared_product']} |"
+        )
+    lines.extend([
+        "",
+        "## Main asymmetry",
+        "",
+        "- **Peru PE1** uses official-source INGEMMET small-mining points.",
+        "- **Zimbabwe Upper Mzingwane prototype** uses the public USGS Africa GIS mineral reference layer. It is stronger than the earlier OSM-only evidence, but it is still not a local ASM activity map.",
+        "",
+        "This supports the current data request: ask whether Zimbabwe ASM mapping, active-site points, or disturbance footprints can be obtained.",
+    ])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_provenance_markdown(path: Path, rows: list[dict[str, str]]) -> None:
+    lines = [
+        "# Core Dataset Provenance",
+        "",
+        "Status: data products used by the active six-criteria prototype comparison.",
+        "",
+        "| Dataset | Version | Provider | Native resolution | Temporal coverage | License | Used for | Registry |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    for item in rows:
+        lines.append(
+            f"| **{item['dataset']}** | {item['version']} | {item['provider']} | {item['native_resolution']} | "
+            f"{item['temporal_coverage']} | {item['license']} | {item['used_for']} | `{item['registry']}` |"
+        )
+    lines.extend([
+        "",
+        "## Main data-quality note",
+        "",
+        "The strongest cross-country asymmetry is the mining layer: Peru has official-source INGEMMET small-mining points, while Zimbabwe uses the public USGS mineral reference layer and still needs local ASM mapping if available.",
+    ])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def main() -> None:
+    write_source_tables()
+    print(f"Wrote source tables to {OUT_DIR}")
+
+
+if __name__ == "__main__":
+    main()
