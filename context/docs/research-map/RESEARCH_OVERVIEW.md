@@ -73,10 +73,10 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
 - [x] Minimal AHP-overlay pipeline built and synthetic-tested
 - [x] Boundary discovery (Zimbabwe V1 + Peru PE1 engineering pilot)
 - [x] Terrain chain end-to-end on both sites (SRTM DEM, slope, hydrology, LS)
-- [x] USLE factor chain (K, LS, C) verified; R-factor under investigation
+- [x] USLE factor chain (K, LS, C) verified; R-factor quarantined out of critical path
 - [x] Five-criteria + rainfall prototype priority maps on both sites
 - [x] July 18 mentor/boss comparison pack generated
-- [ ] Mentor confirmation on R-factor method (highest-priority open question)
+- [ ] Mentor confirmation: sediment criterion on K×LS×C (R-factor quarantined)
 - [ ] Mentor confirmation on AHP matrix authorisation
 - [ ] Mentor confirmation on Rehabilitation Potential role
 - [ ] Final boundary acceptance (V1 is `accepted_with_waiver_for_controlled_prototype`)
@@ -88,18 +88,36 @@ or `engineering_pilot`. No output is `final_claim`.
 
 ## Biggest current uncertainties
 
-1. **R-factor method for semi-arid Zimbabwe** — two incompatible literature
-   families ~6× apart; ERA5 empirical lower-bound sits in the lower range; needs
-   mentor ruling or primary EI30 data. See `RESULTS.md` §R-factor.
-2. **AHP weight authorisation** — the slide matrix is `sensitivity_scenario`
+1. **AHP weight authorisation** — the slide matrix is `sensitivity_scenario`
    only. See IFPM-D04 in `RESEARCH_QUESTIONS.md`.
-3. **Mining/ASM evidence (Zimbabwe)** — only OSM quarry/industrial proxy;
+2. **Mining/ASM evidence (Zimbabwe)** — only OSM quarry/industrial proxy;
    official ASM data waits on the mentor's 2026-07-18 conference ask. See A-013.
-4. **Socioeconomic exposure evidence** — only road/access proximity; no observed
+3. **Socioeconomic exposure evidence** — only road/access proximity; no observed
    flood-impact / damaged-infrastructure / affected-settlement data.
-5. **Peru boundary** — PE1 is an engineering pilot chosen by a selection rule,
+4. **Peru boundary** — PE1 is an engineering pilot chosen by a selection rule,
    not a research-selected site. See IFPM-D02.
-6. **Validation data** — effectively zero for both sites. See IFPM-D03.
+5. **Validation data** — effectively zero for both sites. See IFPM-D03.
+6. **Sediment criterion confirmation** — switched to K×LS×C erosion-source
+   structure (R-factor quarantined out of the critical path, see
+   `DECISION_LOG.md` D-RFACTOR-QUARANTINE); awaiting mentor confirmation.
+
+## R-factor status (no longer a critical-path uncertainty)
+
+R-factor was previously the highest-priority open question. As of 2026-07-06 it
+is **quarantined out of the critical path** (see `DECISION_LOG.md`
+D-RFACTOR-QUARANTINE):
+
+- The sediment criterion is served by the K×LS×C erosion-source structure layer
+  (`a_structure_K_LS_C_30m.tif`), which is independent of the rainfall-
+  erosivity factor R and is already built and grid-compatible.
+- Priority hotspots are independent of the rainfall-erosivity factor R
+  (H-HOTSPOT-R-INVARIANT, supported), so the PIM output does not depend on the
+  R-method choice.
+- USLE A absolute values (ton/ha/yr) are **no longer required** for the
+  prototype priority map. They become a thesis-stage optional refinement,
+  reopened only if a quantitative soil-loss rate is needed.
+- The R-factor investigation history and ERA5 lower-bound evidence stay in
+  `RESULTS.md` §R-factor as a deferred-record, not an active blocker.
 
 ## Optional conventions noted but not adopted as policy
 

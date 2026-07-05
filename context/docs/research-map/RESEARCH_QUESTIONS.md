@@ -6,24 +6,35 @@ mentor-gated decisions that block final claims.
 Each open question is tagged with the IFPM-DNN decision id (where applicable),
 related experiment_ids, related hypotheses, and current claim level.
 
-## RQ1: What is the appropriate R-factor method for semi-arid Zimbabwe?
+## RQ1: What is the appropriate R-factor method for semi-arid Zimbabwe? (DEFERRED — out of critical path as of 2026-07-06)
 
-The deepest open methodological question. Six literature methods run on the same
-V1 CHIRPS inputs split into two incompatible families ~6× apart. The only
-independent check (ERA5 hourly EI30 lower-bound) sits in the lower range,
-questioning the transferability of the high-family formulas. There is no
-independent measured EI30 R for the V1 catchment.
+**Status: deferred.** This was previously the highest-priority open question.
+It is now quarantined out of the critical path (see `DECISION_LOG.md`
+D-RFACTOR-QUARANTINE). The sediment criterion is served by the K×LS×C
+erosion-source structure layer, which is independent of R; priority hotspots
+are independent of the rainfall-erosivity factor R (H-HOTSPOT-R-INVARIANT).
+USLE A absolute values (ton/ha/yr) are
+no longer required for the prototype priority map.
 
-To settle: a primary EI30 dataset (sub-daily gauge or GPM IMERG) in or near V1;
+The technical record stays for transparency: six literature methods run on the
+same V1 CHIRPS inputs split into two incompatible families ~6× apart. The only
+independent check (ERA5 hourly EI30 lower-bound) sits in the lower range. There
+is no independent measured EI30 R for the V1 catchment.
+
+**Reopened only if**: the mentor requires a quantitative soil-loss rate
+(ton/ha/yr), or rejects the K×LS×C sediment-criterion approach. To settle if
+reopened: a primary EI30 dataset (sub-daily gauge or GPM IMERG) in or near V1;
 or a mentor ruling on which R convention the thesis adopts; or a traceable
 original source for the low-R family to resolve its units.
 
-- **Decision id:** (highest-priority open question, no IFPM-D id; surfaced
-  via IFPM-080/081/082)
-- **Related:** `EXPERIMENTS.md` §R-factor exploration, §ERA5 empirical;
-  `RESULTS.md` §R-factor; `HYPOTHESES.md` H-RF-FAMILIES, H-BIMODALITY-ARTIFACT
-- **Claim level:** `sensitivity_scenario`; all V1/V2 R and USLE A absolute
-  values remain deprecated.
+- **Decision id:** D-RFACTOR-QUARANTINE (active); was surfaced via IFPM-080/081/082
+- **Related:** `EXPERIMENTS.md` §R-factor exploration, §ERA5 empirical (deferred);
+  `RESULTS.md` §R-factor (deferred-record); `HYPOTHESES.md` H-RF-FAMILIES (deferred),
+  H-BIMODALITY-ARTIFACT (supported), H-HOTSPOT-R-INVARIANT (supported, justifies quarantine)
+- **Mentor question:** one-sentence confirmation that the sediment criterion
+  can use K×LS×C (draft in `context/docs/mentor-explanation/Mentor_RFactor_Quarantine_Question_2026-07-06.md`)
+- **Claim level:** `deferred` (was `sensitivity_scenario`); all V1/V2 R and
+  USLE A absolute values remain deprecated and are no longer needed.
 
 ## RQ2: Is the mentor-supplied AHP pairwise matrix the intended project weight set?
 

@@ -88,12 +88,22 @@ final approved weights unless explicitly confirmed. Required metadata: source,
 date, criteria order, pairwise matrix or derived weights, consistency ratio,
 status / claim level.
 
-### R-factor rule
+### R-factor rule (QUARANTINED 2026-07-06, see D-RFACTOR-QUARANTINE)
 
-Known-invalid R/A products remain deprecated. New R-factor products may be
-generated as provisional or sensitivity scenarios if method, source, value
-range, uncertainty, and lineage are documented. Waiting for mentor confirmation
-should not pause all R-factor work.
+R-factor is removed from the critical path. The sediment criterion is served by
+the K×LS×C erosion-source structure layer (`a_structure_K_LS_C_30m.tif`), which
+is independent of R and already built. Priority hotspots are independent of the
+rainfall-erosivity factor R (H-HOTSPOT-R-INVARIANT), so the PIM priority map
+does not depend on the R-method
+choice. USLE A absolute values (ton/ha/yr) are no longer required for the
+prototype.
+
+Known-invalid V1/V2 R/A products remain deprecated. R-factor experiments move to
+`deferred` status. R-factor is reopened only if: the mentor requires a
+quantitative soil-loss rate (ton/ha/yr), or the mentor rejects the K×LS×C
+sediment-criterion approach. If reopened, new R-factor products may be generated
+as `provisional` or `sensitivity_scenario` with documented method, source, value
+range, uncertainty, and lineage.
 
 ### Peru rule
 

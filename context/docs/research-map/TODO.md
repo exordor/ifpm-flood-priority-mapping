@@ -42,15 +42,27 @@ briefing (IFPM-069) and the data-processor scope split (IFPM-070) are all
 
 ## Highest-priority open questions (mentor)
 
-1. **R-factor method for semi-arid Zimbabwe** (RQ1) — surface FIRST; it blocks
-   USLE A re-derivation. Send only Figure 1 + Figure 2 from the verified R-factor
-   send packet.
+1. **Sediment criterion confirmation** (D-RFACTOR-QUARANTINE, 2026-07-06) —
+   one-sentence question: can the sediment criterion use the K×LS×C erosion-
+   source structure layer (R-factor quarantined out of the critical path)?
+   Draft: `context/docs/mentor-explanation/Mentor_RFactor_Quarantine_Question_2026-07-06.md`.
+   If the mentor approves, R-factor stays deferred. If the mentor requires a
+   quantitative USLE A (ton/ha/yr), R-factor is reopened.
 2. **AHP matrix authorisation** (IFPM-D04) — is the slide matrix the intended
    weight set?
 3. **Rehabilitation Potential role** (IFPM-D05) — sixth criterion, post-score
    filter, or output?
 4. **Final boundary acceptance** (IFPM-D06) — V1 promotion from waiver to final.
 5. **Peru boundary rule** (IFPM-D02) — admin / hydrographic / clipped.
+
+### Deferred (no longer mentor-blocking, see D-RFACTOR-QUARANTINE)
+
+- **R-factor method for semi-arid Zimbabwe** (RQ1) — deferred out of the
+  critical path on 2026-07-06. Reopened only if the mentor requires a
+  quantitative USLE A or rejects the K×LS×C sediment criterion. The verified
+  R-factor send packet (Figure 1 + Figure 2) stays available in
+  `mentor-explanation/Mentor_RFactor_Figure_Send_Packet_2026-06-19.md` if the
+  mentor asks for the detail.
 
 ## Backlog
 

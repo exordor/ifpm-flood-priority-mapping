@@ -6,7 +6,17 @@ IFPM claim level. Confidence uses the IFPM `claim_level` ladder defined in
 mentor_review_ready → final_claim), not the framework's low/medium/high — IFPM's
 ladder is stricter.
 
-## R-factor investigation (RQ1)
+> **R-factor quarantine notice (2026-07-06):** R-factor is removed from the
+> critical path. The sediment criterion is served by the K×LS×C erosion-source
+> structure layer (`a_structure_K_LS_C_30m.tif`), which is independent of R.
+> Priority hotspots are independent of the rainfall-erosivity factor R
+> (H-HOTSPOT-R-INVARIANT), so the PIM output
+> does not depend on the R-method choice. The R-factor section below is kept as
+> a deferred technical record, not an active blocker. USLE A absolute values
+> (ton/ha/yr) are no longer required for the prototype. See
+> `DECISION_LOG.md` D-RFACTOR-QUARANTINE.
+
+## R-factor investigation (RQ1) — DEFERRED RECORD
 
 ### Observation
 
@@ -38,20 +48,23 @@ The only independent check (ERA5 hourly EI30) sits in/near the LOW family and
   supported).
 - The "V2 resolves the bimodality" framing is invalid (H-V2-RESOLVES-BIMODALITY,
   rejected).
-- The two R-families are real and unresolved (H-RF-FAMILIES, unresolved).
+- The two R-families are real but no longer on the critical path
+  (H-RF-FAMILIES, deferred per D-RFACTOR-QUARANTINE).
 - The "US formulas don't transfer" hypothesis is rejected — the Zimbabwe-native
   Elwell relation lands in the HIGH family (H-US-FORMULAS-TRANSFER, rejected).
 - ERA5 supports the lower range as an independent lower-bound check
-  (H-ERA5-LOWER-BOUND, supported as lower bound).
+  (H-ERA5-LOWER-BOUND, supported as lower bound; kept as deferred record).
 
-### Claim level: `sensitivity_scenario`. All V1/V2 R and USLE A absolute values
-deprecated.
+### Claim level: `deferred` (was `sensitivity_scenario`). All V1/V2 R and USLE A
+absolute values deprecated and no longer required for the prototype.
 
 ## V1 terrain and USLE factor chain
 
 ### Observation
 
-Five USLE factors derived on the V1 reference grid; only the R-factor is blocked.
+Five USLE factors derived on the V1 reference grid; R-factor quarantined out of
+the critical path (D-RFACTOR-QUARANTINE) — the sediment criterion is served by
+the K×LS×C erosion-source structure layer, which is independent of R.
 
 ### Evidence (verified correct, IFPM-080/085)
 
@@ -217,13 +230,18 @@ diagnostics; hotspot-survival structure test (with caveats).
 
 ## Send decisions
 
-Sendable (with caption wording): Figure 1 (R-method comparison) and Figure 2
-(ERA5 lower-bound). Source: `context/docs/mentor-explanation/Mentor_RFactor_Figure_Send_Packet_2026-06-19.md`.
+**R-factor figures (deferred):** Figure 1 (R-method comparison) and Figure 2
+(ERA5 lower-bound) are no longer active send items as of D-RFACTOR-QUARANTINE.
+They remain available in
+`context/docs/mentor-explanation/Mentor_RFactor_Figure_Send_Packet_2026-06-19.md`
+if the mentor asks for the R-factor detail after seeing the one-sentence
+quarantine question, or if the mentor rejects the K×LS×C sediment-criterion
+approach and R-factor is reopened.
 
 Blocked: Figure 3 (V1/V2 comparison board); any soil-loss A magnitude as a final
 result; any flood-risk / sediment-risk / intervention-priority claim.
 
-Required wording corrections:
+If R-factor figures are sent later, the required wording corrections still apply:
 - "Corrected Arnoldus" → "Arnoldus-family / Nakil-Khire MFI law"
 - "high formulas ~4× too high" → "high-family formulas much larger than ERA5 lower-bound"
 - "ERA5 proves the low family" → "ERA5 supports the lower range as independent lower-bound check"
