@@ -172,7 +172,7 @@ These are the mentor/domain decisions. They are the only place a "decision" is r
 
 ### Step S1-S5 (execution steps — engineering checklists, not decisions)
 
-These are internal engineering steps in `real_data_execution_preflight_gate.md`. They verify
+These are internal engineering steps in `context/docs/research-map/REPRODUCIBILITY.md` (§3 Preflight gate). They verify
 readiness; they do not record a decision.
 
 | Step | Plain meaning | (was) |
@@ -185,11 +185,11 @@ readiness; they do not record a decision.
 
 ### IFPM-0XX (task tracking)
 
-These are task-board entries in `task_progress_board.md`. They never appear in mentor text.
+These are experiment-registry entries in `context/docs/research-map/EXPERIMENTS.md`. They never appear in mentor text.
 
 ### Output claim levels (status tags)
 
-Internal status tags from `execution_status_policy.md`: `diagnostic_only`, `provisional`,
+Internal status tags from `context/docs/research-map/REPRODUCIBILITY.md` (§2 Execution status policy): `diagnostic_only`, `provisional`,
 `sensitivity_scenario`, `mentor_review_ready`, `final_claim`. These label how confident an
 output is. Do not paste the tag into mentor text; translate it (e.g. `provisional` → "working
 result, defensible but not yet validated").

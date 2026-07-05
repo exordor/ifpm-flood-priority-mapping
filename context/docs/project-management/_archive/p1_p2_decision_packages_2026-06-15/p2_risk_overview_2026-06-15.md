@@ -168,8 +168,8 @@ Present these after the P1 bundle, in the dependency order above:
 
 - Source risk analysis: 2026-06-15 in-session project risk and data-gap analysis.
 - P1 overview (preceding package): `p1_risk_overview_2026-06-15.md`.
-- Preflight gate: `real_data_execution_preflight_gate.md`.
-- Task board: `task_progress_board.md`.
+- Preflight gate: `context/docs/research-map/REPRODUCIBILITY.md` §3.
+- Experiment registry: `context/docs/research-map/EXPERIMENTS.md`.
 - Packages: `p2_modelling_unit_decision_package_2026-06-15.md`,
   `p2_hydrology_derivatives_decision_package_2026-06-15.md`,
   `p2_sediment_risk_decision_package_2026-06-15.md`,

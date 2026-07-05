@@ -13,7 +13,7 @@ R2.4 (P2): the modelling unit is not selected (IFPM-D01 blocked).
 
 The real-data execution preflight gate requires a modelling-unit branch to be chosen before
 terrain and rainfall are combined. The three branches defined in
-`real_data_execution_preflight_gate.md` IFPM-D01 are:
+`context/docs/research-map/REPRODUCIBILITY.md` §3 IFPM-D01 are:
 
 1. Terrain-only raster screening with CHIRPS reported as context or a separate summary.
 2. Sub-basin aggregation with terrain and CHIRPS summarized to the same accepted units.
@@ -113,7 +113,7 @@ To close IFPM-D01, record:
 ## Cross-References
 
 - Risk overview: `p2_risk_overview_2026-06-15.md`.
-- Preflight gate: `real_data_execution_preflight_gate.md` (IFPM-D01).
+- Preflight gate: `context/docs/research-map/REPRODUCIBILITY.md` §3 (IFPM-D01).
 - Reference grid rule: `context/docs/data-management/v1_terrain_reference_grid_rule.md`.
 - CHIRPS comparison: `chirps_v1_rainfall_comparison_2026-06-13.md`.
 - Pipeline zonal path: `ifpm-flood-pipeline/src/ifpm_flood_pipeline/zonal.py`.

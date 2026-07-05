@@ -1,0 +1,204 @@
+# Decision Log
+
+Status: active. Why each major choice was made. Each entry: id, date, context,
+decision, reason, alternatives, consequences.
+
+## D-VERSION-B — 2026-06-16 slide is the authoritative methodology
+
+- **Date:** 2026-07-02 (recorded), 2026-06-16 (slide received).
+- **Context:** Two methodology versions existed: Version A (original broad
+  picture, 2026-05/2026-06-02) and Version B (2026-06-16 slide). They are not
+  identical.
+- **Decision:** Version B (2026-06-16 slide) is authoritative.
+- **Reason:** most recent, most specific, the version the mentor actively sent.
+  Version B narrows scope: five scored criteria, example weights, an explicit
+  open question on Rehabilitation Potential rather than treating it as a full
+  third module.
+- **Alternatives:** Version A (broad picture with citizen-science + stakeholder
+  iteration + post-mining module). Rejected — de-scoped by Version B.
+- **Consequences:**
+  - In scope: five AHP-scored criteria + rainfall sensitivity; bilateral
+    Zimbabwe-Peru prototype comparison; AHP-MCDA weighted overlay; sensitivity
+    analysis.
+  - Not required unless mentor re-requests: citizen-science module; stakeholder
+    feedback iteration; post-mining opportunities as a full module.
+  - Open, mentor-gated: Rehabilitation Potential role (D-REHAB).
+
+## D-V1-WAIVER — V1 accepted with waiver for controlled prototype
+
+- **Date:** 2026-06-12 (decision), 2026-06-16 (mentor thumbs-up).
+- **Context:** Boundary discovery produced multiple candidates (HydroBASINS L7
+  ~3700 km², Geoportal `Upper Mzingwane` ~7321.5 km², ~2138 km² literature
+  reference). No source supplied reusable geometry for the literature reference.
+- **Decision:** V1 (`HB_L8_1081528840_full_l7_chain`) is
+  `accepted_with_waiver_for_controlled_prototype`. C1
+  (`HB_L8_1081522660_literature_near`) demoted to machine prior only.
+- **Reason:** V1 better matches the mentor's Level-8 downstream-to-Gwanda cue;
+  mentor gave thumbs-up to the V1 evidence board.
+- **Alternatives:** Geoportal named sub-catchment; HydroBASINS L7 union; ~2138
+  km² literature boundary (geometry-unresolved).
+- **Consequences:** V1 is the working prototype boundary. Final thesis boundary
+  remains open (IFPM-D06). Waiver does not authorize final flood-risk
+  interpretation, intervention-priority interpretation, or treating CHIRPS as
+  native 30 m rainfall evidence.
+
+## D-PE1-PILOT — PE1 selected by rule as Peru engineering pilot
+
+- **Date:** 2026-06-30.
+- **Context:** Peru side was entirely blank. The mentor had not named a specific
+  Peru site. A boundary was needed to run the terrain chain end-to-end and prove
+  comparability.
+- **Decision:** PE1 = HydroBASINS L7 `HYBAS_ID=6070641200`, 2745.4 km²,
+  pacific-slope, ~17 km west of Arequipa city, chosen by explicit selection rule
+  (pacific-slope, fully inside the three-department envelope, area comparable to
+  V1, non-terminal).
+- **Reason:** no mentor-named Peru outlet exists; selection rule makes the
+  choice auditable rather than arbitrary.
+- **Alternatives:** wait for mentor to name a site (blocked progress); pick
+  arbitrary largest basin (not defensible).
+- **Consequences:** PE1 is `engineering_pilot`, NOT research-selected. It will
+  be replaced if the mentor names a specific Peru site. No flood-risk/comparison
+  claim from PE1.
+
+## D-CRITERIA-V0-2 — honest-label criteria stack repair
+
+- **Date:** 2026-06-29.
+- **Context:** `criteria_stack_v0_1` worked technically but two semantic/data-
+  policy problems: `K×LS×C` was mislabelled as sediment risk, and NoData was
+  filled as low pressure. Mining and exposure criteria were the weakest.
+- **Decision:** `criteria_stack_v0_2` splits the hidden averages, renames to
+  honest labels (`land_cover_pressure`, `mining_pressure`,
+  `soil_erosion_factors`), and preserves NoData instead of filling.
+- **Reason:** AGENTS.md §Criteria Design Rules requires criterion names that
+  describe what the data actually measure, and NoData must remain NoData unless
+  a documented method justifies imputation.
+- **Alternatives:** keep v0.1 labelling (violates criteria-design rules);
+  over-broaden to sediment risk (no accepted R-factor).
+- **Replacement rules** (a v0.2 update may replace a v0.1 criterion only if
+  stronger by at least one of):
+  - official source instead of public proxy;
+  - observed flood/mining impact instead of generic proximity;
+  - better temporal match;
+  - clear V1 overlap;
+  - documented licence and reproducibility;
+  - no false precision from resampling.
+- **Consequences:** v0.1 remains the frozen baseline; v0.2 outputs do not
+  overwrite v0.1. If evidence is not stronger, v0.2 keeps the baseline criterion
+  and marks the missing dataset in the mentor trip request list.
+
+## D-EXECUTION-POLICY — uncertainty reduces claim level, not pauses execution
+
+- **Date:** 2026-06-29 (IFPM-090).
+- **Context:** Multiple "defensive gates" treated uncertainty as a reason to
+  pause. This blocked legitimate data-processing work behind thesis-level
+  decisions that are the mentor's responsibility.
+- **Decision:** Convert defensive gates into execution-status rules.
+  Uncertainty reduces claim level; it does not automatically pause execution.
+- **Reason:** separates HiWi data-processing scope from mentor/thesis claim
+  scope. Data production (downloads, preprocessing, indicator derivation,
+  standardization, diagnostic overlays with documented weights) is GO and
+  self-authorizing via documented defaults. Interpretable claims (validated
+  flood-risk map, intervention priority, Zimbabwe-Peru comparison, publication)
+  remain NO-GO and are the mentor's calls.
+- **Alternatives:** keep global pauses (blocked progress); remove all gates
+  (loses claim discipline).
+- **Consequences:** the five claim levels
+  (`diagnostic_only`/`provisional`/`sensitivity_scenario`/`mentor_review_ready`/
+  `final_claim`) become the standard status vocabulary. Pause only when required
+  inputs are missing and no provisional substitute exists, code cannot run with
+  the exact error documented, continuing would overwrite valid outputs, or the
+  user explicitly asks to pause. See `REPRODUCIBILITY.md` §Execution status.
+
+## D-JULY18-SCOPE — locked deliverable scope for 18 July mentor trip
+
+- **Date:** 2026-07-02 (revised 2026-07-03).
+- **Context:** The bilateral comparison the mentor wants already existed at
+  ~80% completion but was buried in `outputs/`. Work drifted to engineering
+  refactoring because the real scientific direction was invisible. Three
+  mentor/boss-facing artifacts existed but were scattered and each lacked one
+  piece.
+- **Decision:** Lock scope for two deliverables, built entirely from existing
+  data and scripts. No new criteria, no new downloads, no final claims.
+  - Deliverable 1: integrated main figure with bilateral comparison + per-pixel
+    priority-criterion colouring + clear "why" (4 panels, takeaway, claim level
+    on figure face).
+  - Deliverable 2: boss short process figure with goal header and bilateral
+    label.
+- **Reason:** the mentor independently asked (2026-07-02 Teams) for exactly what
+  was half-built.
+- **Alternatives:** broad new modelling (blocked by gates); broad `bin/`
+  refactoring as primary activity (no scientific value).
+- **Consequences:** the integrated comparison pack is generated under
+  `outputs/zimbabwe_peru_prototype_comparison/`. Out of scope for 7/18: new
+  Zimbabwe mining work; Voi site switch; final flood-risk claim; final
+  Zimbabwe-Peru comparison; weight authorisation; broad `bin/` refactoring.
+- **QA criteria:** non-participant identifies study area, main result, key
+  driver within 30 seconds; claim level on figure face in plain language;
+  takeaway is a statement not a question; legends/colourbars/captions do not
+  hide evidence; criterion names are plain.
+
+## D-RFACTOR-DEPRECATE — all V1/V2 R and USLE A products deprecated
+
+- **Date:** 2026-06-19 (audit), 2026-07-01 (products removed).
+- **Context:** A spot-check found an unverified R-factor coefficient. A full
+  audit revealed the V1 R applies P-based Renard-Freimund coefficients to MFI
+  with an invented break, manufacturing the bimodality.
+- **Decision:** all V1/V2 R-factor rasters and all USLE A rasters derived from
+  them are deprecated and removed. The "V2 resolves the bimodality" framing is
+  invalid.
+- **Reason:** wrong coefficients AND wrong break; absolute values untrustworthy.
+- **What stays safe:** `a_structure_K_LS_C_30m.tif` (K×LS×C erosion-source
+  structure, no rainfall-erosivity factor); K, LS, C factors (all verified);
+  hydrology and terrain preprocessing; CHIRPS
+  rainfall-comparison products; ERA5 empirical R diagnostics; hotspot-survival
+  structure test (with caveats).
+- **Consequences:** USLE A absolute values blocked until R-method decision
+  (RQ1). New R-factor products may be generated as `provisional` or
+  `sensitivity_scenario` if method, source, value range, uncertainty, and
+  lineage are documented.
+
+## D-TERMINOLOGY — active terminology gate
+
+- **Date:** 2026-07-02 (audit), 2026-07-03 (execution).
+- **Context:** Human-facing terms needed to be checked against mainstream
+  literature; broad `*_proxy` names were leaking into active workflow.
+- **Decision:** stop using broad `*_proxy` names in the active workflow. Active
+  criteria now use `flood_conditioning_factors`, `soil_erosion_factors`,
+  `land_cover_pressure`, `mining_pressure`, `exposure_indicators`,
+  `rainfall_climatology`. Active gate is `bin/check_active_terminology.py`.
+- **Reason:** P1 findings: the deprecated `flood_hazard_proxy` name misused the
+  standard word "hazard" (no inundation evidence); the deprecated coined internal
+  shorthand `R-invariant` is not a mainstream USLE/RUSLE term.
+- **Consequences:** active terminology gate must pass before sending any
+  mentor/boss-facing package. 5 v0.1 + 6-13 files archived 2026-07-03; 3 live
+  files rewritten; `violation` count stayed at 0. Remaining hits of the coined
+  shorthand are all in the dead V2 set or living docs to fix opportunistically.
+
+## IFPM-DNN decision register (mentor-gated)
+
+These decisions are recorded in `RESEARCH_QUESTIONS.md` and block final claims.
+They are not project decisions; they are mentor decisions awaiting input.
+
+| id | decision needed | current state |
+|---|---|---|
+| IFPM-D01 | Final modelling unit (pixel / sub-basin / mixed) | blocked |
+| IFPM-D02 | Peru boundary rule (admin / hydrographic / clipped) | concrete candidates exist; mentor-gated |
+| IFPM-D03 | Validation evidence hierarchy | blocked (validation data ~zero) |
+| IFPM-D04 | AHP weighting protocol + matrix authorisation | candidate matrix exists as `sensitivity_scenario`; auth open |
+| IFPM-D05 | Mining-data interpretation rule + Rehabilitation Potential role | open |
+| IFPM-D06 | Upper Mzingwane boundary acceptance (final thesis) | V1 waiver only |
+
+## Lineage
+
+Absorbs content from:
+- `project_objective_calibration_2026-07-02.md` (D-VERSION-B)
+- `task_progress_board.md` §Blocked Or Needs Decision (IFPM-D01..D06)
+- `boundary_v1_criteria_stack_v0_2_2026-06-29.md` (D-CRITERIA-V0-2)
+- `july18_deliverable_scope_2026-07-02.md` (D-JULY18-SCOPE)
+- `real_data_execution_preflight_gate.md` (D-EXECUTION-POLICY scope split)
+- `rfactor_investigation_consolidated.md` §1, §6 (D-RFACTOR-DEPRECATE)
+- `terminology_audit_2026-07-02.md` (D-TERMINOLOGY)
+- `assumptions_log.md` (decision-style assumptions)
+- `real_data_preprocessing_design.md` (boundary acceptance rules → D-V1-WAIVER)
+- `_archive/superseded_boundary_exploration_2026-06/v1_working_boundary_decision_2026-06-12.md` (D-V1-WAIVER)
+- `_archive/superseded_process_notes_2026-06/peru_pilot_boundary_decision_2026-06-30.md` (D-PE1-PILOT)

@@ -38,6 +38,14 @@ ACTIVE_OUTPUT_DIRS = [
     ROOT / "outputs/mentor_boss_priority_explanation",
 ]
 
+# Active research-map governance docs. These are active and scanned, but a line
+# that cites a deprecated term is allowed when the SAME line carries historical
+# context (deprecated / legacy / historical / superseded / coined / shorthand /
+# was renamed). This is a line-level allowlist, not a whole-file allowlist: a
+# future contributor who adds a real `flood_hazard_proxy` identifier in a normal
+# prose sentence in RESULTS.md will still be flagged.
+ACTIVE_RESEARCH_MAP_DIR = ROOT / "context/docs/research-map"
+
 TEXT_SUFFIXES = {".csv", ".md", ".txt", ".py", ".json", ".yaml", ".yml"}
 GENERATED_CHECK_OUTPUT_NAMES = {
     "active_terminology_check.csv",
@@ -56,16 +64,52 @@ FORBIDDEN_TERMS = [
     "socioeconomic_exposure",
     "closeness_to_mining_proxy",
     "proxy_0_1",
-    "proxy",
-    "Proxy",
     "Mining-proxy",
     "R-invariant",
     "rainfail",
 ]
 
+# The bare words "proxy"/"Proxy" are flagged to catch newly-coined *_proxy
+# identifier leaks in mentor-facing outputs, but they are normal English in
+# internal governance prose ("OSM quarry/industrial proxy"). The terminology
+# audit already reclassified 185/226 such hits as benign English usage. Internal
+# research-map docs are scanned for the deprecated identifiers above; the bare
+# word check is skipped for them.
+GENERIC_TERMS = ["proxy", "Proxy"]
+
+# Historical-context markers that mark a deprecated-term citation as legitimate
+# documentation of the deprecation/renaming itself. Must appear on the SAME line
+# as the deprecated term for the line to be allowed.
+HISTORICAL_CONTEXT_MARKERS = (
+    "deprecated",
+    "deprecation",
+    "legacy",
+    "historical",
+    "superseded",
+    "coined",
+    "shorthand",
+    "was renamed",
+    "old name",
+    "renamed",
+)
+
 
 def rel(path: Path) -> str:
     return str(path.resolve().relative_to(ROOT))
+
+
+def is_historical_context_line(line: str) -> bool:
+    """True if the line carries historical/renaming context. A deprecated-term
+    hit on such a line is a legitimate citation of the deprecation, not a live
+    use."""
+    lowered = line.lower()
+    return any(marker in lowered for marker in HISTORICAL_CONTEXT_MARKERS)
+
+
+def is_glossary_file(path: Path) -> bool:
+    """The glossary legitimately quotes deprecated terms across many lines while
+    defining them; it is the one file-level exception."""
+    return path.resolve().relative_to(ROOT).parts == ("context", "docs", "glossary.md")
 
 
 def iter_targets(skip: Path) -> list[Path]:
@@ -80,7 +124,21 @@ def iter_targets(skip: Path) -> list[Path]:
                 continue
             if path.resolve() != skip.resolve():
                 paths.append(path)
+    # Active research-map governance docs (filenames always checked; content
+    # hits allowed in the reference-history subset).
+    if ACTIVE_RESEARCH_MAP_DIR.exists():
+        for path in ACTIVE_RESEARCH_MAP_DIR.rglob("*"):
+            if path.is_file() and path.suffix.lower() in TEXT_SUFFIXES:
+                paths.append(path)
     return sorted(set(paths))
+
+
+def is_research_map_doc(path: Path) -> bool:
+    """True for files inside context/docs/research-map/. The bare-word generic
+    'proxy' check is skipped for these internal governance docs (the deprecated
+    *_proxy identifiers are still checked)."""
+    rel_parts = path.resolve().relative_to(ROOT).parts
+    return rel_parts[:3] == ("context", "docs", "research-map")
 
 
 def scan_path(path: Path) -> list[dict[str, str]]:
@@ -89,15 +147,45 @@ def scan_path(path: Path) -> list[dict[str, str]]:
     for term in FORBIDDEN_TERMS:
         if term in name:
             rows.append({"path": rel(path), "where": "filename", "term": term, "line": "", "excerpt": name})
+    # Filenames inside research-map are governance docs, not mentor-facing; do
+    # not flag the bare word "proxy" in their filenames.
+    if not is_research_map_doc(path):
+        for term in GENERIC_TERMS:
+            if term in name:
+                rows.append({"path": rel(path), "where": "filename", "term": term, "line": "", "excerpt": name})
 
     if path.suffix.lower() not in TEXT_SUFFIXES:
         return rows
+    # The glossary legitimately quotes deprecated terms across many lines while
+    # defining them; it is the one whole-file exception.
+    if is_glossary_file(path):
+        return rows
+    skip_generic = is_research_map_doc(path)
     try:
         text = path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
         return rows
     for line_no, line in enumerate(text.splitlines(), start=1):
+        # Line-level allowlist: a deprecated-term citation on a line that
+        # carries historical/renaming context is documenting the deprecation,
+        # not a live use. This catches future real violations in any file
+        # (including research-map) while allowing the existing audit records.
+        if is_historical_context_line(line):
+            continue
         for term in FORBIDDEN_TERMS:
+            if term in line:
+                rows.append(
+                    {
+                        "path": rel(path),
+                        "where": "content",
+                        "term": term,
+                        "line": str(line_no),
+                        "excerpt": line.strip()[:220],
+                    }
+                )
+        if skip_generic:
+            continue
+        for term in GENERIC_TERMS:
             if term in line:
                 rows.append(
                     {

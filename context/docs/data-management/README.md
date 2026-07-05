@@ -15,7 +15,7 @@ be reused.
   (soilgrids). Completed preflights moved to `_archive/preflight_completed/`.
 
 Before moving from notes to any real download, also check the cross-dataset gate in
-`context/docs/project-management/real_data_execution_preflight_gate.md`.
+`context/docs/research-map/REPRODUCIBILITY.md` (§3 Real-data execution preflight gate).
 
 Real downloaded data must stay outside this folder. Store it under ignored workspace paths such
 as `data/`, keep processed outputs under `outputs/`, and keep packaged bundles under `exports/`.

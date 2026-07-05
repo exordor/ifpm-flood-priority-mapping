@@ -153,7 +153,7 @@ assumptions, not data access.
 ## Cross-References
 
 - Risk overview: `p2_risk_overview_2026-06-15.md`.
-- Preflight gate: `real_data_execution_preflight_gate.md` (immediate next action on flow
+- Preflight gate: `context/docs/research-map/REPRODUCIBILITY.md` §3 (immediate next action on flow
   accumulation deferral).
 - Reference grid rule: `context/docs/data-management/v1_terrain_reference_grid_rule.md`.
 - Terrain preprocessing: `srtm_v1_terrain_preprocessing_2026-06-12.md`.

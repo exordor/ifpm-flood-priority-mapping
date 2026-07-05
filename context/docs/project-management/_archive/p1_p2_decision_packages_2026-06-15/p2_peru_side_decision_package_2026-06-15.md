@@ -133,7 +133,7 @@ the mentor confirms Peru is a hard requirement on a fixed timeline.
 ## Cross-References
 
 - Risk overview: `p2_risk_overview_2026-06-15.md`.
-- Preflight gate: `real_data_execution_preflight_gate.md` (IFPM-D02 Peru boundary rule;
+- Preflight gate: `context/docs/research-map/REPRODUCIBILITY.md` §3 (IFPM-D02 Peru boundary rule;
   excluded from the Zimbabwe gate scope).
 - Zimbabwe mining data (pattern reference): `p1_mining_data_decision_package_2026-06-15.md`.
 - Original inventory: `context/docs/original/Detailed_Dataset_Inventory_Zimbabwe_Peru.md`.
