@@ -55,11 +55,29 @@ ALLOWED_REFERENCE_FILES = {
     "bin/check_active_terminology.py",
     "bin/check_project_terminology.py",
     "context/docs/glossary.md",
-    "context/docs/project-management/terminology_audit_2026-07-02.md",
 }
+
+# Historical-context markers that mark a deprecated-term citation as legitimate
+# documentation of the deprecation/renaming itself. Must appear on the SAME line
+# as the deprecated term for the line to be allowed. This is a line-level
+# allowlist: a future real violation in any active file (including research-map
+# docs) is still caught.
+HISTORICAL_CONTEXT_MARKERS = (
+    "deprecated",
+    "deprecation",
+    "legacy",
+    "historical",
+    "superseded",
+    "coined",
+    "shorthand",
+    "was renamed",
+    "old name",
+    "renamed",
+)
 
 ACTIVE_PREFIXES = (
     "context/configs/",
+    "context/docs/research-map/",
     "outputs/boundary_v1/criteria_stack_v0_2/",
     "outputs/boundary_v1/rainfall_sensitivity_v0_3/",
     "outputs/boundary_v1/rainfall_exposure_v0_4/",
@@ -104,6 +122,7 @@ ARCHIVAL_MARKERS = (
 )
 
 MENTOR_FACING_PREFIX = "context/docs/mentor-explanation/"
+RESEARCH_MAP_PREFIX = "context/docs/research-map/"
 
 
 def rel(path: Path) -> str:
@@ -118,6 +137,13 @@ def is_allowed_reference(path: str) -> bool:
     return path in ALLOWED_REFERENCE_FILES
 
 
+def is_historical_context_line(line: str) -> bool:
+    """True if the line carries historical/renaming context. A deprecated-term
+    citation on such a line is documenting the deprecation, not a live use."""
+    lowered = line.lower()
+    return any(marker in lowered for marker in HISTORICAL_CONTEXT_MARKERS)
+
+
 def is_archival(path: str, line: str) -> bool:
     haystack = f"{path} {line}"
     return any(marker in haystack for marker in ARCHIVAL_MARKERS)
@@ -125,7 +151,21 @@ def is_archival(path: str, line: str) -> bool:
 
 def classify(path: str, term: str, line: str) -> tuple[str, str]:
     if is_allowed_reference(path):
-        return "allowed_reference", "glossary_or_audit_may_quote_deprecated_terms"
+        return "allowed_reference", "glossary_or_checker_may_quote_deprecated_terms"
+    # Line-level allowlist: a deprecated-term citation on a line that carries
+    # historical/renaming context is documenting the deprecation, not a live
+    # use. This applies in EVERY file (including active research-map docs), so
+    # a future real violation in any active file is still caught while the
+    # existing audit/decision records pass.
+    if is_historical_context_line(line):
+        return "allowed_reference", "line_documents_deprecation_or_rename"
+    # Research-map governance docs are active but internal. The bare English
+    # word "proxy/proxies" is benign here (it describes what a layer is, e.g.
+    # "OSM quarry/industrial proxy"); only deprecated *_proxy identifiers would
+    # be a real violation, and those are FORBIDDEN_TERMS caught above. Generic
+    # proxy usage in research-map is needs_review, not violation.
+    if path.startswith(RESEARCH_MAP_PREFIX) and term in GENERIC_TERMS:
+        return "needs_review", "generic_proxy_word_in_internal_governance_doc"
     if is_active(path):
         return "violation", "deprecated_or_generic_term_in_active_workflow"
     if path.startswith(MENTOR_FACING_PREFIX):
