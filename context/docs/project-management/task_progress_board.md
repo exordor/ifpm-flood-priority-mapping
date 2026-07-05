@@ -167,7 +167,7 @@ or Zimbabwe-Peru comparison is authorized.
 
 - Status: complete as a 250 m diagnostic data product.
 - Evidence: `bin/factors/derive_v1_soilgrids_kfactor.py`,
-  `context/docs/project-management/soilgrids_v1_kfactor_processing_2026-06-15.md`,
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/usle_factor_batch_history_2026-06-15.md`,
   `outputs/soilgrids_250m_sediment_candidate/k_factor_0_5cm_250m.tif`,
   `k_factor_0_30cm_avg_250m.tif`, `k_factor_diagnostics.json`.
 - Key result: V1 K-factor (0-5 cm, US units) mean 0.1695, range [0.082, 0.251]; depth-stable;
@@ -1024,7 +1024,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
 - Completion evidence:
   `bin/acquire/download_srtm_v1_tiles.py`,
   `bin/acquire/inventory_srtm_v1_tiles.py`,
-  `context/docs/project-management/srtm_v1_download_and_inventory_2026-06-12.md`,
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/srtm_v1_terrain_chain_history_2026-06-12.md`,
   `outputs/srtm_1arcsec_zimbabwe_prototype/srtm_raw_file_manifest.csv`,
   `outputs/srtm_1arcsec_zimbabwe_prototype/srtm_tile_inventory.csv`, and
   `outputs/srtm_1arcsec_zimbabwe_prototype/srtm_tile_coverage_check.png`.
@@ -1044,7 +1044,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   `bin/factors/preprocess_srtm_v1_dem.py`,
   `bin/factors/derive_srtm_v1_slope.py`,
   `bin/visualize/plot_srtm_v1_terrain_qa.py`,
-  `context/docs/project-management/srtm_v1_terrain_preprocessing_2026-06-12.md`, and
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/srtm_v1_terrain_chain_history_2026-06-12.md`, and
   `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_terrain_preprocessing_diagnostics.csv`.
 - Key result: final DEM and slope rasters are `EPSG:32735`, `30 m`, single-band `float32`, NoData
   `-9999.0`, and both have `1.0` valid-cell fraction inside V1. DEM elevation ranges from about
