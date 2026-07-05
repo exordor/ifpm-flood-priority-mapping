@@ -17,7 +17,7 @@ boundary_id for path purposes, even though it is not nested under `boundary_v1`)
 | `rainfall_sensitivity_v0_3` | IFPM-090 | complete | sensitivity_scenario | Adds rainfall_climatology (CHIRPS coarse-to-grid, A-010); effective res ~5 km | `outputs/boundary_v1/rainfall_sensitivity_v0_3/` |
 | `hotspot_exposure_diagnostic_v0_3` | IFPM-090 | complete | diagnostic_only | Tests co-location of v0.2 hotspots with exposure proxies; weak co-location | `outputs/boundary_v1/hotspot_exposure_diagnostic_v0_3/` |
 | `rainfall_exposure_v0_4` | IFPM-097 | complete | sensitivity_scenario | Merged v0.3 rainfall + exposure; feeds 7/18 comparison pack | `outputs/boundary_v1/rainfall_exposure_v0_4/` |
-| `sediment_r_factor_scenarios` | IFPM-081/082 | complete (deprecated products) | sensitivity_scenario | R-factor family comparison; two incompatible families ~6× apart | `outputs/boundary_v1/sediment_r_factor_scenarios/` |
+| `sediment_r_factor_scenarios` | IFPM-081/082 | complete (deferred) | deferred | R-factor family comparison; deferred out of critical path (D-RFACTOR-QUARANTINE) | `outputs/boundary_v1/sediment_r_factor_scenarios/` |
 | `mining_decay_priority_sensitivity` | IFPM-074 track | complete | sensitivity_scenario | Decay-function sensitivity on mining proximity; structure test only | `outputs/boundary_v1/mining_decay_priority_sensitivity/` |
 
 ## Convention-compliant Peru experiments (`outputs/srtm_1arcsec_peru_pilot/`)
@@ -54,12 +54,21 @@ boundary_id for path purposes, even though it is not nested under `boundary_v1`)
 | `v1_terrain_mentor_package` | IFPM-056 | complete | mentor_review_ready | Low-slope susceptibility primary candidate; high-slope runoff alternative | `outputs/v1_terrain_mentor_package/` |
 | `v1_usle_soil_loss` | IFPM-077 | **DEPRECATED** | n/a (deprecated) | A-mean 0.50 t/ha/yr; ~87% < 1 t/ha/yr; A absolute R-dependent and deprecated | `outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md` |
 
-## R-factor investigation experiments (`outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/` and `outputs/v1_usle_soil_loss/rfactor_empirical_era5/`)
+## R-factor investigation experiments — DEFERRED RECORD (out of critical path since 2026-07-06, see D-RFACTOR-QUARANTINE)
+
+These experiments are preserved as a deferred technical record. R-factor is no
+longer on the critical path: the sediment criterion is served by the K×LS×C
+erosion-source structure layer, and priority hotspots are independent of the
+rainfall-erosivity factor R (H-HOTSPOT-R-INVARIANT). Reopened only if the mentor requires a quantitative
+USLE A (ton/ha/yr) or rejects the K×LS×C approach.
+
+Outputs at: `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/` and
+`outputs/v1_usle_soil_loss/rfactor_empirical_era5/`.
 
 | experiment_id | IFPM-NNN | status | claim_level | result_summary |
 |---|---|---|---|---|
-| `rfactor_method_exploration` | IFPM-081 | complete | sensitivity_scenario | 6 literature methods on V1 CHIRPS; two incompatible families ~6× apart |
-| `rfactor_empirical_era5` | IFPM-082 | complete | provisional (lower bound) | ERA5 hourly EI30 R mean 358-506; supports lower range as independent check |
+| `rfactor_method_exploration` | IFPM-081 | complete (deferred) | deferred | 6 literature methods on V1 CHIRPS; two incompatible families ~6× apart |
+| `rfactor_empirical_era5` | IFPM-082 | complete (deferred) | deferred (was provisional lower bound) | ERA5 hourly EI30 R mean 358-506; supports lower range as independent check |
 | `rfactor_full_verification` | IFPM-080/085 | complete | n/a (audit) | Hand-calc verification of all formulas; one sourcing inaccuracy fixed |
 | `v2_rfactor_candidates` | IFPM-079 | **deprecated** | n/a (deprecated) | V2 smoother-R; premise invalid (bimodality was artifact); V2 A outputs removed 2026-07-01 |
 | `chirps_v1_rainfall_comparison` | IFPM-058 | complete | mentor_review_ready | 561 CHIRPS inputs; recent annual + rainy-season anomaly both ~17.5%; pentad peak different pattern |

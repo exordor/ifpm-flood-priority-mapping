@@ -155,7 +155,55 @@ decision, reason, alternatives, consequences.
 - **Consequences:** USLE A absolute values blocked until R-method decision
   (RQ1). New R-factor products may be generated as `provisional` or
   `sensitivity_scenario` if method, source, value range, uncertainty, and
-  lineage are documented.
+  lineage are documented. (Superseded for the critical path by
+  D-RFACTOR-QUARANTINE below.)
+
+## D-RFACTOR-QUARANTINE — R-factor removed from the critical path
+
+- **Date:** 2026-07-06.
+- **Context:** R-factor had been the highest-priority open question (RQ1) since
+  the 2026-06-19 formula audit (D-RFACTOR-DEPRECATE). It recurrently consumed
+  attention through three mechanisms: (a) the original error opened a rabbit
+  hole with no exit sign; (b) the project's own execution-status policy
+  ("uncertainty reduces claim level, does not automatically pause") was not
+  applied to R-factor, which was treated as a blocker; (c) the technical work
+  (six literature methods, two incompatible families ~6× apart, ERA5 lower-
+  bound) was interesting enough to keep pulling focus. Meanwhile R-factor is
+  one sub-component of one criterion (sediment) out of five, not the project
+  mainline.
+- **Decision:** Quarantine R-factor out of the critical path. The sediment
+  criterion is served by the K×LS×C erosion-source structure layer
+  (`a_structure_K_LS_C_30m.tif`), which is independent of R, already built, and
+  grid-compatible. USLE A absolute values (ton/ha/yr) are no longer required
+  for the prototype priority map. RQ1, H-RF-FAMILIES, and the R-factor
+  experiments move to `deferred` status. The R-factor record stays in
+  `RESULTS.md` §R-factor as a deferred technical record, not an active blocker.
+- **Reason:** Priority hotspots are independent of the rainfall-erosivity
+  factor R (H-HOTSPOT-R-INVARIANT,
+  supported): R only scales absolute magnitude (ton/ha/yr), it does not change
+  which area ranks first. For the PIM priority-map output, the R-method choice
+  is irrelevant. The v0.2 honest-label repair already renamed this criterion
+  `soil_erosion_factors` (not "sediment risk") — the quarantine completes what
+  that rename started. This decision operationalises the existing
+  D-EXECUTION-POLICY rule that the project was not applying to R-factor.
+- **Alternatives considered:**
+  - Keep R-factor as the highest-priority open question (rejected: no stop
+    condition; recursion loop continues).
+  - Delete the R-factor history entirely (rejected: the audit/verification
+    work is sound and may be needed if the mentor requires USLE A; deletion
+    loses traceable evidence).
+  - Demote the entire sediment criterion to weight 0 (rejected for now: the
+    slide matrix gives sediment weight 0.226, second highest; unilateral
+    demotion may diverge from mentor expectation. K×LS×C keeps the criterion
+    live with honest evidence.)
+- **Consequences:**
+  - The PIM prototype priority map no longer waits on R-factor.
+  - One-sentence mentor question drafted (see TODO + mentor-explanation draft)
+    asking whether the K×LS×C sediment-criterion approach is acceptable.
+  - Reversible: if the mentor rejects K×LS×C and requires USLE A (ton/ha/yr),
+    R-factor is reopened and the deferred record in `RESULTS.md` becomes the
+    active starting point.
+  - IFPM-074 (V2 R-factor) and the dead V2 set stay deferred; no rework now.
 
 ## D-TERMINOLOGY — active terminology gate
 

@@ -50,10 +50,11 @@ before any USLE A absolute value can be trusted.
   Zimbabwe-native relation. LOW family (Hurni 320 / Epworth 243) agree with
   each other. The "measured Epworth 329" is circular (computed with the
   low-family equation).
-- **Verdict:** **unresolved** (families identified, but which is correct is
-  the open question)
-- **Status:** active. Highest-priority mentor question (RQ1).
-- **Claim level:** `sensitivity_scenario`
+- **Verdict:** **deferred** (families identified, but which is correct is no
+  longer on the critical path — see D-RFACTOR-QUARANTINE)
+- **Status:** deferred as of 2026-07-06. Reopened only if the mentor requires a
+  quantitative USLE A (ton/ha/yr) or rejects the K×LS×C sediment criterion.
+- **Claim level:** `deferred` (was `sensitivity_scenario`)
 
 ## H-ERA5-LOWER-BOUND
 
@@ -118,7 +119,11 @@ survives any choice of R-factor.
   power — read as a weak confirmatory signal, not a candidate-quality ranking.
 - **Verdict:** **supported** as a structure test only
 - **Status:** closed as a structure-test claim; must not be read as a
-  statement about R correctness.
+  statement about R correctness. **This hypothesis is the justification for
+  D-RFACTOR-QUARANTINE (2026-07-06)**: since hotspots are independent of the
+  rainfall-erosivity factor R, the PIM priority map does not require an
+  R-method choice, and R-factor is
+  removed from the critical path.
 - **Claim level:** `sensitivity_scenario`
 
 ## H-PE1-SYMMETRIC
