@@ -108,7 +108,7 @@ the existing file before doing anything else.
 - Extracted file count: 85 (12 levels x 7 shapefile components + TechDoc PDF; same structure as the Africa artifact)
 - Field schema verified against level 6: `HYBAS_ID, NEXT_DOWN, NEXT_SINK, MAIN_BAS, DIST_SINK, DIST_MAIN, SUB_AREA, UP_AREA, PFAF_ID, ENDO, COAST, ORDER, SORT, geometry`; CRS `EPSG:4326`; identical to the Africa product.
 - Boundary result note:
-  `context/docs/project-management/peru_diagnostic_readiness_report_2026-06-30.md`
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/peru_diagnostic_readiness_report_2026-06-30.md`
 
 ## Discovery Outputs To Record After Download
 

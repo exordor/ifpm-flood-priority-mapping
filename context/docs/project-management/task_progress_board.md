@@ -413,7 +413,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: complete as rainfall-only intake; final R-factor calculation not started.
 - Evidence:
   `context/docs/data-management/registry/mentor_voi_rainfall_measurements_2026-06-24.md`,
-  `context/docs/project-management/mentor_voi_rainfall_intake_2026-06-24.md`,
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/mentor_voi_rainfall_intake_2026-06-24.md`,
   `bin/acquire/inventory_mentor_voi_rainfall_archive.py`, `bin/acquire/intake_mentor_voi_rainfall.py`, and ignored
   outputs under `outputs/mentor_voi_rainfall_intake/`.
 - Key results:
@@ -437,7 +437,7 @@ or Zimbabwe-Peru comparison is authorized.
 - Status: complete as provisional autonomous prototype scoring; not a final flood-risk or
   intervention-priority result.
 - Evidence:
-  `context/docs/project-management/v1_autonomous_prototype_v0_1_2026-06-25.md`,
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/v1_autonomous_prototype_v0_1_2026-06-25.md`,
   `bin/criteria/build_v1_autonomous_criteria_stack.py`,
   `bin/scenarios/run_v1_autonomous_priority_scenarios.py`,
   `bin/visualize/plot_v1_autonomous_prototype_board.py`, and ignored outputs under
@@ -503,7 +503,7 @@ or Zimbabwe-Peru comparison is authorized.
   previously entirely blank (zero Peru data, scripts, or outputs). This is the first Peru work.
 - Evidence:
   `context/docs/data-management/preflight/peru_hydrobasins_boundary_discovery_authorization_2026-06-30.md`,
-  `context/docs/project-management/peru_diagnostic_readiness_report_2026-06-30.md`,
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/peru_diagnostic_readiness_report_2026-06-30.md`,
   `bin/acquire/discover_peru_candidate_basins.py`, ignored raw under
   `data/raw/hydrosheds_peru_prototype/`, ignored outputs under
   `outputs/peru_boundary_discovery/`.
@@ -535,7 +535,7 @@ or Zimbabwe-Peru comparison is authorized.
   Peru terrain chain end-to-end and prove comparability. It will be replaced if the mentor names a
   specific Peru site.
 - Evidence:
-  `context/docs/project-management/peru_pilot_boundary_decision_2026-06-30.md`,
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/peru_pilot_boundary_decision_2026-06-30.md`,
   `context/docs/data-management/peru_pilot_terrain_reference_grid_rule.md`,
   `bin/package/export_peru_pilot_boundary.py`, `bin/acquire/plan_srtm_tiles_for_peru_pilot.py`,
   `bin/factors/preprocess_srtm_peru_pilot_dem.py`, ignored raw under
@@ -1089,7 +1089,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
 - Status: done for prototype diagnostic candidates.
 - Completion evidence:
   `bin/package/standardize_v1_terrain.py`,
-  `context/docs/project-management/v1_terrain_standardization_rule_2026-06-13.md`, and
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/v1_terrain_standardization_rule_2026-06-13.md`, and
   `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_standardization/v1_terrain_standardization_diagnostics.csv`.
 - Key result: elevation lowland context, low-slope susceptibility, and high-slope runoff-pressure
   candidates were produced with 2nd-98th percentile min-max scaling and passed the V1 raster grid
@@ -1106,7 +1106,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
 - Status: done for mentor review package.
 - Completion evidence:
   `bin/visualize/plot_v1_terrain_mentor_package.py`,
-  `context/docs/project-management/v1_terrain_mentor_package_2026-06-13.md`, and
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/v1_terrain_mentor_package_2026-06-13.md`, and
   `outputs/v1_terrain_mentor_package/mentor_v1_terrain_diagnostic_board.png`.
 - Key result: the package presents lowland context, low-slope susceptibility, and high-slope
   runoff-pressure alternative as terrain-only diagnostic candidates. The low-slope layer is the
@@ -1145,7 +1145,7 @@ The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor brief
   `bin/acquire/download_chirps_v1_rainfall_inputs.py`,
   `bin/investigate/compare_chirps_v1_rainfall_metrics.py`,
   `bin/visualize/plot_chirps_v1_rainfall_comparison.py`,
-  `context/docs/project-management/chirps_v1_rainfall_comparison_2026-06-13.md`,
+  `context/docs/project-management/_archive/superseded_process_notes_2026-06/chirps_v1_rainfall_comparison_2026-06-13.md`,
   and
   `outputs/chirps_v3_zimbabwe_prototype/rainfall_comparison/mentor_v1_chirps_rainfall_comparison_board.png`.
 - Key result: 561 scoped CHIRPS inputs were downloaded or clipped, all readable at `EPSG:4326`
