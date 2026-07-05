@@ -8,14 +8,11 @@ be reused.
 
 - `dataset_registry_template.md`: reusable metadata template for each dataset.
 - `download_preflight_checklist.md`: checklist to complete before each download.
-- `registry/`: dataset-specific registry notes.
-- `preflight/`: dataset-specific download preflight notes.
-- `preflight/hydrosheds_boundary_discovery_authorization_2026-06-10.md`: executed
-  HydroBASINS boundary-discovery authorization for its approved artifact.
-- `registry/zimbabwe_geoportal_subcatchments_2025.md`: downloaded and verified Zimbabwe
-  Geoportal Sub-Catchments boundary-comparison registry.
-- `preflight/zimbabwe_geoportal_subcatchments_2025.md`: completed boundary-only download
-  preflight and verification record.
+- `registry/`: dataset-specific registry notes (the authoritative record; each
+  dataset's Verification section supersedes its completed preflight).
+- `preflight/`: active preflight notes only — datasets still pending download
+  (emdat), authorization records (hydrosheds/peru_hydrobasins), or stale drafts
+  (soilgrids). Completed preflights moved to `_archive/preflight_completed/`.
 
 Before moving from notes to any real download, also check the cross-dataset gate in
 `context/docs/project-management/real_data_execution_preflight_gate.md`.
