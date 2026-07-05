@@ -98,5 +98,5 @@ Then complete the preflight checklist under
 ## Cross-References
 
 - Source package: `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p1_mining_data_decision_package_2026-06-15.md`.
-- Preflight gate: `real_data_execution_preflight_gate.md` (IFPM-D05).
+- Preflight gate: `context/docs/research-map/REPRODUCIBILITY.md` §3 (IFPM-D05 decision tracked in `context/docs/research-map/RESEARCH_QUESTIONS.md`).
 - Templates: `dataset_registry_template.md`, `download_preflight_checklist.md`.

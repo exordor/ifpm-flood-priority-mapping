@@ -173,7 +173,7 @@ recommended default unless the mentor closes Tier A access.
 ## Cross-References
 
 - Risk source: `p1_risk_overview_2026-06-15.md`.
-- Preflight gate: `real_data_execution_preflight_gate.md` (IFPM-D05 mining-data rule).
+- Preflight gate: `context/docs/research-map/REPRODUCIBILITY.md` §3 (IFPM-D05 mining-data rule).
 - Existing context: `v1_full_methodology_evidence_sweep_2026-06-13.md`,
   `v1_full_methodology_adversarial_review_2026-06-13.md`.
 - Decision tasks: IFPM-D05 (mining-data interpretation rule), IFPM-062 (this package).

@@ -118,8 +118,8 @@ Source anchors: [S1], [L1], [L3].
   https://www.mdpi.com/2071-1050/12/20/8531
 - [S8] Hurni equation source status: secondary trace only in the current audit; use as a regional
   sanity check, not as a primary Zimbabwe calibration.
-- [L1] `context/docs/project-management/rfactor_investigation_consolidated.md`
-- [L2] `context/docs/project-management/rfactor_investigation_consolidated.md`
+- [L1] `context/docs/research-map/RESULTS.md` (§R-factor)
+- [L2] `context/docs/research-map/HYPOTHESES.md` (H-RF-FAMILIES, H-ERA5-LOWER-BOUND, H-BIMODALITY-ARTIFACT)
 - [L3] `outputs/v1_usle_soil_loss/DEPRECATED_DUE_TO_R_FACTOR_ERROR.md`
 - [L4] `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/rfactor_method_exploration_diagnostics.json`
 - [L5] `outputs/v1_usle_soil_loss/rfactor_empirical_era5/era5_empirical_rfactor_diagnostics.json`

@@ -148,7 +148,7 @@ It is the recommended default unless a mentor decision explicitly closes the val
 ## Cross-References
 
 - Risk source: `p1_risk_overview_2026-06-15.md`.
-- Preflight gate: `real_data_execution_preflight_gate.md` (Step S2 dataset-specific preflight,
+- Preflight gate: `context/docs/research-map/REPRODUCIBILITY.md` §3 (Step S2 dataset-specific preflight,
   IFPM-033 backlog).
 - Existing context: `srtm_v1_terrain_preprocessing_2026-06-12.md`,
   `chirps_v1_rainfall_comparison_2026-06-13.md`,

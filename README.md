@@ -20,7 +20,8 @@ context/
     research-review/      Reviewed dataset inventory with dataset links and method notes.
     deep-research/        Deep research fact-check report on mentor requirements and review quality.
     data-management/      Internal dataset download registry templates and preflight checks.
-    project-management/   Internal task progress boards and planning notes.
+    project-management/   Archive-only since 2026-07-05. Live research-governance is in research-map/.
+    research-map/         Research map: experiments, results, decisions, reproducibility, hypotheses.
     project-analysis/     IFPM HiWi project analysis notes and workflow retrospectives.
     mentor-explanation/   Chinese and English oral explanation guides for mentor discussion.
   assets/
@@ -45,12 +46,16 @@ ifpm-flood-pipeline/
 - `context/docs/data-management/download_preflight_checklist.md`
 - `context/docs/data-management/registry/`
 - `context/docs/data-management/preflight/`
-- `context/docs/project-management/task_progress_board.md`
-- `context/docs/project-management/rfactor_investigation_consolidated.md`
-- `context/docs/project-management/rfactor_investigation_consolidated.md`
+- `context/docs/research-map/README.md` — research-governance framework (index)
+- `context/docs/research-map/EXPERIMENTS.md` — experiment registry (replaces task_progress_board)
+- `context/docs/research-map/RESULTS.md` — results synthesis (replaces rfactor_investigation_consolidated)
+- `context/docs/research-map/REPRODUCIBILITY.md` — preflight gate + preprocessing design + claim-level ladder
+- `context/docs/research-map/RESEARCH_QUESTIONS.md` — open questions + A-001..A-014 assumption register
+- `context/docs/research-map/DECISION_LOG.md` — why each major choice was made
+- `context/docs/research-map/HYPOTHESES.md` — testable claims with verdicts
+- `context/docs/research-map/ARTIFACT_INDEX.md` — code / dataset / figure / config index
+- `context/docs/research-map/TODO.md` — backlog, in-progress, awaiting-mentor
 - `context/docs/project-management/_archive/superseded_process_notes_2026-06/outlet_based_catchment_research_plan_2026-06-11.md`
-- `context/docs/project-management/real_data_preprocessing_design.md`
-- `context/docs/project-management/real_data_execution_preflight_gate.md`
 - `context/docs/project-management/_archive/superseded_process_notes_2026-06/multi_level_progress_review_2026-06-10.md`
 - `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/hydrosheds_boundary_discovery_result_2026-06-10.md`
 - `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/upper_mzingwane_boundary_decision_record_2026-06-10.md`
@@ -75,8 +80,7 @@ ifpm-flood-pipeline/
 - `context/docs/mentor-explanation/Mentor_Decision_Briefing_2026-06-15.md`
 - `context/docs/mentor-explanation/Mentor_Teams_Messages_2026-06-15.md`
 - `context/docs/mentor-explanation/STYLE.md`
-- `context/docs/mentor-explanation/Mentor_RFactor_Investigation_Briefing_2026-06-19.md`
-- `context/docs/mentor-explanation/Mentor_Teams_Message_RFactor_2026-06-19.md`
+- `context/docs/mentor-explanation/Mentor_RFactor_Figure_Send_Packet_2026-06-19.md`
 - `context/docs/project-analysis/IFPM_HiWi_Project_Analysis.md`
 - `context/docs/project-analysis/AI_Research_Document_Generation_Lessons_Learned.md`
 
@@ -102,7 +106,10 @@ ifpm-flood-pipeline/
 - `context/docs/data-management/`
   internal templates for dataset download registry notes and download preflight checks.
 - `context/docs/project-management/`
-  internal task progress boards and planning notes.
+  archive-only since 2026-07-05 (live research-governance moved to `research-map/`).
+- `context/docs/research-map/`
+  research-governance framework: experiments, results, decisions, reproducibility,
+  hypotheses, artifact index, and todo.
 - `context/docs/mentor-explanation/`
   English and Chinese oral explanation guides for mentor discussion.
 - `context/docs/project-analysis/`

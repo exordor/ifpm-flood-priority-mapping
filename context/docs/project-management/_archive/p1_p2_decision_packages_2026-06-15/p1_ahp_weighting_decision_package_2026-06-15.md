@@ -128,7 +128,7 @@ default unless the mentor completes or delegates the elicitation.
 
 - Risk source: `p1_risk_overview_2026-06-15.md`.
 - Elicitation instrument: `AHP_Elicitation_Protocol_And_Template_2026-06-15.md`.
-- Preflight gate: `real_data_execution_preflight_gate.md` (IFPM-D04 AHP weighting protocol,
+- Preflight gate: `context/docs/research-map/REPRODUCIBILITY.md` §3 (IFPM-D04 AHP weighting protocol,
   Step S5 engineering readiness).
 - Pipeline code: `ifpm-flood-pipeline/src/ifpm_flood_pipeline/ahp.py`,
   `ifpm-flood-pipeline/configs/example_pairwise_matrix.csv`.

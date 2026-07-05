@@ -126,9 +126,24 @@ Active control files should remain few:
 
 - `AGENTS.md`
 - `README.md`
-- `context/docs/project-management/assumptions_log.md`
+- `context/docs/research-map/RESEARCH_OVERVIEW.md` (project scope and status)
+- `context/docs/research-map/REPRODUCIBILITY.md` (claim-level ladder, preflight gate, preprocessing rules)
+- `context/docs/research-map/EXPERIMENTS.md` (current experiment registry)
 - a current experiment manifest or output-local manifest for the active run
 - a current mentor packet only when a mentor message or artifact is being prepared
+
+These are the binding **control** tier. The other seven files in
+`context/docs/research-map/` (`RESEARCH_QUESTIONS`, `HYPOTHESES`, `RESULTS`,
+`ARTIFACT_INDEX`, `DECISION_LOG`, `TODO`, and the folder `README`) are active
+working docs but derived — see `context/docs/research-map/README.md` for the
+control-vs-derived distinction. Control files must stay consistent with each
+other and with the codebase; derived files may lag but must not contradict the
+control tier.
+
+The older `context/docs/project-management/` folder is archive-only since the
+2026-07-05 consolidation into `context/docs/research-map/`. Its former live files
+(assumptions_log, execution_status_policy, task_progress_board, etc.) are
+preserved under `_archive/superseded_by_research_map_2026-07-05/`.
 
 Older governance documents are archival. They may be referenced for evidence, but they must not
 drive new work unless the user explicitly points to them or the active experiment needs a recorded
@@ -158,7 +173,7 @@ Keep boundary versions separate from experiment versions.
 Core principle: uncertainty reduces claim level; it does not automatically pause execution.
 
 Detailed internal policy:
-`context/docs/project-management/execution_status_policy.md`.
+`context/docs/research-map/REPRODUCIBILITY.md` (§2 Execution status policy).
 
 If a scientific choice is uncertain, continue with a clearly labelled diagnostic, provisional, or
 sensitivity scenario; record the assumption and lineage; expose the choice in config or a table
@@ -217,8 +232,10 @@ Avoid unless explicitly requested or already scoped in a current plan:
 
 Do not stop implementation solely because a scientific decision is uncertain. Instead:
 
-- record the assumption in the relevant project note, registry, preflight file, handoff, or a
-  cross-cutting `context/docs/project-management/assumptions_log.md` if one is needed;
+- record the assumption in the relevant project note, registry, preflight file, handoff, or the
+  active assumptions register in `context/docs/research-map/RESEARCH_QUESTIONS.md`
+  (and a decision record in `context/docs/research-map/DECISION_LOG.md` when the
+  assumption is decision-shaped) if one is needed;
 - expose uncertain values as config/table parameters where practical;
 - continue with clearly labelled placeholder, candidate, indicator, or context evidence;
 - never claim scientific validity, validation, final flood-risk status, or intervention priority
@@ -337,7 +354,7 @@ the mentor, must follow the style rule in `context/docs/mentor-explanation/STYLE
 lead with the conclusion, one question per message, and no AI-style scaffolding (TL;DR / "bottom
 line" headers, over-symmetric structure, filler hedges, decorative formatting). This keeps
 mentor-facing documents reading as the HiWi's own work. It does not apply to internal engineering
-notes under `project-management/` or `data-management/`, where full step-by-step evidence chains
+notes under `research-map/` or `data-management/`, where full step-by-step evidence chains
 are wanted.
 
 ## Report-Friendly Figure And Briefing Rule

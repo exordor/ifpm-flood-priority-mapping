@@ -129,8 +129,8 @@ mentor can sequence them:
 ## Cross-References
 
 - Source risk analysis: 2026-06-15 in-session project risk and data-gap analysis.
-- Preflight gate: `real_data_execution_preflight_gate.md`.
-- Task board: `task_progress_board.md`.
+- Preflight gate: `context/docs/research-map/REPRODUCIBILITY.md` §3.
+- Experiment registry: `context/docs/research-map/EXPERIMENTS.md`.
 - Packages: `p1_validation_data_decision_package_2026-06-15.md`,
   `p1_mining_data_decision_package_2026-06-15.md`,
   `p1_ahp_weighting_decision_package_2026-06-15.md`.
