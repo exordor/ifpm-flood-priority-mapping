@@ -316,7 +316,7 @@ def plot_process() -> None:
         ("2. Grid prep", "clip to boundary; use common CRS/grid; check NoData"),
         ("3. Criteria", "standardize each layer to 0-1 with direction"),
         ("4. Scenarios", "combine criteria with candidate weights and sensitivity runs"),
-        ("5. Outputs", "priority map, hotspot frequency, dominant-PIM-criterion map"),
+        ("5. Outputs", "priority map, top-20% selection frequency, dominant-PIM-criterion map"),
         ("6. Review", "mentor checks criteria, data gaps, and final study site"),
     ]
     x, width, height = 0.09, 0.82, 0.105

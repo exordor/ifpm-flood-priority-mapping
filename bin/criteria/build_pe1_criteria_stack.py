@@ -28,6 +28,7 @@ ROOT = Path(__file__).resolve().parents[2]
 INPUTS = {
     "twi": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_twi.tif",
     "drainage": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_distance_to_drainage_t500.tif",
+    "ls_factor": ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/pe1_ls_factor_capped50_hillslope_30m.tif",
     "structure": ROOT / "outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/a_structure_K_LS_C_30m.tif",
     "c_factor": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
     "roads": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
@@ -36,7 +37,18 @@ INPUTS = {
 }
 
 
-OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif"]
+OUTPUTS = [
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_conditioning_factors_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/twi_wetness_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/drainage_proximity_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/ls_factor_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/c_factor_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif",
+]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
@@ -137,9 +149,14 @@ def main() -> None:
     profile, mask = read_reference()
     rasters = {key: read_band(path, profile) for key, path in INPUTS.items()}
 
-    # Standardize: TWI high->high (wetness), drainage inverted (closer->higher), structure high->high, c high->high.
+    # Standardize: TWI high->high (wetness), drainage inverted (closer->higher),
+    # LS/C high->high for diagnostics, and K x LS x C structure high->high for
+    # the current executable sediment criterion. SoilGrids K remains embedded as
+    # the current scalar K in the structure layer until a grid-compatible K raster
+    # is rebuilt.
     twi_std, twi_lo, twi_hi = normalize_2_98(rasters["twi"], mask, invert=False)
     drain_std, drain_lo, drain_hi = normalize_2_98(rasters["drainage"], mask, invert=True)
+    ls_std, ls_lo, ls_hi = normalize_2_98(rasters["ls_factor"], mask, invert=False)
     structure_std, s_lo, s_hi = normalize_2_98(rasters["structure"], mask, invert=False)
     c_std, c_lo, c_hi = normalize_2_98(rasters["c_factor"], mask, invert=False)
     # roads + mining are already 0-1 proximity rasters from build_pe1_osm_proximity_criteria.py
@@ -148,7 +165,11 @@ def main() -> None:
 
     criteria = {
         "flood_conditioning_factors": weighted_average([(twi_std, 0.5), (drain_std, 0.5)], mask),
+        "twi_wetness": twi_std,
+        "drainage_proximity": drain_std,
         "soil_erosion_factors": structure_std,
+        "ls_factor": ls_std,
+        "c_factor": c_std,
         "land_cover_pressure": c_std,
         "mining_pressure": mining_std,
         "exposure_indicators": roads_std,
@@ -158,7 +179,11 @@ def main() -> None:
     manifest_rows = []
     components_map = {
         "flood_conditioning_factors": "TWI high-wetness + drainage proximity (inverted)",
+        "twi_wetness": "DEM-derived TWI standardized high wetness -> high flood susceptibility",
+        "drainage_proximity": "distance to drainage standardized as closer drainage -> higher flood susceptibility",
         "soil_erosion_factors": "K x LS x C erosion source structure standardized 2-98; rainfall erosivity not applied",
+        "ls_factor": "SRTM-derived LS-factor, capped at 50, hillslope/channel mask preserved",
+        "c_factor": "ESA WorldCover C-factor pressure, also used as land-cover pressure evidence",
         "land_cover_pressure": "WorldCover C-factor pressure",
         "mining_pressure": "INGEMMET Pequeña Minería ASM-point proximity (inverted); official source",
         "exposure_indicators": "OSM roads proximity (inverted); access/exposure indicator",
@@ -166,7 +191,11 @@ def main() -> None:
     }
     claim_map = {
         "flood_conditioning_factors": "provisional",
+        "twi_wetness": "provisional",
+        "drainage_proximity": "provisional",
         "soil_erosion_factors": "diagnostic_only",
+        "ls_factor": "diagnostic_only",
+        "c_factor": "provisional",
         "land_cover_pressure": "provisional",
         "mining_pressure": "provisional",
         "exposure_indicators": "provisional",
@@ -186,8 +215,8 @@ def main() -> None:
             "grid_compatible": "true" if frac >= MIN_VALID_FRACTION else "false",
             "coverage_threshold": MIN_VALID_FRACTION,
             "nodata_policy": (
-                "preserve NoData; erosion_structure inherits intentional channel mask from hillslope LS"
-                if name == "soil_erosion_factors" else "preserve NoData; no score imputation"
+                "preserve NoData; inherits intentional channel mask from hillslope LS"
+                if name in {"soil_erosion_factors", "ls_factor"} else "preserve NoData; no score imputation"
             ),
             **stats(arr, mask),
         })
@@ -206,6 +235,7 @@ def main() -> None:
         {"component": "twi", "method": "percentile_clip_minmax_2_98", "clip_low": twi_lo, "clip_high": twi_hi},
         {"component": "drainage", "method": "percentile_clip_minmax_2_98_inverted", "clip_low": drain_lo, "clip_high": drain_hi},
         {"component": "structure", "method": "percentile_clip_minmax_2_98", "clip_low": s_lo, "clip_high": s_hi},
+        {"component": "ls_factor", "method": "percentile_clip_minmax_2_98", "clip_low": ls_lo, "clip_high": ls_hi},
         {"component": "c_factor", "method": "percentile_clip_minmax_2_98", "clip_low": c_lo, "clip_high": c_hi},
     ])
     low_coverage = [

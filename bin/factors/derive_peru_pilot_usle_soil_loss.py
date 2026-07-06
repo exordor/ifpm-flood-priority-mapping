@@ -9,7 +9,7 @@ erosion structure is trustworthy, R is a labelled scalar.
 
 PE1 structure = K_SI_scalar x LS(hillslope, capped-50) x C(30m) x P(=1.0).
 Provisional sediment scenarios = structure x R_mean for a LOW and HIGH R family.
-The hotspot RANK does not depend on the chosen R value; R only scales magnitude.
+The cell ranking does not depend on the chosen R value; R only scales magnitude.
 """
 
 from __future__ import annotations
@@ -39,7 +39,7 @@ K_SI_MEAN = K_US_MEAN_0_5CM * 0.1317  # = 0.0239
 # LOW: same provisional value used for Zimbabwe (Arnoldus 1980 LOW family, applied as a
 # labelled provisional default until a PE1-specific CHIRPS/ERA5 R is derived). Peru PE1 is
 # a drier Pacific-slope basin; the true R is likely lower, but the LOW-family provisional
-# is a defensible conservative screening value, and the hotspot rank does not depend on R.
+# is a defensible conservative screening value, and the cell ranking does not depend on R.
 R_LOW_DEFAULT = 238.6
 R_HIGH_SENSITIVITY = 408.0
 
@@ -110,7 +110,7 @@ def main() -> None:
             "P": P,
         },
         "boundary_status": "provisional_comparison_catchment_not_final_study_area",
-        "r_invariance_note": ("The hotspot RANK does not depend on the chosen R value; R only "
+        "r_invariance_note": ("The cell ranking does not depend on the chosen R value; R only "
                               "scales the absolute magnitude. The LOW R is a provisional screening "
                               "default; a PE1-specific CHIRPS/ERA5 R should be derived for any "
                               "magnitude claim."),

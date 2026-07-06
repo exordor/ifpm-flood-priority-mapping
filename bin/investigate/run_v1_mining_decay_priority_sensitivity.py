@@ -4,8 +4,8 @@
 Isolates the effect of the mining-criterion decay function on the priority
 output. Loads the same five non-mining scored layers as rainfall_exposure_v0_4,
 swaps in each of the three mining decay rasters (tiered_linear, linear_3km,
-gaussian_1km), runs the same three weight scenarios, and records hotspot
-stability + dominant-driver share for each.
+gaussian_1km), runs the same three weight scenarios, and records top-20%
+priority-area stability + dominant-driver share for each.
 
 Writes to an isolated directory; does NOT touch the default v0.4 outputs.
 """

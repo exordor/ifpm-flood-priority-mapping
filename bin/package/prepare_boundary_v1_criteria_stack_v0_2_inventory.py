@@ -93,7 +93,7 @@ def build_gap_table() -> list[dict[str, object]]:
             "requested_dataset": "flood extents, event reports, affected places/roads, dates and damage notes",
             "trip_priority": "must_ask_zimbabwe_and_peru",
             "candidate_update_rule": "use only as validation/context until modelling-unit and interpretation rules are accepted",
-            "if_missing": "do not call hotspot map validated flood risk",
+            "if_missing": "do not call top-20% priority areas validated flood risk",
         },
         {
             "criterion_family": "rainfall_r",
@@ -160,7 +160,7 @@ def action_for(family: str, strength: str) -> str:
     if family == "exposure" and "population" in strength:
         return "use as context/zonal summary; avoid false 30 m precision"
     if family == "exposure":
-        return "compare against hotspots; do not call it vulnerability"
+        return "compare against top-20% priority areas; do not call it vulnerability"
     if family == "flood_validation":
         return "record as gap unless local observed flood evidence is obtained"
     return "review"

@@ -41,7 +41,7 @@ class Site:
     claim_level: str
     priority_mean: Path
     top20_frequency: Path
-    hotspot_summary: Path
+    top20_summary: Path
     criteria_manifest: Path
     boundary_gpkg: Path
     boundary_layer: str
@@ -59,7 +59,7 @@ SITES = [
         claim_level="sensitivity_scenario",
         priority_mean=ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/priority_mean.tif",
         top20_frequency=ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/top20_frequency.tif",
-        hotspot_summary=ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/hotspot_stability_summary.csv",
+        top20_summary=ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/hotspot_stability_summary.csv",
         criteria_manifest=ROOT / "outputs/boundary_v1/criteria_stack_v0_2/revised_criteria_manifest.csv",
         boundary_gpkg=ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg",
         boundary_layer="v1_working_boundary",
@@ -75,7 +75,7 @@ SITES = [
         claim_level="provisional / sensitivity_scenario",
         priority_mean=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif",
         top20_frequency=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif",
-        hotspot_summary=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/hotspot_stability_summary.csv",
+        top20_summary=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/hotspot_stability_summary.csv",
         criteria_manifest=ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria_stack_manifest.csv",
         boundary_gpkg=ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
         boundary_layer="peru_pilot_boundary",
@@ -212,7 +212,7 @@ def plot_panel(fig, ax, site: Site, raster_path: Path, title: str, cmap: str, la
 def build_summary_rows() -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for site in SITES:
-        metrics = read_metric_csv(site.hotspot_summary)
+        metrics = read_metric_csv(site.top20_summary)
         priority, profile, _ = read_raster(site.priority_mean)
         top20, _, _ = read_raster(site.top20_frequency)
         stats = valid_summary(priority)
@@ -235,7 +235,7 @@ def build_summary_rows() -> list[dict[str, object]]:
             "priority_mean": stats["mean"],
             "priority_p80": stats["p80"],
             "priority_p95": stats["p95"],
-            "hotspot_frequency_mean": valid_summary(top20)["mean"],
+            "top20_selection_frequency_mean": valid_summary(top20)["mean"],
             "status_note": site.status_note,
             "active_criteria_note": site.active_criteria_note,
         })
@@ -267,18 +267,18 @@ def plot_board() -> None:
         axes[1, 0],
         SITES[0],
         SITES[0].top20_frequency,
-        "C. Zimbabwe: top-20% hotspot frequency",
+        "C. Zimbabwe: top-20% priority selection frequency",
         "Blues",
-        "top-20% frequency",
+        "selection frequency",
     )
     plot_panel(
         fig,
         axes[1, 1],
         SITES[1],
         SITES[1].top20_frequency,
-        "D. Peru: top-20% hotspot frequency",
+        "D. Peru: top-20% priority selection frequency",
         "Blues",
-        "top-20% frequency",
+        "selection frequency",
     )
     fig.suptitle(
         "Prototype comparison: Zimbabwe and southern Peru",
@@ -304,9 +304,9 @@ claim, and not a final Zimbabwe-Peru thesis comparison.
 
 ## Main reading
 
-- The Upper Mzingwane prototype follows the mentor 5-main-criterion framework with five active PIM main criteria; stable top-20% hotspot area:
+- The Upper Mzingwane prototype follows the mentor 5-main-criterion framework with five active PIM main criteria; area selected in the top 20% under all scenarios:
   {zimbabwe['stable_top20_area_km2']} km2.
-- The southern Peru comparison catchment follows the same 5-main-criterion framework with five active PIM main criteria; stable top-20% hotspot area:
+- The southern Peru comparison catchment follows the same 5-main-criterion framework with five active PIM main criteria; area selected in the top 20% under all scenarios:
   {peru['stable_top20_area_km2']} km2.
 - The five PIM main criteria are Flood, Sediment, Land Use / ASM, Environmental, and
   Socioeconomic. Flood and Land Use / ASM have internal component layers; Environmental is
@@ -320,7 +320,7 @@ claim, and not a final Zimbabwe-Peru thesis comparison.
 ## Files
 
 - `zimbabwe_peru_prototype_comparison_board.png` / `.pdf`: four-panel map comparison.
-- `zimbabwe_peru_summary.csv`: boundary, scenario, and hotspot summary.
+- `zimbabwe_peru_summary.csv`: boundary, scenario, and top-20% priority-area summary.
 - `zimbabwe_peru_criteria_source_table.csv`: AHP main criteria, data sources, claim levels, and
   limitations.
 
@@ -345,7 +345,7 @@ comparative pipeline, while keeping final study-site decisions and final claims 
         "Both displayed maps follow the mentor five-main-criterion AHP framework, and the "
         "current executable overlay uses five active PIM main criteria. "
         "The upper panels show mean priority across sensitivity scenarios; the lower panels show "
-        "how often each cell appears in the top-20% hotspot set. The figure is for mentor review "
+        "how often each cell appears in the top-20% priority areas. The figure is for mentor review "
         "of the prototype pipeline only. It is not a validated flood-risk map or a final "
         "Zimbabwe-Peru comparison."
     )
@@ -380,7 +380,7 @@ def ensure_inputs() -> None:
         paths.extend([
             site.priority_mean,
             site.top20_frequency,
-            site.hotspot_summary,
+            site.top20_summary,
             site.criteria_manifest,
             site.boundary_gpkg,
         ])

@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Diagnose spatial agreement between boundary_v1 hotspots and exposure evidence.
+"""Diagnose spatial agreement between boundary_v1 top-20% priority areas and exposure evidence.
 
-IFPM-089 hardening task: do the v0.2 stable hotspots fall where real exposure
-evidence exists (road-river crossings, settlements, mining pressure, population)?
+IFPM-089 hardening task: do the v0.2 repeatedly selected top-20% priority areas
+fall where real exposure evidence exists (road-river crossings, settlements,
+mining pressure, population)?
 This is a DIAGNOSTIC of spatial co-location, NOT validation. It does not claim
-the hotspots are validated flood risk.
+the selected areas are validated flood risk.
 
 Inputs (all confirmed to exist):
-  - v0.2 hotspot rasters (priority_mean, top20_frequency) on the V1 grid.
+  - v0.2 priority rasters (priority_mean, top20_frequency) on the V1 grid.
   - Vector points from v1_full_methodology_review_layers.gpkg:
       road_river_crossings_v1 (64), osm_places_v1 (8).
   - Mining proximity raster (already grid-aligned to V1).
@@ -53,7 +54,7 @@ WORLDPOP_RASTER = MAIN_OUTPUTS / "v1_full_methodology_evidence_sweep/rasters/v1_
 GHSL_BUILT_RASTER = MAIN_OUTPUTS / "v1_full_methodology_evidence_sweep/rasters/v1_ghsl_built_surface_2025_native.tif"
 
 CELL_AREA_KM2 = 0.0009
-# Stable hotspot = appears in >=2 of 3 v0.2 scenarios.
+# Repeatedly selected top-20% priority area = appears in >=2 of 3 v0.2 scenarios.
 STABLE_FREQ_THRESHOLD = 0.667
 
 
@@ -97,10 +98,10 @@ def v1_inside_mask(profile: dict) -> np.ndarray:
     )
 
 
-def points_in_hotspot_bands(
+def points_in_top20_selection_bands(
     points: gpd.GeoDataFrame, freq: np.ndarray, profile: dict, inside: np.ndarray, label: str
 ) -> list[dict[str, object]]:
-    """Sample hotspot frequency at each point and tally by band.
+    """Sample top-20% selection frequency at each point and tally by band.
 
     Buckets keep "outside V1" and "NoData inside V1" separate for honesty: a
     point inside the boundary that lands on a NoData cell is NOT the same as a
@@ -140,16 +141,17 @@ def points_in_hotspot_bands(
     ]
 
 
-def zonal_population_by_hotspot(
+def zonal_population_by_top20_selection(
     pop_raster: Path, freq: np.ndarray, profile: dict, inside: np.ndarray, label: str
 ) -> dict[str, object]:
-    """Zonal-sum a native-grid population raster over V1, split by stable-hotspot
-    vs non-hotspot. Population is NOT resampled to 30 m; it is masked to the V1
-    boundary on its native grid and the per-cell hotspot band (upsampled by
-    nearest label for zonal assignment only) is used to split the sum.
+    """Zonal-sum a native-grid population raster over V1, split by repeated
+    top-20% selection vs other cells. Population is NOT resampled to 30 m; it is
+    masked to the V1 boundary on its native grid and the per-cell top-20%
+    selection band (upsampled by nearest label for zonal assignment only) is
+    used to split the sum.
 
     To avoid false precision, population stays on its native grid; only the
-    stable-hotspot LABEL is nearest-assigned to native cells for grouping.
+    repeated-selection LABEL is nearest-assigned to native cells for grouping.
     """
     from rasterio.warp import reproject, Resampling
 
@@ -168,7 +170,7 @@ def zonal_population_by_hotspot(
         arr = data[0].astype("float64")
         if src.nodata is not None:
             arr[arr == src.nodata] = np.nan
-        # Upsample the stable-hotspot label to the CROPPED native pop grid via
+        # Upsample the repeated top-20% selection label to the CROPPED native pop grid via
         # reproject (nearest). Only the boolean label is resampled, never the
         # population. dst_transform MUST be the cropped out_transform.
         label_band = np.where(inside & np.isfinite(freq) & (freq >= STABLE_FREQ_THRESHOLD), 1, 0).astype("float32")
@@ -195,13 +197,13 @@ def zonal_population_by_hotspot(
         "evidence": label,
         "native_crs": native_crs_str,
         "native_resolution": native_res_str,
-        "stable_hotspot_pop_sum": round(hot_sum, 1),
-        "non_hotspot_pop_sum": round(cold_sum, 1),
+        "repeated_top20_pop_sum": round(hot_sum, 1),
+        "other_cells_pop_sum": round(cold_sum, 1),
         "total_pop_sum": round(total, 1),
-        "share_in_stable_hotspot": round(hot_sum / total, 4) if total else 0.0,
-        "stable_hotspot_native_cells": hot_cells,
-        "non_hotspot_native_cells": cold_cells,
-        "method": "zonal sum on native grid; only the stable-hotspot label is nearest-resampled for grouping (population NOT resampled to 30 m)",
+        "share_in_repeated_top20": round(hot_sum / total, 4) if total else 0.0,
+        "repeated_top20_native_cells": hot_cells,
+        "other_cells_native_cells": cold_cells,
+        "method": "zonal sum on native grid; only the repeated top-20% selection label is nearest-resampled for grouping (population NOT resampled to 30 m)",
     }
 
 
@@ -220,7 +222,7 @@ def plot_board(freq: np.ndarray, inside: np.ndarray, profile: dict) -> None:
     crossings.plot(ax=ax, marker="o", color="blue", markersize=14, label="road-river crossings (64)", edgecolor="white", linewidth=0.3)
     places.plot(ax=ax, marker="^", color="lime", markersize=46, label="OSM places (8)", edgecolor="black", linewidth=0.5)
     ax.set_title(
-        "Upper Mzingwane Catchment: Prototype Hotspots and Exposure Indicators",
+        "Upper Mzingwane Catchment: Top-20% Priority Areas and Exposure Indicators",
         loc="left",
         fontsize=11,
         fontweight="bold",
@@ -231,7 +233,7 @@ def plot_board(freq: np.ndarray, inside: np.ndarray, profile: dict) -> None:
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="3%", pad=0.04)
     cb = fig.colorbar(im, cax=cax)
-    cb.set_label("Stable hotspot frequency (top 20%)", fontsize=8)
+    cb.set_label("Top-20% selection frequency", fontsize=8)
     fig.savefig(OUT_DIR / "hotspot_exposure_board.png", dpi=220, bbox_inches="tight")
     fig.savefig(OUT_DIR / "hotspot_exposure_board.pdf", bbox_inches="tight")
     plt.close(fig)
@@ -254,16 +256,16 @@ def main() -> None:
 
     summary_rows: list[dict[str, object]] = [
         {"metric": "claim_level", "value": "diagnostic_only"},
-        {"metric": "stable_hotspot_threshold", "value": f"top20_frequency >= {STABLE_FREQ_THRESHOLD}"},
-        {"metric": "stable_hotspot_cells", "value": stable_cells},
-        {"metric": "stable_hotspot_area_km2", "value": round(stable_area, 3)},
+        {"metric": "repeated_top20_threshold", "value": f"top20_frequency >= {STABLE_FREQ_THRESHOLD}"},
+        {"metric": "repeated_top20_cells", "value": stable_cells},
+        {"metric": "repeated_top20_area_km2", "value": round(stable_area, 3)},
     ]
 
     # --- Point evidence: crossings and places ---
     crossings = gpd.read_file(EVIDENCE_GPKG, layer="road_river_crossings_v1")
     places = gpd.read_file(EVIDENCE_GPKG, layer="osm_places_v1")
-    point_rows = points_in_hotspot_bands(crossings, freq, profile, inside, "road_river_crossings")
-    point_rows += points_in_hotspot_bands(places, freq, profile, inside, "osm_places")
+    point_rows = points_in_top20_selection_bands(crossings, freq, profile, inside, "road_river_crossings")
+    point_rows += points_in_top20_selection_bands(places, freq, profile, inside, "osm_places")
 
     # --- Raster evidence: mining proximity (grid-aligned) Pearson r ---
     mining = read_band(MINING_PROX_RASTER, profile)
@@ -275,22 +277,22 @@ def main() -> None:
         pearson_r = float(r_matrix[0, 1])
     else:
         pearson_r = float("nan")
-    # Mean mining pressure inside stable hotspots vs elsewhere.
+    # Mean mining pressure inside repeatedly selected top-20% priority areas vs elsewhere.
     mining_in_stable = float(np.nanmean(mining[stable])) if np.isfinite(mining[stable]).any() else float("nan")
     mining_in_rest = inside & np.isfinite(mining) & ~stable
     mining_in_rest_mean = float(np.nanmean(mining[mining_in_rest])) if mining_in_rest.any() else float("nan")
 
     raster_rows = [
         {"evidence": "mining_proximity_proxy", "comparison": "pearson_r_priority_vs_mining", "value": round(pearson_r, 6)},
-        {"evidence": "mining_proximity_proxy", "comparison": "mean_mining_in_stable_hotspot", "value": round(mining_in_stable, 6)},
-        {"evidence": "mining_proximity_proxy", "comparison": "mean_mining_in_non_hotspot", "value": round(mining_in_rest_mean, 6)},
+        {"evidence": "mining_proximity_proxy", "comparison": "mean_mining_in_repeated_top20", "value": round(mining_in_stable, 6)},
+        {"evidence": "mining_proximity_proxy", "comparison": "mean_mining_in_other_cells", "value": round(mining_in_rest_mean, 6)},
     ]
 
     # --- Population zonal summaries (native grid, not resampled) ---
     pop_rows: list[dict[str, object]] = []
     for pop_path, pop_label in [(WORLDPOP_RASTER, "worldpop_2020"), (GHSL_BUILT_RASTER, "ghsl_built_surface_2025")]:
         if pop_path.exists():
-            pop_rows.append(zonal_population_by_hotspot(pop_path, freq, profile, inside, pop_label))
+            pop_rows.append(zonal_population_by_top20_selection(pop_path, freq, profile, inside, pop_label))
 
     plot_board(freq, inside, profile)
 
@@ -299,7 +301,7 @@ def main() -> None:
     write_csv(OUT_DIR / "raster_evidence_correlation.csv", raster_rows)
     write_csv(OUT_DIR / "population_zonal_summary.csv", pop_rows)
     print(f"wrote {boundary_id} / {experiment_id} to {rel(OUT_DIR)}")
-    print(f"stable hotspot: {stable_cells} cells ({stable_area:.1f} km^2)")
+    print(f"repeated top-20% priority area: {stable_cells} cells ({stable_area:.1f} km^2)")
     print(f"mining-proximity Pearson r vs priority_mean: {pearson_r:.4f}")
     for row in point_rows:
         if "high" in str(row["band"]):

@@ -22,6 +22,16 @@ from scipy.ndimage import distance_transform_edt
 
 ROOT = Path(__file__).resolve().parents[2]
 WORLDCOVER_SENSITIVE_CLASSES = {80, 90, 95}
+ENVIRONMENTAL_CONTEXT_WEIGHTS = {
+    "Zimbabwe": {
+        "water_wetland_context": 0.55,
+        "protected_ecological_context": 0.45,
+    },
+    "Peru": {
+        "water_wetland_context": 0.60,
+        "protected_ecological_context": 0.40,
+    },
+}
 
 
 @dataclass(frozen=True)
@@ -244,6 +254,7 @@ def vector_proximity_score(
 def build_site(config: SiteConfig) -> dict[str, object]:
     config.output_dir.mkdir(parents=True, exist_ok=True)
     profile, mask, boundary = read_reference(config)
+    context_weights = ENVIRONMENTAL_CONTEXT_WEIGHTS[config.site]
 
     worldcover = reproject_to_reference(config.worldcover_paths, profile, Resampling.nearest)
     worldcover_codes = np.nan_to_num(worldcover, nan=-9999).astype("int32")
@@ -303,7 +314,7 @@ def build_site(config: SiteConfig) -> dict[str, object]:
     protected_score = vector_proximity_score(protected_features, profile, mask)
     component_rows.append({
         "component": "protected_area_proximity",
-        "component_weight": 0.5,
+        "component_weight": context_weights["protected_ecological_context"],
         "source": "; ".join(rel(path) if layer is None else f"{rel(path)}:{layer}" for path, layer in config.protected_vectors),
         "source_feature_count": len(protected_features),
         "raw_feature_count": protected_raw_count,
@@ -318,11 +329,17 @@ def build_site(config: SiteConfig) -> dict[str, object]:
             "jrc_surface_water_occurrence",
             "water_vector_proximity",
         }:
-            row["component_weight"] = f"0.5 * {water_component_weight}"
+            row["component_weight"] = (
+                f"{context_weights['water_wetland_context']} * "
+                f"{water_component_weight}"
+            )
 
     water_context = weighted_average_scores(water_layers, mask)
     environmental = weighted_average_scores(
-        [(water_context, 0.5), (protected_score, 0.5)],
+        [
+            (water_context, context_weights["water_wetland_context"]),
+            (protected_score, context_weights["protected_ecological_context"]),
+        ],
         mask,
     )
 
@@ -339,7 +356,11 @@ def build_site(config: SiteConfig) -> dict[str, object]:
         "criterion": "environmental_sensitivity",
         "path": rel(out_path),
         "components": "water/wetland context; protected-area proximity",
-        "component_rule": "0.5 * water/wetland context + 0.5 * protected-area proximity; water context is an equal-weight average of available water/wetland evidence",
+        "component_rule": (
+            f"{context_weights['water_wetland_context']} * water/wetland context + "
+            f"{context_weights['protected_ecological_context']} * protected-area proximity; "
+            "water context is an equal-weight average of available water/wetland evidence"
+        ),
         "claim_level": "provisional",
         "semantic_meaning": "environmental sensitivity indicator, not ecological valuation",
         "nodata_policy": "preserve NoData outside boundary; no NoData-to-zero imputation",

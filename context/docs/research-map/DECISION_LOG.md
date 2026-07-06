@@ -18,8 +18,9 @@ decision, reason, alternatives, consequences.
   iteration + post-mining module). Rejected — de-scoped by Version B.
 - **Consequences:**
   - In scope: five AHP main criteria; rainfall only as a Flood-side sensitivity
-    implementation layer; bilateral Zimbabwe-Peru prototype comparison;
-    AHP-MCDA weighted overlay; sensitivity analysis.
+    implementation layer; AHP-MCDA weighted overlay; sensitivity analysis.
+    Bilateral Zimbabwe-Peru prototype comparison was the June/early-July
+    working route, but the current mainline is superseded by D-PERU-FIRST.
   - Not required unless mentor re-requests: citizen-science module; stakeholder
     feedback iteration; post-mining opportunities as a full module.
   - Open, mentor-gated: Rehabilitation Potential role (D-REHAB).
@@ -65,7 +66,111 @@ decision, reason, alternatives, consequences.
   catchment in Arequipa Region (~2745 km², arid) — is a provisional comparison
   catchment, NOT a final research-selected Peru study area. It will be replaced
   if the mentor names a specific Peru site. No flood-risk/comparison claim from
-  PE1.
+  PE1. Superseded for the current working mainline by D-PERU-FIRST: PE1 remains
+  provisional, but it is now the active Peru-first case to complete.
+
+## D-PERU-FIRST — Peru becomes the current mainline case
+
+- **Date:** 2026-07-06.
+- **Context:** During the 2026-07-06 mentor discussion, the mentor directed:
+  "Let's keep Peru and work with Peru first till the end." The immediate
+  methodological point was that the end product should be a flood
+  prioritisation map based on all weighted criteria, with mining data overlaid
+  afterwards to see whether mining areas coincide with high-priority areas.
+  Peru also has stronger current mining evidence through INGEMMET small-mining
+  points, while Zimbabwe mining remains OSM-only / weak.
+- **Decision:** Shift the active project mainline to a Peru-first case study.
+  Complete PE1 first: five-criterion input maps, AHP-weighted prototype
+  prioritisation map, top-priority classes, mining overlay, and a data-strength
+  table. Keep Zimbabwe as a secondary / background comparison and method
+  development baseline, not the result to finish first.
+- **Reason:** Peru currently has the more complete and defensible data stack
+  for the research story, especially mining. Completing one coherent Peru case
+  is stronger than maintaining a symmetric Zimbabwe-Peru comparison while one
+  side has weaker mining evidence.
+- **Alternatives:**
+  - Continue bilateral Zimbabwe-Peru comparison as the mainline (rejected for
+    now: splits attention and over-emphasises weak Zimbabwe evidence).
+  - Switch to Zimbabwe only (rejected: current mining evidence is weaker).
+  - Wait for a final Peru site or final AHP weights (rejected: uncertainty
+    lowers claim level; it does not stop the Peru prototype).
+- **Consequences:**
+  - New outputs and PPT structure should lead with Peru.
+  - Zimbabwe outputs remain usable for background, contrast, or later
+    comparison, but not as the active endpoint.
+  - PE1 is still provisional and not a final research-selected Peru boundary.
+  - Equal weights remain baseline/sensitivity only; the current Peru main
+    weight scenario is superseded by D-PERU-MENTOR-WEIGHTS.
+  - The final map label should be "prototype flood prioritisation map", not
+    "validated flood-risk map" or "rescue-decision map".
+  - Mining overlay is an interpretation layer over the Peru prioritisation map;
+    it is not validation by itself.
+
+## D-PERU-MENTOR-WEIGHTS — Peru direct AHP weights become the current PIM scenario
+
+- **Date:** 2026-07-06.
+- **Context:** After the Peru-first switch, the mentor supplied a Peru-specific
+  recommended weight table for the Arequipa mining-region case:
+  `FH=0.35`, `SE=0.25`, `LM=0.20`, `ES=0.12`, `SV=0.08`, plus local
+  sub-criteria weights.
+- **Decision:** Use those direct Peru weights as the current main PIM scenario
+  (`mentor_peru_direct_pim`) and keep equal weights as a neutral baseline. Do
+  not use the older slide pairwise matrix as the current Peru mainline scenario.
+- **Reason:** The new table is site-specific and newer than the generic
+  example matrix. It matches the mentor's current Peru-first direction.
+- **Alternatives:** keep the old slide matrix (rejected for the current Peru
+  run because it is generic/older); keep flood-sediment-heavy as a third
+  scenario (rejected for the current PPT/mainline because the mentor asked for
+  the weighted prioritisation model, not extra scenario storytelling).
+- **Consequences:**
+  - Current Peru scenario outputs contain two scenarios: `equal_active_pim`
+    and `mentor_peru_direct_pim`.
+  - The direct weights have no supplied pairwise matrix or consistency ratio,
+    so the current run must not report a CR for them.
+  - Flood, Land Use / ASM, and Environmental subweights are implemented where
+    the current data support them.
+  - Sediment still uses the current `K x LS x C` erosion-source structure as a
+    single executable criterion; the new K/LS/C local subweights are recorded
+    as a gap until a grid-compatible independent K-factor layer is rebuilt.
+  - Socioeconomic still uses road/access proximity only; independent
+    infrastructure exposure is recorded as missing.
+
+## D-ZIMBABWE-MENTOR-WEIGHTS — Zimbabwe direct AHP weights recorded as secondary scenario
+
+- **Date:** 2026-07-06.
+- **Context:** After the Peru-first switch, a Zimbabwe-specific recommended
+  weight table was supplied for the Upper Mzingwane catchment:
+  `FH=0.32`, `SE=0.23`, `LM=0.18`, `ES=0.12`, `SV=0.15`, plus local
+  sub-criteria weights.
+- **Decision:** Use those direct Zimbabwe weights in the secondary
+  `boundary_v1 / rainfall_exposure_v0_4` run as
+  `mentor_zimbabwe_direct_pim`, with equal weights retained as baseline.
+  Do not use the older generic slide matrix or the former flood/sediment-heavy
+  scenario in the current Zimbabwe output directory.
+- **Reason:** The new table is site-specific and aligns the secondary
+  Zimbabwe prototype with the same five-main-criterion framework used by
+  Peru, while keeping Peru as the active mainline.
+- **Alternatives:** keep the old slide matrix in the current Zimbabwe run
+  (rejected for current outputs because a newer site-specific table exists);
+  promote Zimbabwe back to mainline (rejected because D-PERU-FIRST still
+  applies).
+- **Consequences:**
+  - Current Zimbabwe scenario outputs contain two scenarios:
+    `equal_active_pim` and `mentor_zimbabwe_direct_pim`.
+  - The direct weights have no supplied pairwise matrix or consistency ratio,
+    so the current run must not report a CR for them.
+  - Flood subweights are implemented as rainfall 0.35, TWI 0.30, and drainage
+    proximity 0.35.
+  - Land Use / ASM subweights are implemented as land-cover pressure 0.40 and
+    mining pressure 0.60, but Zimbabwe mining evidence remains OSM-only and
+    weak.
+  - Environmental is implemented as water/wetland context 0.55 plus protected /
+    ecological context 0.45.
+  - Sediment still uses the current `K x LS x C` erosion-source structure as a
+    single executable criterion; the new K/LS/C subweights are recorded as a
+    gap until a grid-compatible independent K-factor layer is rebuilt.
+  - Socioeconomic still uses road/access proximity only; independent
+    infrastructure exposure is recorded as missing.
 
 ## D-CRITERIA-V0-2 — honest-label criteria stack repair
 
@@ -157,8 +262,8 @@ decision, reason, alternatives, consequences.
 - **What stays safe:** `a_structure_K_LS_C_30m.tif` (K×LS×C erosion-source
   structure, no rainfall-erosivity factor); K, LS, C factors (all verified);
   hydrology and terrain preprocessing; CHIRPS
-  rainfall-comparison products; ERA5 empirical R diagnostics; hotspot-survival
-  structure test (with caveats).
+  rainfall-comparison products; ERA5 empirical R diagnostics; top-20%
+  selection-survival structure test (with caveats).
 - **Consequences:** USLE A absolute values blocked until R-method decision
   (RQ1). New R-factor products may be generated as `provisional` or
   `sensitivity_scenario` if method, source, value range, uncertainty, and
@@ -185,8 +290,8 @@ decision, reason, alternatives, consequences.
   for the prototype priority map. RQ1, H-RF-FAMILIES, and the R-factor
   experiments move to `deferred` status. The R-factor record stays in
   `RESULTS.md` §R-factor as a deferred technical record, not an active blocker.
-- **Reason:** Priority hotspots are independent of the rainfall-erosivity
-  factor R (H-HOTSPOT-R-INVARIANT,
+- **Reason:** Top-20% priority areas are independent of the rainfall-erosivity
+  factor R (H-TOP20-R-INVARIANT,
   supported): R only scales absolute magnitude (ton/ha/yr), it does not change
   which area ranks first. For the PIM priority-map output, the R-method choice
   is irrelevant. The v0.2 honest-label repair already renamed this criterion

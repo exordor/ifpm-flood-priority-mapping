@@ -108,7 +108,8 @@ but not centrally indexed.
 
 | package | location | status |
 |---|---|---|
-| July 18 integrated comparison board | `outputs/zimbabwe_peru_prototype_comparison/` | mentor_review_ready |
+| Peru-first paper-style single maps | `outputs/slide_ready_figures/paper_style_single_maps/` | current Peru-first figure source; includes both sites, but Peru maps should lead |
+| July 18 integrated comparison board | `outputs/zimbabwe_peru_prototype_comparison/` | mentor_review_ready; secondary/background after D-PERU-FIRST |
 | Dominant-criterion pixel map | `outputs/mentor_boss_priority_explanation/{zimbabwe,peru}/` | mentor_review_ready |
 | Boss process figure | `outputs/mentor_boss_priority_explanation/data_analysis_process_for_boss.pdf` | mentor_review_ready |
 | R-factor send packet | `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/mentor_rfactor_exploration_board.png`, `outputs/v1_usle_soil_loss/rfactor_empirical_era5/mentor_era5_empirical_rfactor_board.png` | conditional send (Fig 1, Fig 2 only) |

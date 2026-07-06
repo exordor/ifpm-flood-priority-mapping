@@ -162,8 +162,9 @@ Keep boundary versions separate from experiment versions.
   `criteria_stack_v0_2`.
 - Do not write ambiguous phrases like `V1 v0.2` in human-facing text. Use
   `boundary_v1 / criteria_stack_v0_2`.
-- File and directory paths should prefer the same two-level structure:
-  `outputs/boundary_v1/<experiment_id>/`.
+- File and directory paths should prefer the same two-level structure when new outputs are created,
+  for example `outputs/boundary_v1/<experiment_id>/` or the current Peru-first equivalent
+  `outputs/srtm_1arcsec_peru_pilot/<experiment_id>/`.
 - If legacy filenames already contain mixed strings such as `v1_v0_2`, treat them as archival
   compatibility artifacts. New scripts and reports should use explicit `boundary_id` and
   `experiment_id` fields.
@@ -200,8 +201,10 @@ explicitly asks to pause.
 
 ## Active Prototype Scope
 
-The current practical prototype path is `boundary_v1` controlled experimentation, not a full
-hydrodynamic flood model and not a final thesis claim.
+The current practical prototype path is Peru-first controlled experimentation on PE1
+(`outputs/srtm_1arcsec_peru_pilot/`), not a full hydrodynamic flood model and not a final thesis
+claim. `boundary_v1` / Upper Mzingwane remains a secondary/background method-development case unless
+explicitly reopened.
 
 Prefer scoped experiments with:
 
@@ -315,12 +318,14 @@ R-factor / RUSLE:
 
 Peru:
 
-- Peru work may run in parallel for data inventory, terrain indicators, and diagnostic readiness
-  checks.
+- Peru work is the active mainline after the 2026-07-06 Peru-first decision. Continue PE1 prototype
+  outputs first: five PIM criteria maps, AHP-weighted prioritisation maps, top-priority classes, and
+  mining overlay.
+- PE1 remains provisional and must not be described as a final research-selected Peru study area or
+  validated rescue-decision map.
 - Final Zimbabwe-Peru comparison remains blocked until both countries share harmonized criteria,
   normalization, thresholds, and claim rules.
-- Do not block Peru terrain or data-readiness work merely because the Zimbabwe final methodology
-  is not locked.
+- Do not block Peru prioritisation work merely because the Zimbabwe final methodology is not locked.
 
 Documentation:
 

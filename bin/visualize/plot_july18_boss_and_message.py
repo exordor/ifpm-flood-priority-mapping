@@ -55,7 +55,7 @@ def plot_boss_process() -> None:
         ("2. Common grid", "clip to each catchment, align raster grid, check NoData"),
         ("3. 0-1 criteria", "standardize each evidence layer with documented direction"),
         ("4. Scenario weights", "apply candidate AHP-style weights and sensitivity runs"),
-        ("5. Priority outputs", "map priority score, stable hotspots, and dominant driver"),
+        ("5. Priority outputs", "map priority score, top-20% priority areas, and dominant driver"),
         ("6. Mentor review", "check criteria, data gaps, Peru area, and Zimbabwe ASM request"),
     ]
     x, width, height = 0.08, 0.84, 0.095
@@ -91,7 +91,7 @@ def write_boss_process_caption(path: Path) -> None:
         "Fig. X. Data-analysis process for the 18 July review briefing. "
         "The workflow starts with existing GIS and rainfall inputs, prepares each prototype "
         "catchment on its own common grid, converts the evidence layers into 0-1 criteria, "
-        "runs candidate weight scenarios, and produces priority maps, hotspot-frequency maps, "
+        "runs candidate weight scenarios, and produces priority maps, top-20% selection-frequency maps, "
         "and dominant-driver maps for mentor review.",
         "",
         "Status: prototype / sensitivity scenario. The figure explains the current workflow and "

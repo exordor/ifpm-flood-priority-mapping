@@ -3,8 +3,9 @@
 
 Produces provisional priority rasters under three weight scenarios (equal-core,
 mentor-slide-mapped default, mining/exposure stress), plus a mean/std/top-20%
-hotspot-stability board. All outputs are `provisional` or `sensitivity_scenario`
-under the execution status policy, not final flood-risk or intervention claims.
+priority-selection-stability board. All outputs are `provisional` or
+`sensitivity_scenario` under the execution status policy, not final flood-risk
+or intervention claims.
 
 Sediment/erosion criterion note: `soil_erosion_factors` is the standardized
 K x LS x C erosion-source structure criterion. It does not include a rainfall
@@ -198,7 +199,7 @@ def plot_board(priority_mean: np.ndarray, top20_frequency: np.ndarray, mentor_sc
     panels = [
         ("A. Mean priority score across scenarios", priority_mean, "YlOrRd", "0-1 priority score"),
         ("B. Candidate AHP-weighted priority score", mentor_score, "YlOrRd", "0-1 priority score"),
-        ("C. Stable hotspot frequency (top 20%)", top20_frequency, "Blues", "hotspot frequency"),
+        ("C. Top-20% priority selection frequency", top20_frequency, "Blues", "selection frequency"),
     ]
     for ax, (title, data, cmap, label) in zip(axes, panels, strict=True):
         image = ax.imshow(np.ma.masked_invalid(data), extent=extent, origin="upper", cmap=cmap, vmin=0, vmax=1)
@@ -209,7 +210,7 @@ def plot_board(priority_mean: np.ndarray, top20_frequency: np.ndarray, mentor_sc
         ax.grid(color="0.9", linewidth=0.4)
         ax.tick_params(labelsize=7)
         add_colorbar(fig, ax, image, label)
-    fig.suptitle("Upper Mzingwane Catchment: Prototype Flood-Priority Hotspot Screening", fontsize=13, fontweight="bold")
+    fig.suptitle("Upper Mzingwane Catchment: Prototype Flood-Priority Screening", fontsize=13, fontweight="bold")
     fig.savefig(OUT_DIR / "priority_scenarios_board.png", dpi=220, bbox_inches="tight")
     fig.savefig(OUT_DIR / "priority_scenarios_board.pdf", bbox_inches="tight")
     plt.close(fig)

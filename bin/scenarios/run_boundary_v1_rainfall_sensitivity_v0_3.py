@@ -2,7 +2,7 @@
 """Run rainfall-included vs rainfall-excluded sensitivity scenarios for boundary_v1.
 
 This is the IFPM-090 next-executable experiment: does adding a standalone
-CHIRPS-derived rainfall criterion shift the Top-20% hotspot pattern relative to
+CHIRPS-derived rainfall criterion shift the top-20% priority-area pattern relative to
 the v0.2 baseline (where rainfall is not represented as a standalone
 criterion)?
 
@@ -11,8 +11,8 @@ Three scenarios, all `sensitivity_scenario` under the execution status policy:
   - rainfall_included_low: 5 criteria, rainfall at 0.10, others re-scaled.
   - rainfall_included_high: 5 criteria, rainfall at 0.25, others re-scaled.
 
-The headline output is the Top-20% hotspot overlap between each rainfall-included
-scenario and the v0.2 baseline hotspot, quantifying how much the pattern moves.
+The headline output is the top-20% priority-area overlap between each rainfall-included
+scenario and the v0.2 baseline top-20% priority areas, quantifying how much the pattern moves.
 
 GOVERNANCE: the rainfall criterion is coarse-to-reference-grid CHIRPS climatology
 (effective resolution ~5 km, NOT native 30 m rainfall). Outputs are
@@ -63,8 +63,8 @@ CRITERIA_PATHS = {
     "rainfall_climatology": RAINFALL_CRITERION,
 }
 
-# v0.2 baseline Top-20% frequency (0-1: fraction of v0.2 scenarios in which the
-# cell was a hotspot). Used to measure hotspot displacement.
+# v0.2 baseline top-20% frequency (0-1: fraction of v0.2 scenarios in which the
+# cell was selected in the top 20%). Used to measure priority-area displacement.
 V02_TOP20_FREQ = V02_BASELINE / "top20_frequency.tif"
 
 CELL_AREA_KM2 = 0.0009  # 30 m x 30 m
@@ -119,7 +119,7 @@ def normalize_if_needed(name: str, data: np.ndarray) -> np.ndarray:
     return np.clip(data / max_value, 0.0, 1.0).astype("float32")
 CLAIM_NOTE = (
     "SENSITIVITY SCENARIO: provisional MCDA overlay testing whether a rainfall "
-    "criterion shifts the v0.2 hotspot pattern. Not a validated flood-risk or "
+    "criterion shifts the v0.2 top-20% priority-area pattern. Not a validated flood-risk or "
     "intervention-priority map."
 )
 
@@ -156,7 +156,7 @@ def raster_stats(data: np.ndarray) -> dict[str, object]:
 
 
 def top20_overlap(a: np.ndarray, b: np.ndarray) -> dict[str, float]:
-    """Top-20% hotspot overlap between two scored rasters.
+    """Top-20% priority-area overlap between two scored rasters.
 
     Returns Jaccard (intersection/union) and the per-scenario retention/share
     relative to baseline. Both masks are restricted to cells valid in BOTH.
@@ -171,7 +171,7 @@ def top20_overlap(a: np.ndarray, b: np.ndarray) -> dict[str, float]:
     inter = int(np.sum(mask_a & mask_b))
     union = int(np.sum(mask_a | mask_b))
     jaccard = inter / union if union else 0.0
-    # Share of baseline hotspots retained by the scenario.
+    # Share of baseline top-20% priority areas retained by the scenario.
     retention = inter / int(mask_a.sum()) if mask_a.sum() else 0.0
     return {
         "baseline_top20_threshold": round(ta, 6),
@@ -179,7 +179,7 @@ def top20_overlap(a: np.ndarray, b: np.ndarray) -> dict[str, float]:
         "intersection_cells": inter,
         "union_cells": union,
         "jaccard": round(jaccard, 6),
-        "baseline_hotspot_cells": int(mask_a.sum()),
+        "baseline_top20_priority_cells": int(mask_a.sum()),
         "retention_of_baseline": round(retention, 6),
     }
 
@@ -203,7 +203,7 @@ def plot_board(scenario_arrays: dict[str, np.ndarray], top20_frequency: np.ndarr
     panels = [
         ("A. Priority score without rainfall criterion", scenario_arrays["rainfall_excluded"]),
         ("B. Priority score with higher rainfall weight", scenario_arrays["rainfall_included_high"]),
-        ("C. Stable hotspot frequency across scenarios", top20_frequency),
+        ("C. Top-20% priority selection frequency", top20_frequency),
     ]
     for ax, (title, data) in zip(axes, panels, strict=True):
         cmap = "YlOrRd" if "frequency" not in title else "Blues"
@@ -214,7 +214,7 @@ def plot_board(scenario_arrays: dict[str, np.ndarray], top20_frequency: np.ndarr
         ax.set_ylabel("Northing (km)", fontsize=8)
         ax.grid(color="0.9", linewidth=0.4)
         ax.tick_params(labelsize=7)
-        add_colorbar(fig, ax, image, "0-1 priority score" if "frequency" not in title else "hotspot frequency")
+        add_colorbar(fig, ax, image, "0-1 priority score" if "frequency" not in title else "selection frequency")
     fig.suptitle(
         "Upper Mzingwane Catchment: Rainfall-Criterion Sensitivity Test",
         fontsize=13,
@@ -239,9 +239,9 @@ def main() -> None:
     }
     scenarios = scenario_weights()
 
-    # v0.2 baseline Top-20% frequency (the reference pattern to compare against).
+    # v0.2 baseline top-20% frequency (the reference pattern to compare against).
     v02_freq = read_band(V02_TOP20_FREQ, profile)
-    v02_hotspot = v02_freq >= 1.0  # stable across all 3 v0.2 scenarios
+    v02_top20_selected = v02_freq >= 1.0  # selected in the top 20% across all 3 v0.2 scenarios
 
     scenario_arrays: dict[str, np.ndarray] = {}
     weight_rows: list[dict[str, object]] = []
@@ -315,7 +315,7 @@ def main() -> None:
     v03_stable = top20_frequency >= 1.0
     valid_common = np.isfinite(top20_frequency) & np.isfinite(v02_freq)
     v03_s = v03_stable & valid_common
-    v02_s = v02_hotspot & valid_common
+    v02_s = v02_top20_selected & valid_common
     inter_v = int(np.sum(v03_s & v02_s))
     union_v = int(np.sum(v03_s | v02_s))
     overlap_rows.append(

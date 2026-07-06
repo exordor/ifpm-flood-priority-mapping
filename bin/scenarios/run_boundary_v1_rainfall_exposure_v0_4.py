@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
-"""Run boundary_v1 priority scenarios as a PIM 5-main-criterion overlay.
+"""Run boundary_v1 priority scenarios as a secondary Zimbabwe PIM overlay.
 
-This experiment keeps the mentor AHP main criteria as Flood, Sediment,
-Land Use / ASM, Environmental, and Socioeconomic. Five criteria are actively
-scored in the current executable prototype:
+This experiment keeps the five PIM main criteria as Flood, Sediment, Land
+Use / ASM, Environmental, and Socioeconomic. Zimbabwe is secondary/background
+after the Peru-first decision, but this run records the latest direct
+Zimbabwe weights for the Upper Mzingwane catchment:
 
-- Flood hazard: flood-conditioning factors + rainfall climatology.
-- Sediment: soil-erosion factors.
+- Flood hazard: rainfall climatology, TWI, and drainage proximity.
+- Sediment: current K x LS x C erosion-source structure. K/LS/C local
+  subweights are recorded as a data gap because K is not currently an
+  independently weighted grid-compatible 30 m layer.
 - Land Use / ASM: land-cover pressure + mining pressure.
 - Environmental: water/wetland and protected-area sensitivity indicator.
-- Socioeconomic: exposure/access indicators.
+- Socioeconomic: road/access exposure indicator; independent infrastructure
+  exposure is explicitly unavailable in the current run.
+
+Current scenarios: equal baseline and Zimbabwe direct recommended weights.
 """
 
 from __future__ import annotations
@@ -29,7 +35,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria/rainfall_climatology_0_1_PROVISIONAL_30m.tif", ROOT / "outputs/boundary_v1/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+INPUTS = [ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria/rainfall_climatology_0_1_PROVISIONAL_30m.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/v1_twi_high_wetness_0_1.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization/v1_drainage_proximity_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/boundary_v1/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
 OUTPUTS = [ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/priority_mean.tif", ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/top20_frequency.tif", ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/hotspot_stability_summary.csv"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
@@ -46,40 +52,50 @@ REF = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_d
 V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
 CRITERIA_DIR = ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria"
 RAINFALL_DIR = ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria"
+HYDROLOGY_STANDARDIZATION_DIR = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardization"
 
 COMPONENT_PATHS = {
-    "flood_conditioning_factors": CRITERIA_DIR / "flood_conditioning_factors_0_1.tif",
+    "rainfall_climatology": RAINFALL_DIR / "rainfall_climatology_0_1_PROVISIONAL_30m.tif",
+    "twi_wetness": HYDROLOGY_STANDARDIZATION_DIR / "v1_twi_high_wetness_0_1.tif",
+    "drainage_proximity": HYDROLOGY_STANDARDIZATION_DIR / "v1_drainage_proximity_0_1.tif",
     "soil_erosion_factors": CRITERIA_DIR / "soil_erosion_factors_0_1.tif",
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
     "mining_pressure": CRITERIA_DIR / "mining_pressure_0_1.tif",
     "exposure_indicators": CRITERIA_DIR / "exposure_indicators_0_1.tif",
-    "rainfall_climatology": RAINFALL_DIR / "rainfall_climatology_0_1_PROVISIONAL_30m.tif",
     "environmental_sensitivity": ROOT / "outputs/boundary_v1/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif",
 }
 
 PIM_CRITERIA_ORDER = ["flood_hazard", "sediment", "landuse_asm", "environmental", "socioeconomic"]
 ACTIVE_PIM_CRITERIA = PIM_CRITERIA_ORDER
 PIM_COMPONENTS = {
-    "flood_hazard": {"flood_conditioning_factors": 0.5, "rainfall_climatology": 0.5},
+    "flood_hazard": {"rainfall_climatology": 0.35, "twi_wetness": 0.30, "drainage_proximity": 0.35},
     "sediment": {"soil_erosion_factors": 1.0},
-    "landuse_asm": {"land_cover_pressure": 0.5, "mining_pressure": 0.5},
+    "landuse_asm": {"land_cover_pressure": 0.40, "mining_pressure": 0.60},
     "environmental": {"environmental_sensitivity": 1.0},
     "socioeconomic": {"exposure_indicators": 1.0},
 }
-SLIDE_MATRIX = np.array([
-    [1, 3, 5, 4, 6],
-    [1/3, 1, 3, 2, 4],
-    [1/5, 1/3, 1, 1/2, 2],
-    [1/4, 1/2, 2, 1, 3],
-    [1/6, 1/4, 1/2, 1/3, 1],
-], dtype="float64")
+ZIMBABWE_MENTOR_MAIN_WEIGHTS = {
+    "flood_hazard": 0.32,
+    "sediment": 0.23,
+    "landuse_asm": 0.18,
+    "environmental": 0.12,
+    "socioeconomic": 0.15,
+}
+SCENARIOS = {
+    "equal_active_pim": {name: 1 / len(ACTIVE_PIM_CRITERIA) for name in ACTIVE_PIM_CRITERIA},
+    "mentor_zimbabwe_direct_pim": ZIMBABWE_MENTOR_MAIN_WEIGHTS,
+}
 CELL_AREA_KM2 = 0.0009
 CLAIM_NOTE = (
-    "SENSITIVITY SCENARIO: boundary_v1 prototype overlay under the mentor "
-    "5-criterion AHP framework. Environmental sensitivity is provisional "
-    "water/wetland and protected-area context. Not a validated flood-risk or "
-    "intervention-priority map."
+    "SENSITIVITY SCENARIO: boundary_v1 secondary Zimbabwe prototype overlay "
+    "under the 5-criterion AHP framework. Environmental sensitivity is "
+    "provisional water/wetland and protected-area context. Not a validated "
+    "flood-risk or intervention-priority map."
 )
+
+
+def rel(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
 
 
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
@@ -136,35 +152,6 @@ def normalize_if_needed(data: np.ndarray) -> np.ndarray:
     if max_value <= 0:
         raise ValueError("non-positive criterion range")
     return np.clip(data / max_value, 0.0, 1.0).astype("float32")
-def slide_weights_available_pim() -> tuple[dict[str, float], float]:
-    vals, vecs = np.linalg.eig(SLIDE_MATRIX)
-    idx = int(np.argmax(vals.real))
-    lam = float(vals.real[idx])
-    weights = np.abs(vecs[:, idx].real)
-    weights = weights / weights.sum()
-    ci = (lam - len(PIM_CRITERIA_ORDER)) / (len(PIM_CRITERIA_ORDER) - 1)
-    cr = ci / 1.12
-    raw = dict(zip(PIM_CRITERIA_ORDER, weights.tolist(), strict=True))
-    available_total = sum(raw[name] for name in ACTIVE_PIM_CRITERIA)
-    return {
-        name: raw[name] / available_total
-        for name in ACTIVE_PIM_CRITERIA
-    }, float(cr)
-
-
-def scenario_weights() -> tuple[dict[str, dict[str, float]], float]:
-    slide_weights, slide_cr = slide_weights_available_pim()
-    return {
-        "equal_active_pim": {name: 1 / len(ACTIVE_PIM_CRITERIA) for name in ACTIVE_PIM_CRITERIA},
-        "mentor_slide_available_pim": slide_weights,
-        "flood_sediment_heavy_pim": {
-            "flood_hazard": 0.30,
-            "sediment": 0.25,
-            "landuse_asm": 0.20,
-            "environmental": 0.10,
-            "socioeconomic": 0.15,
-        },
-    }, slide_cr
 
 
 def combine_weighted_layers(
@@ -196,6 +183,11 @@ def build_pim_criteria(components: dict[str, np.ndarray], profile: dict) -> dict
     return criteria
 
 
+def clear_previous_scenario_rasters() -> None:
+    for path in SCENARIO_DIR.glob("priority_*.tif"):
+        path.unlink()
+
+
 def raster_stats(data: np.ndarray) -> dict[str, object]:
     values = data[np.isfinite(data)]
     return {
@@ -225,7 +217,7 @@ def plot_board(priority_mean: np.ndarray, top20_frequency: np.ndarray, profile: 
     fig, axes = plt.subplots(1, 2, figsize=(11.5, 5.2), constrained_layout=True)
     panels = [
         ("A. Mean priority across PIM scenarios", priority_mean, "YlOrRd", "0-1 priority"),
-        ("B. Top-20% hotspot frequency", top20_frequency, "Blues", "top-20% frequency"),
+        ("B. Top-20% priority selection frequency", top20_frequency, "Blues", "selection frequency"),
     ]
     km_formatter = FuncFormatter(lambda value, _: f"{value / 1000:.0f}")
     for ax, (title, data, cmap, label) in zip(axes, panels, strict=True):
@@ -268,6 +260,129 @@ def build_grid_check(profile: dict, criteria: dict[str, np.ndarray]) -> list[dic
     return rows
 
 
+def build_subcriteria_weight_rows() -> list[dict[str, object]]:
+    rows = [
+        {
+            "pim_criterion": "flood_hazard",
+            "component": "rainfall_climatology",
+            "suggested_local_weight": 0.35,
+            "applied_weight_in_current_run": 0.35,
+            "implementation_status": "implemented",
+            "source_layer": rel(COMPONENT_PATHS["rainfall_climatology"]),
+            "note": "CHIRPS rainy-season climatology, coarse-to-reference-grid sensitivity layer",
+        },
+        {
+            "pim_criterion": "flood_hazard",
+            "component": "twi_wetness",
+            "suggested_local_weight": 0.30,
+            "applied_weight_in_current_run": 0.30,
+            "implementation_status": "implemented",
+            "source_layer": rel(COMPONENT_PATHS["twi_wetness"]),
+            "note": "DEM-derived TWI, high wetness -> high flood-conditioning score",
+        },
+        {
+            "pim_criterion": "flood_hazard",
+            "component": "drainage_proximity",
+            "suggested_local_weight": 0.35,
+            "applied_weight_in_current_run": 0.35,
+            "implementation_status": "implemented",
+            "source_layer": rel(COMPONENT_PATHS["drainage_proximity"]),
+            "note": "distance to drainage, closer -> higher flood-conditioning score",
+        },
+        {
+            "pim_criterion": "sediment",
+            "component": "soil_erosion_factors",
+            "suggested_local_weight": "",
+            "applied_weight_in_current_run": 1.00,
+            "implementation_status": "implemented_as_current_composite",
+            "source_layer": rel(COMPONENT_PATHS["soil_erosion_factors"]),
+            "note": "current executable sediment criterion: standardized K x LS x C erosion-source structure",
+        },
+        {
+            "pim_criterion": "sediment",
+            "component": "soil_k_factor",
+            "suggested_local_weight": 0.35,
+            "applied_weight_in_current_run": 0.00,
+            "implementation_status": "not_independently_weighted_current_run",
+            "source_layer": "outputs/soilgrids_250m_sediment_candidate/k_factor_0_5cm_250m.tif",
+            "note": "current PIM uses the K x LS x C sediment structure; independent grid-compatible K weighting is deferred",
+        },
+        {
+            "pim_criterion": "sediment",
+            "component": "ls_factor",
+            "suggested_local_weight": 0.35,
+            "applied_weight_in_current_run": 0.00,
+            "implementation_status": "available_but_not_independently_weighted_current_run",
+            "source_layer": "outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor/v1_ls_factor_capped50_hillslope_30m.tif",
+            "note": "available as a diagnostic layer; current PIM sediment criterion uses K x LS x C as one structure layer",
+        },
+        {
+            "pim_criterion": "sediment",
+            "component": "c_factor",
+            "suggested_local_weight": 0.30,
+            "applied_weight_in_current_run": 0.00,
+            "implementation_status": "available_but_not_independently_weighted_current_run",
+            "source_layer": "outputs/esa_worldcover_2021_v1_methodology/c_factor/c_factor_v1_30m.tif",
+            "note": "available as a diagnostic layer; current PIM sediment criterion uses K x LS x C as one structure layer",
+        },
+        {
+            "pim_criterion": "landuse_asm",
+            "component": "land_cover_pressure",
+            "suggested_local_weight": 0.40,
+            "applied_weight_in_current_run": 0.40,
+            "implementation_status": "implemented",
+            "source_layer": rel(COMPONENT_PATHS["land_cover_pressure"]),
+            "note": "ESA WorldCover land-cover pressure",
+        },
+        {
+            "pim_criterion": "landuse_asm",
+            "component": "mining_pressure",
+            "suggested_local_weight": 0.60,
+            "applied_weight_in_current_run": 0.60,
+            "implementation_status": "implemented",
+            "source_layer": rel(COMPONENT_PATHS["mining_pressure"]),
+            "note": "OSM mining/quarry indicator; weaker than official mining evidence",
+        },
+        {
+            "pim_criterion": "environmental",
+            "component": "water_wetland_context",
+            "suggested_local_weight": 0.55,
+            "applied_weight_in_current_run": 0.55,
+            "implementation_status": "implemented_upstream_in_environmental_sensitivity",
+            "source_layer": rel(ROOT / "outputs/boundary_v1/environmental_sensitivity_v0_1/water_wetland_context_0_1.tif"),
+            "note": "combined before the PIM overlay into environmental_sensitivity",
+        },
+        {
+            "pim_criterion": "environmental",
+            "component": "protected_ecological_context",
+            "suggested_local_weight": 0.45,
+            "applied_weight_in_current_run": 0.45,
+            "implementation_status": "implemented_upstream_in_environmental_sensitivity",
+            "source_layer": rel(ROOT / "outputs/boundary_v1/environmental_sensitivity_v0_1/protected_area_context_0_1.tif"),
+            "note": "combined before the PIM overlay into environmental_sensitivity",
+        },
+        {
+            "pim_criterion": "socioeconomic",
+            "component": "road_access_proximity",
+            "suggested_local_weight": 0.40,
+            "applied_weight_in_current_run": 1.00,
+            "implementation_status": "implemented_as_only_available_component",
+            "source_layer": rel(COMPONENT_PATHS["exposure_indicators"]),
+            "note": "current socioeconomic criterion is road/access proximity only",
+        },
+        {
+            "pim_criterion": "socioeconomic",
+            "component": "infrastructure_exposure",
+            "suggested_local_weight": 0.60,
+            "applied_weight_in_current_run": 0.00,
+            "implementation_status": "not_available_current_run",
+            "source_layer": "",
+            "note": "no independent Zimbabwe infrastructure-exposure raster is present in the current workspace",
+        },
+    ]
+    return rows
+
+
 def write_handoff(summary: dict[str, object]) -> None:
     text = f"""# boundary_v1 / rainfall_exposure_v0_4
 
@@ -275,35 +390,39 @@ Date: 2026-06-30
 
 Status: `sensitivity_scenario`.
 
-This run follows the mentor's 5 AHP main-criterion framework and keeps the
-current executable overlay aligned to active PIM main criteria.
+This is the secondary Zimbabwe PIM run after the Peru-first decision. It uses
+the current five AHP main criteria and the latest direct Zimbabwe weights for
+the Upper Mzingwane catchment.
 
-## Mentor AHP main criteria
+## AHP main criteria
 
 1. Flood (FH)
-2. Sediment (SR)
-3. Land Use / ASM (LU)
+2. Sediment / Erosion (SE)
+3. Land Use / ASM Pressure (LM)
 4. Environmental (ES)
 5. Socioeconomic (SV)
 
 ## Active scored PIM criteria
 
-1. flood_hazard = flood_conditioning_factors + rainfall_climatology
-2. sediment = soil_erosion_factors
-3. landuse_asm = land_cover_pressure + mining_pressure
+1. flood_hazard = rainfall_climatology + TWI + drainage proximity
+2. sediment = soil_erosion_factors composite
+3. landuse_asm = land_cover_pressure + ASM/mining pressure
 4. environmental = water/wetland context + protected-area proximity
-5. socioeconomic = exposure_indicators
+5. socioeconomic = road/access exposure indicator
 
 ## Headline result
 
-- Stable top-20% hotspot area across all three PIM scenarios:
+- Area selected in the top 20% across both PIM scenarios:
   {summary['stable_area_km2']} km2.
 - Top-20% in at least one scenario: {summary['any_area_km2']} km2.
 
 ## Limits
 
 - Rainfall is CHIRPS coarse-to-grid context, not native 30 m rainfall.
+- Sediment local K/LS/C subweights are recorded, but current PIM still uses
+  the existing K x LS x C composite as one executable criterion.
 - Road accessibility is an exposure/access indicator, not observed vulnerability.
+- Independent infrastructure exposure is not available in the current Zimbabwe run.
 - This is not a validated flood-risk map and not an intervention-priority map.
 """
     (OUT_DIR / "handoff.md").write_text(text, encoding="utf-8")
@@ -316,13 +435,13 @@ def main() -> None:
     experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     SCENARIO_DIR.mkdir(parents=True, exist_ok=True)
+    clear_previous_scenario_rasters()
     profile = read_reference()
     components = {
         name: normalize_if_needed(read_band(path, profile))
         for name, path in COMPONENT_PATHS.items()
     }
     criteria = build_pim_criteria(components, profile)
-    scenarios, slide_cr = scenario_weights()
     boundary_mask = read_boundary_mask(profile)
     common_valid = boundary_mask.copy()
     for layer in criteria.values():
@@ -334,7 +453,7 @@ def main() -> None:
     scenario_arrays: dict[str, np.ndarray] = {}
     top20_masks: list[np.ndarray] = []
 
-    for scenario, weights in scenarios.items():
+    for scenario, weights in SCENARIOS.items():
         if round(sum(weights.values()), 10) != 1.0:
             raise ValueError(f"weights do not sum to 1 for {scenario}")
         numerator = np.zeros((profile["height"], profile["width"]), dtype="float32")
@@ -347,6 +466,11 @@ def main() -> None:
                 "scenario": scenario,
                 "criterion": criterion,
                 "weight": round(weight, 8),
+                "weight_source": (
+                    "equal baseline"
+                    if scenario == "equal_active_pim"
+                    else "Zimbabwe direct recommended weights, July 2026"
+                ),
                 "claim_level": "sensitivity_scenario",
             })
         score = np.full_like(numerator, np.nan, dtype="float32")
@@ -379,33 +503,38 @@ def main() -> None:
     write_raster(OUT_DIR / "priority_std.tif", priority_std, profile)
     write_raster(OUT_DIR / "top20_frequency.tif", top20_frequency.astype("float32"), profile)
     write_csv(OUT_DIR / "scenario_weights.csv", weight_rows)
+    write_csv(OUT_DIR / "pim_subcriteria_weights.csv", build_subcriteria_weight_rows())
     write_csv(OUT_DIR / "scenario_priority_summary.csv", summary_rows)
     write_csv(OUT_DIR / "component_grid_check.csv", build_grid_check(profile, components))
     write_csv(OUT_DIR / "pim_criteria_grid_check.csv", build_grid_check(profile, criteria))
 
     all_mask = np.all(np.stack(top20_masks), axis=0)
     any_mask = np.any(np.stack(top20_masks), axis=0)
-    hotspot_summary = {
-        "scenario_count": len(scenarios),
-        "mentor_slide_consistency_ratio": round(slide_cr, 6),
+    top20_summary = {
+        "scenario_count": len(SCENARIOS),
+        "mentor_zimbabwe_direct_weights": "flood_hazard=0.32, sediment=0.23, landuse_asm=0.18, environmental=0.12, socioeconomic=0.15",
+        "mentor_zimbabwe_weight_type": "direct recommended weights; no pairwise matrix consistency ratio supplied in the current note",
         "pim_main_criteria_count": len(PIM_CRITERIA_ORDER),
         "active_scored_pim_criteria_count": len(ACTIVE_PIM_CRITERIA),
         "component_layer_count": len(COMPONENT_PATHS),
         "common_valid_fraction": round(common_valid_fraction, 6),
         "top20_all_scenarios_cells": int(all_mask.sum()),
         "top20_any_scenario_cells": int(any_mask.sum()),
+        "top20_all_scenarios_area_km2": round(float(all_mask.sum() * CELL_AREA_KM2), 3),
+        "top20_any_scenario_area_km2": round(float(any_mask.sum() * CELL_AREA_KM2), 3),
         "stable_area_km2": round(float(all_mask.sum() * CELL_AREA_KM2), 3),
         "any_area_km2": round(float(any_mask.sum() * CELL_AREA_KM2), 3),
         "active_scored_pim_criteria": ", ".join(ACTIVE_PIM_CRITERIA),
         "component_layers": ", ".join(COMPONENT_PATHS),
         "environmental_sensitivity_status": "provisional",
+        "socioeconomic_infrastructure_exposure_status": "not_available_current_run; road/access proximity is used as the only available component",
     }
     write_csv(
         OUT_DIR / "hotspot_stability_summary.csv",
-        [{"metric": key, "value": value} for key, value in hotspot_summary.items()],
+        [{"metric": key, "value": value} for key, value in top20_summary.items()],
     )
     plot_board(priority_mean, top20_frequency, profile)
-    write_handoff(hotspot_summary)
+    write_handoff(top20_summary)
     print(f"Wrote {experiment_id} outputs to {OUT_DIR}")
 
 

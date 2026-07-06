@@ -10,14 +10,15 @@ mentor's three asks at once:
 
 Layout: four panels. Top row = dominant priority driver per pixel (colour
 codes the criterion contributing the largest share). Bottom row = top-20%
-hotspot frequency (how often each cell lands in the high-priority set across
-sensitivity scenarios). The claim level is printed on the figure face, not only
-in the caption, so the image survives being forwarded without its caption.
+priority selection frequency (how often each cell lands in the highest-priority
+quintile across sensitivity scenarios). The claim level is printed on the figure
+face, not only in the caption, so the image survives being forwarded without its
+caption.
 
 The dominant-criterion computation reuses the verified logic from
-``plot_mentor_boss_priority_explanation_package.py``. The hotspot frequency
-rasters are read from the existing priority-scenario outputs. No criteria are
-regenerated and no overlay is re-run.
+``plot_mentor_boss_priority_explanation_package.py``. The top-20% selection
+frequency rasters are read from the existing priority-scenario outputs. No
+criteria are regenerated and no overlay is re-run.
 """
 
 from __future__ import annotations
@@ -90,7 +91,7 @@ class Site:
     experiment_id: str
     criteria: tuple[Criterion, ...]
     weights_csv: Path
-    hotspot_frequency: Path
+    top20_frequency: Path
     boundary_gpkg: Path
     boundary_layer: str
     crs_label: str
@@ -105,7 +106,7 @@ SITES = [
         boundary_id="boundary_v1",
         experiment_id="rainfall_exposure_v0_4",
         weights_csv=ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/scenario_weights.csv",
-        hotspot_frequency=ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/top20_frequency.tif",
+        top20_frequency=ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/top20_frequency.tif",
         boundary_gpkg=ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg",
         boundary_layer="v1_working_boundary",
         crs_label="EPSG:32735",
@@ -125,7 +126,7 @@ SITES = [
         boundary_id="PE1",
         experiment_id="priority_scenarios",
         weights_csv=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_weights.csv",
-        hotspot_frequency=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif",
+        top20_frequency=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif",
         boundary_gpkg=ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
         boundary_layer="peru_pilot_boundary",
         crs_label="EPSG:32718",
@@ -203,12 +204,12 @@ def build_site_products(site: Site) -> dict[str, object]:
     dominant = np.full(valid.shape, np.nan, dtype="float32")
     dominant[valid] = winner[valid].astype("float32") + 1.0
 
-    hotspot, hotspot_profile = read_raster(site.hotspot_frequency)
-    # The hotspot raster should share the criteria grid; if it does not, mask
+    top20_frequency, top20_profile = read_raster(site.top20_frequency)
+    # The top-20% selection raster should share the criteria grid; if it does not, mask
     # rather than fail so the figure still renders with a recorded warning.
     grid_ok = (
-        hotspot_profile["width"] == profile["width"]
-        and hotspot_profile["height"] == profile["height"]
+        top20_profile["width"] == profile["width"]
+        and top20_profile["height"] == profile["height"]
     )
 
     # Dominant-criterion pixel share, for the takeaway line and the CSV.
@@ -229,8 +230,8 @@ def build_site_products(site: Site) -> dict[str, object]:
         "site": site,
         "profile": profile,
         "dominant": dominant,
-        "hotspot": hotspot if grid_ok else None,
-        "hotspot_grid_ok": grid_ok,
+        "top20_frequency": top20_frequency if grid_ok else None,
+        "top20_grid_ok": grid_ok,
         "share_rows": share_rows,
     }
 
@@ -319,11 +320,11 @@ def plot_board(products_by_site: list[dict[str, object]]) -> None:
         ax_top.set_xlabel("")
         ax_top.tick_params(labelbottom=False)
 
-        # Bottom row: top-20% hotspot frequency.
+        # Bottom row: top-20% priority selection frequency.
         ax_bot = fig.add_subplot(grid[2, col])
-        hotspot: np.ndarray | None = products["hotspot"]  # type: ignore[assignment]
-        if hotspot is not None:
-            im = ax_bot.imshow(np.ma.masked_invalid(hotspot), extent=map_extent(profile),
+        top20_frequency: np.ndarray | None = products["top20_frequency"]  # type: ignore[assignment]
+        if top20_frequency is not None:
+            im = ax_bot.imshow(np.ma.masked_invalid(top20_frequency), extent=map_extent(profile),
                                origin="upper", cmap="inferno", vmin=0, vmax=1, aspect="equal")
             bbox = ax_bot.get_position()
             cax = fig.add_axes([
@@ -333,13 +334,13 @@ def plot_board(products_by_site: list[dict[str, object]]) -> None:
                 bbox.height * 0.76,
             ])
             cb = fig.colorbar(im, cax=cax)
-            cb.set_label("top-20% frequency", fontsize=8)
+            cb.set_label("selection frequency", fontsize=8)
             cb.ax.tick_params(labelsize=7)
         else:
-            ax_bot.text(0.5, 0.5, "hotspot grid mismatch — not plotted",
+            ax_bot.text(0.5, 0.5, "top-20% grid mismatch — not plotted",
                         ha="center", va="center", transform=ax_bot.transAxes, fontsize=9)
         format_map_axes(ax_bot, site, profile)
-        ax_bot.set_title(f"{panel_letters[(1, col)]}. {site.short_label} — top-20% priority hotspot frequency",
+        ax_bot.set_title(f"{panel_letters[(1, col)]}. {site.short_label} — top-20% priority selection frequency",
                          loc="left", fontsize=12.5, fontweight="bold", pad=8)
 
     # Legend row: one patch per PIM main criterion.
@@ -370,7 +371,7 @@ def write_caption(path: Path, products_by_site: list[dict[str, object]]) -> None
         "Fig. X. Integrated prototype priority board for the 18 July mentor preview. "
         "Top row: each pixel is coloured by the PIM main criterion that contributes the largest share "
         "to the prototype priority score under the current sensitivity scenarios. "
-        "Bottom row: how often each cell appears in the top-20% priority hotspot set across scenarios. "
+        "Bottom row: how often each cell appears in the top-20% priority areas across scenarios. "
         "Left column: Zimbabwe Upper Mzingwane prototype catchment. "
         "Right column: southern Peru comparison catchment in Arequipa Region, mainly the "
         "Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city.",
@@ -378,7 +379,7 @@ def write_caption(path: Path, products_by_site: list[dict[str, object]]) -> None
         f"Takeaway: {takeaway}",
         "",
         "Status: prototype / sensitivity scenario. These maps explain which PIM main criteria drive "
-        "the current prototype score and where stable hotspots sit. They are not a validated "
+        "the current prototype score and where repeatedly selected top-20% priority areas sit. They are not a validated "
         "flood-risk map, not an intervention-priority map, and not a final Zimbabwe–Peru "
         "comparison. The Peru area is a provisional comparison catchment and will be replaced "
         "if the mentor names a specific Peru study site.",

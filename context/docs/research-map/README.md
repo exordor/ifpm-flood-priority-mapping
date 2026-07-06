@@ -22,7 +22,7 @@ and decisions recorded in the control files.
 | `RESEARCH_OVERVIEW.md` | what the project is researching, scope, current status | **control** (named in AGENTS.md) |
 | `REPRODUCIBILITY.md` | environment, runbook, preflight gate, claim-level ladder, grid rules | **control** (named in AGENTS.md) |
 | `EXPERIMENTS.md` | master registry of every `experiment_id` joined to IFPM-NNN task IDs | **control** (named in AGENTS.md) |
-| `RESEARCH_QUESTIONS.md` | open scientific and methodological questions, defaults-taken register, A-001..A-014 assumption register | active (derived) |
+| `RESEARCH_QUESTIONS.md` | open scientific and methodological questions, defaults-taken register, A-001..A-015 assumption register | active (derived) |
 | `HYPOTHESES.md` | testable claims with verdicts (supported / rejected / unresolved) | active (derived) |
 | `RESULTS.md` | per-experiment observation / evidence / interpretation, claim level | active (derived) |
 | `ARTIFACT_INDEX.md` | index of code, datasets, figures, prompts, configs (keep / archive / delete) | active (derived) |

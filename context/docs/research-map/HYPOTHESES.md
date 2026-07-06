@@ -89,7 +89,7 @@ Zimbabwe.
 
 **Statement:** The 2026-06-16 mentor-slide AHP matrix is internally consistent
 and structurally aligns with the deliverable pipeline, so it can serve as a
-sensitivity-scenario weight set.
+historical / generic sensitivity-scenario weight set.
 
 - **Related RQ:** RQ2
 - **Evidence:** eigenvector weights Flood 0.490 / Sediment 0.226 /
@@ -101,28 +101,72 @@ sensitivity-scenario weight set.
   not final authorised weights. Promotion to `final_claim` happens only if the
   mentor explicitly adopts the matrix after seeing results
   (IFPM-D04).
+- **Status:** background after D-PERU-MENTOR-WEIGHTS. Not the current Peru
+  mainline weight set.
+- **Claim level:** `sensitivity_scenario`
+
+## H-PERU-DIRECT-WEIGHTS
+
+**Statement:** The current Peru direct mentor weights can drive the Peru-first
+PIM prototype as the main sensitivity scenario, with equal weights retained as
+the neutral baseline.
+
+- **Related RQ:** RQ2
+- **Evidence:** `pe1_priority_scenarios` now runs `equal_active_pim` and
+  `mentor_peru_direct_pim` with main weights `FH=0.35`, `SE=0.25`, `LM=0.20`,
+  `ES=0.12`, `SV=0.08`. The area selected in the top 20% under both current
+  scenarios is **431.827 km²**; top-20% in at least one current scenario is
+  **622.660 km²**.
+- **Caveat:** no pairwise matrix was supplied for these new direct weights, so
+  no consistency ratio is reported. Sediment subweights are recorded but not
+  independently applied because the current independent K-factor layer is not
+  grid-compatible for PE1 overlay. Socioeconomic infrastructure exposure is
+  missing, so road/access proximity is the only active socioeconomic component.
+- **Verdict:** **supported** as the current Peru `sensitivity_scenario`
 - **Status:** active.
 - **Claim level:** `sensitivity_scenario`
 
-## H-HOTSPOT-R-INVARIANT
+## H-ZIMBABWE-DIRECT-WEIGHTS
 
-**Statement:** The LS×C hotspot pattern is independent of the rainfall-
+**Statement:** The current Zimbabwe direct recommended weights can drive the
+secondary Upper Mzingwane PIM prototype, with equal weights retained as the
+neutral baseline.
+
+- **Related RQ:** RQ2
+- **Evidence:** `boundary_v1 / rainfall_exposure_v0_4` now runs
+  `equal_active_pim` and `mentor_zimbabwe_direct_pim` with main weights
+  `FH=0.32`, `SE=0.23`, `LM=0.18`, `ES=0.12`, `SV=0.15`. The area selected in
+  the top 20% under both current scenarios is **622.048 km²**; top-20% in at
+  least one current scenario is **808.752 km²**.
+- **Caveat:** no pairwise matrix was supplied for these direct weights, so no
+  consistency ratio is reported. Zimbabwe mining evidence remains OSM-only;
+  sediment subweights are recorded but not independently applied because the
+  current K-factor layer is not a grid-compatible 30 m weighted layer.
+  Socioeconomic infrastructure exposure is missing, so road/access proximity
+  is the only active socioeconomic component.
+- **Verdict:** **supported** as a secondary Zimbabwe `sensitivity_scenario`
+- **Status:** active as background after D-PERU-FIRST.
+- **Claim level:** `sensitivity_scenario`
+
+## H-TOP20-R-INVARIANT
+
+**Statement:** The LS×C top-20% erosion-source pattern is independent of the rainfall-
 erosivity factor R — it is governed by LS×C, not by R spatial variation, so it
 survives any choice of R-factor.
 
 - **Related RQ:** RQ1, RQ9
-- **Evidence:** hotspot survival 84-87% under all R candidates including the
+- **Evidence:** top-20% selection survival 84-87% under all R candidates including the
   bimodal baseline; Spearman agreement 0.99 under smoother R vs 0.88 under
   bimodal R. USLE A using empirical R=507: A_zonal mean 0.621 vs A_spatial
-  mean 0.619 (<1% agreement) confirms hotspot pattern is governed by LS×C.
+  mean 0.619 (<1% agreement) confirms the top-20% pattern is governed by LS×C.
 - **Caveat:** the survival metric is structurally biased toward high values
   (LS spans ~4 orders of magnitude vs R's ~3×), so it has low discriminating
   power — read as a weak confirmatory signal, not a candidate-quality ranking.
 - **Verdict:** **supported** as a structure test only
 - **Status:** closed as a structure-test claim; must not be read as a
   statement about R correctness. **This hypothesis is the justification for
-  D-RFACTOR-QUARANTINE (2026-07-06)**: since hotspots are independent of the
-  rainfall-erosivity factor R, the PIM priority map does not require an
+  D-RFACTOR-QUARANTINE (2026-07-06)**: since the top-20% priority areas are
+  independent of the rainfall-erosivity factor R, the PIM priority map does not require an
   R-method choice, and R-factor is
   removed from the critical path.
 - **Claim level:** `sensitivity_scenario`
@@ -138,16 +182,18 @@ structurally compared with the same scenario logic.
 - **Evidence:** PE1 and V1 both use flood_hazard, sediment, landuse_asm,
   environmental, and socioeconomic as top-level PIM criteria. Flood and Land
   Use / ASM have internal component rasters, and Environmental is implemented as
-  a provisional water/wetland and protected-area sensitivity indicator. PE1 stable
-  top-20% hotspot is 385.187 km² under the current PIM rerun (Zimbabwe
-  boundary_v1 / rainfall_exposure_v0_4 stable top-20% hotspot is 512.917 km²);
+  a provisional water/wetland and protected-area sensitivity indicator. The area
+  selected in the top 20% under both current PE1 PIM scenarios is 431.827 km²
+  (Zimbabwe boundary_v1 / rainfall_exposure_v0_4: 622.048 km² under its
+  equal-baseline + direct Zimbabwe scenarios);
   PE1 mining upgraded to official INGEMMET point evidence (strictly stronger
   than V1).
 - **Verdict:** **supported** at `provisional` level
 - **Caveat:** PE1 is not research-selected; physical regimes differ (arid
   Andean Pacific slope vs semi-humid savanna). Final harmonised comparison
-  claim blocked (IFPM-D03).
-- **Status:** active.
+  claim blocked (IFPM-D03). After D-PERU-FIRST, this hypothesis supports
+  background comparison only; the active mainline is Peru-first completion.
+- **Status:** active as background; no longer the current mainline driver.
 - **Claim level:** `provisional`
 
 ## H-MINING-OSM-INDICATOR
@@ -170,8 +216,8 @@ not official ASM truth.
 observed socioeconomic vulnerability.
 
 - **Related RQ:** RQ7, RQ8
-- **Evidence:** V1 hotspot-exposure diagnostic shows weak co-location of
-  stable hotspots with exposure indicators; hotspots reflect natural-pressure
+- **Evidence:** V1 top-20% priority-area exposure diagnostic shows weak co-location of
+  repeatedly selected top-20% priority areas with exposure indicators; selected areas reflect natural-pressure
   overlap, not observed exposure.
 - **Verdict:** **supported** as an indicator
 - **Status:** active. A-006 / A-011. Needs observed flood-impact data to
@@ -199,7 +245,7 @@ native 30 m rainfall.
 Absorbs hypothesis-style content from:
 - `rfactor_investigation_consolidated.md` §1-5 (H-BIMODALITY-ARTIFACT,
   H-V2-RESOLVES-BIMODALITY, H-RF-FAMILIES, H-ERA5-LOWER-BOUND, H-US-FORMULAS-TRANSFER,
-  H-HOTSPOT-R-INVARIANT)
+  H-TOP20-R-INVARIANT)
 - `task_progress_board.md` IFPM-079/080/081/082/094/095 (R-factor + Peru symmetry)
 - `assumptions_log.md` A-005/A-006/A-010/A-011/A-012/A-013 (indicator and
   rainfall-coarse-to-grid statuses)

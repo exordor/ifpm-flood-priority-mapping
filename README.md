@@ -6,10 +6,15 @@ This workspace uses a split boundary:
 - `ifpm-flood-pipeline/` is an independent deliverable code repository with a minimal
   synthetic-tested pipeline. Real-data use remains gated.
 
-The project focuses on comparative flood risk modelling for:
+The current project mainline is Peru-first flood prioritisation modelling. The
+working Peru case is:
 
-- Upper Mzingwane Catchment, Zimbabwe
-- Arequipa-Moquegua-Tacna Region, Peru
+- Arequipa Region, Peru — mainly the Vitor-La Joya-Santa Rita de Siguas
+  catchment west of Arequipa city
+
+Upper Mzingwane Catchment, Zimbabwe remains a secondary/background comparison
+case and method-development baseline, but the active result sequence should now
+lead with Peru.
 
 ## Directory Structure
 
@@ -50,7 +55,7 @@ ifpm-flood-pipeline/
 - `context/docs/research-map/EXPERIMENTS.md` — experiment registry (replaces task_progress_board)
 - `context/docs/research-map/RESULTS.md` — results synthesis (replaces rfactor_investigation_consolidated)
 - `context/docs/research-map/REPRODUCIBILITY.md` — preflight gate + preprocessing design + claim-level ladder
-- `context/docs/research-map/RESEARCH_QUESTIONS.md` — open questions + A-001..A-014 assumption register
+- `context/docs/research-map/RESEARCH_QUESTIONS.md` — open questions + A-001..A-015 assumption register
 - `context/docs/research-map/DECISION_LOG.md` — why each major choice was made
 - `context/docs/research-map/HYPOTHESES.md` — testable claims with verdicts
 - `context/docs/research-map/ARTIFACT_INDEX.md` — code / dataset / figure / config index

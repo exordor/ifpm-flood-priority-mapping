@@ -5,31 +5,43 @@ IDs, status, claim level, and result summary. Per-experiment detail lives in
 `RESULTS.md` and in each `outputs/<experiment_id>/handoff.md`.
 
 Naming convention: `boundary_id / experiment_id`. `boundary_v1` is the Zimbabwe
-prototype boundary; `pe1` is the southern Peru comparison catchment in Arequipa
+prototype boundary; `pe1` is the Peru-first working catchment in Arequipa
 Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa
 city (treated as a parallel boundary_id for path purposes, even though it is
-not nested under `boundary_v1`).
+not nested under `boundary_v1`). After D-PERU-FIRST (2026-07-06), `pe1` is the
+active mainline; `boundary_v1` is secondary/background unless explicitly
+reopened.
 
-## Convention-compliant experiments (`outputs/boundary_v1/<experiment_id>/`)
+## Current mainline focus (2026-07-06)
+
+Peru-first work should build on `pe1_priority_scenarios` and its upstream
+criteria stack. The next output set should be Peru-only: five PIM criterion
+maps, AHP prototype prioritisation map, high-priority class map, mining overlay,
+and a data-strength table. Current weighting is the Peru direct mentor-weight
+scenario (`FH=0.35`, `SE=0.25`, `LM=0.20`, `ES=0.12`, `SV=0.08`) plus an equal
+baseline. Zimbabwe comparison outputs remain available but should not drive the
+next modelling sequence.
+
+## Secondary Zimbabwe experiments (`outputs/boundary_v1/<experiment_id>/`)
 
 | experiment_id | IFPM-NNN | status | claim_level | result_summary | handoff |
 |---|---|---|---|---|---|
 | `criteria_stack_v0_2` | IFPM-089 | in_progress | provisional | Honest-label 5-criteria stack; mining/exposure hardening planned not implemented | `outputs/boundary_v1/criteria_stack_v0_2/handoff.md` |
-| `priority_scenarios_v0_2` | IFPM-089 | complete | sensitivity_scenario | 4 weight scenarios on v0.2 criteria; stable top-20% hotspot 431.907 km² | `outputs/boundary_v1/priority_scenarios_v0_2/handoff.md` |
+| `priority_scenarios_v0_2` | IFPM-089 | complete | sensitivity_scenario | 4 weight scenarios on v0.2 criteria; 431.907 km² selected in the top 20% under all scenarios | `outputs/boundary_v1/priority_scenarios_v0_2/handoff.md` |
 | `rainfall_sensitivity_v0_3` | IFPM-090 | complete | sensitivity_scenario | Adds rainfall_climatology (CHIRPS coarse-to-grid, A-010); effective res ~5 km | `outputs/boundary_v1/rainfall_sensitivity_v0_3/` |
-| `hotspot_exposure_diagnostic_v0_3` | IFPM-090 | complete | diagnostic_only | Tests co-location of v0.2 hotspots with exposure indicators; weak co-location | `outputs/boundary_v1/hotspot_exposure_diagnostic_v0_3/` |
-| `rainfall_exposure_v0_4` | IFPM-097 | complete | sensitivity_scenario | Merged v0.3 rainfall + exposure; feeds 7/18 comparison pack | `outputs/boundary_v1/rainfall_exposure_v0_4/` |
+| `hotspot_exposure_diagnostic_v0_3` | IFPM-090 | complete | diagnostic_only | Tests co-location of v0.2 top-20% priority areas with exposure indicators; weak co-location | `outputs/boundary_v1/hotspot_exposure_diagnostic_v0_3/` |
+| `rainfall_exposure_v0_4` | IFPM-097 | complete | sensitivity_scenario | Secondary Zimbabwe PIM run with equal baseline + direct Zimbabwe weights; 622.048 km² selected in the top 20% under both scenarios | `outputs/boundary_v1/rainfall_exposure_v0_4/` |
 | `mining_decay_priority_sensitivity` | IFPM-074 track | complete | sensitivity_scenario | Decay-function sensitivity on mining proximity; structure test only | `outputs/boundary_v1/mining_decay_priority_sensitivity/` |
 
-## Convention-compliant Peru experiments (`outputs/srtm_1arcsec_peru_pilot/`)
+## Current mainline Peru experiments (`outputs/srtm_1arcsec_peru_pilot/`)
 
 | experiment_id | IFPM-NNN | status | claim_level | result_summary | handoff |
 |---|---|---|---|---|---|
 | `pe1_criteria_stack` (3-criteria) | IFPM-093 | complete | provisional | First PE1 stack: flood, erosion, land cover | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
 | `pe1_criteria_stack` (5-criteria) | IFPM-094 | complete | provisional | +mining (OSM indicator) +exposure (OSM roads) | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_criteria_stack` (component rasters, INGEMMET mining) | IFPM-095/096 | complete | provisional | component inputs for flood, sediment, land use/ASM, socioeconomic, rainfall; PIM overlay happens in `pe1_priority_scenarios` | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_environmental_sensitivity_v0_1` | IFPM-096 | complete | provisional | WorldCover water/wetland + OSM water/protected-area sensitivity indicator | `outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/` |
-| `pe1_priority_scenarios` | IFPM-093/094/095/096 | complete | sensitivity_scenario | Equal + slide-matrix + flood_sediment_heavy over five PIM criteria; stable top-20% hotspot 385.187 km² in current rerun | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/` |
+| `pe1_criteria_stack` (component rasters, INGEMMET mining) | IFPM-095/096 | complete | provisional | component inputs for flood, sediment, land use/ASM, environmental, socioeconomic, rainfall; includes TWI/drainage and LS/C diagnostic sublayers | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
+| `pe1_environmental_sensitivity_v0_1` | IFPM-096 | complete | provisional | WorldCover/OSM water-wetland context plus protected/ecological context, now combined 0.60 / 0.40 | `outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/` |
+| `pe1_priority_scenarios` | IFPM-093/094/095/096 | complete | sensitivity_scenario | Equal baseline + Peru mentor direct weights over five PIM criteria; 431.827 km² selected in the top 20% under both scenarios in current rerun | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/` |
 | `pe1_rainfall_criterion` | IFPM-096 | complete | sensitivity_scenario | CHIRPS latam Dec-Mar mean, bilinear to PE1 30 m grid (A-012) | `outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/` |
 | `pe1_ls_factor` | IFPM-093 | complete | diagnostic_only | PE1 LS hillslope mean 3.70 (vs V1 1.563) | `outputs/srtm_1arcsec_peru_pilot/ls_factor/` |
 | `pe1_usle_soil_loss` | IFPM-093 | complete | provisional | PE1 USLE A mean 8.74 t/ha/yr (LOW R=238.6); vs V1 0.50 | `outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/` |
@@ -50,7 +62,7 @@ not nested under `boundary_v1`).
 
 | experiment_id (legacy) | IFPM-NNN | status | claim_level | result_summary | handoff |
 |---|---|---|---|---|---|
-| `v1_autonomous_prototype_v0_1` | IFPM-087 | complete (frozen baseline) | provisional | 5 criteria, 4 scenarios; stable top-20% hotspot 436.907 km²; mean σ 0.04697 | `outputs/v1_autonomous_prototype_v0_1/` (process note archived) |
+| `v1_autonomous_prototype_v0_1` | IFPM-087 | complete (frozen baseline) | provisional | 5 criteria, 4 scenarios; 436.907 km² selected in the top 20% under all scenarios; mean σ 0.04697 | `outputs/v1_autonomous_prototype_v0_1/` (process note archived) |
 | `v1_working_boundary` | IFPM-049 | complete | provisional | V1 area 3689.484 km²; Mzingwane Dam + Esigodini inside; Gwanda outside | `outputs/v1_working_boundary/v1_working_boundary_manifest.csv` |
 | `v1_full_methodology_evidence_sweep` | IFPM-059 | complete (superseded) | diagnostic_only | 7-criteria evidence matrix; superseded by v0.2 honest labels | (process note archived) |
 | `v1_terrain_mentor_package` | IFPM-056 | complete | mentor_review_ready | Low-slope susceptibility primary candidate; high-slope runoff alternative | `outputs/v1_terrain_mentor_package/` |
@@ -60,8 +72,8 @@ not nested under `boundary_v1`).
 
 These experiments are preserved as a deferred technical record. R-factor is no
 longer on the critical path: the sediment criterion is served by the K×LS×C
-erosion-source structure layer, and priority hotspots are independent of the
-rainfall-erosivity factor R (H-HOTSPOT-R-INVARIANT). Reopened only if the mentor requires a quantitative
+erosion-source structure layer, and top-20% priority areas are independent of the
+rainfall-erosivity factor R (H-TOP20-R-INVARIANT). Reopened only if the mentor requires a quantitative
 USLE A (ton/ha/yr) or rejects the K×LS×C approach.
 
 Outputs at: `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/` and
@@ -90,7 +102,7 @@ Outputs at: `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/` and
 
 | package | IFPM-NNN | status | claim_level | contents |
 |---|---|---|---|---|
-| `zimbabwe_peru_prototype_comparison` | IFPM-097 | complete | sensitivity_scenario | 2×2 main board, dominant-criterion colouring, hotspot frequency, claim-level note, Teams draft |
+| `zimbabwe_peru_prototype_comparison` | IFPM-097 | complete; secondary after D-PERU-FIRST | sensitivity_scenario | 2×2 main board, dominant-criterion colouring, top-20% selection frequency, claim-level note, Teams draft |
 | `mentor_boss_priority_explanation` | (july18 work) | complete | mentor_review_ready | Per-pixel winning criterion, contribution shares, boss process figure |
 | `mentor_boundary_decision` | IFPM-040 | complete | mentor_review_ready | Mentor-facing boundary decision package |
 | `mentor_voi_rainfall_intake` | IFPM-086 | complete | diagnostic_only | Mentor Voi rainfall archive intake; daily records, no strict EI30 |

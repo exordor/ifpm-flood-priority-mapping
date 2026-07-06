@@ -92,8 +92,8 @@ status / claim level.
 
 R-factor is removed from the critical path. The sediment criterion is served by
 the K×LS×C erosion-source structure layer (`a_structure_K_LS_C_30m.tif`), which
-is independent of R and already built. Priority hotspots are independent of the
-rainfall-erosivity factor R (H-HOTSPOT-R-INVARIANT), so the PIM priority map
+is independent of R and already built. Top-20% priority areas are independent of the
+rainfall-erosivity factor R (H-TOP20-R-INVARIANT), so the PIM priority map
 does not depend on the R-method
 choice. USLE A absolute values (ton/ha/yr) are no longer required for the
 prototype.
@@ -107,10 +107,13 @@ range, uncertainty, and lineage.
 
 ### Peru rule
 
-Peru work may run in parallel for: data inventory; terrain indicators;
-rainfall/land-cover availability checks; diagnostic readiness reports. Final
-Zimbabwe-Peru comparison remains blocked until both countries share harmonized
-criteria, normalization, thresholds, and claim rules.
+After D-PERU-FIRST (2026-07-06), Peru work is the active mainline. PE1 may be
+used for Peru-first prototype outputs: five PIM criteria maps, AHP-weighted
+priority maps, top-priority classes, and mining overlay. PE1 remains
+`provisional`; final flood-risk, final rescue-priority, and final study-area
+claims remain blocked until validation and mentor approval. Final
+Zimbabwe-Peru comparison remains secondary and blocked until both countries
+share harmonized criteria, normalization, thresholds, and claim rules.
 
 ### Global scope statement
 
@@ -146,8 +149,8 @@ by this gate unless a dataset-specific preflight is incomplete):
 - producing R-factor family diagnostics and provisional/sensitivity sediment-
   risk products from fresh documented lineage while keeping known-invalid R/A
   products deprecated;
-- producing Peru data inventory and terrain/readiness diagnostics before any
-  final cross-country comparison;
+- producing Peru-first prototype maps and diagnostics from the current PE1 data
+  stack before any final cross-country comparison;
 - generating diagnostics, figures, and handoff tables.
 
 Data-production outputs must be labelled as workflow/diagnostic products and
@@ -566,9 +569,9 @@ bash bin/validate-boundary.sh
 - V1/V2 R-factor and USLE A products are deprecated; do not regenerate the old
   workflow. See `RESULTS.md` §R-factor.
 - PE1 — a Pacific-slope catchment in Arequipa Region, ~2745 km², arid, mainly
-  the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city — is a
-  provisional comparison catchment, not a final research-selected Peru study
-  area; replace if the mentor names a Peru site.
+  the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city — is the
+  active Peru-first working case, but remains provisional and not a final
+  research-selected Peru study area; replace if the mentor names a Peru site.
 - PE1 and V1 reference grids are separate (EPSG:32718 vs EPSG:32735); do not
   cross-overlay without reprojecting to a shared grid.
 - 16 hits of the deprecated `R-invariant` shorthand remain in the dead V2
