@@ -76,9 +76,9 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
 - [x] USLE factor chain (K, LS, C) verified; R-factor quarantined out of critical path
 - [x] Five-criteria + rainfall prototype priority maps on both sites
 - [x] July 18 mentor/boss comparison pack generated
-- [ ] Mentor confirmation: sediment criterion on K×LS×C (R-factor quarantined)
-- [ ] Mentor confirmation on AHP matrix authorisation
-- [ ] Mentor confirmation on Rehabilitation Potential role
+- [ ] Sediment criterion on K×LS×C shown to mentor (R-factor quarantined; default taken)
+- [ ] AHP slide-matrix sensitivity-scenario priority maps shown to mentor (default taken)
+- [ ] Rehabilitation Potential: default not built (not in PIM formula); revisit if a use appears
 - [ ] Final boundary acceptance (V1 is `accepted_with_waiver_for_controlled_prototype`)
 - [ ] Harmonised Zimbabwe-Peru comparison claim
 - [ ] Validation / final flood-risk claim
@@ -86,20 +86,34 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
 Most current outputs are `diagnostic_only`, `provisional`, `sensitivity_scenario`,
 or `engineering_pilot`. No output is `final_claim`.
 
-## Biggest current uncertainties
+## Operating mode (2026-07-06)
 
-1. **AHP weight authorisation** — the slide matrix is `sensitivity_scenario`
-   only. See IFPM-D04 in `RESEARCH_QUESTIONS.md`.
-2. **Mining/ASM evidence (Zimbabwe)** — only OSM quarry/industrial proxy;
-   official ASM data waits on the mentor's 2026-07-18 conference ask. See A-013.
+This project runs on **autonomous default decisions**, not on questions to the
+mentor. The HiWi makes the methodological call with a documented default, builds
+the artifact, labels it with the appropriate claim level, and shows the result.
+If the mentor wants something different, he says so when he sees the artifact.
+Open questions in `RESEARCH_QUESTIONS.md` are recorded as defaults-taken or
+next-experiment prompts, not as gates that block forward progress. The project
+does not maintain a queue of "questions to ask the mentor".
+
+## Current evidence gaps (these are realities to label, not problems to solve by asking)
+
+1. **AHP weights** — the slide matrix (CR 0.022) is used as a
+   `sensitivity_scenario` input; multiple weight scenarios are run and hotspot
+   stability is reported. Default: no single weight set is called final.
+2. **Mining/ASM evidence (Zimbabwe)** — only OSM quarry/industrial indicator;
+   official ASM data does not exist publicly and the mentor may be able to ask
+   Zimbabwe contacts. Default: label as indicator, keep building.
 3. **Socioeconomic exposure evidence** — only road/access proximity; no observed
-   flood-impact / damaged-infrastructure / affected-settlement data.
+   flood-impact / damaged-infrastructure / affected-settlement data. Default:
+   label as access indicator, keep building.
 4. **Peru boundary** — PE1 is an engineering pilot chosen by a selection rule,
-   not a research-selected site. See IFPM-D02.
-5. **Validation data** — effectively zero for both sites. See IFPM-D03.
-6. **Sediment criterion confirmation** — switched to K×LS×C erosion-source
-   structure (R-factor quarantined out of the critical path, see
-   `DECISION_LOG.md` D-RFACTOR-QUARANTINE); awaiting mentor confirmation.
+   not a research-selected site. Default: keep PE1, do not extend further.
+5. **Validation data** — effectively zero for both sites. Default: outputs stay
+   at priority/susceptibility level, never labelled as validated risk.
+6. **Sediment criterion** — uses K×LS×C erosion-source structure (R-factor
+   quarantined out of the critical path, see `DECISION_LOG.md`
+   D-RFACTOR-QUARANTINE).
 
 ## R-factor status (no longer a critical-path uncertainty)
 

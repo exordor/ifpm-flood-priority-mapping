@@ -98,7 +98,8 @@ sensitivity-scenario weight set.
   pipeline's already-implemented overlay.
 - **Verdict:** **supported** as a sensitivity scenario
 - **Caveat:** the slide labels it "example", so it is `sensitivity_scenario`,
-  not final authorised weights. Promotion to `final_claim` is mentor-gated
+  not final authorised weights. Promotion to `final_claim` happens only if the
+  mentor explicitly adopts the matrix after seeing results
   (IFPM-D04).
 - **Status:** active.
 - **Claim level:** `sensitivity_scenario`
