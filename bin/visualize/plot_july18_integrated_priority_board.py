@@ -346,7 +346,7 @@ def plot_board(products_by_site: list[dict[str, object]]) -> None:
         ax_bot.set_title(f"{panel_letters[(1, col)]}. {site.short_label} — top-20% priority hotspot frequency",
                          loc="left", fontsize=12.5, fontweight="bold", pad=8)
 
-    # Legend row: one Patch per criterion family.
+    # Legend row: one Patch per scored implementation layer.
     legend_ax = fig.add_subplot(grid[3, :])
     legend_ax.set_axis_off()
     handles = [Patch(facecolor=COLORS[c.family], edgecolor="0.3",
@@ -372,7 +372,7 @@ def write_caption(path: Path, products_by_site: list[dict[str, object]]) -> None
         "# Caption",
         "",
         "Fig. X. Integrated prototype priority board for the 18 July mentor preview. "
-        "Top row: each pixel is coloured by the criterion family that contributes the largest share "
+        "Top row: each pixel is coloured by the scored implementation layer that contributes the largest share "
         "to the prototype priority score under the current sensitivity scenarios. "
         "Bottom row: how often each cell appears in the top-20% priority hotspot set across scenarios. "
         "Left column: Zimbabwe Upper Mzingwane prototype catchment. "
@@ -380,7 +380,7 @@ def write_caption(path: Path, products_by_site: list[dict[str, object]]) -> None
         "",
         f"Takeaway: {takeaway}",
         "",
-        "Status: prototype / sensitivity scenario. These maps explain which criteria drive "
+        "Status: prototype / sensitivity scenario. These maps explain which implementation layers drive "
         "the current prototype score and where stable hotspots sit. They are not a validated "
         "flood-risk map, not an intervention-priority map, and not a final Zimbabwe–Peru "
         "comparison. Peru is an engineering pilot and will be replaced if the mentor names a "

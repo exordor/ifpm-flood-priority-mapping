@@ -59,8 +59,11 @@ Peru PE1:      ...   pe1_dem →  slope   →  pe1_criteria_stack   →  pe1_pri
                                                     plot_mentor_boss_priority_explanation_package
 ```
 
-The two chains reach six-criteria symmetry (flood / erosion / land-cover / mining /
-exposure / rainfall) and converge in the reporting layer.
+The two chains now follow the mentor five-main-criterion framework (Flood,
+Sediment, Land Use / ASM, Environmental, Socioeconomic). The executable overlay
+currently uses six scored implementation layers because Land Use / ASM is split
+into land-cover and mining, rainfall is a sensitivity layer, and Environmental
+is not yet an independent scored raster.
 
 ## Shared helpers (`_lib/`)
 

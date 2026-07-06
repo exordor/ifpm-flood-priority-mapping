@@ -33,7 +33,8 @@ MCDA scaffold that the mentor can later authorize for thesis-level claims.
 
 In scope (Version B):
 
-- Five AHP-scored criteria plus the rainfall sensitivity criterion already added.
+- Five AHP main criteria; rainfall is included only as a Flood-side sensitivity
+  implementation layer, not as a sixth AHP main criterion.
 - Bilateral Zimbabwe-Peru prototype comparison (established requirement from the
   dataset inventory / research review, 2026-06-02).
 - AHP-MCDA weighted overlay producing a priority intervention map.
@@ -74,7 +75,7 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
 - [x] Boundary discovery (Zimbabwe V1 + Peru PE1 engineering pilot)
 - [x] Terrain chain end-to-end on both sites (SRTM DEM, slope, hydrology, LS)
 - [x] USLE factor chain (K, LS, C) verified; R-factor quarantined out of critical path
-- [x] Five-criteria + rainfall prototype priority maps on both sites
+- [x] Five-main-criterion / implementation-layer prototype priority maps on both sites
 - [x] July 18 mentor/boss comparison pack generated
 - [ ] Sediment criterion on K×LS×C shown to mentor (R-factor quarantined; default taken)
 - [ ] AHP slide-matrix sensitivity-scenario priority maps shown to mentor (default taken)

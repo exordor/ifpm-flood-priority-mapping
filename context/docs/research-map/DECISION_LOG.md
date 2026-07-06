@@ -17,9 +17,9 @@ decision, reason, alternatives, consequences.
 - **Alternatives:** Version A (broad picture with citizen-science + stakeholder
   iteration + post-mining module). Rejected — de-scoped by Version B.
 - **Consequences:**
-  - In scope: five AHP-scored criteria + rainfall sensitivity; bilateral
-    Zimbabwe-Peru prototype comparison; AHP-MCDA weighted overlay; sensitivity
-    analysis.
+  - In scope: five AHP main criteria; rainfall only as a Flood-side sensitivity
+    implementation layer; bilateral Zimbabwe-Peru prototype comparison;
+    AHP-MCDA weighted overlay; sensitivity analysis.
   - Not required unless mentor re-requests: citizen-science module; stakeholder
     feedback iteration; post-mining opportunities as a full module.
   - Open, mentor-gated: Rehabilitation Potential role (D-REHAB).

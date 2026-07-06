@@ -336,7 +336,7 @@ def plot_process() -> None:
             ax.annotate("", xy=end_xy, xytext=start_xy,
                     arrowprops={"arrowstyle": "->", "linewidth": 1.4, "color": "0.35"})
 
-    ax.text(0.09, 0.035, "Status: prototype / sensitivity scenario. These maps explain criteria drivers; they are not final flood-risk maps.",
+    ax.text(0.09, 0.035, "Status: prototype / sensitivity scenario. These maps explain scored-layer drivers; they are not final flood-risk maps.",
             fontsize=10, color="0.25")
     fig.savefig(OUT_DIR / "data_analysis_process_for_boss.png", dpi=300, bbox_inches="tight")
     fig.savefig(OUT_DIR / "data_analysis_process_for_boss.pdf", dpi=300, bbox_inches="tight")
@@ -358,11 +358,11 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
 def write_text_outputs(manifest_rows: list[dict[str, object]], products_by_site: list[dict[str, object]]) -> None:
     captions = """# Captions: Prototype Priority Criteria Explanation Package
 
-Fig. 1. Colour-coded dominant priority-driver map. Each pixel is coloured by the criterion family that contributes the largest share to the prototype priority score under the current sensitivity scenarios. The map is meant to make the priority criteria visually clear; it is not a final flood-risk map.
+Fig. 1. Colour-coded dominant priority-driver map. Each pixel is coloured by the scored implementation layer that contributes the largest share to the prototype priority score under the current sensitivity scenarios. The map is meant to make the current implementation layers visually clear; it is not a final flood-risk map.
 
-Fig. 2. Zimbabwe criterion contribution share maps. Each panel shows where one criterion contributes more strongly to the current prototype priority score. Values are contribution shares, not independent risk probabilities.
+Fig. 2. Zimbabwe contribution share maps. Each panel shows where one scored implementation layer contributes more strongly to the current prototype priority score. Values are contribution shares, not independent risk probabilities.
 
-Fig. 3. Peru criterion contribution share maps. Each panel shows the same contribution-share logic for the Peru pilot site. Peru remains an engineering pilot unless a final Peru study site is confirmed.
+Fig. 3. Peru contribution share maps. Each panel shows the same implementation-layer contribution-share logic for the Peru pilot site. Peru remains an engineering pilot unless a final Peru study site is confirmed.
 
 Fig. 4. Data analysis process for a concise review briefing. The workflow runs from input data through grid preparation, criterion standardization, sensitivity scenarios, map outputs, and mentor review.
 """
@@ -388,13 +388,13 @@ Status: `mentor_review_ready` explanation package for prototype / sensitivity-sc
 ## What changed
 
 Mentor asked for clearer colour coding on the maps. This package adds a pixel-level dominant
-criterion map and separate contribution-share maps, so the viewer can see why an area receives a
-high priority score.
+implementation-layer map and separate contribution-share maps, so the viewer can see why an area
+receives a high priority score.
 
 ## How to read it
 
-- Dominant criterion map: one colour per criterion family.
-- Contribution maps: one panel per criterion; brighter means that criterion contributes a larger
+- Dominant layer map: one colour per scored implementation layer.
+- Contribution maps: one panel per scored layer; brighter means that layer contributes a larger
   share of the current priority score in that location.
 - Process figure: short presentation-friendly data-analysis workflow.
 
@@ -402,13 +402,13 @@ high priority score.
 
 {chr(10).join(dominant_lines)}
 
-This dominant-colour result is also a diagnostic check. If one criterion dominates too much, that
-does not mean the model is final; it points to the criterion weighting or standardization that
+This dominant-colour result is also a diagnostic check. If one implementation layer dominates too
+much, that does not mean the model is final; it points to the layer weighting or standardization that
 mentor should review first.
 
 ## Claim boundary
 
-These are prototype explanation maps. They explain the current criteria and sensitivity-scenario
+These are prototype explanation maps. They explain the current implementation layers and sensitivity-scenario
 outputs. They are not final flood-risk maps, not validated intervention-priority maps, and not final
 country-comparison claims.
 

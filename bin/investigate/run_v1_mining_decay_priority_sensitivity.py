@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Run the V1 six-criteria priority under each mining decay variant and compare.
+"""Run V1 implementation-layer priority under each mining decay variant.
 
 Isolates the effect of the mining-criterion decay function on the priority
-output. Loads the same five non-mining criteria as rainfall_exposure_v0_4,
+output. Loads the same five non-mining scored layers as rainfall_exposure_v0_4,
 swaps in each of the three mining decay rasters (tiered_linear, linear_3km,
 gaussian_1km), runs the same three weight scenarios, and records hotspot
 stability + dominant-driver share for each.
@@ -23,7 +23,7 @@ V1 = ROOT / "outputs/boundary_v1"
 OUT_DIR = ROOT / "outputs/boundary_v1/mining_decay_priority_sensitivity"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# Same five non-mining criteria as rainfall_exposure_v0_4
+# Same five non-mining scored layers as rainfall_exposure_v0_4.
 NON_MINING = {
     "flood_conditioning_factors": V1 / "criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif",
     "soil_erosion_factors": V1 / "criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif",
@@ -37,7 +37,7 @@ MINING_VARIANTS = {
     "gaussian_1km": ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_mining_gaussian_1km_0_1_utm35s_30m.tif",
 }
 SCENARIOS = {
-    "equal_6": None,  # filled per-variant as 1/6 each
+    "equal_scored_layers": None,  # filled per-variant as 1/6 each
     "rainfall_exposure_balanced": {
         "flood_conditioning_factors": 0.20, "soil_erosion_factors": 0.20,
         "land_cover_pressure": 0.15, "mining_pressure": 0.15,

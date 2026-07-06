@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""Run priority scenarios for the PE1 engineering-pilot criteria stack (6 criteria).
+"""Run priority scenarios for the PE1 engineering-pilot implementation layers.
 
-Mirrors `run_boundary_v1_priority_scenarios.py`. PE1 now has 6 criteria (flood conditioning,
-soil erosion factors, land cover, mining, exposure, rainfall), comparable to Zimbabwe 6-criteria
-prototype runs. Three scenarios: equal, mentor-slide-mapped, and flood/erosion/rainfall heavy.
+PE1 follows the mentor 5-main-criterion AHP framework: Flood, Sediment,
+Land Use / ASM, Environmental, and Socioeconomic. The executable engineering
+pilot currently has six scored implementation layers because Land Use / ASM is
+split into land-cover and mining layers, rainfall is tested as a sensitivity
+layer, and Environmental is not yet implemented as an independent scored raster.
+Three scenarios: equal, mentor-slide-mapped, and flood/erosion/rainfall heavy.
 
 Soil-erosion normalization note: the soil_erosion_factors criterion is max-normalized to [0,1] for
 MCDA scoring, so its 0-1 value is a relative hotspot intensity, not absolute t/ha/yr. Rank is
@@ -57,7 +60,8 @@ CRITERIA_PATHS = {
     "rainfall_climatology": CRITERIA_DIR / "rainfall_climatology_0_1.tif",
 }
 
-# Mentor-slide pairwise matrix (CR 0.022) mapped to PE1's six active criteria. The slide's 5 criteria
+# Mentor-slide pairwise matrix (CR 0.022) mapped to PE1's scored implementation layers.
+# The slide's 5 AHP main criteria
 # (Flood, Sediment, LandUse/ASM, Environmental, Socioeconomic) map: Flood->flood_hazard,
 # Sediment->erosion_structure, LandUse/ASM->land_cover + mining (split), Environmental->(no direct
 # PE1 equivalent; folded into flood as terrain context), Socioeconomic->exposure, and rainfall
@@ -302,9 +306,11 @@ def main() -> None:
         {"metric": "top20_any_scenario_area_km2", "value": round(float(np.nansum(top20_frequency > 0.0) * cell_km2), 3)},
         {"metric": "priority_std_mean", "value": round(float(np.nanmean(priority_std)), 6)},
         {"metric": "priority_std_p95", "value": round(float(np.nanpercentile(priority_std, 95)), 6)},
-        {"metric": "zimbabwe_boundary_v1_rainfall_exposure_v0_4_top20_all_ref_km2", "value": 570.436},
-        {"metric": "criteria_count", "value": len(CRITERIA_PATHS)},
-        {"metric": "criteria", "value": "flood, erosion_structure, land_cover, mining, exposure, rainfall"},
+        {"metric": "zimbabwe_boundary_v1_rainfall_exposure_v0_4_top20_all_ref_km2", "value": 584.635},
+        {"metric": "ahp_main_criteria_count", "value": 5},
+        {"metric": "scored_layer_count", "value": len(CRITERIA_PATHS)},
+        {"metric": "scored_layers", "value": "flood, erosion_structure, land_cover, mining, exposure, rainfall"},
+        {"metric": "unimplemented_ahp_criteria", "value": "Environmental (ES) independent scored layer"},
     ]
     write_csv(OUT_DIR / "scenario_weights.csv", weight_rows)
     write_csv(OUT_DIR / "scenario_priority_summary.csv", summary_rows)
@@ -313,7 +319,7 @@ def main() -> None:
     print(f"  common valid coverage: {common_valid_fraction:.6f}")
     print(f"  top-20% stable across all scenarios: {stability_rows[5]['value']} km2")
     print(f"  mentor slide CR: {round(slide_cr, 6)}")
-    print("  (Zimbabwe boundary_v1 / rainfall_exposure_v0_4 ref: 570.436 km2 stable top-20%; PE1 uses 6 criteria incl. rainfall)")
+    print("  (Zimbabwe boundary_v1 / rainfall_exposure_v0_4 ref: 584.635 km2 stable top-20%; PE1 uses 6 scored layers mapped to the 5-criterion framework)")
 
 
 if __name__ == "__main__":

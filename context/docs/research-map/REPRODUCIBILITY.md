@@ -183,8 +183,9 @@ not be described as native 30 m rainfall evidence.
 
 The project has completed one narrow terrain chain (six SRTMGL1 raw tiles
 downloaded, inventoried, mosaicked, reprojected, clipped to V1, converted into
-DEM/slope diagnostics), one Peru terrain chain (PE1), and the full 5/6-criteria
-prototype priority stacks on both sites.
+DEM/slope diagnostics), one Peru terrain chain (PE1), and prototype priority
+stacks on both sites that follow the mentor five-main-criterion framework while
+using six scored implementation layers for the current executable overlay.
 
 Boundary-only exceptions executed:
 - HydroBASINS boundary-discovery download (authorized + executed).

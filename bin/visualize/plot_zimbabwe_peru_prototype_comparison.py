@@ -65,7 +65,7 @@ SITES = [
         boundary_layer="v1_working_boundary",
         crs_label="EPSG:32735",
         status_note="controlled prototype boundary, not final thesis boundary",
-        active_criteria_note="current six-criteria run includes exposure indicators and rainfall",
+        active_criteria_note="mentor 5-main-criterion framework; current run uses 6 scored implementation layers",
     ),
     Site(
         label="Peru",
@@ -81,7 +81,7 @@ SITES = [
         boundary_layer="peru_pilot_boundary",
         crs_label="EPSG:32718",
         status_note="engineering-pilot site, replace if mentor names a Peru site",
-        active_criteria_note="current engineering-pilot priority run uses 6 criterion families, including exposure indicators and rainfall",
+        active_criteria_note="mentor 5-main-criterion framework; current run uses 6 scored implementation layers",
     ),
 ]
 
@@ -89,50 +89,44 @@ SITES = [
 CRITERIA_FIELDS = [
     "site",
     "boundary_id",
-    "criterion_family",
-    "criterion_name",
+    "ahp_main_criterion",
+    "scored_implementation_layers",
     "source_basis",
     "claim_level",
     "limitation",
 ]
 
 CRITERIA_SPECS = [
-    ("Zimbabwe", "boundary_v1", "flood conditioning", "flood_conditioning_factors",
-     "DEM-derived TWI and distance-to-drainage flood conditioning factors", "provisional",
-     "not hydraulic inundation depth"),
-    ("Zimbabwe", "boundary_v1", "soil erosion", "soil_erosion_factors",
+    ("Zimbabwe", "boundary_v1", "Flood (FH)", "flood_conditioning_factors; rainfall_climatology sensitivity layer",
+     "DEM-derived TWI / distance-to-drainage plus CHIRPS rainy-season climatology", "provisional / sensitivity_scenario",
+     "not hydraulic inundation depth; rainfall is coarse-to-grid context"),
+    ("Zimbabwe", "boundary_v1", "Sediment (SR)", "soil_erosion_factors",
      "K x LS x C structure on the V1 reference grid", "diagnostic_only",
      "K x LS x C structure; rainfall erosivity not applied"),
-    ("Zimbabwe", "boundary_v1", "land use/land cover", "land_cover_pressure",
-     "WorldCover / C-factor style land-cover pressure", "provisional",
-     "land-cover pressure only, not observed damage"),
-    ("Zimbabwe", "boundary_v1", "mining/ASM", "mining_pressure",
-     "USGS mineral facilities/deposits with tiered distance-decay", "provisional",
-     "reference layer only; still needs local ASM mapping"),
-    ("Zimbabwe", "boundary_v1", "exposure indicators", "exposure_indicators",
+    ("Zimbabwe", "boundary_v1", "Land Use / ASM (LU)", "land_cover_pressure; mining_pressure",
+     "WorldCover / C-factor style land-cover pressure plus USGS mineral reference proximity", "provisional",
+     "not observed damage; Zimbabwe still needs local ASM mapping"),
+    ("Zimbabwe", "boundary_v1", "Environmental (ES)", "not independently scored",
+     "No accepted independent environmental-sensitivity raster in the current run", "data_gap",
+     "must not be presented as an implemented scored layer"),
+    ("Zimbabwe", "boundary_v1", "Socioeconomic (SV)", "exposure_indicators",
      "OSM road proximity / access-exposure indicator", "diagnostic_only",
      "indicator only, not observed flood impact or vulnerability"),
-    ("Zimbabwe", "boundary_v1", "rainfall", "rainfall_climatology",
-     "CHIRPS v3 Africa rainy-season climatology, coarse-to-grid", "sensitivity_scenario",
-     "effective resolution about 5 km, not native 30 m rainfall"),
-    ("Peru", "PE1", "flood conditioning", "flood_conditioning_factors",
-     "DEM-derived TWI and distance-to-drainage flood conditioning factors", "provisional",
-     "engineering-pilot susceptibility indicator"),
-    ("Peru", "PE1", "soil erosion", "soil_erosion_factors",
+    ("Peru", "PE1", "Flood (FH)", "flood_conditioning_factors; rainfall_climatology sensitivity layer",
+     "DEM-derived TWI / distance-to-drainage plus CHIRPS rainy-season climatology", "provisional / sensitivity_scenario",
+     "engineering-pilot susceptibility indicator; rainfall is coarse-to-grid context"),
+    ("Peru", "PE1", "Sediment (SR)", "soil_erosion_factors",
      "K x LS x C structure on PE1 reference grid", "diagnostic_only",
      "K x LS x C structure; rainfall erosivity not applied"),
-    ("Peru", "PE1", "land use/land cover", "land_cover_pressure",
-     "WorldCover / C-factor style land-cover pressure", "provisional",
-     "arid land cover dominates; interpretation needs site context"),
-    ("Peru", "PE1", "mining/ASM", "mining_pressure",
-     "INGEMMET official small-mining point proximity", "provisional",
-     "point proximity, not full active footprint"),
-    ("Peru", "PE1", "exposure indicators", "exposure_indicators",
+    ("Peru", "PE1", "Land Use / ASM (LU)", "land_cover_pressure; mining_pressure",
+     "WorldCover / C-factor style pressure plus INGEMMET official small-mining point proximity", "provisional",
+     "arid land-cover interpretation needs site context; mining is point proximity, not active footprint"),
+    ("Peru", "PE1", "Environmental (ES)", "not independently scored",
+     "No accepted independent environmental-sensitivity raster in the current run", "data_gap",
+     "must not be presented as an implemented scored layer"),
+    ("Peru", "PE1", "Socioeconomic (SV)", "exposure_indicators",
      "OSM road proximity / access-exposure indicator", "provisional",
      "indicator only, not observed flood impact or vulnerability"),
-    ("Peru", "PE1", "rainfall", "rainfall_climatology",
-     "CHIRPS v3 LatAm Dec-Mar climatology, coarse-to-grid", "sensitivity_scenario",
-     "effective resolution about 5 km, not native 30 m rainfall"),
 ]
 
 
@@ -225,13 +219,16 @@ def build_summary_rows() -> list[dict[str, object]]:
         area = boundary_area_km2(site, profile["crs"])
         stable_area = float(metrics.get("top20_all_scenarios_area_km2", metrics.get("stable_area_km2", "nan")))
         any_area = float(metrics.get("top20_any_scenario_area_km2", metrics.get("any_area_km2", "nan")))
+        ahp_count = metrics.get("ahp_main_criteria_count", "5")
+        scored_count = metrics.get("scored_layer_count", "")
         rows.append({
             "site": site.label,
             "boundary_id": site.boundary_id,
             "experiment_id": site.experiment_id,
             "claim_level": site.claim_level,
             "boundary_area_km2": round(area, 3),
-            "criteria_count": metrics.get("criteria_count", "5"),
+            "ahp_main_criteria_count": ahp_count,
+            "scored_layer_count": scored_count,
             "stable_top20_area_km2": round(stable_area, 3),
             "any_top20_area_km2": round(any_area, 3),
             "stable_top20_share_of_boundary": round(stable_area / area, 4),
@@ -252,7 +249,7 @@ def plot_board() -> None:
         axes[0, 0],
         SITES[0],
         SITES[0].priority_mean,
-        "A. Zimbabwe Upper Mzingwane: mean priority",
+        "A. Zimbabwe: mean priority",
         "YlOrRd",
         "0-1 priority",
     )
@@ -261,7 +258,7 @@ def plot_board() -> None:
         axes[0, 1],
         SITES[1],
         SITES[1].priority_mean,
-        "B. Peru pilot site: mean priority",
+        "B. Peru: mean priority",
         "YlOrRd",
         "0-1 priority",
     )
@@ -270,7 +267,7 @@ def plot_board() -> None:
         axes[1, 0],
         SITES[0],
         SITES[0].top20_frequency,
-        "C. Zimbabwe Upper Mzingwane: top-20% priority hotspot frequency",
+        "C. Zimbabwe: top-20% hotspot frequency",
         "Blues",
         "top-20% frequency",
     )
@@ -279,7 +276,7 @@ def plot_board() -> None:
         axes[1, 1],
         SITES[1],
         SITES[1].top20_frequency,
-        "D. Peru pilot site: top-20% priority hotspot frequency",
+        "D. Peru: top-20% hotspot frequency",
         "Blues",
         "top-20% frequency",
     )
@@ -307,13 +304,16 @@ claim, and not a final Zimbabwe-Peru thesis comparison.
 
 ## Main reading
 
-- The Upper Mzingwane prototype has a six-criteria rainfall + exposure run with a stable top-20% hotspot area of
+- The Upper Mzingwane prototype follows the mentor 5-main-criterion framework with six scored implementation layers; stable top-20% hotspot area:
   {zimbabwe['stable_top20_area_km2']} km2.
-- The Peru engineering pilot has a six-criteria stack with a stable top-20% hotspot area of
+- The Peru engineering pilot follows the same 5-main-criterion framework with six scored implementation layers; stable top-20% hotspot area:
   {peru['stable_top20_area_km2']} km2.
-- Both displayed runs now use six active criterion families: flood conditioning factors, soil
-  erosion factors, land use/land cover, mining/ASM activity, exposure indicators, and rainfall.
-- This is a 6-vs-6 prototype workflow comparison, not a final scientific country comparison.
+- The five AHP main criteria are Flood, Sediment, Land Use / ASM, Environmental, and
+  Socioeconomic. The executable overlay currently scores six implementation layers because
+  Land Use / ASM is split into land-cover and mining, rainfall is a sensitivity layer, and
+  Environmental is not yet an independent scored raster.
+- This is a 5-framework / implementation-layer prototype comparison, not a final scientific
+  country comparison.
 - The method is now executable on both countries, but the evidence quality is not equal:
   Peru has official INGEMMET mining points, while Zimbabwe still needs stronger official mining or
   ASM data.
@@ -322,7 +322,7 @@ claim, and not a final Zimbabwe-Peru thesis comparison.
 
 - `zimbabwe_peru_prototype_comparison_board.png` / `.pdf`: four-panel map comparison.
 - `zimbabwe_peru_summary.csv`: boundary, scenario, and hotspot summary.
-- `zimbabwe_peru_criteria_source_table.csv`: criteria families, data sources, claim levels, and
+- `zimbabwe_peru_criteria_source_table.csv`: AHP main criteria, data sources, claim levels, and
   limitations.
 
 ## Mentor question
@@ -343,7 +343,8 @@ comparative pipeline, while keeping the final study sites and final claims open?
     caption = (
         "Fig. X. Prototype comparison between the Upper Mzingwane prototype catchment "
         "in Zimbabwe and the current Peru pilot catchment. "
-        "Both displayed maps use six active criteria. "
+        "Both displayed maps follow the mentor five-main-criterion AHP framework, while the "
+        "current executable overlay uses six scored implementation layers. "
         "The upper panels show mean priority across sensitivity scenarios; the lower panels show "
         "how often each cell appears in the top-20% hotspot set. The figure is for mentor review "
         "of the prototype pipeline only. It is not a validated flood-risk map or a final "
@@ -360,8 +361,10 @@ comparative pipeline, while keeping the final study sites and final claims open?
 For Zimbabwe, I used the Upper Mzingwane prototype catchment.
 For Peru, I used a temporary pilot catchment, only to test whether the same workflow runs there.
 
-The method now runs on both sides with six active criterion families:
-flood conditioning factors, soil erosion factors, land use/land cover, mining/ASM activity, exposure indicators, and rainfall.
+The method now runs on both sides using the mentor's five main AHP criteria:
+Flood, Sediment, Land Use / ASM, Environmental, and Socioeconomic.
+
+The current executable overlay still has six scored implementation layers because Land Use / ASM is split into land-cover and mining, rainfall is tested as a sensitivity layer, and Environmental is not yet an independent scored raster.
 
 The important difference is data quality: Peru has official mining points, but Zimbabwe still needs better mining / ASM data.
 

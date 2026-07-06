@@ -129,15 +129,20 @@ survives any choice of R-factor.
 
 ## H-PE1-SYMMETRIC
 
-**Statement:** PE1 is methodologically symmetric to V1 — same 5/6-criteria
-structure, same slide-matrix scenario, comparable hotspot-stability output —
-so the two prototypes can be structurally compared with identical weighting.
+**Statement:** PE1 and V1 are operationally comparable under the mentor
+five-main-criterion AHP framework. Both prototype runs use the same six scored
+implementation layers, and the layer-to-main-criterion mapping is explicit, so
+the two prototypes can be structurally compared with the same scenario logic.
 
 - **Related RQ:** RQ10
-- **Evidence:** PE1 5-criteria stack (flood, erosion, land cover, mining,
-  exposure) reaches full 6-criteria symmetry with the +rainfall criterion;
-  stable top-20% hotspot 299.57 km² (V1 v0.3 ref 431.907 km²); PE1 mining
-  upgraded to official INGEMMET point evidence (strictly stronger than V1).
+- **Evidence:** PE1 and V1 both use six scored implementation layers
+  (flood, erosion, land cover, mining, exposure, rainfall) mapped to five AHP
+  main criteria. Land Use / ASM is split into land-cover and mining layers,
+  rainfall is a Flood-side sensitivity layer, and Environmental is not yet an
+  independent scored layer. PE1 stable top-20% hotspot is 258.538 km² under the
+  current rerun (Zimbabwe boundary_v1 / rainfall_exposure_v0_4 ref 584.635 km²);
+  PE1 mining upgraded to official INGEMMET point evidence
+  (strictly stronger than V1).
 - **Verdict:** **supported** at `engineering_pilot` level
 - **Caveat:** PE1 is not research-selected; physical regimes differ (arid
   Andean Pacific slope vs semi-humid savanna). Final harmonised comparison

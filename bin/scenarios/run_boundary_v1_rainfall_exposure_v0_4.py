@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Run boundary_v1 six-criteria rainfall + exposure priority scenarios.
+"""Run boundary_v1 priority scenarios under the mentor 5-criterion framework.
 
-This experiment makes the Zimbabwe output comparable to the current Peru PE1
-six-criteria pilot: flood, sediment/erosion structure, land cover, mining,
-exposure/access, and rainfall. It reuses existing rasters only.
+This experiment keeps the mentor AHP main criteria as Flood, Sediment,
+Land Use / ASM, Environmental, and Socioeconomic. The current executable
+prototype uses six scored implementation layers because rainfall is tested as
+a sensitivity layer and Environmental is not yet implemented as an independent
+scored raster. It reuses existing rasters only.
 """
 
 from __future__ import annotations
@@ -51,9 +53,10 @@ CRITERIA_PATHS = {
 
 CELL_AREA_KM2 = 0.0009
 CLAIM_NOTE = (
-    "SENSITIVITY SCENARIO: boundary_v1 six-criteria prototype overlay. "
-    "Uses rainfall and exposure/access indicators. Not a validated flood-risk or "
-    "intervention-priority map."
+    "SENSITIVITY SCENARIO: boundary_v1 prototype overlay under the mentor "
+    "5-criterion AHP framework. Uses six scored implementation layers because "
+    "rainfall is a sensitivity layer and Environmental is not yet an independent "
+    "scored raster. Not a validated flood-risk or intervention-priority map."
 )
 
 
@@ -101,7 +104,7 @@ def normalize_if_needed(data: np.ndarray) -> np.ndarray:
     return np.clip(data / max_value, 0.0, 1.0).astype("float32")
 def scenario_weights() -> dict[str, dict[str, float]]:
     return {
-        "equal_6": {name: 1 / 6 for name in CRITERIA_PATHS},
+        "equal_scored_layers": {name: 1 / 6 for name in CRITERIA_PATHS},
         "rainfall_exposure_balanced": {
             "flood_conditioning_factors": 0.20,
             "soil_erosion_factors": 0.20,
@@ -149,7 +152,7 @@ def plot_board(priority_mean: np.ndarray, top20_frequency: np.ndarray, profile: 
 
     fig, axes = plt.subplots(1, 2, figsize=(11.5, 5.2), constrained_layout=True)
     panels = [
-        ("A. Mean priority across six-criteria scenarios", priority_mean, "YlOrRd", "0-1 priority"),
+        ("A. Mean priority across implementation-layer scenarios", priority_mean, "YlOrRd", "0-1 priority"),
         ("B. Top-20% hotspot frequency", top20_frequency, "Blues", "top-20% frequency"),
     ]
     km_formatter = FuncFormatter(lambda value, _: f"{value / 1000:.0f}")
@@ -164,7 +167,11 @@ def plot_board(priority_mean: np.ndarray, top20_frequency: np.ndarray, profile: 
         ax.tick_params(labelsize=8)
         ax.grid(color="0.9", linewidth=0.35)
         add_colorbar(fig, ax, image, label)
-    fig.suptitle("Zimbabwe Upper Mzingwane: six-criteria prototype scenario", fontsize=13, fontweight="bold")
+    fig.suptitle(
+        "Zimbabwe Upper Mzingwane: 5-criterion framework / implementation-layer prototype",
+        fontsize=13,
+        fontweight="bold",
+    )
     fig.savefig(OUT_DIR / "rainfall_exposure_v0_4_board.png", dpi=300, bbox_inches="tight")
     fig.savefig(OUT_DIR / "rainfall_exposure_v0_4_board.pdf", bbox_inches="tight")
     plt.close(fig)
@@ -196,10 +203,18 @@ Date: 2026-06-30
 
 Status: `sensitivity_scenario`.
 
-This run creates a six-criteria Zimbabwe prototype scenario so it can be compared
-more cleanly with the current Peru PE1 six-criteria pilot.
+This run follows the mentor's 5 AHP main-criterion framework and keeps the
+current executable six scored implementation layers for sensitivity testing.
 
-## Active criteria
+## Mentor AHP main criteria
+
+1. Flood (FH)
+2. Sediment (SR)
+3. Land Use / ASM (LU)
+4. Environmental (ES) - not independently scored in this run
+5. Socioeconomic (SV)
+
+## Scored implementation layers
 
 1. flood_conditioning_factors
 2. soil_erosion_factors
@@ -210,7 +225,7 @@ more cleanly with the current Peru PE1 six-criteria pilot.
 
 ## Headline result
 
-- Stable top-20% hotspot area across all three six-criteria scenarios:
+- Stable top-20% hotspot area across all three implementation-layer scenarios:
   {summary['stable_area_km2']} km2.
 - Top-20% in at least one scenario: {summary['any_area_km2']} km2.
 
@@ -225,7 +240,7 @@ more cleanly with the current Peru PE1 six-criteria pilot.
 
 def main() -> None:
     opts = parse_script_args(boundary_id=BOUNDARY_ID, experiment_id=EXPERIMENT_ID,
-                             description="Run boundary_v1 six-criteria rainfall + exposure priority scenarios.")
+                             description="Run boundary_v1 5-criterion-framework implementation-layer priority scenarios.")
     boundary_id = opts.get("boundary_id", BOUNDARY_ID)
     experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -297,12 +312,14 @@ def main() -> None:
     any_mask = np.any(np.stack(top20_masks), axis=0)
     hotspot_summary = {
         "scenario_count": len(scenarios),
-        "criteria_count": len(CRITERIA_PATHS),
+        "ahp_main_criteria_count": 5,
+        "scored_layer_count": len(CRITERIA_PATHS),
         "top20_all_scenarios_cells": int(all_mask.sum()),
         "top20_any_scenario_cells": int(any_mask.sum()),
         "stable_area_km2": round(float(all_mask.sum() * CELL_AREA_KM2), 3),
         "any_area_km2": round(float(any_mask.sum() * CELL_AREA_KM2), 3),
-        "criteria": ", ".join(CRITERIA_PATHS),
+        "scored_layers": ", ".join(CRITERIA_PATHS),
+        "unimplemented_ahp_criteria": "Environmental (ES) independent scored layer",
     }
     write_csv(
         OUT_DIR / "hotspot_stability_summary.csv",

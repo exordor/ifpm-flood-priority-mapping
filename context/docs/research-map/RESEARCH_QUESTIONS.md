@@ -151,8 +151,11 @@ independent of R), not as a candidate-quality ranking.
 
 ## RQ10: Are the Zimbabwe and Peru sites structurally comparable?
 
-PE1 is now methodologically symmetric to V1 v0.3 — same 6-criteria structure,
-same slide-matrix scenario, comparable hotspot-stability output. Physical
+PE1 is now operationally comparable to V1 v0.3 under the mentor five-main-criterion
+framework. Both runs use the same six scored implementation layers, but these
+layers map onto five AHP main criteria: Flood, Sediment, Land Use / ASM,
+Environmental, and Socioeconomic. Environmental is not yet an independent scored
+layer in either run. Physical
 contrast is real: PE1 is arid Andean Pacific slope (C=0.61, bare; soil loss
 8.74 t/ha/yr) vs V1 semi-humid savanna (C=0.04, shrub/grass; soil loss 0.50).
 Final comparison claim remains blocked until harmonized.

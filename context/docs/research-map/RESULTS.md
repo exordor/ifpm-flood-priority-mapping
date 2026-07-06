@@ -125,7 +125,8 @@ revive deprecated R/A products.
 
 ### Observation
 
-PE1 reaches full 6-criteria symmetry with V1 v0.3.
+PE1 is operationally comparable with V1 v0.3 under the mentor five-main-criterion
+framework, using the same six scored implementation layers.
 
 ### Evidence
 
@@ -135,15 +136,17 @@ PE1 reaches full 6-criteria symmetry with V1 v0.3.
 - LS hillslope mean 3.70 (vs V1 1.563).
 - K (0-1815 US, native 250m); C mean 0.6096 (bare/sparse dominant).
 - USLE A (LOW R=238.6) mean 8.74 t/ha/yr (vs V1 0.50).
-- 6 criteria: flood, erosion, land cover, mining (INGEMMET 11 official ASM
-  points), exposure (OSM 6210 roads), rainfall (CHIRPS latam Dec-Mar 37.6-292.9
-  mm/season, mean ~78).
-- Stable top-20% hotspot across 3 scenarios: **299.57 km²**.
+- Five AHP main criteria are represented as six scored implementation layers:
+  flood, erosion, land cover, mining (INGEMMET 11 official ASM points), exposure
+  (OSM 6210 roads), and rainfall (CHIRPS latam Dec-Mar 37.6-292.9 mm/season,
+  mean ~78). Environmental is not yet an independent scored layer.
+- Stable top-20% hotspot across 3 scenarios: **258.538 km²** in the current rerun.
 
 ### Interpretation
 
-PE1 is methodologically symmetric to V1 v0.3 (H-PE1-SYMMETRIC, supported at
-`engineering_pilot`). Physical regimes differ fundamentally: arid Andean
+PE1 is operationally comparable to V1 v0.3 (H-PE1-SYMMETRIC, supported at
+`engineering_pilot`) under the same 5-main-criterion / implementation-layer
+mapping. Physical regimes differ fundamentally: arid Andean
 Pacific slope (C=0.61, bare; soil loss 8.74) vs semi-humid savanna (C=0.04,
 shrub/grass; soil loss 0.50). This is a real defensible contrast, not noise.
 
