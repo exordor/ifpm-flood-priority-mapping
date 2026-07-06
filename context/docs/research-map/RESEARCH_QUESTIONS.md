@@ -1,110 +1,141 @@
 # Research Questions
 
-Status: active. Open scientific and methodological questions, plus the
-mentor-gated decisions that block final claims.
+Status: active. Open scientific and methodological questions.
 
-Each open question is tagged with the IFPM-DNN decision id (where applicable),
-related experiment_ids, related hypotheses, and current claim level.
+> **Operating mode (2026-07-06):** this project runs on autonomous default
+> decisions. The HiWi makes the call, documents it, builds the artifact, and
+> shows the result. Open questions below are tracked as defaults-taken or
+> next-experiment-prompts, not as "questions for the mentor". If the mentor
+> wants a different choice after seeing an artifact, the project adapts then.
 
 ## RQ1: What is the appropriate R-factor method for semi-arid Zimbabwe? (DEFERRED — out of critical path as of 2026-07-06)
 
-**Status: deferred.** This was previously the highest-priority open question.
-It is now quarantined out of the critical path (see `DECISION_LOG.md`
-D-RFACTOR-QUARANTINE). The sediment criterion is served by the K×LS×C
-erosion-source structure layer, which is independent of R; priority hotspots
-are independent of the rainfall-erosivity factor R (H-HOTSPOT-R-INVARIANT).
-USLE A absolute values (ton/ha/yr) are
-no longer required for the prototype priority map.
+**Status: deferred.** R-factor is quarantined out of the critical path (see
+`DECISION_LOG.md` D-RFACTOR-QUARANTINE). The sediment criterion is served by
+the K×LS×C erosion-source structure layer, which is independent of R; priority
+hotspots are independent of the rainfall-erosivity factor R
+(H-HOTSPOT-R-INVARIANT). USLE A absolute values (ton/ha/yr) are no longer
+required for the prototype priority map.
 
 The technical record stays for transparency: six literature methods run on the
 same V1 CHIRPS inputs split into two incompatible families ~6× apart. The only
 independent check (ERA5 hourly EI30 lower-bound) sits in the lower range. There
 is no independent measured EI30 R for the V1 catchment.
 
-**Reopened only if**: the mentor requires a quantitative soil-loss rate
-(ton/ha/yr), or rejects the K×LS×C sediment-criterion approach. To settle if
-reopened: a primary EI30 dataset (sub-daily gauge or GPM IMERG) in or near V1;
-or a mentor ruling on which R convention the thesis adopts; or a traceable
-original source for the low-R family to resolve its units.
+**Default taken:** use K×LS×C for the sediment criterion. Revisit R-factor only
+if a quantitative soil-loss rate (ton/ha/yr) becomes needed for the thesis —
+that would require a primary EI30 dataset (sub-daily gauge or GPM IMERG) or an
+explicit method choice.
 
 - **Decision id:** D-RFACTOR-QUARANTINE (active); was surfaced via IFPM-080/081/082
 - **Related:** `EXPERIMENTS.md` §R-factor exploration, §ERA5 empirical (deferred);
   `RESULTS.md` §R-factor (deferred-record); `HYPOTHESES.md` H-RF-FAMILIES (deferred),
   H-BIMODALITY-ARTIFACT (supported), H-HOTSPOT-R-INVARIANT (supported, justifies quarantine)
-- **Mentor question:** one-sentence confirmation that the sediment criterion
-  can use K×LS×C (draft in `context/docs/mentor-explanation/Mentor_RFactor_Quarantine_Question_2026-07-06.md`)
 - **Claim level:** `deferred` (was `sensitivity_scenario`); all V1/V2 R and
   USLE A absolute values remain deprecated and are no longer needed.
 
-## RQ2: Is the mentor-supplied AHP pairwise matrix the intended project weight set?
+## RQ2: AHP weight set — default: slide matrix as sensitivity scenario
 
 The 2026-06-16 slide matrix (CR 0.022) is internally consistent and structurally
-aligns with the deliverable pipeline, but the slide labels it "example". It is
-recorded as `sensitivity_scenario`, not final weights.
+aligns with the deliverable pipeline. The slide labels it "example".
 
-- **Decision id:** IFPM-D04
+**Default taken:** use the slide matrix as a `sensitivity_scenario` input, run
+multiple weight scenarios (equal + slide + flood/erosion-heavy), and report
+hotspot stability across them. Do not call any single weight set "final". The
+priority map shown to the mentor is the multi-scenario comparison, not a single
+weighted overlay.
+
+- **Decision id:** IFPM-D04 (default taken)
 - **Related:** `HYPOTHESES.md` H-AHP-SLIDE-TRANSFERS
 - **Claim level:** `sensitivity_scenario`
 
-## RQ3: Should Rehabilitation Potential be a sixth scored criterion, a post-score
-scenario filter, or an output?
+## RQ3: Rehabilitation Potential — default: not built until a use is needed
 
 The slide lists it as an input layer but omits it from the PIM formula and
-matrix. Three options: (A) post-score scenario comparison; (B) sixth criterion
-with simplified formula; (C) output/filter rather than AHP criterion.
+matrix.
 
-- **Decision id:** IFPM-D05
-- **Related:** none yet built; blocks any rehabilitation-priority output
-- **Claim level:** not yet applicable
+**Default taken:** do not build a Rehabilitation Potential criterion for the
+prototype. It is not in the 5-criteria PIM formula, so it is not needed for the
+priority map. If a rehabilitation-priority comparison becomes a thesis goal
+later, revisit then. Meanwhile do not block on it.
 
-## RQ4: What is the final modelling unit?
+- **Decision id:** IFPM-D05 (default taken)
+- **Related:** none built
+- **Claim level:** not applicable yet
 
-Pixel, HydroBASINS/sub-basin, ANA hydrographic unit, or mixed mask. Controls
-normalization, aggregation, and Zimbabwe-Peru comparability.
+## RQ4: Modelling unit — default: pixel-raster on the 30 m reference grid
 
-- **Decision id:** IFPM-D01
+Controls normalization, aggregation, and Zimbabwe-Peru comparability.
+
+**Default taken:** pixel-raster on the 30 m reference grid (EPSG:32735 for V1,
+EPSG:32718 for PE1), with zonal summaries (catchment / sub-basin) reported
+alongside when needed. The grid gate enforces compatibility before any overlay.
+This avoids blocking on a sub-basin-aggregation redesign.
+
+- **Decision id:** IFPM-D01 (default taken)
 - **Related:** `REPRODUCIBILITY.md` §Preprocessing design (model-unit branches)
-- **Claim level:** blocks final terrain-rainfall claim
+- **Claim level:** `provisional` for pixel-raster outputs
 
-## RQ5: What is the final Zimbabwe (Upper Mzingwane) thesis boundary?
+## RQ5: Zimbabwe (Upper Mzingwane) boundary — default: V1 with waiver
 
 V1 (`HB_L8_1081528840_full_l7_chain`) is `accepted_with_waiver_for_controlled_prototype`.
-Final thesis boundary remains open. Comparison layers: Geoportal `Upper Mzingwane`
-(~7321.5 km²), HydroBASINS L7 (~3700 km²), the source/geometry-unresolved
-~2138 km² literature reference.
+Comparison layers: Geoportal `Upper Mzingwane` (~7321.5 km²), HydroBASINS L7
+(~3700 km²), the source/geometry-unresolved ~2138 km² literature reference.
 
-- **Decision id:** IFPM-D06
+**Default taken:** keep V1 as the working boundary for all prototype work. Do
+not promote it to "final thesis boundary" in any output label. The ~2138 km²
+public-source hunt is exhausted; if the mentor supplies an authoritative
+polygon later, swap it in then. Meanwhile do not redo work on a different
+boundary.
+
+- **Decision id:** IFPM-D06 (default taken)
 - **Related:** `EXPERIMENTS.md` §boundary discovery; `DECISION_LOG.md` D-V1-WAIVER
-- **Claim level:** controlled prototype only
+- **Claim level:** `provisional` (prototype)
 
-## RQ6: What is the Peru boundary rule?
+## RQ6: Peru boundary — default: PE1 engineering pilot
 
-Administrative regions, hydrographic units, or clipped hydrological units. PE1
-is an engineering pilot, not a research-selected site. Avoids catchment-vs-
-region bias.
+PE1 is an engineering pilot chosen by a selection rule (pacific-slope, inside
+the three-department envelope, area comparable to V1, non-terminal), not a
+research-selected site.
 
-- **Decision id:** IFPM-D02
+**Default taken:** keep PE1 as the Peru-side prototype. Do not extend it
+further (no additional criteria refinement, no further sensitivity sub-runs)
+until either (a) the mentor names a specific Peru site, or (b) the bilateral
+comparison is promoted. If the mentor names a different site, rebuild there.
+See `DECISION_LOG.md` D-PE1-PILOT.
+
+- **Decision id:** IFPM-D02 (default taken)
 - **Related:** `EXPERIMENTS.md` §Peru PE1 chain; `DECISION_LOG.md` D-PE1-PILOT
 - **Claim level:** `engineering_pilot`
 
-## RQ7: What evidence hierarchy supports validation or calibration?
+## RQ7: Validation evidence — default: none available; outputs stay at priority/susceptibility level
 
 Determines whether outputs are susceptibility maps, risk maps, or intervention
 maps. Current validation data is effectively zero (EM-DAT country profile only;
 GloFAS downgraded as not publicly accessible; no in-situ flood-impact data).
 
-- **Decision id:** IFPM-D03
-- **Related:** `RESULTS.md` §exposure diagnostic
-- **Claim level:** blocks any validated-claim output
+**Default taken:** label all outputs as priority/susceptibility prototypes,
+never as validated risk maps. Do not block progress waiting for validation
+data that does not exist. If the mentor can supply flood-impact observations
+or a validation dataset, the project will add a validation layer then.
 
-## RQ8: How should mining concessions, cadastre records, and active disturbance be separated?
+- **Decision id:** IFPM-D03 (default taken)
+- **Related:** `RESULTS.md` §exposure diagnostic
+- **Claim level:** `diagnostic_only` for any validation-dependent claim
+
+## RQ8: Mining evidence — default: OSM indicator (Zimbabwe) / INGEMMET official points (Peru)
 
 Avoids treating mining rights as active mining footprints. Zimbabwe ASM is
 structurally artisanal and scattered; no official footprint exists (A-013).
 Peru has the public INGEMMET/GEOCATMIN Pequeña Minería cadastre (strictly
 stronger than Zimbabwe's OSM-only proxy).
 
-- **Decision id:** IFPM-D05 (overlaps RQ3 role)
+**Default taken:** use OSM quarry/industrial proximity as the Zimbabwe mining
+indicator (label as indicator, not truth), and INGEMMET official ASM point
+proximity as the Peru mining layer (stronger, `provisional`). If the mentor
+returns with official Zimbabwe ASM data, swap it in.
+
+- **Decision id:** IFPM-D05 (default taken; overlaps RQ3 role)
 - **Related:** `EXPERIMENTS.md` §PE1 mining upgrade; `RESULTS.md` §mining
 - **Claim level:** Zimbabwe mining = `diagnostic_only`; Peru mining = `provisional`
 

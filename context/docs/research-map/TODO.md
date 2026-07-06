@@ -1,6 +1,15 @@
 # TODO
 
-Status: active. Backlog, in-progress, awaiting-mentor, and next steps.
+Status: active. Backlog, in-progress, and next steps.
+
+> **Operating mode (2026-07-06):** this project runs on autonomous default
+> decisions, not on questions to the mentor. The HiWi makes methodological
+> choices with documented defaults, builds the artifact, labels it with the
+> appropriate claim level, and shows the result. If the mentor wants something
+> different, he will say so when he sees the artifact. Do not gate forward
+> progress on "ask the mentor first" — that is not how this project moves.
+> Items below that used to be phrased as mentor questions are now recorded as
+> the default that was taken or will be taken.
 
 ## In progress
 
@@ -12,57 +21,24 @@ Status: active. Backlog, in-progress, awaiting-mentor, and next steps.
   visual QA and send-pack selection with the user pending. Do not open new
   modelling work before this packet is reviewed.
 
-## Awaiting mentor decisions (gate-blocked)
+## Default decisions taken (was "awaiting mentor")
 
-The ten P1/P2 decision packages (IFPM-061..068) plus the compressed mentor
-briefing (IFPM-069) and the data-processor scope split (IFPM-070) are all
-`decision package complete; awaits mentor`. Full text lives in
-`context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/`.
+The former P1/P2 decision packages (IFPM-061..070, full text in
+`context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/`)
+were framed as questions for the mentor. In practice the project has been making
+the calls autonomously and showing results. The defaults now in effect:
 
-- **IFPM-061** P1 R1.1 Validation Data Decision Package — decision package and
-  public-safe preflight scaffolding complete.
-- **IFPM-062** P1 R1.2 Mining Data Decision Package — decision package and
-  mentor request template complete.
-- **IFPM-063** P1 R1.3 AHP Weighting Decision Package — partially advanced; a
-  mentor-provided candidate matrix exists but is not yet authorised.
-- **IFPM-064** P2 R2.1 Sediment Risk Decision Package — decision package and
-  SoilGrids preflight scaffolding complete.
-- **IFPM-065** P2 R2.2 Hydrology Derivatives Decision Package — hydrological-
-  conditioning assumptions A1-A5 drafted.
-- **IFPM-066** P2 R2.4 Modelling Unit Decision Package (IFPM-D01) — trade-off
-  matrix and Branch-1 recommendation complete.
-- **IFPM-067** P2 R2.3 Peru Side Decision Package — scope and data-holder
-  inventory complete.
-- **IFPM-068** P2 R2.5 Final Boundary Acceptance Decision Package — public-source
-  hunt consolidated as exhausted.
-- **IFPM-069** Mentor Decision Briefing (Compressed) — ~35 individual mentor
-  questions compressed into eight dependency-ordered key decisions in three
-  batches.
-- **IFPM-070** Data-Processor Scope Split In Governance — complete.
+| id | topic | default taken | claim level |
+|---|---|---|---|
+| IFPM-D01 | Modelling unit | pixel-raster on the 30 m reference grid, with zonal summaries when needed | provisional |
+| IFPM-D02 | Peru boundary | PE1 engineering pilot (rule-selected); replaced only if mentor names a site | engineering_pilot |
+| IFPM-D03 | Validation evidence | none available; outputs stay at susceptibility/priority level, not validated risk | diagnostic_only |
+| IFPM-D04 | AHP weights | slide matrix (CR 0.022) used as `sensitivity_scenario`; multiple weight scenarios run, hotspot stability reported | sensitivity_scenario |
+| IFPM-D05 | Mining + Rehabilitation | mining = OSM/INGEMMET indicator; Rehabilitation Potential = deferred (not built until a use is needed) | diagnostic_only |
+| IFPM-D06 | Upper Mzingwane boundary | V1 (`HB_L8_1081528840_full_l7_chain`) accepted with waiver for prototype | provisional |
 
-## Highest-priority open questions (mentor)
-
-1. **Sediment criterion confirmation** (D-RFACTOR-QUARANTINE, 2026-07-06) —
-   one-sentence question: can the sediment criterion use the K×LS×C erosion-
-   source structure layer (R-factor quarantined out of the critical path)?
-   Draft: `context/docs/mentor-explanation/Mentor_RFactor_Quarantine_Question_2026-07-06.md`.
-   If the mentor approves, R-factor stays deferred. If the mentor requires a
-   quantitative USLE A (ton/ha/yr), R-factor is reopened.
-2. **AHP matrix authorisation** (IFPM-D04) — is the slide matrix the intended
-   weight set?
-3. **Rehabilitation Potential role** (IFPM-D05) — sixth criterion, post-score
-   filter, or output?
-4. **Final boundary acceptance** (IFPM-D06) — V1 promotion from waiver to final.
-5. **Peru boundary rule** (IFPM-D02) — admin / hydrographic / clipped.
-
-### Deferred (no longer mentor-blocking, see D-RFACTOR-QUARANTINE)
-
-- **R-factor method for semi-arid Zimbabwe** (RQ1) — deferred out of the
-  critical path on 2026-07-06. Reopened only if the mentor requires a
-  quantitative USLE A or rejects the K×LS×C sediment criterion. The verified
-  R-factor send packet (Figure 1 + Figure 2) stays available in
-  `mentor-explanation/Mentor_RFactor_Figure_Send_Packet_2026-06-19.md` if the
-  mentor asks for the detail.
+If the mentor sees a result and wants a different choice, the project adapts
+then. The packages stay archived as the analysis behind each default.
 
 ## Backlog
 
