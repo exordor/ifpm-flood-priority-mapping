@@ -24,41 +24,48 @@ decision, reason, alternatives, consequences.
     feedback iteration; post-mining opportunities as a full module.
   - Open, mentor-gated: Rehabilitation Potential role (D-REHAB).
 
-## D-V1-WAIVER — V1 accepted with waiver for controlled prototype
+## D-V1-WAIVER — V1 (Upper Mzingwane catchment, ~3689 km²) accepted with waiver for prototype
 
 - **Date:** 2026-06-12 (decision), 2026-06-16 (mentor thumbs-up).
 - **Context:** Boundary discovery produced multiple candidates (HydroBASINS L7
   ~3700 km², Geoportal `Upper Mzingwane` ~7321.5 km², ~2138 km² literature
   reference). No source supplied reusable geometry for the literature reference.
-- **Decision:** V1 (`HB_L8_1081528840_full_l7_chain`) is
-  `accepted_with_waiver_for_controlled_prototype`. C1
-  (`HB_L8_1081522660_literature_near`) demoted to machine prior only.
+- **Decision:** V1 — the Upper Mzingwane catchment (~3689 km², HydroBASINS
+  level-8, semi-arid; contains Mzingwane Dam and Esigodini, excludes Gwanda) —
+  is accepted with waiver for prototype. C1 (the next-nearest HydroBASINS
+  candidate) is demoted to machine prior only.
 - **Reason:** V1 better matches the mentor's Level-8 downstream-to-Gwanda cue;
   mentor gave thumbs-up to the V1 evidence board.
 - **Alternatives:** Geoportal named sub-catchment; HydroBASINS L7 union; ~2138
   km² literature boundary (geometry-unresolved).
-- **Consequences:** V1 is the working prototype boundary. Final thesis boundary
-  remains open (IFPM-D06). Waiver does not authorize final flood-risk
+- **Consequences:** V1 — the Upper Mzingwane catchment (~3689 km², semi-arid;
+  contains Mzingwane Dam and Esigodini, excludes Gwanda) — is the prototype
+  boundary. Final thesis boundary remains open (IFPM-D06). Waiver does not
+  authorize final flood-risk
   interpretation, intervention-priority interpretation, or treating CHIRPS as
   native 30 m rainfall evidence.
 
-## D-PE1-PILOT — PE1 selected by rule as Peru engineering pilot
+## D-PE1-CATCHMENT — PE1 selected as southern Peru comparison catchment
 
 - **Date:** 2026-06-30.
-- **Context:** Peru side was entirely blank. The mentor had not named a specific
-  Peru site. A boundary was needed to run the terrain chain end-to-end and prove
-  comparability.
+- **Context:** Peru side was entirely blank. The mentor had not named a final
+  Peru study site. A boundary was needed to run the terrain chain end-to-end and
+  prove comparability.
 - **Decision:** PE1 = HydroBASINS L7 `HYBAS_ID=6070641200`, 2745.4 km²,
-  pacific-slope, ~17 km west of Arequipa city, chosen by explicit selection rule
-  (pacific-slope, fully inside the three-department envelope, area comparable to
-  V1, non-terminal).
+  Pacific-slope catchment in Arequipa Region, mainly the
+  Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It was chosen
+  by explicit selection rule (pacific-slope, fully inside the
+  Arequipa-Moquegua-Tacna discovery envelope, area comparable to V1,
+  non-terminal).
 - **Reason:** no mentor-named Peru outlet exists; selection rule makes the
   choice auditable rather than arbitrary.
 - **Alternatives:** wait for mentor to name a site (blocked progress); pick
   arbitrary largest basin (not defensible).
-- **Consequences:** PE1 is `engineering_pilot`, NOT research-selected. It will
-  be replaced if the mentor names a specific Peru site. No flood-risk/comparison
-  claim from PE1.
+- **Consequences:** PE1 — the Pacific-slope Vitor-La Joya-Santa Rita de Siguas
+  catchment in Arequipa Region (~2745 km², arid) — is a provisional comparison
+  catchment, NOT a final research-selected Peru study area. It will be replaced
+  if the mentor names a specific Peru site. No flood-risk/comparison claim from
+  PE1.
 
 ## D-CRITERIA-V0-2 — honest-label criteria stack repair
 
@@ -249,4 +256,4 @@ Absorbs content from:
 - `assumptions_log.md` (decision-style assumptions)
 - `real_data_preprocessing_design.md` (boundary acceptance rules → D-V1-WAIVER)
 - `_archive/superseded_boundary_exploration_2026-06/v1_working_boundary_decision_2026-06-12.md` (D-V1-WAIVER)
-- `_archive/superseded_process_notes_2026-06/peru_pilot_boundary_decision_2026-06-30.md` (D-PE1-PILOT)
+- `_archive/superseded_process_notes_2026-06/peru_pilot_boundary_decision_2026-06-30.md` (historical PE1 boundary-selection note)

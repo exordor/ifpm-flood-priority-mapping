@@ -8,7 +8,8 @@ IFPM is an exploratory **comparative flood-risk modelling workspace** for two
 semi-arid, mining-influenced mountain catchments:
 
 - **Upper Mzingwane Catchment, Zimbabwe** (primary)
-- **Arequipa-Moquegua-Tacna Region, Peru** (parallel engineering pilot)
+- **Arequipa Region, Peru** — mainly the Vitor-La Joya-Santa Rita de Siguas
+  catchment west of Arequipa city (provisional comparison catchment)
 
 The method is **AHP-MCDA weighted-overlay prioritization**, not hydrodynamic
 inundation modelling. Outputs are susceptibility / prioritization products.
@@ -72,7 +73,7 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
 
 - [x] Idea exploration and project framing
 - [x] Minimal AHP-overlay pipeline built and synthetic-tested
-- [x] Boundary discovery (Zimbabwe V1 + Peru PE1 engineering pilot)
+- [x] Boundary discovery (Zimbabwe V1 + Peru PE1 southern comparison catchment)
 - [x] Terrain chain end-to-end on both sites (SRTM DEM, slope, hydrology, LS)
 - [x] USLE factor chain (K, LS, C) verified; R-factor quarantined out of critical path
 - [x] Five-main-criterion / implementation-layer prototype priority maps on both sites
@@ -80,12 +81,12 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
 - [ ] Sediment criterion on K×LS×C shown to mentor (R-factor quarantined; default taken)
 - [ ] AHP slide-matrix sensitivity-scenario priority maps shown to mentor (default taken)
 - [ ] Rehabilitation Potential: default not built (not in PIM formula); revisit if a use appears
-- [ ] Final boundary acceptance (V1 is `accepted_with_waiver_for_controlled_prototype`)
+- [ ] Final boundary acceptance (V1 = Upper Mzingwane, ~3689 km², accepted with waiver for prototype)
 - [ ] Harmonised Zimbabwe-Peru comparison claim
 - [ ] Validation / final flood-risk claim
 
-Most current outputs are `diagnostic_only`, `provisional`, `sensitivity_scenario`,
-or `engineering_pilot`. No output is `final_claim`.
+Most current outputs are `diagnostic_only`, `provisional`, or
+`sensitivity_scenario`. No output is `final_claim`.
 
 ## Operating mode (2026-07-06)
 
@@ -108,8 +109,11 @@ does not maintain a queue of "questions to ask the mentor".
 3. **Socioeconomic exposure evidence** — only road/access proximity; no observed
    flood-impact / damaged-infrastructure / affected-settlement data. Default:
    label as access indicator, keep building.
-4. **Peru boundary** — PE1 is an engineering pilot chosen by a selection rule,
-   not a research-selected site. Default: keep PE1, do not extend further.
+4. **Peru boundary** — PE1 is HydroBASINS L7 `6070641200`, a provisional
+   southern Peru comparison catchment in Arequipa Region, mainly the
+   Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It is chosen
+   by a selection rule, not a final research-selected site. Default: keep PE1,
+   do not extend further.
 5. **Validation data** — effectively zero for both sites. Default: outputs stay
    at priority/susceptibility level, never labelled as validated risk.
 6. **Sediment criterion** — uses K×LS×C erosion-source structure (R-factor

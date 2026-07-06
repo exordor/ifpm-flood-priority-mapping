@@ -31,11 +31,11 @@ the calls autonomously and showing results. The defaults now in effect:
 | id | topic | default taken | claim level |
 |---|---|---|---|
 | IFPM-D01 | Modelling unit | pixel-raster on the 30 m reference grid, with zonal summaries when needed | provisional |
-| IFPM-D02 | Peru boundary | PE1 engineering pilot (rule-selected); replaced only if mentor names a site | engineering_pilot |
+| IFPM-D02 | Peru boundary | PE1 southern Peru comparison catchment in Arequipa Region; replaced only if mentor names a site | provisional |
 | IFPM-D03 | Validation evidence | none available; outputs stay at susceptibility/priority level, not validated risk | diagnostic_only |
 | IFPM-D04 | AHP weights | slide matrix (CR 0.022) used as `sensitivity_scenario`; multiple weight scenarios run, hotspot stability reported | sensitivity_scenario |
 | IFPM-D05 | Mining + Rehabilitation | mining = OSM/INGEMMET indicator; Rehabilitation Potential = deferred (not built until a use is needed) | diagnostic_only |
-| IFPM-D06 | Upper Mzingwane boundary | V1 (`HB_L8_1081528840_full_l7_chain`) accepted with waiver for prototype | provisional |
+| IFPM-D06 | Upper Mzingwane boundary | V1 — Upper Mzingwane catchment (~3689 km²); accepted with waiver for prototype | provisional |
 
 If the mentor sees a result and wants a different choice, the project adapts
 then. The packages stay archived as the analysis behind each default.

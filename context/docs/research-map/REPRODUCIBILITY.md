@@ -220,10 +220,10 @@ Required before SRTM download, CHIRPS download, overlay, or aggregation:
 - state the mismatch policy if candidate boundary sources disagree;
 - mark the boundary as accepted, rejected, or accepted with waiver.
 
-Current state: closed with waiver for controlled prototype SRTM terrain
-diagnostics only. Working boundary: V1 / `HB_L8_1081528840_full_l7_chain`,
-`accepted_with_waiver_for_controlled_prototype`. Final boundary acceptance
-remains open.
+Current state: closed with waiver for prototype SRTM terrain diagnostics only.
+Working boundary: V1 — the Upper Mzingwane catchment (~3689 km², semi-arid;
+contains Mzingwane Dam and Esigodini, excludes Gwanda), accepted with waiver
+for prototype. Final boundary acceptance remains open.
 
 ### IFPM-D01: Modelling Unit (was Gate G2)
 
@@ -395,7 +395,7 @@ true:
 
 ### Grid And Resolution Rules
 
-For the active V1 controlled prototype terrain run, the detailed reference-grid
+For the active V1 terrain run (Upper Mzingwane, ~3689 km²), the detailed reference-grid
 rule is saved in
 `context/docs/data-management/v1_terrain_reference_grid_rule.md`. That file is
 authoritative for V1 terrain derivative compatibility. The Peru analogue is
@@ -565,8 +565,10 @@ bash bin/validate-boundary.sh
 
 - V1/V2 R-factor and USLE A products are deprecated; do not regenerate the old
   workflow. See `RESULTS.md` §R-factor.
-- PE1 is `engineering_pilot`, not research-selected; replace if the mentor names
-  a Peru site.
+- PE1 — a Pacific-slope catchment in Arequipa Region, ~2745 km², arid, mainly
+  the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city — is a
+  provisional comparison catchment, not a final research-selected Peru study
+  area; replace if the mentor names a Peru site.
 - PE1 and V1 reference grids are separate (EPSG:32718 vs EPSG:32735); do not
   cross-overlay without reprojecting to a shared grid.
 - 16 hits of the deprecated `R-invariant` shorthand remain in the dead V2

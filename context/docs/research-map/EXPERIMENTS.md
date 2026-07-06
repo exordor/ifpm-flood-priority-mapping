@@ -5,8 +5,10 @@ IDs, status, claim level, and result summary. Per-experiment detail lives in
 `RESULTS.md` and in each `outputs/<experiment_id>/handoff.md`.
 
 Naming convention: `boundary_id / experiment_id`. `boundary_v1` is the Zimbabwe
-prototype boundary; `pe1` is the Peru engineering pilot (treated as a parallel
-boundary_id for path purposes, even though it is not nested under `boundary_v1`).
+prototype boundary; `pe1` is the southern Peru comparison catchment in Arequipa
+Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa
+city (treated as a parallel boundary_id for path purposes, even though it is
+not nested under `boundary_v1`).
 
 ## Convention-compliant experiments (`outputs/boundary_v1/<experiment_id>/`)
 
@@ -23,10 +25,10 @@ boundary_id for path purposes, even though it is not nested under `boundary_v1`)
 
 | experiment_id | IFPM-NNN | status | claim_level | result_summary | handoff |
 |---|---|---|---|---|---|
-| `pe1_criteria_stack` (3-criteria) | IFPM-093 | complete | engineering_pilot | First PE1 stack: flood, erosion, land cover | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_criteria_stack` (5-criteria) | IFPM-094 | complete | engineering_pilot | +mining (OSM proxy) +exposure (OSM roads) | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_criteria_stack` (5-framework / 6 scored layers, INGEMMET mining) | IFPM-095/096 | complete | engineering_pilot | +rainfall (CHIRPS latam Dec-Mar) +official INGEMMET ASM points; same implementation-layer mapping as V1 | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_priority_scenarios` | IFPM-093/094/095/096 | complete | engineering_pilot | Equal + slide-matrix + flood_erosion_heavy; stable top-20% hotspot 258.538 km² in current rerun | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/` |
+| `pe1_criteria_stack` (3-criteria) | IFPM-093 | complete | provisional | First PE1 stack: flood, erosion, land cover | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
+| `pe1_criteria_stack` (5-criteria) | IFPM-094 | complete | provisional | +mining (OSM proxy) +exposure (OSM roads) | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
+| `pe1_criteria_stack` (5-framework / 6 scored layers, INGEMMET mining) | IFPM-095/096 | complete | provisional | +rainfall (CHIRPS latam Dec-Mar) +official INGEMMET ASM points; same implementation-layer mapping as V1 | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
+| `pe1_priority_scenarios` | IFPM-093/094/095/096 | complete | sensitivity_scenario | Equal + slide-matrix + flood_erosion_heavy; stable top-20% hotspot 258.538 km² in current rerun | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/` |
 | `pe1_rainfall_criterion` | IFPM-096 | complete | sensitivity_scenario | CHIRPS latam Dec-Mar mean, bilinear to PE1 30 m grid (A-012) | `outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/` |
 | `pe1_ls_factor` | IFPM-093 | complete | diagnostic_only | PE1 LS hillslope mean 3.70 (vs V1 1.563) | `outputs/srtm_1arcsec_peru_pilot/ls_factor/` |
 | `pe1_usle_soil_loss` | IFPM-093 | complete | provisional | PE1 USLE A mean 8.74 t/ha/yr (LOW R=238.6); vs V1 0.50 | `outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/` |
@@ -80,7 +82,7 @@ Outputs at: `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/` and
 | `zimbabwe_geoportal_subcatchments_comparison` | IFPM-041 | complete | Geoportal `Upper Mzingwane` ~7321.5 km²; HydroBASINS L7 inside covers 49.8% |
 | `upper_mzingwane_fact_check` | IFPM-042/043 | complete | ~2138 km² reference has external support but no reusable geometry |
 | `candidate_outlet_exploration` | IFPM-045/046 | complete (superseded) | C1 first-pass prior; demoted after mentor cue |
-| `professional_outlet_review` | IFPM-048 | complete | V1 `accepted_with_waiver_for_controlled_prototype`; C1 demoted |
+| `professional_outlet_review` | IFPM-048 | complete | V1 = Upper Mzingwane (~3689 km²) accepted with waiver; C1 demoted to machine prior |
 | `peru_boundary_discovery` | IFPM-091 | complete | HydroBASINS SA candidates 2.8-14,300 km²; PE1 selected by rule |
 
 ## Reporting / comparison packages (not modelling experiments)

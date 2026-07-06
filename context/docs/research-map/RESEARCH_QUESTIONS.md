@@ -78,11 +78,12 @@ This avoids blocking on a sub-basin-aggregation redesign.
 
 ## RQ5: Zimbabwe (Upper Mzingwane) boundary — default: V1 with waiver
 
-V1 (`HB_L8_1081528840_full_l7_chain`) is `accepted_with_waiver_for_controlled_prototype`.
+V1 — the Upper Mzingwane catchment (~3689 km², semi-arid; contains Mzingwane
+Dam and Esigodini, excludes Gwanda) — is accepted with waiver for prototype.
 Comparison layers: Geoportal `Upper Mzingwane` (~7321.5 km²), HydroBASINS L7
 (~3700 km²), the source/geometry-unresolved ~2138 km² literature reference.
 
-**Default taken:** keep V1 as the working boundary for all prototype work. Do
+**Default taken:** keep V1 as the prototype boundary for all current work. Do
 not promote it to "final thesis boundary" in any output label. The ~2138 km²
 public-source hunt is exhausted; if the mentor supplies an authoritative
 polygon later, swap it in then. Meanwhile do not redo work on a different
@@ -92,21 +93,23 @@ boundary.
 - **Related:** `EXPERIMENTS.md` §boundary discovery; `DECISION_LOG.md` D-V1-WAIVER
 - **Claim level:** `provisional` (prototype)
 
-## RQ6: Peru boundary — default: PE1 engineering pilot
+## RQ6: Peru boundary — default: PE1 southern Peru comparison catchment
 
-PE1 is an engineering pilot chosen by a selection rule (pacific-slope, inside
-the three-department envelope, area comparable to V1, non-terminal), not a
-research-selected site.
+PE1 is HydroBASINS L7 `6070641200`, a provisional comparison catchment in
+Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of
+Arequipa city. It was chosen by a selection rule (pacific-slope, inside the
+Arequipa-Moquegua-Tacna discovery envelope, area comparable to V1,
+non-terminal), not as a final research-selected site.
 
 **Default taken:** keep PE1 as the Peru-side prototype. Do not extend it
 further (no additional criteria refinement, no further sensitivity sub-runs)
 until either (a) the mentor names a specific Peru site, or (b) the bilateral
 comparison is promoted. If the mentor names a different site, rebuild there.
-See `DECISION_LOG.md` D-PE1-PILOT.
+See `DECISION_LOG.md` D-PE1-CATCHMENT.
 
 - **Decision id:** IFPM-D02 (default taken)
-- **Related:** `EXPERIMENTS.md` §Peru PE1 chain; `DECISION_LOG.md` D-PE1-PILOT
-- **Claim level:** `engineering_pilot`
+- **Related:** `EXPERIMENTS.md` §Peru PE1 chain; `DECISION_LOG.md` D-PE1-CATCHMENT
+- **Claim level:** `provisional`
 
 ## RQ7: Validation evidence — default: none available; outputs stay at priority/susceptibility level
 
@@ -162,7 +165,7 @@ Final comparison claim remains blocked until harmonized.
 
 - **Decision id:** part of IFPM-D03 / Peru gate
 - **Related:** `EXPERIMENTS.md` §Zimbabwe-Peru comparison; `RESULTS.md` §comparison
-- **Claim level:** `engineering_pilot` / `sensitivity_scenario`; final claim blocked
+- **Claim level:** `provisional` / `sensitivity_scenario`; final claim blocked
 
 ## Other recurring open modelling questions
 
@@ -182,7 +185,7 @@ decision id:
 
 | id | assumption | status | applies to |
 |---|---|---|---|
-| A-001 | V1 remains the controlled prototype boundary, not the final thesis boundary. | provisional | V1 outputs |
+| A-001 | V1 (Upper Mzingwane, ~3689 km², semi-arid; contains Mzingwane Dam and Esigodini, excludes Gwanda) remains the prototype boundary, not the final thesis boundary. | provisional | V1 outputs |
 | A-002 | Coarse rainfall may be used through zonal aggregation or labelled coarse-to-reference-grid resampling. | sensitivity_scenario | CHIRPS/rainfall criteria |
 | A-003 | The 2026-06-16 mentor-slide AHP matrix may be used as a sensitivity scenario. | sensitivity_scenario | AHP weights |
 | A-004 | Deprecated R/A products remain invalid, but new R-factor families may be generated with fresh lineage. | provisional | R-factor/RUSLE work |
@@ -190,7 +193,7 @@ decision id:
 | A-006 | Road proximity is an exposure/access indicator, not socioeconomic vulnerability. | diagnostic_only | exposure criterion |
 | A-007 | Peru can run data-readiness and terrain diagnostics in parallel. | diagnostic_only | Peru side |
 | A-008 | The Peru Arequipa-Moquegua-Tacna discovery envelope is a discovery aid, not an authoritative boundary. | diagnostic_only | Peru boundary discovery |
-| A-009 | PE1 is an engineering-pilot Peru boundary, chosen by a selection rule, NOT a research-value-selected site. | engineering_pilot | Peru terrain chain |
+| A-009 | PE1 is the southern Peru comparison catchment in Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It is chosen by a selection rule, NOT a final research-selected site. | provisional | Peru terrain chain |
 | A-010 | The `rainfall_climatology` criterion (rainfall_sensitivity_v0_3) is a 0.05° CHIRPS rainy-season mean bilinear-resampled to the V1 30 m grid; resampling-edge NoData slivers inside V1 are nearest-EDT filled. Effective resolution ~5 km, NOT native 30 m. | sensitivity_scenario | rainfall criterion |
 | A-011 | The hotspot-exposure diagnostic measures spatial co-location of v0.2 stable hotspots with exposure proxies; weak co-location means hotspots reflect natural-pressure overlap, not observed exposure. | diagnostic_only | exposure diagnostic |
 | A-012 | The PE1 `rainfall_climatology` criterion mirrors Zimbabwe A-010 (CHIRPS latam Dec-Mar mean, bilinear-resampled to PE1 30 m grid). Effective resolution ~5 km. | sensitivity_scenario | PE1 rainfall criterion |

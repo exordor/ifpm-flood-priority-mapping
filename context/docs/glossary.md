@@ -73,9 +73,9 @@ in the workspace. Outside the workspace, use **one** name.
 
 **Key facts to keep consistent:**
 
-- The V1 prototype catchment area is about `3689.5 km2`.
-- It is a **prototype working boundary, not the final thesis boundary**.
+- The V1 prototype catchment area is about `3689.5 km2`, semi-arid.
 - It contains Mzingwane Dam and Esigodini; it excludes Gwanda.
+- Status: a prototype working boundary, not the final thesis boundary.
 - The often-cited literature reference is `~2138 km2` for "Upper Mzingwane", but no checked
   source supplied a reusable boundary polygon for that value, so it is unresolved.
 

@@ -64,15 +64,15 @@ SITES = [
         boundary_gpkg=ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg",
         boundary_layer="v1_working_boundary",
         crs_label="EPSG:32735",
-        status_note="controlled prototype boundary, not final thesis boundary",
+        status_note="Upper Mzingwane catchment (~3689 km², semi-arid); prototype boundary, not final thesis boundary",
         active_criteria_note="mentor 5-main-criterion framework; current run uses 6 scored implementation layers",
     ),
     Site(
         label="Peru",
-        site_id="peru_pe1",
+        site_id="peru_southern_comparison_catchment",
         boundary_id="PE1",
         experiment_id="priority_scenarios",
-        claim_level="engineering_pilot / sensitivity_scenario",
+        claim_level="provisional / sensitivity_scenario",
         priority_mean=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif",
         top20_frequency=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif",
         hotspot_summary=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/hotspot_stability_summary.csv",
@@ -80,7 +80,7 @@ SITES = [
         boundary_gpkg=ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
         boundary_layer="peru_pilot_boundary",
         crs_label="EPSG:32718",
-        status_note="engineering-pilot site, replace if mentor names a Peru site",
+        status_note="Arequipa Region, mainly Vitor-La Joya-Santa Rita de Siguas west of Arequipa city; final Peru study area remains open",
         active_criteria_note="mentor 5-main-criterion framework; current run uses 6 scored implementation layers",
     ),
 ]
@@ -114,7 +114,7 @@ CRITERIA_SPECS = [
      "indicator only, not observed flood impact or vulnerability"),
     ("Peru", "PE1", "Flood (FH)", "flood_conditioning_factors; rainfall_climatology sensitivity layer",
      "DEM-derived TWI / distance-to-drainage plus CHIRPS rainy-season climatology", "provisional / sensitivity_scenario",
-     "engineering-pilot susceptibility indicator; rainfall is coarse-to-grid context"),
+     "provisional susceptibility indicator; rainfall is coarse-to-grid context"),
     ("Peru", "PE1", "Sediment (SR)", "soil_erosion_factors",
      "K x LS x C structure on PE1 reference grid", "diagnostic_only",
      "K x LS x C structure; rainfall erosivity not applied"),
@@ -281,7 +281,7 @@ def plot_board() -> None:
         "top-20% frequency",
     )
     fig.suptitle(
-        "Prototype comparison: Zimbabwe and Peru pilot",
+        "Prototype comparison: Zimbabwe and southern Peru",
         fontsize=14,
         fontweight="bold",
     )
@@ -298,15 +298,15 @@ Date: 2026-06-30
 
 Status: `mentor_review_ready` evidence packet for prototype discussion.
 
-This package compares the current Upper Mzingwane controlled prototype with the current
-Peru engineering pilot catchment. It is not a final flood-risk map, not an intervention-priority
+This package compares the current Upper Mzingwane controlled prototype with the southern Peru
+comparison catchment in Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It is not a final flood-risk map, not an intervention-priority
 claim, and not a final Zimbabwe-Peru thesis comparison.
 
 ## Main reading
 
 - The Upper Mzingwane prototype follows the mentor 5-main-criterion framework with six scored implementation layers; stable top-20% hotspot area:
   {zimbabwe['stable_top20_area_km2']} km2.
-- The Peru engineering pilot follows the same 5-main-criterion framework with six scored implementation layers; stable top-20% hotspot area:
+- The southern Peru comparison catchment follows the same 5-main-criterion framework with six scored implementation layers; stable top-20% hotspot area:
   {peru['stable_top20_area_km2']} km2.
 - The five AHP main criteria are Flood, Sediment, Land Use / ASM, Environmental, and
   Socioeconomic. The executable overlay currently scores six implementation layers because
@@ -327,14 +327,14 @@ claim, and not a final Zimbabwe-Peru thesis comparison.
 
 ## Mentor question
 
-Can I use the Upper Mzingwane prototype and the Peru engineering pilot as test sites for the
-comparative pipeline, while keeping the final study sites and final claims open?
+Can I use Upper Mzingwane and the southern Peru comparison catchment west of Arequipa city to test the
+comparative pipeline, while keeping final study-site decisions and final claims open?
 
 ## Data to request during the trip
 
 1. Zimbabwe official mining / ASM footprints or active-site points.
 2. Observed flood-impact or damaged-road / affected-settlement evidence.
-3. Confirmation whether the current Peru pilot catchment is acceptable, or whether a different Peru site should
+3. Confirmation whether the current southern Peru comparison catchment is acceptable, or whether a different Peru site should
    replace it.
 4. Any local rainfall station or high-frequency rainfall data that can support the R-factor range.
 """
@@ -342,7 +342,7 @@ comparative pipeline, while keeping the final study sites and final claims open?
 
     caption = (
         "Fig. X. Prototype comparison between the Upper Mzingwane prototype catchment "
-        "in Zimbabwe and the current Peru pilot catchment. "
+        "in Zimbabwe and the southern Peru comparison catchment in Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. "
         "Both displayed maps follow the mentor five-main-criterion AHP framework, while the "
         "current executable overlay uses six scored implementation layers. "
         "The upper panels show mean priority across sensitivity scenarios; the lower panels show "
@@ -359,7 +359,7 @@ comparative pipeline, while keeping the final study sites and final claims open?
     mentor_message = """Hi Supervisor, I moved the work forward into a simple Zimbabwe-Peru prototype comparison.
 
 For Zimbabwe, I used the Upper Mzingwane prototype catchment.
-For Peru, I used a temporary pilot catchment, only to test whether the same workflow runs there.
+For Peru, I used a southern Peru comparison catchment in Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city, to test whether the same workflow runs there.
 
 The method now runs on both sides using the mentor's five main AHP criteria:
 Flood, Sediment, Land Use / ASM, Environmental, and Socioeconomic.

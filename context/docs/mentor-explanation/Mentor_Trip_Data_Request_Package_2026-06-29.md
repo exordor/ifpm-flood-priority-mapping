@@ -20,7 +20,7 @@ share the datasets below, or tell us who holds them.
 | 5 | Flood event dates and damages | This lets me compare model hotspots with real events. | Event date, location, damage type, affected people/roads/bridges/crops. |
 | 6 | Local rainfall records | R/rainfall remains uncertain. Voi data is useful only as an outside sanity check, not as Upper Mzingwane rainfall. | Station data, preferably sub-daily; daily is still useful if sub-daily is not available. |
 | 7 | Station metadata | Rainfall without location and units is hard to use safely. | Coordinates, time zone, unit, time step, missing-value code, instrument notes. |
-| 8 | Catchment / outlet confirmation | V1 is accepted only as a controlled prototype boundary, not a final thesis boundary. | A marked outlet point/river section, catchment polygon, or written confirmation. |
+| 8 | Catchment / outlet confirmation | The Upper Mzingwane catchment (V1, ~3689 km²) is accepted only as a prototype boundary, not a final thesis boundary. | A marked outlet point/river section, catchment polygon, or written confirmation. |
 | 9 | Local exposure data | My exposure layer is currently a road/access indicator, not true exposure. | Settlements, population, critical roads, bridges, schools/clinics, flood-prone infrastructure. |
 | 10 | Local land-use or land-cover data | WorldCover is useful, but local land-use/mining classes would be stronger. | GIS layer, map, report table, or management-zone layer. |
 
@@ -47,8 +47,8 @@ recorded before I process it.
 
 ## What I should not claim yet
 
-The current V1 output is not a final flood-risk map. It is a working prototype that shows where
-the hotspot pattern is stable and where the evidence is weak.
+The current Upper Mzingwane output (V1, ~3689 km²) is not a final flood-risk map. It is a
+prototype that shows where the hotspot pattern is stable and where the evidence is weak.
 
 The biggest current weakness is not coding. It is data credibility: mining/ASM, observed flood
 impact, rainfall, and true exposure.
