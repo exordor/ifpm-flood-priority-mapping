@@ -1,6 +1,7 @@
-# Dataset Registry: ESA WorldCover 2021 Peru Pilot
+# Dataset Registry: ESA WorldCover 2021 Southern Peru PE1
 
-Status: active for PE1 engineering-pilot land-cover and C-factor repair.
+Status: active for PE1 land-cover and C-factor repair in the southern Peru
+comparison catchment.
 
 ## Dataset Identity
 
@@ -9,7 +10,8 @@ Status: active for PE1 engineering-pilot land-cover and C-factor repair.
 - Data class: `LOCAL_DATA`
 - Reusable download: yes, for PE1 prototype evidence and C-factor repair
 - Project role: land-cover class and RUSLE C-factor proxy for PE1 criteria stack
-- Study area: PE1 Peru engineering pilot boundary
+- Study area: PE1 southern Peru comparison catchment in Arequipa Region, mainly
+  the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city
 - Temporal coverage: 2021 land-cover map
 
 ## Source And Access

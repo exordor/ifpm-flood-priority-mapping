@@ -184,7 +184,7 @@ def main() -> None:
         "formula": "Williams 1995 EPIC/RUSLE",
         "depth_note": "0-5cm = surface topsoil; 0-30cm = depth-weighted average of 0-5/5-15/15-30",
         "units_note": "K in US units; multiply by 0.1317 for SI (t ha h / ha MJ mm)",
-        "boundary_status": "engineering_pilot_not_research_selected",
+        "boundary_status": "provisional_comparison_catchment_not_final_study_area",
         "not_resampled_note": "kept at SoilGrids native 250m; NOT resampled to PE1 30m grid",
         "property_ranges_by_depth": raw_ranges,
         "pe1_zonal_summary": zonal_summary,

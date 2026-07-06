@@ -131,7 +131,7 @@ or a validation dataset, the project will add a validation layer then.
 Avoids treating mining rights as active mining footprints. Zimbabwe ASM is
 structurally artisanal and scattered; no official footprint exists (A-013).
 Peru has the public INGEMMET/GEOCATMIN Pequeña Minería cadastre (strictly
-stronger than Zimbabwe's OSM-only proxy).
+stronger than Zimbabwe's OSM-only indicator).
 
 **Default taken:** use OSM quarry/industrial proximity as the Zimbabwe mining
 indicator (label as indicator, not truth), and INGEMMET official ASM point
@@ -154,11 +154,12 @@ independent of R), not as a candidate-quality ranking.
 
 ## RQ10: Are the Zimbabwe and Peru sites structurally comparable?
 
-PE1 is now operationally comparable to V1 v0.3 under the mentor five-main-criterion
-framework. Both runs use the same six scored implementation layers, but these
-layers map onto five AHP main criteria: Flood, Sediment, Land Use / ASM,
-Environmental, and Socioeconomic. Environmental is not yet an independent scored
-layer in either run. Physical
+PE1 is now operationally comparable to V1 under the mentor five-main-criterion
+framework. Both runs use the same five active PIM main criteria as top-level
+overlay terms: Flood, Sediment, Land Use / ASM, Environmental, and
+Socioeconomic. Flood and Land Use / ASM have internal component rasters, while
+Environmental is a provisional water/wetland and protected-area sensitivity
+indicator rather than ecological valuation. Physical
 contrast is real: PE1 is arid Andean Pacific slope (C=0.61, bare; soil loss
 8.74 t/ha/yr) vs V1 semi-humid savanna (C=0.04, shrub/grass; soil loss 0.50).
 Final comparison claim remains blocked until harmonized.
@@ -195,7 +196,7 @@ decision id:
 | A-008 | The Peru Arequipa-Moquegua-Tacna discovery envelope is a discovery aid, not an authoritative boundary. | diagnostic_only | Peru boundary discovery |
 | A-009 | PE1 is the southern Peru comparison catchment in Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It is chosen by a selection rule, NOT a final research-selected site. | provisional | Peru terrain chain |
 | A-010 | The `rainfall_climatology` criterion (rainfall_sensitivity_v0_3) is a 0.05° CHIRPS rainy-season mean bilinear-resampled to the V1 30 m grid; resampling-edge NoData slivers inside V1 are nearest-EDT filled. Effective resolution ~5 km, NOT native 30 m. | sensitivity_scenario | rainfall criterion |
-| A-011 | The hotspot-exposure diagnostic measures spatial co-location of v0.2 stable hotspots with exposure proxies; weak co-location means hotspots reflect natural-pressure overlap, not observed exposure. | diagnostic_only | exposure diagnostic |
+| A-011 | The hotspot-exposure diagnostic measures spatial co-location of v0.2 stable hotspots with exposure indicators; weak co-location means hotspots reflect natural-pressure overlap, not observed exposure. | diagnostic_only | exposure diagnostic |
 | A-012 | The PE1 `rainfall_climatology` criterion mirrors Zimbabwe A-010 (CHIRPS latam Dec-Mar mean, bilinear-resampled to PE1 30 m grid). Effective resolution ~5 km. | sensitivity_scenario | PE1 rainfall criterion |
 | A-013 | Zimbabwe ASM is structurally artisanal and scattered; no official footprint exists and none is expected before the mentor's 2026-07-18 conference ask. The OSM quarry/industrial indicator (A-005) remains the current mining layer. | diagnostic_only | Zimbabwe mining criterion |
 | A-014 | If Zimbabwe ASM data is not obtainable, the mentor may switch the Zimbabwe site to Voi (Kenya). Voi rainfall is already in managed storage. NOT a current action — strategic fallback only. | contingency | Zimbabwe site / boundary |

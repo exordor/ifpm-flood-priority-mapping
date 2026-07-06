@@ -1,4 +1,4 @@
-# Dataset Registry: INGEMMET Catastro Minero (Peru Pilot)
+# Dataset Registry: INGEMMET Catastro Minero (Southern Peru PE1)
 
 Status: queried via the public ArcGIS REST API for PE1 features. This is the authoritative
 official Peru mining cadastre — a strict upgrade over the OSM quarry/industrial proxy.

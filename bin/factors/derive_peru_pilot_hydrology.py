@@ -168,7 +168,7 @@ def main() -> int:
         "thresholds": STREAM_THRESHOLDS, "primary_threshold": PRIMARY_THRESHOLD,
         "reference_grid": rel(PE1_DEM), "crs": str(ref["crs"]),
         "width": ref["width"], "height": ref["height"], "cell_area_m2": CELL_AREA_M2,
-        "boundary_status": "engineering_pilot_not_research_selected",
+        "boundary_status": "provisional_comparison_catchment_not_final_study_area",
     }
 
     # 1. fill depressions

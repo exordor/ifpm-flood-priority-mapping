@@ -221,7 +221,7 @@ def main() -> None:
         "source_tiles": [rel(path) for path in source_tiles],
         "lut": "RUSLE C-factor lookup (literature-derived; identical to Zimbabwe LUT)",
         "resample_method": "MODE (10m->30m, legitimate fine->coarse aggregation); lookup applied AFTER resample",
-        "boundary_status": "engineering_pilot_not_research_selected",
+        "boundary_status": "provisional_comparison_catchment_not_final_study_area",
         "c_factor_30m_stats": {
             "valid_cells": int(valid.sum()),
             "valid_fraction_inside_pe1": round(float(valid.sum() / pe1_mask_ref.sum()), 6) if pe1_mask_ref.sum() else 0.0,

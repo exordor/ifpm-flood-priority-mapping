@@ -35,18 +35,16 @@ NODATA = -9999.0
 COLORS = {
     "flood": "#0072B2",
     "sediment": "#D55E00",
-    "land_cover": "#009E73",
-    "mining": "#CC79A7",
-    "exposure": "#E69F00",
-    "rainfall": "#F0E442",
+    "landuse_asm": "#009E73",
+    "environmental": "#CC79A7",
+    "socioeconomic": "#E69F00",
 }
 
-FLOOD_CONDITIONING_LABEL = "Flood conditioning factors"
-SOIL_EROSION_LABEL = "Soil erosion factors"
-LULC_LABEL = "Land use/land cover"
-MINING_LABEL = "Mining / ASM activity"
-EXPOSURE_LABEL = "Exposure indicators"
-RAINFALL_LABEL = "Rainfall"
+FLOOD_LABEL = "Flood hazard"
+SEDIMENT_LABEL = "Sediment"
+LANDUSE_ASM_LABEL = "Land Use / ASM"
+ENVIRONMENTAL_LABEL = "Environmental sensitivity"
+SOCIOECONOMIC_LABEL = "Socioeconomic exposure"
 
 
 @dataclass(frozen=True)
@@ -87,16 +85,15 @@ SITES = [
         claim_level="sensitivity_scenario",
         process_note="controlled prototype boundary; not final thesis boundary",
         criteria=(
-            Criterion("flood_conditioning_factors", "flood", FLOOD_CONDITIONING_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif", "provisional", "TWI and drainage proximity; not inundation depth"),
-            Criterion("soil_erosion_factors", "sediment", SOIL_EROSION_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif", "diagnostic_only", "K x LS x C structure; rainfall erosivity not applied"),
-            Criterion("land_cover_pressure", "land_cover", LULC_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", "provisional", "land-cover pressure only"),
-            Criterion("mining_pressure", "mining", MINING_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", "diagnostic_only", "OSM mining evidence; official ASM data missing"),
-            Criterion("exposure_indicators", "exposure", EXPOSURE_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif", "diagnostic_only", "road access indicator, not observed vulnerability"),
-            Criterion("rainfall_climatology", "rainfall", RAINFALL_LABEL, ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria/rainfall_climatology_0_1_PROVISIONAL_30m.tif", "sensitivity_scenario", "CHIRPS coarse-to-grid context, not native 30 m rainfall"),
+            Criterion("flood_hazard", "flood", FLOOD_LABEL, ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/pim_criteria/flood_hazard_0_1.tif", "sensitivity_scenario", "flood conditioning plus coarse rainfall context; not inundation depth"),
+            Criterion("sediment", "sediment", SEDIMENT_LABEL, ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/pim_criteria/sediment_0_1.tif", "diagnostic_only", "K x LS x C structure; rainfall erosivity not applied"),
+            Criterion("landuse_asm", "landuse_asm", LANDUSE_ASM_LABEL, ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/pim_criteria/landuse_asm_0_1.tif", "provisional", "land-cover pressure plus mining-pressure indicator"),
+            Criterion("environmental", "environmental", ENVIRONMENTAL_LABEL, ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/pim_criteria/environmental_0_1.tif", "provisional", "water/wetland context plus protected-area proximity"),
+            Criterion("socioeconomic", "socioeconomic", SOCIOECONOMIC_LABEL, ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/pim_criteria/socioeconomic_0_1.tif", "diagnostic_only", "road access indicator, not observed vulnerability"),
         ),
     ),
     Site(
-        label="Peru pilot site",
+        label="Southern Peru comparison catchment",
         short_label="Peru",
         boundary_id="PE1",
         experiment_id="priority_scenarios",
@@ -104,15 +101,14 @@ SITES = [
         boundary_gpkg=ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
         boundary_layer="peru_pilot_boundary",
         crs_label="EPSG:32718",
-        claim_level="engineering_pilot / sensitivity_scenario",
-        process_note="temporary pilot site; replace if mentor names another Peru site",
+        claim_level="provisional / sensitivity_scenario",
+        process_note="Arequipa Region, mainly Vitor-La Joya-Santa Rita de Siguas west of Arequipa city; final Peru study area remains open",
         criteria=(
-            Criterion("flood_conditioning_factors", "flood", FLOOD_CONDITIONING_LABEL, ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_conditioning_factors_0_1.tif", "provisional", "TWI and drainage proximity; not inundation depth"),
-            Criterion("soil_erosion_factors", "sediment", SOIL_EROSION_LABEL, ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif", "diagnostic_only", "K x LS x C structure; rainfall erosivity not applied"),
-            Criterion("land_cover_pressure", "land_cover", LULC_LABEL, ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif", "provisional", "arid land-cover interpretation needs site context"),
-            Criterion("mining_pressure", "mining", MINING_LABEL, ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif", "provisional", "official points, not full active footprint"),
-            Criterion("exposure_indicators", "exposure", EXPOSURE_LABEL, ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif", "provisional", "road access indicator, not observed vulnerability"),
-            Criterion("rainfall_climatology", "rainfall", RAINFALL_LABEL, ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif", "sensitivity_scenario", "CHIRPS coarse-to-grid context, not native 30 m rainfall"),
+            Criterion("flood_hazard", "flood", FLOOD_LABEL, ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/flood_hazard_0_1.tif", "sensitivity_scenario", "flood conditioning plus coarse rainfall context; not inundation depth"),
+            Criterion("sediment", "sediment", SEDIMENT_LABEL, ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/sediment_0_1.tif", "diagnostic_only", "K x LS x C structure; rainfall erosivity not applied"),
+            Criterion("landuse_asm", "landuse_asm", LANDUSE_ASM_LABEL, ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/landuse_asm_0_1.tif", "provisional", "land-cover pressure plus official mining-point proximity"),
+            Criterion("environmental", "environmental", ENVIRONMENTAL_LABEL, ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/environmental_0_1.tif", "provisional", "water/wetland context plus protected-area proximity"),
+            Criterion("socioeconomic", "socioeconomic", SOCIOECONOMIC_LABEL, ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/socioeconomic_0_1.tif", "provisional", "road access indicator, not observed vulnerability"),
         ),
     ),
 ]
@@ -255,7 +251,7 @@ def format_map_axes(ax, site: Site, profile: dict) -> None:
 
 def plot_dominant(products_by_site: list[dict[str, object]]) -> None:
     cmap = ListedColormap([COLORS[c.family] for c in SITES[0].criteria])
-    norm = BoundaryNorm(np.arange(0.5, 7.5, 1), cmap.N)
+    norm = BoundaryNorm(np.arange(0.5, len(SITES[0].criteria) + 1.5, 1), cmap.N)
     fig = plt.figure(figsize=(12, 6.8), constrained_layout=True)
     grid = fig.add_gridspec(2, 2, height_ratios=[1.0, 0.13])
     axes = [fig.add_subplot(grid[0, 0]), fig.add_subplot(grid[0, 1])]
@@ -270,7 +266,7 @@ def plot_dominant(products_by_site: list[dict[str, object]]) -> None:
         ax.set_title(f"{site.short_label}: dominant priority driver", loc="left", fontsize=12, fontweight="bold")
 
     handles = [Patch(facecolor=COLORS[c.family], edgecolor="0.3", label=f"{i + 1}. {c.label}") for i, c in enumerate(SITES[0].criteria)]
-    legend_ax.legend(handles=handles, loc="center", ncol=3, frameon=True, fontsize=9)
+    legend_ax.legend(handles=handles, loc="center", ncol=5, frameon=True, fontsize=9)
     fig.suptitle("Dominant driver of the prototype priority score", fontsize=14, fontweight="bold")
     fig.savefig(OUT_DIR / "dominant_priority_criterion_maps.png", dpi=300, bbox_inches="tight")
     fig.savefig(OUT_DIR / "dominant_priority_criterion_maps.pdf", bbox_inches="tight")
@@ -283,6 +279,9 @@ def plot_contributions(products: dict[str, object]) -> None:
     shares: np.ndarray = products["shares"]  # type: ignore[assignment]
     fig, axes = plt.subplots(2, 3, figsize=(12.5, 8), constrained_layout=True)
     for idx, ax in enumerate(axes.ravel()):
+        if idx >= len(site.criteria):
+            ax.set_axis_off()
+            continue
         criterion = site.criteria[idx]
         image = ax.imshow(
             np.ma.masked_invalid(shares[idx]),
@@ -313,11 +312,11 @@ def plot_process() -> None:
             ha="center", va="center", fontsize=11.5, fontweight="bold", color="white")
 
     steps = [
-        ("1. Inputs", "DEM, rivers, land cover, mining, roads, rainfall"),
+        ("1. Inputs", "DEM, rainfall, sediment factors, land use/ASM, ES, roads"),
         ("2. Grid prep", "clip to boundary; use common CRS/grid; check NoData"),
         ("3. Criteria", "standardize each layer to 0-1 with direction"),
         ("4. Scenarios", "combine criteria with candidate weights and sensitivity runs"),
-        ("5. Outputs", "priority map, hotspot frequency, dominant-driver map"),
+        ("5. Outputs", "priority map, hotspot frequency, dominant-PIM-criterion map"),
         ("6. Review", "mentor checks criteria, data gaps, and final study site"),
     ]
     x, width, height = 0.09, 0.82, 0.105
@@ -336,7 +335,7 @@ def plot_process() -> None:
             ax.annotate("", xy=end_xy, xytext=start_xy,
                     arrowprops={"arrowstyle": "->", "linewidth": 1.4, "color": "0.35"})
 
-    ax.text(0.09, 0.035, "Status: prototype / sensitivity scenario. These maps explain scored-layer drivers; they are not final flood-risk maps.",
+    ax.text(0.09, 0.035, "Status: prototype / sensitivity scenario. These maps explain PIM criterion drivers; they are not final flood-risk maps.",
             fontsize=10, color="0.25")
     fig.savefig(OUT_DIR / "data_analysis_process_for_boss.png", dpi=300, bbox_inches="tight")
     fig.savefig(OUT_DIR / "data_analysis_process_for_boss.pdf", dpi=300, bbox_inches="tight")
@@ -358,11 +357,11 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
 def write_text_outputs(manifest_rows: list[dict[str, object]], products_by_site: list[dict[str, object]]) -> None:
     captions = """# Captions: Prototype Priority Criteria Explanation Package
 
-Fig. 1. Colour-coded dominant priority-driver map. Each pixel is coloured by the scored implementation layer that contributes the largest share to the prototype priority score under the current sensitivity scenarios. The map is meant to make the current implementation layers visually clear; it is not a final flood-risk map.
+Fig. 1. Colour-coded dominant priority-driver map. Each pixel is coloured by the PIM main criterion that contributes the largest share to the prototype priority score under the current sensitivity scenarios. The map is meant to make the current PIM implementation visually clear; it is not a final flood-risk map.
 
-Fig. 2. Zimbabwe contribution share maps. Each panel shows where one scored implementation layer contributes more strongly to the current prototype priority score. Values are contribution shares, not independent risk probabilities.
+Fig. 2. Zimbabwe contribution share maps. Each panel shows where one PIM main criterion contributes more strongly to the current prototype priority score. Values are contribution shares, not independent risk probabilities.
 
-Fig. 3. Peru contribution share maps. Each panel shows the same implementation-layer contribution-share logic for the Peru pilot site. Peru remains an engineering pilot unless a final Peru study site is confirmed.
+Fig. 3. Peru contribution share maps. Each panel shows the same PIM-criterion contribution-share logic for the southern Peru comparison catchment in Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It is not a final Peru study-area claim.
 
 Fig. 4. Data analysis process for a concise review briefing. The workflow runs from input data through grid preparation, criterion standardization, sensitivity scenarios, map outputs, and mentor review.
 """
@@ -388,12 +387,12 @@ Status: `mentor_review_ready` explanation package for prototype / sensitivity-sc
 ## What changed
 
 Mentor asked for clearer colour coding on the maps. This package adds a pixel-level dominant
-implementation-layer map and separate contribution-share maps, so the viewer can see why an area
+PIM-criterion map and separate contribution-share maps, so the viewer can see why an area
 receives a high priority score.
 
 ## How to read it
 
-- Dominant layer map: one colour per scored implementation layer.
+- Dominant criterion map: one colour per PIM main criterion.
 - Contribution maps: one panel per scored layer; brighter means that layer contributes a larger
   share of the current priority score in that location.
 - Process figure: short presentation-friendly data-analysis workflow.
@@ -408,7 +407,7 @@ mentor should review first.
 
 ## Claim boundary
 
-These are prototype explanation maps. They explain the current implementation layers and sensitivity-scenario
+These are prototype explanation maps. They explain the current PIM criteria and sensitivity-scenario
 outputs. They are not final flood-risk maps, not validated intervention-priority maps, and not final
 country-comparison claims.
 
@@ -425,13 +424,13 @@ country-comparison claims.
 
     message = """Hi Supervisor, I prepared a clearer colour-coded version for the maps.
 
-Now each pixel shows which criterion is driving the priority score most.
-I also made separate contribution maps for each criterion, plus a simple data-analysis process figure.
+Now each pixel shows which PIM criterion is driving the priority score most.
+I also made separate contribution maps for each PIM criterion, plus a simple data-analysis process figure.
 
 This should be easier to explain in a short presentation:
 data inputs -> grid preparation -> 0-1 criteria -> scenario weights -> priority maps -> mentor review.
 
-One useful finding: Zimbabwe is mostly rainfall-driven in the current prototype, while Peru is mostly driven by flood conditioning factors. I think this is exactly the kind of thing we should review before treating the maps as results.
+One useful finding is that the dominant criterion differs between the two prototype sites. I think this is exactly the kind of thing we should review before treating the maps as results.
 
 I kept the wording as prototype / sensitivity scenario, not final flood-risk.
 """

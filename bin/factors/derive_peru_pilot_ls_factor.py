@@ -95,7 +95,7 @@ def main() -> None:
         "inputs": {"slope_deg": str(SLOPE_DEG), "sca": str(SCA), "flow_accum": str(FLOW_ACCUM)},
         "channel_threshold_cells": CHANNEL_THRESHOLD_CELLS,
         "ls_cap": LS_CAP,
-        "boundary_status": "engineering_pilot_not_research_selected",
+        "boundary_status": "provisional_comparison_catchment_not_final_study_area",
         "stats": {
             "uncapped": stats(ls),
             "hillslope_channel_masked": stats(ls_hillslope),

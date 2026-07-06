@@ -17,7 +17,7 @@ not nested under `boundary_v1`).
 | `criteria_stack_v0_2` | IFPM-089 | in_progress | provisional | Honest-label 5-criteria stack; mining/exposure hardening planned not implemented | `outputs/boundary_v1/criteria_stack_v0_2/handoff.md` |
 | `priority_scenarios_v0_2` | IFPM-089 | complete | sensitivity_scenario | 4 weight scenarios on v0.2 criteria; stable top-20% hotspot 431.907 km² | `outputs/boundary_v1/priority_scenarios_v0_2/handoff.md` |
 | `rainfall_sensitivity_v0_3` | IFPM-090 | complete | sensitivity_scenario | Adds rainfall_climatology (CHIRPS coarse-to-grid, A-010); effective res ~5 km | `outputs/boundary_v1/rainfall_sensitivity_v0_3/` |
-| `hotspot_exposure_diagnostic_v0_3` | IFPM-090 | complete | diagnostic_only | Tests co-location of v0.2 hotspots with exposure proxies; weak co-location | `outputs/boundary_v1/hotspot_exposure_diagnostic_v0_3/` |
+| `hotspot_exposure_diagnostic_v0_3` | IFPM-090 | complete | diagnostic_only | Tests co-location of v0.2 hotspots with exposure indicators; weak co-location | `outputs/boundary_v1/hotspot_exposure_diagnostic_v0_3/` |
 | `rainfall_exposure_v0_4` | IFPM-097 | complete | sensitivity_scenario | Merged v0.3 rainfall + exposure; feeds 7/18 comparison pack | `outputs/boundary_v1/rainfall_exposure_v0_4/` |
 | `mining_decay_priority_sensitivity` | IFPM-074 track | complete | sensitivity_scenario | Decay-function sensitivity on mining proximity; structure test only | `outputs/boundary_v1/mining_decay_priority_sensitivity/` |
 
@@ -26,9 +26,10 @@ not nested under `boundary_v1`).
 | experiment_id | IFPM-NNN | status | claim_level | result_summary | handoff |
 |---|---|---|---|---|---|
 | `pe1_criteria_stack` (3-criteria) | IFPM-093 | complete | provisional | First PE1 stack: flood, erosion, land cover | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_criteria_stack` (5-criteria) | IFPM-094 | complete | provisional | +mining (OSM proxy) +exposure (OSM roads) | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_criteria_stack` (5-framework / 6 scored layers, INGEMMET mining) | IFPM-095/096 | complete | provisional | +rainfall (CHIRPS latam Dec-Mar) +official INGEMMET ASM points; same implementation-layer mapping as V1 | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_priority_scenarios` | IFPM-093/094/095/096 | complete | sensitivity_scenario | Equal + slide-matrix + flood_erosion_heavy; stable top-20% hotspot 258.538 km² in current rerun | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/` |
+| `pe1_criteria_stack` (5-criteria) | IFPM-094 | complete | provisional | +mining (OSM indicator) +exposure (OSM roads) | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
+| `pe1_criteria_stack` (component rasters, INGEMMET mining) | IFPM-095/096 | complete | provisional | component inputs for flood, sediment, land use/ASM, socioeconomic, rainfall; PIM overlay happens in `pe1_priority_scenarios` | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
+| `pe1_environmental_sensitivity_v0_1` | IFPM-096 | complete | provisional | WorldCover water/wetland + OSM water/protected-area sensitivity indicator | `outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/` |
+| `pe1_priority_scenarios` | IFPM-093/094/095/096 | complete | sensitivity_scenario | Equal + slide-matrix + flood_sediment_heavy over five PIM criteria; stable top-20% hotspot 385.187 km² in current rerun | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/` |
 | `pe1_rainfall_criterion` | IFPM-096 | complete | sensitivity_scenario | CHIRPS latam Dec-Mar mean, bilinear to PE1 30 m grid (A-012) | `outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/` |
 | `pe1_ls_factor` | IFPM-093 | complete | diagnostic_only | PE1 LS hillslope mean 3.70 (vs V1 1.563) | `outputs/srtm_1arcsec_peru_pilot/ls_factor/` |
 | `pe1_usle_soil_loss` | IFPM-093 | complete | provisional | PE1 USLE A mean 8.74 t/ha/yr (LOW R=238.6); vs V1 0.50 | `outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/` |

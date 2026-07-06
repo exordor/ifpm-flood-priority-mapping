@@ -1,6 +1,7 @@
-# Dataset Registry: SRTM 1 Arc-Second Peru Pilot (PE1)
+# Dataset Registry: SRTM 1 Arc-Second Southern Peru PE1
 
-Status: downloaded and processed for Peru engineering-pilot (PE1) terrain diagnostics only.
+Status: downloaded and processed for PE1 terrain diagnostics in the southern
+Peru comparison catchment.
 
 ## Dataset Identity
 
@@ -9,7 +10,9 @@ Status: downloaded and processed for Peru engineering-pilot (PE1) terrain diagno
 - Data class: `LOCAL_DATA`
 - Reusable download: yes, if the Peru side proceeds
 - Project role: terrain baseline for PE1 elevation, slope, and hydrological derivatives
-- Study area: Peru engineering-pilot PE1 (`HYBAS_ID=6070641200`, 2745.4 km2, pacific-slope)
+- Study area: PE1 (`HYBAS_ID=6070641200`, 2745.4 km2), a Pacific-slope
+  catchment in Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas
+  area west of Arequipa city
 - Spatial unit or mask: PE1 boundary, the Peru analogue of the Zimbabwe V1 working boundary;
   PE1 is NOT a research-selected boundary and will be replaced if the mentor names a Peru site
 - Temporal coverage: SRTM mission acquisition period in February 2000
@@ -82,8 +85,8 @@ Status: downloaded and processed for Peru engineering-pilot (PE1) terrain diagno
 - Reference-grid rule: `context/docs/data-management/peru_pilot_terrain_reference_grid_rule.md`
   (PE1 DEM is the Peru reference grid, separate from Zimbabwe's EPSG:32735 reference)
 - Known limitations: some SRTM tiles may contain voids; hydrological conditioning not guaranteed
-- Replacement or update rule: replace if mentor names a specific Peru site (PE1 is
-  engineering-pilot only) or if a higher-resolution DEM is explicitly requested
+- Replacement or update rule: replace if mentor names a specific Peru site or
+  if a higher-resolution DEM is explicitly requested
 - Validation role: terrain input only, not direct validation evidence
 
 ## Release Boundary

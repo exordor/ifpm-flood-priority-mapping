@@ -130,25 +130,25 @@ survives any choice of R-factor.
 ## H-PE1-SYMMETRIC
 
 **Statement:** PE1 and V1 are operationally comparable under the mentor
-five-main-criterion AHP framework. Both prototype runs use the same six scored
-implementation layers, and the layer-to-main-criterion mapping is explicit, so
-the two prototypes can be structurally compared with the same scenario logic.
+five-main-criterion AHP framework. Both prototype runs use the same five active
+PIM main criteria as top-level overlay terms, so the two prototypes can be
+structurally compared with the same scenario logic.
 
 - **Related RQ:** RQ10
-- **Evidence:** PE1 and V1 both use six scored implementation layers
-  (flood, erosion, land cover, mining, exposure, rainfall) mapped to five AHP
-  main criteria. Land Use / ASM is split into land-cover and mining layers,
-  rainfall is a Flood-side sensitivity layer, and Environmental is not yet an
-  independent scored layer. PE1 stable top-20% hotspot is 258.538 km² under the
-  current rerun (Zimbabwe boundary_v1 / rainfall_exposure_v0_4 ref 584.635 km²);
-  PE1 mining upgraded to official INGEMMET point evidence
-  (strictly stronger than V1).
-- **Verdict:** **supported** at `engineering_pilot` level
+- **Evidence:** PE1 and V1 both use flood_hazard, sediment, landuse_asm,
+  environmental, and socioeconomic as top-level PIM criteria. Flood and Land
+  Use / ASM have internal component rasters, and Environmental is implemented as
+  a provisional water/wetland and protected-area sensitivity indicator. PE1 stable
+  top-20% hotspot is 385.187 km² under the current PIM rerun (Zimbabwe
+  boundary_v1 / rainfall_exposure_v0_4 stable top-20% hotspot is 512.917 km²);
+  PE1 mining upgraded to official INGEMMET point evidence (strictly stronger
+  than V1).
+- **Verdict:** **supported** at `provisional` level
 - **Caveat:** PE1 is not research-selected; physical regimes differ (arid
   Andean Pacific slope vs semi-humid savanna). Final harmonised comparison
   claim blocked (IFPM-D03).
 - **Status:** active.
-- **Claim level:** `engineering_pilot`
+- **Claim level:** `provisional`
 
 ## H-MINING-OSM-INDICATOR
 
@@ -171,7 +171,7 @@ observed socioeconomic vulnerability.
 
 - **Related RQ:** RQ7, RQ8
 - **Evidence:** V1 hotspot-exposure diagnostic shows weak co-location of
-  stable hotspots with exposure proxies; hotspots reflect natural-pressure
+  stable hotspots with exposure indicators; hotspots reflect natural-pressure
   overlap, not observed exposure.
 - **Verdict:** **supported** as an indicator
 - **Status:** active. A-006 / A-011. Needs observed flood-impact data to

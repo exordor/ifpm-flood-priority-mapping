@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
-"""Run priority scenarios for the PE1 engineering-pilot implementation layers.
+"""Run priority scenarios for the southern Peru comparison catchment.
 
 PE1 follows the mentor 5-main-criterion AHP framework: Flood, Sediment,
-Land Use / ASM, Environmental, and Socioeconomic. The executable engineering
-pilot currently has six scored implementation layers because Land Use / ASM is
-split into land-cover and mining layers, rainfall is tested as a sensitivity
-layer, and Environmental is not yet implemented as an independent scored raster.
-Three scenarios: equal, mentor-slide-mapped, and flood/erosion/rainfall heavy.
+Land Use / ASM, Environmental, and Socioeconomic. Five criteria are actively
+scored in the current executable prototype:
+
+- Flood hazard: flood-conditioning factors + rainfall climatology.
+- Sediment: soil-erosion factors.
+- Land Use / ASM: land-cover pressure + mining pressure.
+- Environmental: water/wetland and protected-area sensitivity indicator.
+- Socioeconomic: exposure/access indicators.
+Three scenarios: equal, mentor-slide available PIM weights, and
+flood/sediment-heavy.
 
 Soil-erosion normalization note: the soil_erosion_factors criterion is max-normalized to [0,1] for
 MCDA scoring, so its 0-1 value is a relative hotspot intensity, not absolute t/ha/yr. Rank is
@@ -14,7 +19,7 @@ not affected by the chosen scalar R-factor.
 
 Outputs (gitignored under outputs/srtm_1arcsec_peru_pilot/priority_scenarios/):
 priority mean/std/top20-frequency rasters, per-scenario rasters, weights + summary CSVs,
-and a board figure. All provisional / engineering_pilot.
+and a board figure. All provisional / sensitivity_scenario.
 """
 
 from __future__ import annotations
@@ -32,7 +37,7 @@ from matplotlib.ticker import FuncFormatter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
 OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/hotspot_stability_summary.csv"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
@@ -43,31 +48,38 @@ BOUNDARY_ID = "pe1"
 EXPERIMENT_ID = "priority_scenarios"
 OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
 SCENARIO_DIR = OUT_DIR / "scenarios"
+PIM_CRITERIA_DIR = OUT_DIR / "pim_criteria"
 CRITERIA_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria"
 REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
 PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+ZIMBABWE_STABILITY_SUMMARY = ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/hotspot_stability_summary.csv"
 # Common-mask overlay must reject true data gaps, but PE1 erosion_structure deliberately
 # masks main-channel cells inherited from hillslope LS. Keep those cells NoData and require
 # enough common coverage to catch tile seams / missing active criteria.
 MIN_COMMON_VALID_FRACTION = 0.95
 
-CRITERIA_PATHS = {
+COMPONENT_PATHS = {
     "flood_conditioning_factors": CRITERIA_DIR / "flood_conditioning_factors_0_1.tif",
     "soil_erosion_factors": CRITERIA_DIR / "soil_erosion_factors_0_1.tif",
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
     "mining_pressure": CRITERIA_DIR / "mining_pressure_0_1.tif",
     "exposure_indicators": CRITERIA_DIR / "exposure_indicators_0_1.tif",
     "rainfall_climatology": CRITERIA_DIR / "rainfall_climatology_0_1.tif",
+    "environmental_sensitivity": ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif",
 }
 
-# Mentor-slide pairwise matrix (CR 0.022) mapped to PE1's scored implementation layers.
-# The slide's 5 AHP main criteria
-# (Flood, Sediment, LandUse/ASM, Environmental, Socioeconomic) map: Flood->flood_hazard,
-# Sediment->erosion_structure, LandUse/ASM->land_cover + mining (split), Environmental->(no direct
-# PE1 equivalent; folded into flood as terrain context), Socioeconomic->exposure, and rainfall
-# receives zero weight in the slide-mapped scenario because the slide matrix has no rainfall criterion.
-# Slide weights derived from principal eigenvector.
-SLIDE_ORDER = ["flood", "sediment", "landuse_asm", "environmental", "socioeconomic"]
+PIM_CRITERIA_ORDER = ["flood_hazard", "sediment", "landuse_asm", "environmental", "socioeconomic"]
+ACTIVE_PIM_CRITERIA = PIM_CRITERIA_ORDER
+PIM_COMPONENTS = {
+    "flood_hazard": {"flood_conditioning_factors": 0.5, "rainfall_climatology": 0.5},
+    "sediment": {"soil_erosion_factors": 1.0},
+    "landuse_asm": {"land_cover_pressure": 0.5, "mining_pressure": 0.5},
+    "environmental": {"environmental_sensitivity": 1.0},
+    "socioeconomic": {"exposure_indicators": 1.0},
+}
+
+# Mentor-slide pairwise matrix (CR 0.022) for the five PIM main criteria.
+SLIDE_ORDER = PIM_CRITERIA_ORDER
 SLIDE_MATRIX = np.array([
     [1, 3, 5, 4, 6],
     [1/3, 1, 3, 2, 4],
@@ -77,7 +89,7 @@ SLIDE_MATRIX = np.array([
 ], dtype="float64")
 
 
-def slide_weights() -> tuple[dict[str, float], float]:
+def slide_weights_available_pim() -> tuple[dict[str, float], float]:
     vals, vecs = np.linalg.eig(SLIDE_MATRIX)
     idx = int(np.argmax(vals.real))
     lam = float(vals.real[idx])
@@ -86,35 +98,22 @@ def slide_weights() -> tuple[dict[str, float], float]:
     ci = (lam - len(SLIDE_ORDER)) / (len(SLIDE_ORDER) - 1)
     cr = ci / 1.12
     base = dict(zip(SLIDE_ORDER, w.tolist(), strict=True))
-    landuse_half = base["landuse_asm"] / 2.0
-    # environmental folded into flood (no separate PE1 environmental criterion)
+    available_total = sum(base[name] for name in ACTIVE_PIM_CRITERIA)
     return {
-        "flood_conditioning_factors": base["flood"] + base["environmental"],
-        "soil_erosion_factors": base["sediment"],
-        "land_cover_pressure": landuse_half,
-        "mining_pressure": landuse_half,
-        "exposure_indicators": base["socioeconomic"],
-        "rainfall_climatology": 0.0,  # slide matrix has no rainfall criterion; set 0 there
+        name: base[name] / available_total
+        for name in ACTIVE_PIM_CRITERIA
     }, float(cr)
 
 
-# Three scenarios: equal (neutral), slide-mapped (mentor matrix), flood/erosion/rainfall heavy (stress).
+# Three scenarios: equal (neutral), slide PIM weights, flood/sediment-heavy (stress).
 SCENARIOS = {
-    "equal": {
-        "flood_conditioning_factors": 1/6,
-        "soil_erosion_factors": 1/6,
-        "land_cover_pressure": 1/6,
-        "mining_pressure": 1/6,
-        "exposure_indicators": 1/6,
-        "rainfall_climatology": 1/6,
-    },
-    "flood_erosion_heavy": {
-        "flood_conditioning_factors": 0.30,
-        "soil_erosion_factors": 0.25,
-        "land_cover_pressure": 0.05,
-        "mining_pressure": 0.10,
-        "exposure_indicators": 0.05,
-        "rainfall_climatology": 0.25,
+    "equal_active_pim": {name: 1/len(ACTIVE_PIM_CRITERIA) for name in ACTIVE_PIM_CRITERIA},
+    "flood_sediment_heavy_pim": {
+        "flood_hazard": 0.30,
+        "sediment": 0.25,
+        "landuse_asm": 0.20,
+        "environmental": 0.10,
+        "socioeconomic": 0.15,
     },
 }
 
@@ -133,6 +132,19 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         writer.writerows(rows)
+
+
+def read_summary_metric(path: Path, metric: str) -> float:
+    if not path.exists():
+        return float("nan")
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            if row.get("metric") == metric:
+                try:
+                    return float(row["value"])
+                except (TypeError, ValueError):
+                    return float("nan")
+    return float("nan")
 
 
 def read_reference() -> dict:
@@ -165,6 +177,56 @@ def read_band(path: Path, profile: dict) -> np.ndarray:
             data[data == src.nodata] = np.nan
     data[~np.isfinite(data)] = np.nan
     return data
+
+
+def combine_weighted_layers(
+    source_layers: dict[str, np.ndarray],
+    component_weights: dict[str, float],
+) -> np.ndarray:
+    first = next(iter(source_layers.values()))
+    numerator = np.zeros(first.shape, dtype="float32")
+    valid_all = np.ones(first.shape, dtype=bool)
+    total_weight = float(sum(component_weights.values()))
+    for component, weight in component_weights.items():
+        layer = source_layers[component]
+        valid = np.isfinite(layer)
+        numerator[valid] += layer[valid] * weight
+        valid_all &= valid
+    combined = np.full(first.shape, np.nan, dtype="float32")
+    combined[valid_all] = numerator[valid_all] / total_weight
+    return np.clip(combined, 0.0, 1.0).astype("float32")
+
+
+def build_pim_criteria(components: dict[str, np.ndarray], profile: dict) -> dict[str, np.ndarray]:
+    PIM_CRITERIA_DIR.mkdir(parents=True, exist_ok=True)
+    criteria = {
+        name: combine_weighted_layers(components, weights)
+        for name, weights in PIM_COMPONENTS.items()
+    }
+    for name, data in criteria.items():
+        write_raster(PIM_CRITERIA_DIR / f"{name}_0_1.tif", data, profile)
+    return criteria
+
+
+def build_grid_check(profile: dict, layers: dict[str, np.ndarray]) -> list[dict[str, object]]:
+    rows = []
+    for name, data in layers.items():
+        values = data[np.isfinite(data)]
+        rows.append({
+            "criterion": name,
+            "grid_compatible": True,
+            "crs": str(profile["crs"]),
+            "width": profile["width"],
+            "height": profile["height"],
+            "valid_cells": int(values.size),
+            "valid_fraction": round(float(values.size / data.size), 6),
+            "min": round(float(values.min()), 6) if values.size else "",
+            "mean": round(float(values.mean()), 6) if values.size else "",
+            "max": round(float(values.max()), 6) if values.size else "",
+        })
+    return rows
+
+
 def raster_stats(data: np.ndarray) -> dict[str, object]:
     values = data[np.isfinite(data)]
     return {
@@ -210,7 +272,7 @@ def plot_board(priority_mean, top20_frequency, equal_score, profile) -> None:
         ax.tick_params(labelsize=7)
         add_colorbar(fig, ax, image, label)
     fig.suptitle(
-        "Peru Engineering Pilot Site: Prototype Flood-Priority Hotspot Screening",
+        "Southern Peru Comparison Catchment: PIM 5-Criterion Prototype Priority Screening",
         fontsize=12,
         fontweight="bold",
     )
@@ -226,7 +288,8 @@ def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     SCENARIO_DIR.mkdir(parents=True, exist_ok=True)
     profile = read_reference()
-    criteria = {name: read_band(path, profile) for name, path in CRITERIA_PATHS.items()}
+    components = {name: read_band(path, profile) for name, path in COMPONENT_PATHS.items()}
+    criteria = build_pim_criteria(components, profile)
     boundary_mask = read_boundary_mask(profile)
     common_valid = boundary_mask.copy()
     for layer in criteria.values():
@@ -250,9 +313,9 @@ def main() -> None:
     top20_masks: list[np.ndarray] = []
 
     # Inject the mentor-slide-mapped scenario (weights + CR).
-    slide_w, slide_cr = slide_weights()
+    slide_w, slide_cr = slide_weights_available_pim()
     all_scenarios = dict(SCENARIOS)
-    all_scenarios["mentor_slide_mapped"] = slide_w
+    all_scenarios["mentor_slide_available_pim"] = slide_w
     for scenario, weights in all_scenarios.items():
         total = round(sum(weights.values()), 10)
         if total != 1.0:
@@ -264,7 +327,7 @@ def main() -> None:
             weight_rows.append({
                 "boundary_id": boundary_id, "experiment_id": experiment_id,
                 "scenario": scenario, "criterion": criterion,
-                "weight": round(weight, 8), "claim_level": "provisional",
+                "weight": round(weight, 8), "claim_level": "sensitivity_scenario",
             })
         score = np.full_like(numerator, np.nan, dtype="float32")
         score[common_valid] = numerator[common_valid]
@@ -293,9 +356,10 @@ def main() -> None:
     write_raster(OUT_DIR / "priority_mean.tif", priority_mean, profile)
     write_raster(OUT_DIR / "priority_std.tif", priority_std, profile)
     write_raster(OUT_DIR / "top20_frequency.tif", top20_frequency, profile)
-    plot_board(priority_mean, top20_frequency, scenario_arrays["equal"], profile)
+    plot_board(priority_mean, top20_frequency, scenario_arrays["equal_active_pim"], profile)
 
     cell_km2 = 30.0 * 30.0 / 1e6
+    zimbabwe_top20_ref_km2 = read_summary_metric(ZIMBABWE_STABILITY_SUMMARY, "stable_area_km2")
     stability_rows = [
         {"metric": "scenario_count", "value": len(all_scenarios)},
         {"metric": "mentor_slide_consistency_ratio", "value": round(slide_cr, 6)},
@@ -306,20 +370,24 @@ def main() -> None:
         {"metric": "top20_any_scenario_area_km2", "value": round(float(np.nansum(top20_frequency > 0.0) * cell_km2), 3)},
         {"metric": "priority_std_mean", "value": round(float(np.nanmean(priority_std)), 6)},
         {"metric": "priority_std_p95", "value": round(float(np.nanpercentile(priority_std, 95)), 6)},
-        {"metric": "zimbabwe_boundary_v1_rainfall_exposure_v0_4_top20_all_ref_km2", "value": 584.635},
-        {"metric": "ahp_main_criteria_count", "value": 5},
-        {"metric": "scored_layer_count", "value": len(CRITERIA_PATHS)},
-        {"metric": "scored_layers", "value": "flood, erosion_structure, land_cover, mining, exposure, rainfall"},
-        {"metric": "unimplemented_ahp_criteria", "value": "Environmental (ES) independent scored layer"},
+        {"metric": "zimbabwe_boundary_v1_rainfall_exposure_v0_4_top20_all_ref_km2", "value": round(zimbabwe_top20_ref_km2, 3)},
+        {"metric": "pim_main_criteria_count", "value": len(PIM_CRITERIA_ORDER)},
+        {"metric": "active_scored_pim_criteria_count", "value": len(ACTIVE_PIM_CRITERIA)},
+        {"metric": "component_layer_count", "value": len(COMPONENT_PATHS)},
+        {"metric": "active_scored_pim_criteria", "value": ", ".join(ACTIVE_PIM_CRITERIA)},
+        {"metric": "component_layers", "value": ", ".join(COMPONENT_PATHS)},
+        {"metric": "environmental_sensitivity_status", "value": "provisional"},
     ]
     write_csv(OUT_DIR / "scenario_weights.csv", weight_rows)
     write_csv(OUT_DIR / "scenario_priority_summary.csv", summary_rows)
     write_csv(OUT_DIR / "hotspot_stability_summary.csv", stability_rows)
-    print(f"wrote PE1 priority scenarios to {rel(OUT_DIR)}")
+    write_csv(OUT_DIR / "component_grid_check.csv", build_grid_check(profile, components))
+    write_csv(OUT_DIR / "pim_criteria_grid_check.csv", build_grid_check(profile, criteria))
+    print(f"wrote southern Peru comparison-catchment priority scenarios to {rel(OUT_DIR)}")
     print(f"  common valid coverage: {common_valid_fraction:.6f}")
     print(f"  top-20% stable across all scenarios: {stability_rows[5]['value']} km2")
     print(f"  mentor slide CR: {round(slide_cr, 6)}")
-    print("  (Zimbabwe boundary_v1 / rainfall_exposure_v0_4 ref: 584.635 km2 stable top-20%; PE1 uses 6 scored layers mapped to the 5-criterion framework)")
+    print("  (PE1 overlay uses 5 active scored PIM criteria; Environmental sensitivity is provisional)")
 
 
 if __name__ == "__main__":

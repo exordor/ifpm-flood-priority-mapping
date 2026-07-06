@@ -1,4 +1,4 @@
-# Dataset Registry: Geofabrik OSM Peru Pilot
+# Dataset Registry: Geofabrik OSM Southern Peru PE1
 
 Status: downloaded and processed for PE1 proximity-criteria derivation. Same source family
 and license as the already-downloaded Geofabrik Zimbabwe extract.

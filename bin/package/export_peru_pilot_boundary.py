@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Export the Peru engineering-pilot boundary package (single HydroBASINS unit).
+"""Export the southern Peru comparison-catchment boundary package.
 
-Engineering pilot, NOT a research-value-selected boundary. The pilot basin was chosen by an
-explicit, defensible selection rule (pacific-slope, fully inside the Arequipa-Moquegua-Tacna
-envelope, area comparable to Zimbabwe V1, non-terminal), NOT because the mentor identified a
-specific flood/mining-relevant outlet. It exists to run the Peru terrain chain end-to-end and
-prove comparability with Zimbabwe. It will be replaced if the mentor later names a specific
-Peru site.
+This boundary is HydroBASINS L7 HYBAS_ID=6070641200 in Arequipa Region, mainly
+the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It is a
+provisional comparison catchment selected by an explicit rule, not a final
+research-selected Peru study area. It exists to run the Peru terrain chain
+end-to-end and prove comparability with Zimbabwe. It will be replaced if the
+mentor later names a specific Peru site.
 
 Mirrors `export_v1_working_boundary.py` but single-source (one HydroBASINS polygon, no outlet
 discovery layers, no anchors because no mentor-named Peru places exist).
@@ -30,9 +30,9 @@ OUT_GPKG = OUT_DIR / "peru_pilot_boundary.gpkg"
 
 HYDRO_L7 = ROOT / "data/raw/hydrosheds_peru_prototype/extracted/hybas_sa_lev07_v1c.shp"
 
-# Engineering-pilot basin. Selection rule documented in the boundary decision note.
+# Southern Peru comparison catchment. Selection rule documented in DECISION_LOG.md.
 PILOT_HYBAS_ID = 6070641200
-PILOT_LABEL = "PE1_HYBAS_L7_6070641200_engineering_pilot"
+PILOT_LABEL = "PE1_HYBAS_L7_6070641200_arequipa_vitor_lajoya_siguas"
 
 GEOD = Geod(ellps="WGS84")
 
@@ -74,7 +74,7 @@ def main() -> None:
             "UP_AREA_km2": float(row["UP_AREA"]),
             "geo_area_km2": round(geo_area, 3),
             "crs_source": "EPSG:4326",
-            "status": "engineering_pilot_not_research_selected",
+            "status": "provisional_comparison_catchment_not_final_study_area",
             "claim_level": "diagnostic_only",
         }],
         geometry=[geom],
@@ -112,7 +112,7 @@ def main() -> None:
             "reference_point": name,
             "lon": round(pt.x, 5),
             "lat": round(pt.y, 5),
-            "inside_pilot": bool(geom.contains(pt) or geom.touches(pt)),
+            "inside_boundary": bool(geom.contains(pt) or geom.touches(pt)),
             "nearest_boundary_distance_km": round(d_km, 2),
             "note": "department-capital reference for orientation; not an accepted anchor",
         })
@@ -125,16 +125,16 @@ def main() -> None:
 
     # Diagnostic map.
     fig, ax = plt.subplots(figsize=(7, 7), constrained_layout=True)
-    boundary.boundary.plot(ax=ax, color="tab:red", linewidth=1.4, label="Peru engineering pilot boundary")
+    boundary.boundary.plot(ax=ax, color="tab:red", linewidth=1.4, label="Arequipa Region comparison catchment")
     boundary.plot(ax=ax, color="tab:red", alpha=0.12)
     for r in anchor_rows:
         ax.plot(r["lon"], r["lat"], "k^", markersize=6)
         ax.annotate(r["reference_point"].replace(" (ref)", ""), (r["lon"], r["lat"]),
                     fontsize=7, xytext=(4, 4), textcoords="offset points")
     c = geom.centroid
-    ax.text(c.x, c.y, "Pilot site", fontsize=11, ha="center", fontweight="bold", color="darkred")
+    ax.text(c.x, c.y, "Vitor-La Joya-Siguas", fontsize=9, ha="center", fontweight="bold", color="darkred")
     ax.set_title(
-        f"Peru Engineering Pilot Site Boundary\n"
+        f"Southern Peru Comparison Catchment\n"
         f"HydroBASINS Level 7 | {geo_area:.0f} km2 | Pacific-slope catchment | diagnostic map",
         fontsize=9,
     )
@@ -146,7 +146,7 @@ def main() -> None:
     fig.savefig(OUT_DIR / "peru_pilot_boundary_diagnostic.png", dpi=180)
     plt.close(fig)
 
-    print(f"wrote Peru pilot boundary PE1 to {rel(OUT_DIR)}")
+    print(f"wrote southern Peru comparison catchment PE1 to {rel(OUT_DIR)}")
     print(f"  HYBAS_ID={PILOT_HYBAS_ID}, geo_area={geo_area:.1f} km2 "
           f"(ZW V1 ref 3689.5, ratio {geo_area/3689.484:.2f})")
     print(f"  bounds WSEN: {bounds}")

@@ -109,7 +109,7 @@ def main() -> None:
             "R_high_sensitivity": R_HIGH_SENSITIVITY,
             "P": P,
         },
-        "boundary_status": "engineering_pilot_not_research_selected",
+        "boundary_status": "provisional_comparison_catchment_not_final_study_area",
         "r_invariance_note": ("The hotspot RANK does not depend on the chosen R value; R only "
                               "scales the absolute magnitude. The LOW R is a provisional screening "
                               "default; a PE1-specific CHIRPS/ERA5 R should be derived for any "

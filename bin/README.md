@@ -61,9 +61,9 @@ Peru PE1:      ...   pe1_dem →  slope   →  pe1_criteria_stack   →  pe1_pri
 
 The two chains now follow the mentor five-main-criterion framework (Flood,
 Sediment, Land Use / ASM, Environmental, Socioeconomic). The executable overlay
-currently uses six scored implementation layers because Land Use / ASM is split
-into land-cover and mining, rainfall is a sensitivity layer, and Environmental
-is not yet an independent scored raster.
+uses those five PIM main criteria as top-level weights. Flood and Land Use / ASM
+still have internal component rasters, and Environmental is implemented as a
+provisional water/wetland plus protected-area sensitivity indicator.
 
 ## Shared helpers (`_lib/`)
 

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Build grid-compatible PE1 scored implementation-layer rasters.
+"""Build grid-compatible PE1 component rasters for the PIM criteria.
 
 Mirrors `build_boundary_v1_criteria_stack_v0_2.py` plus the v0.3 rainfall
-sensitivity layer. PE1 follows the mentor 5-main-criterion AHP framework, but
-the executable stack has six scored implementation layers:
+sensitivity layer. PE1 follows the mentor 5-main-criterion AHP framework. This
+script prepares the component rasters that are combined later into PIM main
+criteria:
 flood_conditioning, soil_erosion_factors, land_cover_pressure,
 mining_pressure (INGEMMET), exposure_indicators (OSM roads), and
 rainfall_climatology (CHIRPS coarse-to-grid, sensitivity).
@@ -181,7 +182,7 @@ def main() -> None:
             "boundary_id": boundary_id, "experiment_id": experiment_id,
             "criterion": name, "path": rel(path),
             "components": components_map[name], "claim_level": claim_map[name],
-            "status": "provisional PE1 engineering-pilot criterion",
+            "status": "provisional southern Peru comparison-catchment criterion",
             "grid_compatible": "true" if frac >= MIN_VALID_FRACTION else "false",
             "coverage_threshold": MIN_VALID_FRACTION,
             "nodata_policy": (
@@ -191,9 +192,8 @@ def main() -> None:
             **stats(arr, mask),
         })
 
-    # Readiness table: PE1 has six scored implementation layers mapped to the
-    # mentor 5-main-criterion framework, matching the current Zimbabwe
-    # boundary_v1 / rainfall_exposure_v0_4 comparison run.
+    # Readiness table: these are component rasters mapped into the mentor
+    # 5-main-criterion framework by run_pe1_priority_scenarios.py.
     readiness = manifest_rows + [
         {"criterion": "rainfall_r_factor", "path": "", "components": "provisional R=238.6 (LOW family, shared default)",
          "status": "scalar R in soil-loss (absolute magnitude); the rainfall_climatology criterion handles the spatial overlay role",
@@ -216,7 +216,7 @@ def main() -> None:
         details = ", ".join(f"{row['criterion']}={row['valid_fraction']}" for row in low_coverage)
         raise RuntimeError(f"PE1 active criterion coverage below {MIN_VALID_FRACTION}: {details}")
     print(f"wrote {len(manifest_rows)} PE1 scored layers to {rel(CRITERIA_DIR)}")
-    print("(5 AHP main criteria; 6 scored layers: flood, erosion, landcover, mining, exposure, rainfall)")
+    print("(component rasters for the 5 PIM main criteria; overlay happens in run_pe1_priority_scenarios.py)")
 
 
 if __name__ == "__main__":

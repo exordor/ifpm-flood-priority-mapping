@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Plan SRTM 1 Arc-Second tiles for the Peru engineering-pilot boundary (PE1).
+"""Plan SRTM 1 Arc-Second tiles for the southern Peru comparison catchment (PE1).
 
-Mirrors `plan_srtm_tiles_for_v1.py` but for the Peru pilot boundary. Pre-download planning only:
+Mirrors `plan_srtm_tiles_for_v1.py` but for the PE1 boundary. Pre-download planning only:
 computes tile names from PE1 + 5 km buffer without downloading any data.
 
 Peru uses UTM 18S (EPSG:32718) for the metric buffer, NOT the Zimbabwe UTM 35S.
@@ -28,7 +28,7 @@ PE1_GPKG = OUT_DIR / "peru_pilot_boundary.gpkg"
 OUT_GPKG = OUT_DIR / "srtm_peru_pilot_tile_plan.gpkg"
 OUT_CSV = OUT_DIR / "srtm_peru_pilot_tile_plan.csv"
 SUMMARY = OUT_DIR / "srtm_peru_pilot_preflight_summary.md"
-METRIC_CRS = "EPSG:32718"  # UTM 18S covers southern Peru / the PE1 pilot area
+METRIC_CRS = "EPSG:32718"  # UTM 18S covers southern Peru / the PE1 area
 BUFFER_M = 5_000
 DATASET_ID = "srtm_1arcsec_peru_pilot"
 DESTINATION = f"data/raw/{DATASET_ID}/"
@@ -92,7 +92,7 @@ def write_outputs(bbox_gdf: gpd.GeoDataFrame, tiles: gpd.GeoDataFrame) -> None:
     bbox = bbox_gdf.iloc[0]
     SUMMARY.write_text(
         "\n".join([
-            "# SRTM Peru Pilot Tile Preflight Summary",
+            "# SRTM Southern Peru Comparison Catchment Tile Preflight Summary",
             "",
             f"Updated: {date.today().isoformat()}",
             "",

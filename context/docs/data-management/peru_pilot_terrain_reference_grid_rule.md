@@ -1,13 +1,15 @@
-# Peru Pilot (PE1) Terrain Reference Grid Rule
+# Southern Peru PE1 Terrain Reference Grid Rule
 
 Status: active internal rule; the Peru analogue of `v1_terrain_reference_grid_rule.md`.
 
 Last updated: 2026-06-30
 
-Scope: Peru engineering-pilot (PE1) controlled raster preprocessing and grid compatibility. This
-rule does NOT accept PE1 as a research-selected Peru study area (it is an engineering pilot, see
-`peru_pilot_boundary_decision_2026-06-30.md`) and does NOT authorize final flood-risk
-interpretation, intervention-priority interpretation, or Zimbabwe-Peru comparison.
+Scope: PE1 controlled raster preprocessing and grid compatibility for the
+southern Peru comparison catchment in Arequipa Region, mainly the
+Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. This rule does
+NOT accept PE1 as a final research-selected Peru study area and does NOT
+authorize final flood-risk interpretation, intervention-priority
+interpretation, or Zimbabwe-Peru comparison.
 
 ## Purpose
 
@@ -48,7 +50,7 @@ accepted. This is the same binding data-quality rule as the Zimbabwe V1 rule.
 
 ## What This Rule Does NOT Do
 
-- It does not accept PE1 as the final Peru study boundary (engineering pilot only).
+- It does not accept PE1 as the final Peru study boundary.
 - It does not authorize CHIRPS, AHP overlay, flood-risk interpretation, or
   intervention-priority interpretation.
 - It does not merge the Peru and Zimbabwe reference grids; each country keeps its own.

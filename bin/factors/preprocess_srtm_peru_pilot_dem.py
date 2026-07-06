@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Mosaic, reproject, and clip SRTMGL1 tiles for the Peru engineering-pilot (PE1).
+"""Mosaic, reproject, and clip SRTMGL1 tiles for the southern Peru PE1 catchment.
 
 Mirrors `preprocess_srtm_v1_dem.py`. Peru differences:
 - 2 tiles (S17W073, S17W072), not 6;
 - DST_CRS = EPSG:32718 (UTM 18S, southern Peru), NOT Zimbabwe's UTM 35S;
-- clips to the PE1 pilot boundary.
+- clips to the PE1 boundary.
 
 The clipped output `pe1_dem_utm18s_30m.tif` becomes the Peru reference grid (the analogue of
 the Zimbabwe `v1_dem_utm35s_30m.tif` reference). A separate Peru reference-grid rule will be

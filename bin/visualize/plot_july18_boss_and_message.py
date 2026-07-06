@@ -46,7 +46,7 @@ def plot_boss_process() -> None:
     )
     ax.text(
         0.5, 0.865,
-        "Zimbabwe Upper Mzingwane prototype vs Peru engineering pilot",
+        "Zimbabwe Upper Mzingwane vs southern Peru comparison catchment",
         ha="center", va="center", fontsize=10.5, color="0.25",
     )
 
@@ -56,7 +56,7 @@ def plot_boss_process() -> None:
         ("3. 0-1 criteria", "standardize each evidence layer with documented direction"),
         ("4. Scenario weights", "apply candidate AHP-style weights and sensitivity runs"),
         ("5. Priority outputs", "map priority score, stable hotspots, and dominant driver"),
-        ("6. Mentor review", "check criteria, data gaps, Peru site, and Zimbabwe ASM request"),
+        ("6. Mentor review", "check criteria, data gaps, Peru area, and Zimbabwe ASM request"),
     ]
     x, width, height = 0.08, 0.84, 0.095
     y0, gap = 0.75, 0.035
@@ -113,7 +113,7 @@ This is not a final flood-risk map. I see it as a way to check the method and de
 The main data gaps are:
 Zimbabwe ASM / mining mapping,
 observed flood-impact evidence,
-and confirmation whether the Peru pilot site is acceptable or should be replaced.
+and confirmation whether the southern Peru comparison catchment should be kept or replaced.
 """
     path.write_text(message, encoding="utf-8")
 

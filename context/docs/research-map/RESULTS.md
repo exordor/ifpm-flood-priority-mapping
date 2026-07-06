@@ -97,16 +97,23 @@ A waits on the R-method decision (RQ1).
 
 ### Observation
 
-Five honest-label criteria built on the V1 reference grid; tested under four
-weight scenarios. v0.3 adds the rainfall criterion (CHIRPS coarse-to-grid).
+Five PIM main criteria built on the V1 reference grid; tested under three
+sensitivity scenarios. Flood and Land Use / ASM are derived from internal
+component rasters, and Environmental is a provisional water/wetland plus
+protected-area sensitivity indicator.
 
 ### Evidence
 
-- Criteria: flood_conditioning_factors, soil_erosion_factors, land_cover_pressure,
-  mining_pressure, exposure_indicators (v0.1 used the legacy `socioeconomic_exposure`
-  name; renamed under D-CRITERIA-V0-2). v0.3 adds rainfall_climatology.
+- Active PIM criteria: flood_hazard, sediment, landuse_asm, environmental,
+  socioeconomic.
+- Component rasters: flood_conditioning_factors, rainfall_climatology,
+  soil_erosion_factors, land_cover_pressure, mining_pressure,
+  environmental_sensitivity, exposure_indicators.
 - Top-20% stable hotspot across all four scenarios: **436.907 km²** (v0.1) /
   **431.907 km²** (v0.2).
+- Current PIM 5-criterion run (`rainfall_exposure_v0_4`): stable top-20%
+  hotspot across all three scenarios **512.917 km²**; top-20% in at least one
+  scenario **931.142 km²**.
 - Top-20% hotspot in at least one scenario: 1066.03 km².
 - Mean priority standard deviation across scenarios: 0.04697.
 - All criteria and checked priority rasters passed the V1 raster grid gate.
@@ -125,8 +132,9 @@ revive deprecated R/A products.
 
 ### Observation
 
-PE1 is operationally comparable with V1 v0.3 under the mentor five-main-criterion
-framework, using the same six scored implementation layers.
+PE1 is operationally comparable with V1 under the mentor five-main-criterion
+framework, using the same five active PIM main criteria as top-level overlay
+terms.
 
 ### Evidence
 
@@ -136,21 +144,26 @@ framework, using the same six scored implementation layers.
 - LS hillslope mean 3.70 (vs V1 1.563).
 - K (0-1815 US, native 250m); C mean 0.6096 (bare/sparse dominant).
 - USLE A (LOW R=238.6) mean 8.74 t/ha/yr (vs V1 0.50).
-- Five AHP main criteria are represented as six scored implementation layers:
-  flood, erosion, land cover, mining (INGEMMET 11 official ASM points), exposure
-  (OSM 6210 roads), and rainfall (CHIRPS latam Dec-Mar 37.6-292.9 mm/season,
-  mean ~78). Environmental is not yet an independent scored layer.
-- Stable top-20% hotspot across 3 scenarios: **258.538 km²** in the current rerun.
+- Active PIM criteria: flood_hazard, sediment, landuse_asm, environmental,
+  socioeconomic.
+- Component rasters: flood_conditioning_factors, rainfall_climatology,
+  soil_erosion_factors, land_cover_pressure, mining_pressure (INGEMMET
+  11 official ASM points), environmental_sensitivity, and exposure_indicators
+  (OSM 6210 roads).
+- Environmental is provisional: water/wetland and protected-area sensitivity
+  indicator, not ecological valuation.
+- Stable top-20% hotspot across 3 scenarios: **385.187 km²** in the current
+  PIM 5-criterion rerun.
 
 ### Interpretation
 
-PE1 is operationally comparable to V1 v0.3 (H-PE1-SYMMETRIC, supported at
-`engineering_pilot`) under the same 5-main-criterion / implementation-layer
-mapping. Physical regimes differ fundamentally: arid Andean
+PE1 is operationally comparable to V1 (H-PE1-SYMMETRIC, supported at
+`provisional` level) under the same 5-main-criterion PIM overlay. Physical
+regimes differ fundamentally: arid Andean
 Pacific slope (C=0.61, bare; soil loss 8.74) vs semi-humid savanna (C=0.04,
 shrub/grass; soil loss 0.50). This is a real defensible contrast, not noise.
 
-### Claim level: `engineering_pilot` / `sensitivity_scenario`. Final harmonised
+### Claim level: `provisional` / `sensitivity_scenario`. Final harmonised
 comparison claim blocked (IFPM-D03).
 
 ## Mining evidence
@@ -162,7 +175,7 @@ official INGEMMET point evidence.
 
 ### Evidence
 
-- V1: 2 quarry/industrial polygons in V1+5km (OSM proxy only).
+- V1: 2 quarry/industrial polygons in V1+5km (OSM indicator only).
 - PE1: 32 quarry/industrial polygons (OSM) upgraded to 11 official INGEMMET
   Pequeña Minería ASM points (ArcGIS REST, no login).
 - PE1 mining upgrade shifted stable top-20% hotspot from 368 km² (OSM) to
@@ -182,7 +195,7 @@ strictly better evidenced than Zimbabwe. Zimbabwe ASM data waits on the mentor's
 
 ### Observation
 
-V1 stable hotspots show weak co-location with exposure proxies.
+V1 stable hotspots show weak co-location with exposure indicators.
 
 ### Evidence
 
