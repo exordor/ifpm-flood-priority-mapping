@@ -6,14 +6,9 @@ mentor-slide-mapped default, mining/exposure stress), plus a mean/std/top-20%
 hotspot-stability board. All outputs are `provisional` or `sensitivity_scenario`
 under the execution status policy, not final flood-risk or intervention claims.
 
-Sediment criterion normalization note: `sediment_risk_lowR_provisional` is an
-absolute soil-loss raster (t/ha/yr, range 0-238.6) derived from
-soil_erosion_factors x R=238.6. `normalize_if_needed` max-normalizes it to
-[0,1] for MCDA scoring, so its 0-1 value is a *relative hotspot intensity*, not
-an absolute erosion rate. The maximum-erosion cell becomes 1.0; the R-value
-choice shifts the absolute magnitude but, after normalization, does not change
-which cells rank highest (rank is independent of the chosen R-factor). Absolute t/ha/yr values remain
-available in `sediment_r_factor_scenarios/`.
+Sediment/erosion criterion note: `soil_erosion_factors` is the standardized
+K x LS x C erosion-source structure criterion. It does not include a rainfall
+erosivity scalar and must not be read as absolute soil loss.
 """
 
 from __future__ import annotations
@@ -30,7 +25,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
 OUTPUTS = [ROOT / "outputs/boundary_v1/priority_scenarios_v0_2/priority_mean.tif", ROOT / "outputs/boundary_v1/priority_scenarios_v0_2/top20_frequency.tif", ROOT / "outputs/boundary_v1/priority_scenarios_v0_2/hotspot_stability_summary.csv"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
@@ -43,13 +38,12 @@ CRITERIA_ID = "criteria_stack_v0_2"
 OUT_DIR = ROOT / f"outputs/{BOUNDARY_ID}/{EXPERIMENT_ID}"
 SCENARIO_DIR = OUT_DIR / "scenarios"
 CRITERIA_DIR = ROOT / f"outputs/{BOUNDARY_ID}/{CRITERIA_ID}/criteria"
-SEDIMENT_DIR = ROOT / f"outputs/{BOUNDARY_ID}/sediment_r_factor_scenarios"
 REF = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif"
 V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
 
 CRITERIA_PATHS = {
     "flood_conditioning_factors": CRITERIA_DIR / "flood_conditioning_factors_0_1.tif",
-    "sediment_risk_lowR_provisional": SEDIMENT_DIR / "sediment_risk_lowR_provisional_30m.tif",
+    "soil_erosion_factors": CRITERIA_DIR / "soil_erosion_factors_0_1.tif",
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
     "mining_pressure": CRITERIA_DIR / "mining_pressure_0_1.tif",
     "river_proximity_indicators": CRITERIA_DIR / "river_proximity_indicators_0_1.tif",
@@ -106,7 +100,7 @@ def read_band(path: Path, profile: dict) -> np.ndarray:
 
 
 def normalize_if_needed(name: str, data: np.ndarray) -> np.ndarray:
-    """Keep 0-1 criteria as-is; scale LOW-R sediment scenario back to 0-1 for MCDA scoring."""
+    """Keep 0-1 criteria as-is; max-normalize only if a layer is outside that range."""
     values = data[np.isfinite(data)]
     if values.size == 0:
         raise ValueError(f"empty criterion: {name}")
@@ -130,7 +124,7 @@ def ahp_slide_weights() -> tuple[dict[str, float], float]:
     return (
         {
             "flood_conditioning_factors": base["flood"],
-            "sediment_risk_lowR_provisional": base["sediment"],
+            "soil_erosion_factors": base["sediment"],
             "land_cover_pressure": landuse_half,
             "mining_pressure": landuse_half,
             "river_proximity_indicators": base["environmental"],
@@ -146,14 +140,14 @@ def scenario_weights() -> tuple[dict[str, dict[str, float]], float]:
         {
             "equal_core": {
                 "flood_conditioning_factors": 0.25,
-                "sediment_risk_lowR_provisional": 0.25,
+                "soil_erosion_factors": 0.25,
                 "land_cover_pressure": 0.25,
                 "mining_pressure": 0.25,
             },
             "default_weighted": slide,
             "mining_exposure_stress": {
                 "flood_conditioning_factors": 0.25,
-                "sediment_risk_lowR_provisional": 0.20,
+                "soil_erosion_factors": 0.20,
                 "land_cover_pressure": 0.10,
                 "mining_pressure": 0.25,
                 "river_proximity_indicators": 0.05,
@@ -187,7 +181,7 @@ def raster_stats(data: np.ndarray) -> dict[str, object]:
 
 def add_colorbar(fig, ax, image, label: str) -> None:
     divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size="3%", pad=0.04)
+    cax = divider.append_axes("right", size="3%", pad=0.08)
     cb = fig.colorbar(image, cax=cax)
     cb.ax.tick_params(labelsize=7)
     cb.set_label(label, fontsize=8)
@@ -199,11 +193,12 @@ def plot_board(priority_mean: np.ndarray, top20_frequency: np.ndarray, mentor_sc
     bounds = rasterio.transform.array_bounds(profile["height"], profile["width"], profile["transform"])
     extent = (bounds[0] / 1000, bounds[2] / 1000, bounds[1] / 1000, bounds[3] / 1000)
 
-    fig, axes = plt.subplots(1, 3, figsize=(14.5, 4.8), constrained_layout=True)
+    fig, axes = plt.subplots(1, 3, figsize=(16.2, 4.9), constrained_layout=True)
+    fig.set_constrained_layout_pads(w_pad=0.12, h_pad=0.08, wspace=0.18, hspace=0.02)
     panels = [
-        ("A. Mean priority across scenarios", priority_mean, "YlOrRd", "0-1 score"),
-        ("B. Default weighted scenario", mentor_score, "YlOrRd", "0-1 score"),
-        ("C. Top-20% hotspot frequency", top20_frequency, "Blues", "frequency"),
+        ("A. Mean priority score across scenarios", priority_mean, "YlOrRd", "0-1 priority score"),
+        ("B. Candidate AHP-weighted priority score", mentor_score, "YlOrRd", "0-1 priority score"),
+        ("C. Stable hotspot frequency (top 20%)", top20_frequency, "Blues", "hotspot frequency"),
     ]
     for ax, (title, data, cmap, label) in zip(axes, panels, strict=True):
         image = ax.imshow(np.ma.masked_invalid(data), extent=extent, origin="upper", cmap=cmap, vmin=0, vmax=1)
@@ -214,7 +209,7 @@ def plot_board(priority_mean: np.ndarray, top20_frequency: np.ndarray, mentor_sc
         ax.grid(color="0.9", linewidth=0.4)
         ax.tick_params(labelsize=7)
         add_colorbar(fig, ax, image, label)
-    fig.suptitle("boundary_v1 / priority_scenarios_v0_2: provisional hotspot map", fontsize=13, fontweight="bold")
+    fig.suptitle("Upper Mzingwane Catchment: Prototype Flood-Priority Hotspot Screening", fontsize=13, fontweight="bold")
     fig.savefig(OUT_DIR / "priority_scenarios_board.png", dpi=220, bbox_inches="tight")
     fig.savefig(OUT_DIR / "priority_scenarios_board.pdf", bbox_inches="tight")
     plt.close(fig)

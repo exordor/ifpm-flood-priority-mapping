@@ -157,13 +157,13 @@ def draw_river_context(ax, legend_ax, layers: dict[str, gpd.GeoDataFrame]) -> No
         layers["geoportal_water_areas_v1"].plot(ax=ax, color="#56B4E9", alpha=0.45, edgecolor="none")
     boundary.boundary.plot(ax=ax, color="#111111", linewidth=1.2)
     layers["v1_anchors"].plot(ax=ax, color="#D55E00", markersize=18, edgecolor="white", linewidth=0.4)
-    style_map(ax, "A. V1 catchment and river context", boundary)
+    style_map(ax, "A. Prototype catchment and river context", boundary)
     add_north_arrow(ax)
     add_scale_bar(ax)
     draw_panel_legend(
         legend_ax,
         [
-            Line2D([0], [0], color="#111111", lw=1.2, label="V1 boundary"),
+            Line2D([0], [0], color="#111111", lw=1.2, label="Prototype catchment boundary"),
             Line2D([0], [0], color="#0072B2", lw=0.9, label="Geoportal rivers"),
             Line2D([0], [0], color="#9DD3EA", lw=0.9, label="HydroRIVERS"),
             Patch(facecolor="#56B4E9", alpha=0.45, label="Water areas"),
@@ -330,9 +330,9 @@ def plot_board(layers: dict[str, gpd.GeoDataFrame], evidence: pd.DataFrame, coun
 
 
 def caption_text() -> str:
-    return """Figure X. V1 multi-criteria evidence package for mentor review. The package is provided as separate panels first: river/flood context, terrain diagnostics, exposure and mining-pressure proxy evidence, and a candidate-criteria decision table. The combined board is a secondary overview only.
+    return """Figure X. Upper Mzingwane multi-criteria evidence package for mentor review. The package is provided as separate panels first: river/flood context, terrain diagnostics, exposure and mining-pressure proxy evidence, and a candidate-criteria decision table. The combined board is a secondary overview only.
 
-Source note: The board uses existing V1 terrain diagnostics, HydroRIVERS, Zimbabwe Geoportal river/water/flood-prone layers, and Geofabrik OSM roads/places/landuse. A separate CHIRPS rainfall-sensitivity package is available; CHIRPS is not resampled or overlaid in this figure.
+Source note: The board uses existing terrain diagnostics for the Upper Mzingwane prototype catchment, HydroRIVERS, Zimbabwe Geoportal river/water/flood-prone layers, and Geofabrik OSM roads/places/landuse. A separate CHIRPS rainfall-sensitivity package is available; CHIRPS is not resampled or overlaid in this figure.
 
 Interpretation note: This is a candidate-criteria evidence package, not a model output. Geoportal Flood Prone Zones have zero local overlap in the current review layers, and OSM quarry/industrial features are weak proxy evidence rather than official mining truth.
 
@@ -341,13 +341,13 @@ Limitation note: This figure is not a flood-risk map, not an AHP-MCDA overlay, n
 
 
 def write_text_outputs() -> None:
-    caption = "# Caption: V1 Multi-Criteria Evidence Package\n\n" + caption_text()
+    caption = "# Caption: Upper Mzingwane Multi-Criteria Evidence Package\n\n" + caption_text()
     (OUT_DIR / "mentor_v1_multicriteria_caption.md").write_text(caption, encoding="utf-8")
     (OUT_DIR / "mentor_v1_multicriteria_caption.txt").write_text(caption_text(), encoding="utf-8")
     HANDOFF.write_text(
         "\n".join(
             [
-                "# V1 Multi-Criteria Evidence Package Handoff",
+                "# Upper Mzingwane Multi-Criteria Evidence Package Handoff",
                 "",
                 f"Updated: {date.today().isoformat()}",
                 "",

@@ -90,7 +90,7 @@ def main():
     ax.set_title("(d) Drainage-proximity candidate (0-1)\ninverted; near-stream -> higher value", pad=7)
     fig.colorbar(im, ax=ax, shrink=0.72, label="standardized (0-1)")
 
-    fig.suptitle("V1 hydrology candidate evidence\nTWI and drainage proximity for mentor review",
+    fig.suptitle("Upper Mzingwane Catchment: Hydrology Candidate Evidence\nTWI and drainage proximity for mentor review",
                  fontsize=13.0, weight="bold", y=0.965)
     fig.text(0.5, 0.025, "Candidate evidence only: no AHP overlay, no flood-risk interpretation.", ha="center", fontsize=8.0, style="italic", color="#333")
     fig.savefig(BOARD_PNG); fig.savefig(BOARD_PDF); plt.close(fig)

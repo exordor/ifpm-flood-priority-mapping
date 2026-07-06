@@ -125,17 +125,17 @@ def main() -> None:
 
     # Diagnostic map.
     fig, ax = plt.subplots(figsize=(7, 7), constrained_layout=True)
-    boundary.boundary.plot(ax=ax, color="tab:red", linewidth=1.4, label="PE1 pilot boundary")
+    boundary.boundary.plot(ax=ax, color="tab:red", linewidth=1.4, label="Peru engineering pilot boundary")
     boundary.plot(ax=ax, color="tab:red", alpha=0.12)
     for r in anchor_rows:
         ax.plot(r["lon"], r["lat"], "k^", markersize=6)
         ax.annotate(r["reference_point"].replace(" (ref)", ""), (r["lon"], r["lat"]),
                     fontsize=7, xytext=(4, 4), textcoords="offset points")
     c = geom.centroid
-    ax.text(c.x, c.y, "PE1", fontsize=11, ha="center", fontweight="bold", color="darkred")
+    ax.text(c.x, c.y, "Pilot site", fontsize=11, ha="center", fontweight="bold", color="darkred")
     ax.set_title(
-        f"Peru engineering-pilot boundary PE1\n"
-        f"HYBAS L7 {PILOT_HYBAS_ID} | {geo_area:.0f} km2 | pacific-slope | diagnostic_only",
+        f"Peru Engineering Pilot Site Boundary\n"
+        f"HydroBASINS Level 7 | {geo_area:.0f} km2 | Pacific-slope catchment | diagnostic map",
         fontsize=9,
     )
     ax.set_xlabel("Longitude (EPSG:4326)")

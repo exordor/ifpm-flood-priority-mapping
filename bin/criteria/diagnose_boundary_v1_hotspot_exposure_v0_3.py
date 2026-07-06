@@ -219,14 +219,19 @@ def plot_board(freq: np.ndarray, inside: np.ndarray, profile: dict) -> None:
     boundary.boundary.plot(ax=ax, color="black", linewidth=1.0)
     crossings.plot(ax=ax, marker="o", color="blue", markersize=14, label="road-river crossings (64)", edgecolor="white", linewidth=0.3)
     places.plot(ax=ax, marker="^", color="lime", markersize=46, label="OSM places (8)", edgecolor="black", linewidth=0.5)
-    ax.set_title("boundary_v1 v0.2 hotspot frequency vs exposure points", loc="left", fontsize=11, fontweight="bold")
+    ax.set_title(
+        "Upper Mzingwane Catchment: Prototype Hotspots and Exposure Indicators",
+        loc="left",
+        fontsize=11,
+        fontweight="bold",
+    )
     ax.set_xlabel("Easting (km, EPSG:32735)", fontsize=9)
     ax.set_ylabel("Northing (km)", fontsize=9)
     ax.legend(loc="lower left", fontsize=8, framealpha=0.9)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="3%", pad=0.04)
     cb = fig.colorbar(im, cax=cax)
-    cb.set_label("v0.2 top-20% frequency (stable >= 0.667)", fontsize=8)
+    cb.set_label("Stable hotspot frequency (top 20%)", fontsize=8)
     fig.savefig(OUT_DIR / "hotspot_exposure_board.png", dpi=220, bbox_inches="tight")
     fig.savefig(OUT_DIR / "hotspot_exposure_board.pdf", bbox_inches="tight")
     plt.close(fig)

@@ -110,7 +110,7 @@ def plot_landcover() -> None:
     fig, ax = plt.subplots(figsize=(5.2, 6.0))
     ax.imshow(shown, cmap=cmap, extent=extent(bounds), origin="upper", vmin=0.5, vmax=len(values) + 0.5)
     boundary("EPSG:4326").boundary.plot(ax=ax, color="#111111", linewidth=1.1)
-    ax.set_title("V1 land-cover evidence: ESA WorldCover 2021", loc="left")
+    ax.set_title("Upper Mzingwane land-cover evidence: ESA WorldCover 2021", loc="left")
     ax.set_xlabel("Longitude")
     ax.set_ylabel("Latitude")
     handles = [Patch(facecolor=LC_COLORS[row.class_value], label=f"{row.class_name} ({row.share_of_valid_pct:.1f}%)") for row in pd.read_csv(LANDCOVER).itertuples()]
@@ -128,7 +128,7 @@ def plot_water() -> None:
     fig, ax = plt.subplots(figsize=(5.2, 6.0))
     img = ax.imshow(data, cmap="Blues", extent=extent(bounds), origin="upper", vmin=0, vmax=100)
     boundary("EPSG:4326").boundary.plot(ax=ax, color="#111111", linewidth=1.1)
-    ax.set_title("V1 water-history evidence: JRC occurrence", loc="left")
+    ax.set_title("Upper Mzingwane water-history evidence: JRC occurrence", loc="left")
     ax.set_xlabel("Longitude")
     ax.set_ylabel("Latitude")
     ax.grid(alpha=0.12)
@@ -151,13 +151,13 @@ def plot_protected_areas() -> None:
         for item in wdpca.itertuples():
             pt = item.geometry.representative_point()
             ax.text(pt.x, pt.y, str(item.name_eng), fontsize=7, ha="center", va="center", color="#173B2F")
-    ax.set_title("V1 environmental evidence: WDPCA protected areas", loc="left")
+    ax.set_title("Upper Mzingwane environmental evidence: WDPCA protected areas", loc="left")
     ax.set_xlabel("Longitude")
     ax.set_ylabel("Latitude")
     ax.grid(alpha=0.12)
     ax.legend(
         handles=[
-            Patch(facecolor="none", edgecolor="#111111", label="V1 boundary"),
+            Patch(facecolor="none", edgecolor="#111111", label="Prototype catchment boundary"),
             Patch(facecolor="#009E73", edgecolor="#006D4C", alpha=0.35, label="WDPCA overlap"),
         ],
         loc="upper center",
@@ -191,7 +191,7 @@ def plot_population() -> None:
     axes[0].set_ylabel("Latitude")
     axes[1].set_xlabel("Easting")
     axes[1].set_ylabel("Northing")
-    fig.suptitle("V1 socioeconomic exposure evidence", fontweight="bold")
+    fig.suptitle("Upper Mzingwane socioeconomic exposure evidence", fontweight="bold")
     save(fig, PANEL_FILES["population"])
 
 

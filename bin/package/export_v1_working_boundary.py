@@ -190,7 +190,7 @@ def plot_diagnostic(v1_boundary: gpd.GeoDataFrame, v1_outlet: gpd.GeoDataFrame, 
         )
     outlet_point = v1_outlet.geometry.iloc[0]
     ax.annotate(
-        "V1 outlet proxy",
+        "Prototype outlet proxy",
         (outlet_point.x, outlet_point.y),
         xytext=(12, 8),
         textcoords="offset points",
@@ -200,7 +200,7 @@ def plot_diagnostic(v1_boundary: gpd.GeoDataFrame, v1_outlet: gpd.GeoDataFrame, 
         arrowprops={"arrowstyle": "-", "color": "#d7191c", "linewidth": 0.8},
     )
 
-    ax.set_title("V1 working boundary map", fontsize=13, weight="bold")
+    ax.set_title("Upper Mzingwane Prototype Catchment Boundary", fontsize=13, weight="bold")
     ax.set_xlabel("Longitude (EPSG:4326)")
     ax.set_ylabel("Latitude (EPSG:4326)")
     ax.grid(True, alpha=0.2)
@@ -208,11 +208,11 @@ def plot_diagnostic(v1_boundary: gpd.GeoDataFrame, v1_outlet: gpd.GeoDataFrame, 
     ax.margins(0.04)
 
     handles = [
-        Patch(facecolor="#fee8c8", edgecolor="#d7191c", alpha=0.55, label="V1 working boundary"),
-        Line2D([0], [0], color="#fdae61", linestyle="--", label="V2 upstream alternative"),
-        Line2D([0], [0], color="#7b3294", linestyle=":", label="Old C1 machine prior"),
-        Line2D([0], [0], marker="o", color="w", markerfacecolor="#238b45", label="Anchor inside V1"),
-        Line2D([0], [0], marker="o", color="w", markerfacecolor="#969696", label="Anchor outside V1"),
+        Patch(facecolor="#fee8c8", edgecolor="#d7191c", alpha=0.55, label="Prototype catchment"),
+        Line2D([0], [0], color="#fdae61", linestyle="--", label="Upstream alternative boundary"),
+        Line2D([0], [0], color="#7b3294", linestyle=":", label="Earlier machine-selected boundary"),
+        Line2D([0], [0], marker="o", color="w", markerfacecolor="#238b45", label="Anchor inside prototype catchment"),
+        Line2D([0], [0], marker="o", color="w", markerfacecolor="#969696", label="Anchor outside prototype catchment"),
     ]
     info.legend(handles=handles, loc="upper left", fontsize=8.4, frameon=True, title="Legend")
 
@@ -235,8 +235,8 @@ def plot_diagnostic(v1_boundary: gpd.GeoDataFrame, v1_outlet: gpd.GeoDataFrame, 
     )
     anchor_text = (
         "Anchor check\n\n"
-        "Inside V1: Mzingwane Dam, Esigodini\n"
-        "Outside V1: Gwanda, Filabusi approx, West Nicholson approx\n\n"
+        "Inside prototype catchment: Mzingwane Dam, Esigodini\n"
+        "Outside prototype catchment: Gwanda, Filabusi approx, West Nicholson approx\n\n"
         "SRTM preflight: six planned tiles only; no DEM downloaded."
     )
     info.text(
@@ -250,7 +250,11 @@ def plot_diagnostic(v1_boundary: gpd.GeoDataFrame, v1_outlet: gpd.GeoDataFrame, 
         linespacing=1.35,
         bbox={"boxstyle": "round,pad=0.45", "facecolor": "white", "edgecolor": "#cccccc", "alpha": 0.95},
     )
-    fig.suptitle("V1 working boundary package: prototype-only waiver, not final thesis boundary", fontsize=14, weight="bold")
+    fig.suptitle(
+        "Upper Mzingwane Prototype Catchment: Working Boundary Context",
+        fontsize=14,
+        weight="bold",
+    )
     fig.savefig(OUT_DIR / "v1_boundary_diagnostic.png", dpi=220)
     fig.savefig(OUT_DIR / "v1_boundary_diagnostic.pdf")
     plt.close(fig)

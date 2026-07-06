@@ -39,15 +39,15 @@ ANCHOR_LABEL_OFFSETS = {
     "West Nicholson approx": (5, 4),
 }
 
-CAPTION = """# Caption: V1 Working Catchment Boundary
+CAPTION = """# Caption: Upper Mzingwane Prototype Catchment Boundary
 
-Figure X. V1 working catchment boundary for the Upper Mzingwane prototype, derived from HydroBASINS Level-8 topology. The boundary includes Mzingwane Dam and Esigodini and follows the main Mzingwane/Umzingwani river corridor downstream toward Gwanda, while Gwanda lies outside the working catchment. The V1 outlet proxy is shown as the downstream reference point used for prototype data preparation.
+Figure X. Working catchment boundary for the Upper Mzingwane prototype, derived from HydroBASINS Level-8 topology. The boundary includes Mzingwane Dam and Esigodini and follows the main Mzingwane/Umzingwani river corridor downstream toward Gwanda, while Gwanda lies outside the working catchment. The prototype outlet proxy is shown as the downstream reference point used for data preparation.
 
 Source note: HydroBASINS Level-8 is used for the working catchment boundary; Zimbabwe Geoportal and river layers are shown as contextual reference layers.
 
 Boundary note: This boundary is accepted with waiver for controlled prototype use and should not be described as the final thesis boundary unless separately confirmed.
 
-Recommended in-text reference: Figure X shows the V1 working catchment boundary used to define the spatial mask for the Upper Mzingwane prototype.
+Recommended in-text reference: Figure X shows the working catchment boundary used to define the spatial mask for the Upper Mzingwane prototype.
 """
 
 
@@ -93,7 +93,7 @@ def add_outlet_label(ax, outlet: gpd.GeoDataFrame) -> None:
     point = outlet.geometry.iloc[0]
     ax.scatter(point.x, point.y, s=56, color="#D55E00", edgecolor="white", linewidth=0.7, zorder=11)
     ax.annotate(
-        "V1 outlet proxy",
+        "Prototype outlet proxy",
         (point.x, point.y),
         xytext=(9, 7),
         textcoords="offset points",
@@ -135,12 +135,12 @@ def add_scale_bar(ax, length_km: int = 20) -> None:
 
 def add_legend(ax) -> None:
     handles = [
-        Patch(facecolor="#F6E8C3", edgecolor="#D55E00", alpha=0.62, label="V1 working catchment"),
+        Patch(facecolor="#F6E8C3", edgecolor="#D55E00", alpha=0.62, label="Prototype catchment"),
         Line2D([0], [0], color="#111111", linewidth=1.1, label="Geoportal context boundary"),
         Line2D([0], [0], color="#0072B2", linewidth=0.9, label="River/stream"),
-        Line2D([0], [0], marker="o", color="w", markerfacecolor="#D55E00", label="V1 outlet proxy"),
-        Line2D([0], [0], marker="o", color="w", markerfacecolor="#009E73", label="Anchor inside V1"),
-        Line2D([0], [0], marker="o", color="w", markerfacecolor="#7A7A7A", label="Anchor outside V1"),
+        Line2D([0], [0], marker="o", color="w", markerfacecolor="#D55E00", label="Prototype outlet proxy"),
+        Line2D([0], [0], marker="o", color="w", markerfacecolor="#009E73", label="Anchor inside prototype catchment"),
+        Line2D([0], [0], marker="o", color="w", markerfacecolor="#7A7A7A", label="Anchor outside prototype catchment"),
     ]
     ax.legend(
         handles=handles,
@@ -189,7 +189,7 @@ def plot_paper_map() -> None:
 def write_caption() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     (OUT_DIR / "v1_boundary_paper_caption.md").write_text(CAPTION, encoding="utf-8")
-    plain = CAPTION.replace("# Caption: V1 Working Catchment Boundary\n\n", "")
+    plain = CAPTION.replace("# Caption: Upper Mzingwane Prototype Catchment Boundary\n\n", "")
     (OUT_DIR / "v1_boundary_paper_caption.txt").write_text(plain, encoding="utf-8")
 
 

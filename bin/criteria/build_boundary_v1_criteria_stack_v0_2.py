@@ -139,14 +139,19 @@ def weighted_average(parts: list[tuple[np.ndarray, float]], mask: np.ndarray) ->
     return out.astype("float32")
 def plot_preview(criteria: dict[str, np.ndarray], mask: np.ndarray, path: Path) -> None:
     names = [name for name in criteria if name in {"soil_erosion_factors", "land_cover_pressure", "mining_pressure"}]
+    public_labels = {
+        "soil_erosion_factors": "Soil-erosion source factors",
+        "land_cover_pressure": "Land-cover pressure",
+        "mining_pressure": "Mining-pressure indicator",
+    }
     fig, axes = plt.subplots(1, len(names), figsize=(12, 4), constrained_layout=True)
     for ax, name in zip(np.atleast_1d(axes), names, strict=True):
         data = np.where(mask, criteria[name], np.nan)
         image = ax.imshow(data, cmap="viridis", vmin=0, vmax=1)
-        ax.set_title(name.replace("_", " "), fontsize=10)
+        ax.set_title(public_labels.get(name, name.replace("_", " ").title()), fontsize=10)
         ax.set_axis_off()
         fig.colorbar(image, ax=ax, fraction=0.046, pad=0.04)
-    fig.suptitle("boundary_v1 / criteria_stack_v0_2: split indicators, NoData preserved", fontsize=12)
+    fig.suptitle("Upper Mzingwane Catchment: Prototype Criterion Layers", fontsize=12)
     fig.savefig(path, dpi=180)
     plt.close(fig)
 

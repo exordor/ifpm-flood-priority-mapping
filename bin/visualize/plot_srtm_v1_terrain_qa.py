@@ -116,12 +116,12 @@ def plot_qa(boundary: gpd.GeoDataFrame) -> None:
     axes[0].imshow(hillshade, cmap="gray", extent=raster_extent(dem_profile["bounds"]), origin="upper")
     dem_img = axes[0].imshow(dem_show, cmap="terrain", extent=raster_extent(dem_profile["bounds"]), origin="upper", alpha=0.62)
     boundary.boundary.plot(ax=axes[0], color="black", linewidth=0.8)
-    axes[0].set_title("V1 DEM with QA hillshade")
+    axes[0].set_title("Upper Mzingwane DEM with QA hillshade")
     fig.colorbar(dem_img, ax=axes[0], shrink=0.76, label="Elevation (m)")
 
     slope_img = axes[1].imshow(slope_show, cmap="magma", extent=raster_extent(slope_profile["bounds"]), origin="upper")
     boundary.boundary.plot(ax=axes[1], color="white", linewidth=0.8)
-    axes[1].set_title("V1 slope diagnostic")
+    axes[1].set_title("Upper Mzingwane slope diagnostic")
     fig.colorbar(slope_img, ax=axes[1], shrink=0.76, label="Slope (degrees)")
 
     for ax in axes:

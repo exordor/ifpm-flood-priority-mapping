@@ -113,7 +113,7 @@ def plot_coverage(rows: list[dict[str, object]]) -> None:
         centroid = row.geometry.centroid
         ax.text(centroid.x, centroid.y, row["tile_name"], ha="center", va="center", fontsize=8)
 
-    ax.set_title("SRTM V1 tile coverage check", fontsize=12, weight="bold")
+    ax.set_title("SRTM Tile Coverage Check for the Upper Mzingwane Prototype Catchment", fontsize=12, weight="bold")
     ax.set_xlabel("Longitude (EPSG:4326)")
     ax.set_ylabel("Latitude (EPSG:4326)")
     ax.grid(True, alpha=0.2)
@@ -121,8 +121,8 @@ def plot_coverage(rows: list[dict[str, object]]) -> None:
     ax.legend(
         handles=[
             Patch(facecolor="#c6dbef", edgecolor="#2171b5", alpha=0.45, label="Downloaded SRTM tile"),
-            Patch(facecolor="#fee8c8", edgecolor="#e34a33", alpha=0.55, label="V1 working catchment"),
-            Line2D([0], [0], color="#636363", linestyle="--", label="V1 5 km buffered bbox"),
+            Patch(facecolor="#fee8c8", edgecolor="#e34a33", alpha=0.55, label="Prototype catchment"),
+            Line2D([0], [0], color="#636363", linestyle="--", label="5 km buffered catchment extent"),
         ],
         loc="lower left",
         fontsize=8,

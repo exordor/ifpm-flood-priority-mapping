@@ -148,7 +148,7 @@ def plot_board() -> None:
         img = plot_panel(ax, layer)
         fig.colorbar(img, ax=ax, shrink=0.78, label="0-1 terrain diagnostic")
     axes[0].legend(
-        handles=[Line2D([0], [0], color="#111111", linewidth=1.0, label="V1 working boundary")],
+        handles=[Line2D([0], [0], color="#111111", linewidth=1.0, label="Prototype catchment boundary")],
         loc="lower right",
         frameon=True,
         framealpha=0.92,
@@ -189,9 +189,9 @@ def write_evidence_table() -> None:
 
 
 def caption_text() -> str:
-    return """Figure X. V1 terrain diagnostic candidates for mentor review. The maps show standardized terrain-only diagnostics within the V1 working catchment: lowland context, low-slope susceptibility, and a high-slope runoff-pressure alternative. Values are scaled from 0 to 1 using 2nd-98th percentile clipping and min-max standardization.
+    return """Figure X. Upper Mzingwane terrain diagnostic candidates for mentor review. The maps show standardized terrain-only diagnostics within the prototype working catchment: lowland context, low-slope susceptibility, and a high-slope runoff-pressure alternative. Values are scaled from 0 to 1 using 2nd-98th percentile clipping and min-max standardization.
 
-Source note: Terrain layers are derived from SRTMGL1 DEM preprocessing for the V1 working catchment and were checked against the V1 reference raster grid before plotting.
+Source note: Terrain layers are derived from SRTMGL1 DEM preprocessing for the Upper Mzingwane prototype catchment and were checked against the prototype reference raster grid before plotting.
 
 Interpretation note: The low-slope susceptibility layer is the primary terrain candidate for mentor review. The high-slope layer is retained as an alternative runoff-pressure framing. Elevation is context only.
 
@@ -202,17 +202,17 @@ Recommended in-text reference: Figure X summarizes terrain-only diagnostic candi
 
 
 def write_caption_and_handoff() -> None:
-    caption = "# Caption: V1 Terrain Diagnostic Candidates\n\n" + caption_text()
+    caption = "# Caption: Upper Mzingwane Terrain Diagnostic Candidates\n\n" + caption_text()
     CAPTION_MD.write_text(caption, encoding="utf-8")
     CAPTION_TXT.write_text(caption_text(), encoding="utf-8")
     HANDOFF.write_text(
         "\n".join(
             [
-                "# V1 Terrain Mentor Package Handoff",
+                "# Upper Mzingwane Terrain Mentor Package Handoff",
                 "",
                 f"Updated: {date.today().isoformat()}",
                 "",
-                "Status: mentor-facing terrain diagnostic package generated from existing V1 standardized terrain rasters.",
+                "Status: mentor-facing terrain diagnostic package generated from existing Upper Mzingwane standardized terrain rasters.",
                 "",
                 f"- Board PNG: `{rel(BOARD_PNG)}`",
                 f"- Board PDF: `{rel(BOARD_PDF)}`",

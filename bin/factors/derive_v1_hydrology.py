@@ -409,7 +409,7 @@ def main() -> int:
     ax[0].set_xscale("log")
     ax[0].set_yscale("log")
     ax[0].set_xlabel("Flow-accumulation threshold (cells)")
-    ax[0].set_ylabel("Stream cells inside V1")
+    ax[0].set_ylabel("Stream cells inside prototype catchment")
     ax[0].set_title("Stream cell count vs threshold")
     ax[0].grid(True, which="both", alpha=0.3)
     ax[1].plot(
@@ -423,7 +423,7 @@ def main() -> int:
     ax[1].set_ylabel("Drainage density (km/km^2, approx)")
     ax[1].set_title("Drainage density vs threshold")
     ax[1].grid(True, which="both", alpha=0.3)
-    fig.suptitle("V1 drainage density sensitivity (D8, whitebox)", fontsize=11)
+    fig.suptitle("Upper Mzingwane Catchment: Drainage-Density Sensitivity (D8)", fontsize=11)
     fig.tight_layout()
     fig.savefig(DENSITY_PNG, dpi=130)
     plt.close(fig)

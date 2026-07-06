@@ -23,7 +23,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria/rainfall_climatology_0_1_PROVISIONAL_30m.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
+INPUTS = [ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria/rainfall_climatology_0_1_PROVISIONAL_30m.tif", ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif", ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
 OUTPUTS = [ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/priority_mean.tif", ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/top20_frequency.tif", ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/hotspot_stability_summary.csv"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
@@ -38,12 +38,11 @@ SCENARIO_DIR = OUT_DIR / "scenarios"
 REF = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif"
 V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
 CRITERIA_DIR = ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria"
-SEDIMENT_DIR = ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios"
 RAINFALL_DIR = ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria"
 
 CRITERIA_PATHS = {
     "flood_conditioning_factors": CRITERIA_DIR / "flood_conditioning_factors_0_1.tif",
-    "sediment_risk_lowR_provisional": SEDIMENT_DIR / "sediment_risk_lowR_provisional_30m.tif",
+    "soil_erosion_factors": CRITERIA_DIR / "soil_erosion_factors_0_1.tif",
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
     "mining_pressure": CRITERIA_DIR / "mining_pressure_0_1.tif",
     "exposure_indicators": CRITERIA_DIR / "exposure_indicators_0_1.tif",
@@ -105,7 +104,7 @@ def scenario_weights() -> dict[str, dict[str, float]]:
         "equal_6": {name: 1 / 6 for name in CRITERIA_PATHS},
         "rainfall_exposure_balanced": {
             "flood_conditioning_factors": 0.20,
-            "sediment_risk_lowR_provisional": 0.20,
+            "soil_erosion_factors": 0.20,
             "land_cover_pressure": 0.15,
             "mining_pressure": 0.15,
             "exposure_indicators": 0.15,
@@ -113,7 +112,7 @@ def scenario_weights() -> dict[str, dict[str, float]]:
         },
         "flood_erosion_rainfall_heavy": {
             "flood_conditioning_factors": 0.30,
-            "sediment_risk_lowR_provisional": 0.25,
+            "soil_erosion_factors": 0.25,
             "land_cover_pressure": 0.05,
             "mining_pressure": 0.10,
             "exposure_indicators": 0.05,
@@ -203,7 +202,7 @@ more cleanly with the current Peru PE1 six-criteria pilot.
 ## Active criteria
 
 1. flood_conditioning_factors
-2. sediment_risk_lowR_provisional
+2. soil_erosion_factors
 3. land_cover_pressure
 4. mining_pressure
 5. exposure_indicators

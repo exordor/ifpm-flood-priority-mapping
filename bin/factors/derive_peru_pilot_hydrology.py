@@ -272,7 +272,7 @@ def main() -> int:
     ax[1].set_xscale("log")
     ax[1].set_xlabel("Flow-accumulation threshold (cells)"); ax[1].set_ylabel("Drainage density (km/km^2)")
     ax[1].set_title("Drainage density vs threshold"); ax[1].grid(True, which="both", alpha=0.3)
-    fig.suptitle("PE1 drainage density sensitivity (D8, whitebox)", fontsize=11)
+    fig.suptitle("Peru Engineering Pilot Site: Drainage-Density Sensitivity (D8)", fontsize=11)
     fig.tight_layout(); fig.savefig(DENSITY_PNG, dpi=130); plt.close(fig)
     diagnostics["density_rows"] = density_rows
 

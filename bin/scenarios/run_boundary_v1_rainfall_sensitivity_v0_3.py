@@ -3,8 +3,8 @@
 
 This is the IFPM-090 next-executable experiment: does adding a standalone
 CHIRPS-derived rainfall criterion shift the Top-20% hotspot pattern relative to
-the v0.2 baseline (where rainfall enters only indirectly via the R-normalized
-sediment criterion)?
+the v0.2 baseline (where rainfall is not represented as a standalone
+criterion)?
 
 Three scenarios, all `sensitivity_scenario` under the execution status policy:
   - rainfall_excluded: 4 core criteria at 0.25 each (v0.2 equal_core analogue).
@@ -49,7 +49,6 @@ MAIN_OUTPUTS = Path(os.environ.get("IFPM_MAIN_OUTPUTS", ROOT / "outputs"))
 REF = MAIN_OUTPUTS / "srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif"
 V1_GPKG = MAIN_OUTPUTS / "v1_working_boundary/v1_working_boundary.gpkg"
 V02_CRITERIA = MAIN_OUTPUTS / f"{BOUNDARY_ID}/criteria_stack_v0_2/criteria"
-SEDIMENT_DIR = MAIN_OUTPUTS / f"{BOUNDARY_ID}/sediment_r_factor_scenarios"
 V02_BASELINE = MAIN_OUTPUTS / f"{BOUNDARY_ID}/priority_scenarios_v0_2"
 
 # Rainfall criterion built by build_boundary_v1_rainfall_criterion_v0_3.py
@@ -58,7 +57,7 @@ RAINFALL_CRITERION = OUT_DIR / "criteria/rainfall_climatology_0_1_PROVISIONAL_30
 
 CRITERIA_PATHS = {
     "flood_conditioning_factors": V02_CRITERIA / "flood_conditioning_factors_0_1.tif",
-    "sediment_risk_lowR_provisional": SEDIMENT_DIR / "sediment_risk_lowR_provisional_30m.tif",
+    "soil_erosion_factors": V02_CRITERIA / "soil_erosion_factors_0_1.tif",
     "land_cover_pressure": V02_CRITERIA / "land_cover_pressure_0_1.tif",
     "mining_pressure": V02_CRITERIA / "mining_pressure_0_1.tif",
     "rainfall_climatology": RAINFALL_CRITERION,
@@ -128,7 +127,7 @@ CLAIM_NOTE = (
 def scenario_weights() -> dict[str, dict[str, float]]:
     """Three scenarios. Rainfall-included scenarios keep the 4 core criteria and
     insert rainfall, re-scaling the core so weights sum to 1.0."""
-    core = ["flood_conditioning_factors", "sediment_risk_lowR_provisional", "land_cover_pressure", "mining_pressure"]
+    core = ["flood_conditioning_factors", "soil_erosion_factors", "land_cover_pressure", "mining_pressure"]
 
     def with_rainfall(rain_w: float) -> dict[str, float]:
         core_w = (1.0 - rain_w) / len(core)
@@ -187,7 +186,7 @@ def top20_overlap(a: np.ndarray, b: np.ndarray) -> dict[str, float]:
 
 def add_colorbar(fig, ax, image, label: str) -> None:
     divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size="3%", pad=0.04)
+    cax = divider.append_axes("right", size="3%", pad=0.08)
     cb = fig.colorbar(image, cax=cax)
     cb.ax.tick_params(labelsize=7)
     cb.set_label(label, fontsize=8)
@@ -195,14 +194,16 @@ def add_colorbar(fig, ax, image, label: str) -> None:
 
 def plot_board(scenario_arrays: dict[str, np.ndarray], top20_frequency: np.ndarray, profile: dict) -> None:
     boundary = gpd.read_file(V1_GPKG, layer="v1_working_boundary").to_crs(profile["crs"])
+    boundary["geometry"] = boundary.geometry.scale(xfact=0.001, yfact=0.001, origin=(0, 0))
     bounds = rasterio.transform.array_bounds(profile["height"], profile["width"], profile["transform"])
     extent = (bounds[0] / 1000, bounds[2] / 1000, bounds[1] / 1000, bounds[3] / 1000)
 
-    fig, axes = plt.subplots(1, 3, figsize=(14.5, 4.8), constrained_layout=True)
+    fig, axes = plt.subplots(1, 3, figsize=(16.2, 4.9), constrained_layout=True)
+    fig.set_constrained_layout_pads(w_pad=0.12, h_pad=0.08, wspace=0.18, hspace=0.02)
     panels = [
-        ("A. Rainfall-excluded (baseline analogue)", scenario_arrays["rainfall_excluded"]),
-        ("B. Rainfall-included high (w=0.25)", scenario_arrays["rainfall_included_high"]),
-        ("C. Top-20% frequency across 3 scenarios", top20_frequency),
+        ("A. Priority score without rainfall criterion", scenario_arrays["rainfall_excluded"]),
+        ("B. Priority score with higher rainfall weight", scenario_arrays["rainfall_included_high"]),
+        ("C. Stable hotspot frequency across scenarios", top20_frequency),
     ]
     for ax, (title, data) in zip(axes, panels, strict=True):
         cmap = "YlOrRd" if "frequency" not in title else "Blues"
@@ -213,9 +214,9 @@ def plot_board(scenario_arrays: dict[str, np.ndarray], top20_frequency: np.ndarr
         ax.set_ylabel("Northing (km)", fontsize=8)
         ax.grid(color="0.9", linewidth=0.4)
         ax.tick_params(labelsize=7)
-        add_colorbar(fig, ax, image, "0-1 score" if "frequency" not in title else "frequency")
+        add_colorbar(fig, ax, image, "0-1 priority score" if "frequency" not in title else "hotspot frequency")
     fig.suptitle(
-        "boundary_v1 / rainfall_sensitivity_v0_3: does a rainfall criterion shift hotspots?",
+        "Upper Mzingwane Catchment: Rainfall-Criterion Sensitivity Test",
         fontsize=13,
         fontweight="bold",
     )

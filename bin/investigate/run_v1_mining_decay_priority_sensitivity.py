@@ -26,7 +26,7 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 # Same five non-mining criteria as rainfall_exposure_v0_4
 NON_MINING = {
     "flood_conditioning_factors": V1 / "criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif",
-    "sediment_risk_lowR_provisional": V1 / "sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif",
+    "soil_erosion_factors": V1 / "criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif",
     "land_cover_pressure": V1 / "criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif",
     "exposure_indicators": V1 / "criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif",
     "rainfall_climatology": V1 / "rainfall_sensitivity_v0_3/criteria/rainfall_climatology_0_1_PROVISIONAL_30m.tif",
@@ -39,12 +39,12 @@ MINING_VARIANTS = {
 SCENARIOS = {
     "equal_6": None,  # filled per-variant as 1/6 each
     "rainfall_exposure_balanced": {
-        "flood_conditioning_factors": 0.20, "sediment_risk_lowR_provisional": 0.20,
+        "flood_conditioning_factors": 0.20, "soil_erosion_factors": 0.20,
         "land_cover_pressure": 0.15, "mining_pressure": 0.15,
         "exposure_indicators": 0.15, "rainfall_climatology": 0.15,
     },
     "flood_erosion_rainfall_heavy": {
-        "flood_conditioning_factors": 0.30, "sediment_risk_lowR_provisional": 0.25,
+        "flood_conditioning_factors": 0.30, "soil_erosion_factors": 0.25,
         "land_cover_pressure": 0.05, "mining_pressure": 0.10,
         "exposure_indicators": 0.05, "rainfall_climatology": 0.25,
     },
@@ -120,7 +120,7 @@ def run_variant(mining_raster: np.ndarray, criteria: dict, profile: dict) -> dic
         "priority_mean": round(float(np.nanmean(stack)), 4),
         "dominant_rainfall": dom.get("rainfall_climatology", 0),
         "dominant_flood": dom.get("flood_conditioning_factors", 0),
-        "dominant_sediment": dom.get("sediment_risk_lowR_provisional", 0),
+        "dominant_sediment": dom.get("soil_erosion_factors", 0),
         "dominant_land_cover": dom.get("land_cover_pressure", 0),
         "dominant_mining": dom.get("mining_pressure", 0),
         "dominant_exposure": dom.get("exposure_indicators", 0),

@@ -175,7 +175,7 @@ def raster_stats(data: np.ndarray) -> dict[str, object]:
 
 def add_colorbar(fig, ax, image, label: str) -> None:
     divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size="3%", pad=0.04)
+    cax = divider.append_axes("right", size="3%", pad=0.08)
     cb = fig.colorbar(image, cax=cax)
     cb.ax.tick_params(labelsize=7)
     cb.set_label(label, fontsize=8)
@@ -186,11 +186,12 @@ def plot_board(priority_mean, top20_frequency, equal_score, profile) -> None:
     bounds = rasterio.transform.array_bounds(profile["height"], profile["width"], profile["transform"])
     extent = (bounds[0], bounds[2], bounds[1], bounds[3])
 
-    fig, axes = plt.subplots(1, 3, figsize=(14.5, 4.8), constrained_layout=True)
+    fig, axes = plt.subplots(1, 3, figsize=(16.2, 4.9), constrained_layout=True)
+    fig.set_constrained_layout_pads(w_pad=0.12, h_pad=0.08, wspace=0.18, hspace=0.02)
     panels = [
-        ("A. Mean priority across scenarios", priority_mean, "YlOrRd", "0-1 score"),
-        ("B. Equal-weight scenario", equal_score, "YlOrRd", "0-1 score"),
-        ("C. Top-20% hotspot frequency", top20_frequency, "Blues", "frequency"),
+        ("A. Mean priority score across scenarios", priority_mean, "YlOrRd", "0-1 priority score"),
+        ("B. Equal-weight priority score", equal_score, "YlOrRd", "0-1 priority score"),
+        ("C. Stable hotspot frequency (top 20%)", top20_frequency, "Blues", "hotspot frequency"),
     ]
     for ax, (title, data, cmap, label) in zip(axes, panels, strict=True):
         image = ax.imshow(np.ma.masked_invalid(data), extent=extent, origin="upper", cmap=cmap, vmin=0, vmax=1)
@@ -204,8 +205,11 @@ def plot_board(priority_mean, top20_frequency, equal_score, profile) -> None:
         ax.grid(color="0.9", linewidth=0.4)
         ax.tick_params(labelsize=7)
         add_colorbar(fig, ax, image, label)
-    fig.suptitle("PE1 (Peru engineering pilot) / priority scenarios: provisional hotspot map",
-                 fontsize=12, fontweight="bold")
+    fig.suptitle(
+        "Peru Engineering Pilot Site: Prototype Flood-Priority Hotspot Screening",
+        fontsize=12,
+        fontweight="bold",
+    )
     fig.savefig(OUT_DIR / "pe1_priority_scenarios_board.png", dpi=220, bbox_inches="tight")
     fig.savefig(OUT_DIR / "pe1_priority_scenarios_board.pdf", bbox_inches="tight")
     plt.close(fig)

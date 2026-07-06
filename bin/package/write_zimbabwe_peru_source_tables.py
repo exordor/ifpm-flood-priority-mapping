@@ -39,14 +39,14 @@ def criteria_rows() -> list[dict[str, str]]:
         ),
         row(
             "Soil erosion",
-            "SoilGrids K-factor, SRTM LS-factor, WorldCover C-factor, provisional low-range R",
+            "SoilGrids K-factor, SRTM LS-factor, WorldCover C-factor",
             "30-250 m",
-            "screening estimate; R still provisional",
+            "factor structure only; rainfall erosivity not applied",
             "SoilGrids K-factor, SRTM LS-factor, WorldCover C-factor",
             "30-250 m",
             "factor structure only; rainfall erosivity not applied",
             "SoilGrids + SRTM + ESA WorldCover",
-            "provisional",
+            "diagnostic_only",
         ),
         row(
             "Land use/land cover",

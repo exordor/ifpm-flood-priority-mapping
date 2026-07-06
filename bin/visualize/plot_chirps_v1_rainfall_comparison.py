@@ -90,7 +90,10 @@ def write_board(rows: list[dict[str, str]], boundary: gpd.GeoDataFrame) -> None:
         plot_one(ax, row, boundary)
         ax.set_xlabel("")
         ax.set_ylabel("")
-    fig.suptitle("V1 CHIRPS rainfall sensitivity comparison, native CHIRPS grid", fontsize=14)
+    fig.suptitle(
+        "Upper Mzingwane Catchment: CHIRPS Rainfall Sensitivity Comparison (Native Grid)",
+        fontsize=14,
+    )
     fig.savefig(BOARD_PNG, dpi=220)
     fig.savefig(BOARD_PDF)
     plt.close(fig)

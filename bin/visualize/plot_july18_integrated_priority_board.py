@@ -115,7 +115,7 @@ SITES = [
         status_note="controlled prototype boundary; not final thesis boundary",
         criteria=(
             Criterion("flood_conditioning_factors", "flood", FLOOD_CONDITIONING_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif", "provisional"),
-            Criterion("sediment_risk_lowR_provisional", "sediment", SOIL_EROSION_LABEL, ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif", "provisional"),
+            Criterion("soil_erosion_factors", "sediment", SOIL_EROSION_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif", "diagnostic_only"),
             Criterion("land_cover_pressure", "land_cover", LULC_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", "provisional"),
             Criterion("mining_pressure", "mining", MINING_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", "diagnostic_only"),
             Criterion("exposure_indicators", "exposure", EXPOSURE_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif", "diagnostic_only"),

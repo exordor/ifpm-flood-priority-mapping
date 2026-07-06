@@ -88,7 +88,7 @@ SITES = [
         process_note="controlled prototype boundary; not final thesis boundary",
         criteria=(
             Criterion("flood_conditioning_factors", "flood", FLOOD_CONDITIONING_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif", "provisional", "TWI and drainage proximity; not inundation depth"),
-            Criterion("sediment_risk_lowR_provisional", "sediment", SOIL_EROSION_LABEL, ROOT / "outputs/boundary_v1/sediment_r_factor_scenarios/sediment_risk_lowR_provisional_30m.tif", "provisional", "low-range R scenario, not final R-factor"),
+            Criterion("soil_erosion_factors", "sediment", SOIL_EROSION_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif", "diagnostic_only", "K x LS x C structure; rainfall erosivity not applied"),
             Criterion("land_cover_pressure", "land_cover", LULC_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/land_cover_pressure_0_1.tif", "provisional", "land-cover pressure only"),
             Criterion("mining_pressure", "mining", MINING_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/mining_pressure_0_1.tif", "diagnostic_only", "OSM mining evidence; official ASM data missing"),
             Criterion("exposure_indicators", "exposure", EXPOSURE_LABEL, ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/exposure_indicators_0_1.tif", "diagnostic_only", "road access indicator, not observed vulnerability"),
@@ -271,7 +271,7 @@ def plot_dominant(products_by_site: list[dict[str, object]]) -> None:
 
     handles = [Patch(facecolor=COLORS[c.family], edgecolor="0.3", label=f"{i + 1}. {c.label}") for i, c in enumerate(SITES[0].criteria)]
     legend_ax.legend(handles=handles, loc="center", ncol=3, frameon=True, fontsize=9)
-    fig.suptitle("Colour-coded pixel map: which criterion family contributes most?", fontsize=14, fontweight="bold")
+    fig.suptitle("Dominant driver of the prototype priority score", fontsize=14, fontweight="bold")
     fig.savefig(OUT_DIR / "dominant_priority_criterion_maps.png", dpi=300, bbox_inches="tight")
     fig.savefig(OUT_DIR / "dominant_priority_criterion_maps.pdf", bbox_inches="tight")
     plt.close(fig)

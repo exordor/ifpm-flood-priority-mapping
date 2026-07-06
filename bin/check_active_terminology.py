@@ -17,7 +17,6 @@ ACTIVE_FILES = [
     ROOT / "bin/criteria/build_pe1_criteria_stack.py",
     ROOT / "bin/criteria/build_boundary_v1_rainfall_criterion_v0_3.py",
     ROOT / "bin/criteria/build_pe1_rainfall_criterion.py",
-    ROOT / "bin/criteria/build_boundary_v1_sediment_r_factor_scenarios.py",
     ROOT / "bin/scenarios/run_boundary_v1_priority_scenarios.py",
     ROOT / "bin/scenarios/run_boundary_v1_rainfall_sensitivity_v0_3.py",
     ROOT / "bin/scenarios/run_boundary_v1_rainfall_exposure_v0_4.py",
