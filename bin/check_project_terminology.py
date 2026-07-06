@@ -46,6 +46,7 @@ DEPRECATED_TERMS = [
     "Mining-proxy",
     "socioeconomic_exposure",
     "R-invariant",
+    "sediment_risk_lowR_provisional",
     "rainfail",
 ]
 
@@ -97,7 +98,6 @@ ACTIVE_FILES = {
     "bin/criteria/build_pe1_criteria_stack.py",
     "bin/criteria/build_boundary_v1_rainfall_criterion_v0_3.py",
     "bin/criteria/build_pe1_rainfall_criterion.py",
-    "bin/criteria/build_boundary_v1_sediment_r_factor_scenarios.py",
     "bin/scenarios/run_boundary_v1_priority_scenarios.py",
     "bin/scenarios/run_boundary_v1_rainfall_sensitivity_v0_3.py",
     "bin/scenarios/run_boundary_v1_rainfall_exposure_v0_4.py",

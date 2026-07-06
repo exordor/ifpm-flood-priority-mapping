@@ -65,6 +65,7 @@ FORBIDDEN_TERMS = [
     "proxy_0_1",
     "Mining-proxy",
     "R-invariant",
+    "sediment_risk_lowR_provisional",
     "rainfail",
 ]
 

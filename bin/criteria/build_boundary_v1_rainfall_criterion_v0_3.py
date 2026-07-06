@@ -220,9 +220,9 @@ def main() -> None:
     raw_mean = float(np.nanmean(raw))
     raw_max = float(np.nanmax(raw))
 
-    # Max-normalize to [0,1] for MCDA scoring (same convention as the LOW-R
-    # sediment criterion in run_boundary_v1_priority_scenarios.py). Monotonic, so
-    # the highest-rainfall cell becomes 1.0 and ranking is preserved.
+    # Max-normalize to [0,1] for MCDA scoring, matching the active criteria
+    # stack convention. Monotonic, so the highest-rainfall cell becomes 1.0
+    # and ranking is preserved.
     if raw_max <= 0:
         raise ValueError(f"non-positive rainfall range, max={raw_max}")
     score = (raw / raw_max).astype("float32")

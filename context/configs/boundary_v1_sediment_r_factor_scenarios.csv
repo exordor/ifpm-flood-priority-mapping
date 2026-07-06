@@ -1,3 +1,0 @@
-boundary_id,experiment_id,scenario_id,r_source_key,r_mean,claim_level,role,use_as_default,notes
-boundary_v1,sediment_r_factor_scenarios,sediment_risk_lowR_provisional,rf_arnoldus,238.60072759219645,provisional,default_low_r_screening,true,Arnoldus (1980) CHIRPS-derived candidate from existing V2 R-factor diagnostics; coefficients are non-universal.
-boundary_v1,sediment_r_factor_scenarios,sediment_risk_highR_sensitivity,rf_v1_bimodal,408.0322845155116,sensitivity_scenario,high_r_sensitivity,false,High-R sensitivity/reference only; not final and not the deprecated old A product.

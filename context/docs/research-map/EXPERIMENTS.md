@@ -17,7 +17,6 @@ boundary_id for path purposes, even though it is not nested under `boundary_v1`)
 | `rainfall_sensitivity_v0_3` | IFPM-090 | complete | sensitivity_scenario | Adds rainfall_climatology (CHIRPS coarse-to-grid, A-010); effective res ~5 km | `outputs/boundary_v1/rainfall_sensitivity_v0_3/` |
 | `hotspot_exposure_diagnostic_v0_3` | IFPM-090 | complete | diagnostic_only | Tests co-location of v0.2 hotspots with exposure proxies; weak co-location | `outputs/boundary_v1/hotspot_exposure_diagnostic_v0_3/` |
 | `rainfall_exposure_v0_4` | IFPM-097 | complete | sensitivity_scenario | Merged v0.3 rainfall + exposure; feeds 7/18 comparison pack | `outputs/boundary_v1/rainfall_exposure_v0_4/` |
-| `sediment_r_factor_scenarios` | IFPM-081/082 | complete (deferred) | deferred | R-factor family comparison; deferred out of critical path (D-RFACTOR-QUARANTINE) | `outputs/boundary_v1/sediment_r_factor_scenarios/` |
 | `mining_decay_priority_sensitivity` | IFPM-074 track | complete | sensitivity_scenario | Decay-function sensitivity on mining proximity; structure test only | `outputs/boundary_v1/mining_decay_priority_sensitivity/` |
 
 ## Convention-compliant Peru experiments (`outputs/srtm_1arcsec_peru_pilot/`)
