@@ -246,7 +246,7 @@ def write_criteria_markdown(path: Path, rows: list[dict[str, str]]) -> None:
         "",
         "## Main asymmetry",
         "",
-        "- **Peru PE1** uses official-source INGEMMET small-mining points.",
+        "- **The Peru engineering pilot catchment** uses official-source INGEMMET small-mining points.",
         "- **Zimbabwe Upper Mzingwane prototype** uses the public USGS Africa GIS mineral reference layer. It is stronger than the earlier OSM-only evidence, but it is still not a local ASM activity map.",
         "",
         "This supports the current data request: ask whether Zimbabwe ASM mapping, active-site points, or disturbance footprints can be obtained.",

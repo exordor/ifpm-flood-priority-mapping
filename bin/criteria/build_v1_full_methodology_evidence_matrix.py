@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the V1 full methodology evidence matrix from prepared summaries."""
+"""Build the Upper Mzingwane methodology evidence matrix from prepared summaries."""
 
 from __future__ import annotations
 
@@ -68,22 +68,22 @@ def matrix_rows(summary: pd.DataFrame) -> list[dict[str, str]]:
     dfo_near = metric(summary, "dfo_zimbabwe_flood_events", "v1_context_points_plus_1deg")
     wdpca_count = metric(summary, "wdpca_protected_areas_v1", "feature_count")
     return [
-        evidence_row("Flood hazard", "Geoportal flood-prone zones local gap", "Zimbabwe Geoportal", LAYERS_GPKG, "vector overlap", "weak/gap", "no", "V1 overlap count is 0; use as gap evidence only."),
+        evidence_row("Flood hazard", "Geoportal flood-prone zones local gap", "Zimbabwe Geoportal", LAYERS_GPKG, "vector overlap", "weak/gap", "no", "Upper Mzingwane overlap count is 0; use as gap evidence only."),
         evidence_row("Flood hazard", "JRC surface-water occurrence/seasonality/change", "JRC Global Surface Water", GSW_CSV, "0.00025 degree", "medium/context", "review", "Water history supports flood/wetland context but is not event flood depth. " + blocked),
-        evidence_row("Flood hazard", "DFO Zimbabwe historical flood-event context", "Dartmouth Flood Observatory via HDX", DFO_CSV, "global event points / country filter", "weak/context", "no", f"{dfo_count:.0f} Zimbabwe-related records; {dfo_near:.0f} valid event points within V1 plus 1 degree. Use as historical context only."),
+        evidence_row("Flood hazard", "DFO Zimbabwe historical flood-event context", "Dartmouth Flood Observatory via HDX", DFO_CSV, "global event points / country filter", "weak/context", "no", f"{dfo_count:.0f} Zimbabwe-related records; {dfo_near:.0f} valid event points within a one-degree context window around the Upper Mzingwane prototype. Use as historical context only."),
         evidence_row("Rainfall", "CHIRPS multi-window rainfall comparison", "CHIRPS v3", RAIN_CSV, "0.05 degree native/zonal", "medium", "review", "Rainfall is a hazard driver; CHIRPS must not be treated as 30 m evidence. " + blocked),
         evidence_row("Terrain", "Elevation lowland context", "SRTMGL1 DEM", TERRAIN_DIR / "v1_elevation_lowland_context_0_1.tif", "30 m", "medium", "review", "Low elevation alone is not flood risk. " + blocked),
         evidence_row("Terrain", "Slope low-slope susceptibility", "SRTMGL1 slope", TERRAIN_DIR / "v1_slope_low_slope_susceptibility_0_1.tif", "30 m", "medium", "review", "Primary terrain framing for mentor review, not accepted criterion yet."),
-        evidence_row("Land use / ASM", "WorldCover land-cover class area", "ESA WorldCover 2021", LANDCOVER_CSV, "10 m", "medium", "review", "Land cover is not active ASM truth; use with OSM mining proxy cautiously."),
-        evidence_row("Land use / ASM", "Bare/sparse ground and built-up proxy", "ESA WorldCover + OSM landuse", LANDCOVER_CSV, "10 m / vector", "weak-medium", "review", "Bare/sparse ground may be natural or degraded; OSM quarry/industrial is incomplete."),
-        evidence_row("Land use / ASM", "OSM quarry/industrial proxy", "Geofabrik OSM Zimbabwe", LAYERS_GPKG, "vector", "weak", "review/no", "Proxy only; official mining/cadastre or remote-sensing disturbance is still preferred."),
+        evidence_row("Land use / ASM", "WorldCover land-cover class area", "ESA WorldCover 2021", LANDCOVER_CSV, "10 m", "medium", "review", "Land cover is not active ASM truth; use with OSM mining indicators cautiously."),
+        evidence_row("Land use / ASM", "Bare/sparse ground and built-up indicator", "ESA WorldCover + OSM landuse", LANDCOVER_CSV, "10 m / vector", "weak-medium", "review", "Bare/sparse ground may be natural or degraded; OSM quarry/industrial mapping is incomplete."),
+        evidence_row("Land use / ASM", "OSM quarry/industrial indicator", "Geofabrik OSM Zimbabwe", LAYERS_GPKG, "vector", "weak", "review/no", "Indicator only; official mining/cadastre or remote-sensing disturbance is still preferred."),
         evidence_row("Environmental sensitivity", "Water/wetland proximity context", "JRC GSW + WorldCover + Geoportal/OSM water", GSW_CSV, "10-30 m equivalent native rasters + vector", "medium", "review", "Surface water and wetland classes are sensitivity context, not ecological valuation."),
         evidence_row("Environmental sensitivity", "Vegetation/land-cover sensitivity", "ESA WorldCover 2021", LANDCOVER_CSV, "10 m", "medium", "review", "Class-based sensitivity needs mentor/domain weighting."),
-        evidence_row("Environmental sensitivity", "Official protected/conserved areas", "WDPCA Zimbabwe via HDX", WDPCA_CSV, "vector polygons/points", "medium/context", "review", f"{wdpca_count:.0f} WDPCA features overlap V1; use as environmental sensitivity context pending mentor weighting."),
-        evidence_row("Socioeconomic vulnerability", "WorldPop population exposure", "WorldPop Zimbabwe 2020", OUT_DIR / "rasters/v1_worldpop_2020_unadj_native.tif", "approx. 100 m", "medium", "review", "Population count is exposure proxy, not full vulnerability."),
+        evidence_row("Environmental sensitivity", "Official protected/conserved areas", "WDPCA Zimbabwe via HDX", WDPCA_CSV, "vector polygons/points", "medium/context", "review", f"{wdpca_count:.0f} WDPCA features overlap the Upper Mzingwane prototype; use as environmental sensitivity context pending mentor weighting."),
+        evidence_row("Socioeconomic vulnerability", "WorldPop population exposure", "WorldPop Zimbabwe 2020", OUT_DIR / "rasters/v1_worldpop_2020_unadj_native.tif", "approx. 100 m", "medium", "review", "Population count is an exposure indicator, not full vulnerability."),
         evidence_row("Socioeconomic vulnerability", "GHSL built-up and population exposure cross-check", "Copernicus Global Human Settlement Layer via HDX", GHSL_CSV, "100 m, Mollweide native", "medium/context", "review", "Built-up surface and population grids cross-check exposure only; they do not encode poverty, coping capacity, or observed flood loss."),
         evidence_row("Socioeconomic vulnerability", "OSM settlements/roads/bridges", "Geofabrik OSM Zimbabwe", LAYERS_GPKG, "vector", "medium", "review", "OSM completeness is uncertain; roads/crossings are exposure proxies."),
-        evidence_row("Rehabilitation potential", "Bare/degraded land candidate components", "WorldCover + OSM mining proxy", REHAB_CSV, "mixed native summaries", "weak-medium", "review", "Components only; no rehabilitation score or intervention priority produced."),
+        evidence_row("Rehabilitation potential", "Bare/degraded land candidate components", "WorldCover + OSM mining indicators", REHAB_CSV, "mixed native summaries", "weak-medium", "review", "Components only; no rehabilitation score or intervention priority produced."),
         evidence_row("Rehabilitation potential", "Accessibility and river-proximity components", "OSM roads + rivers + crossings", REHAB_CSV, "vector summaries", "medium/context", "review", "Distance/proximity components are not combined or weighted yet."),
     ]
 

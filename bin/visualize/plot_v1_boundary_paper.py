@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plot a paper/report-ready V1 boundary map and save caption files."""
+"""Plot a paper/report-ready Upper Mzingwane boundary map and save caption files."""
 
 from __future__ import annotations
 
@@ -41,7 +41,7 @@ ANCHOR_LABEL_OFFSETS = {
 
 CAPTION = """# Caption: Upper Mzingwane Prototype Catchment Boundary
 
-Figure X. Working catchment boundary for the Upper Mzingwane prototype, derived from HydroBASINS Level-8 topology. The boundary includes Mzingwane Dam and Esigodini and follows the main Mzingwane/Umzingwani river corridor downstream toward Gwanda, while Gwanda lies outside the working catchment. The prototype outlet proxy is shown as the downstream reference point used for data preparation.
+Figure X. Working catchment boundary for the Upper Mzingwane prototype, derived from HydroBASINS Level-8 topology. The boundary includes Mzingwane Dam and Esigodini and follows the main Mzingwane/Umzingwani river corridor downstream toward Gwanda, while Gwanda lies outside the working catchment. The reference outlet point is shown as the downstream point used for data preparation.
 
 Source note: HydroBASINS Level-8 is used for the working catchment boundary; Zimbabwe Geoportal and river layers are shown as contextual reference layers.
 
@@ -93,7 +93,7 @@ def add_outlet_label(ax, outlet: gpd.GeoDataFrame) -> None:
     point = outlet.geometry.iloc[0]
     ax.scatter(point.x, point.y, s=56, color="#D55E00", edgecolor="white", linewidth=0.7, zorder=11)
     ax.annotate(
-        "Prototype outlet proxy",
+        "Reference outlet point",
         (point.x, point.y),
         xytext=(9, 7),
         textcoords="offset points",
@@ -138,7 +138,7 @@ def add_legend(ax) -> None:
         Patch(facecolor="#F6E8C3", edgecolor="#D55E00", alpha=0.62, label="Prototype catchment"),
         Line2D([0], [0], color="#111111", linewidth=1.1, label="Geoportal context boundary"),
         Line2D([0], [0], color="#0072B2", linewidth=0.9, label="River/stream"),
-        Line2D([0], [0], marker="o", color="w", markerfacecolor="#D55E00", label="Prototype outlet proxy"),
+        Line2D([0], [0], marker="o", color="w", markerfacecolor="#D55E00", label="Reference outlet point"),
         Line2D([0], [0], marker="o", color="w", markerfacecolor="#009E73", label="Anchor inside prototype catchment"),
         Line2D([0], [0], marker="o", color="w", markerfacecolor="#7A7A7A", label="Anchor outside prototype catchment"),
     ]

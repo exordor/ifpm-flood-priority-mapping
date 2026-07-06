@@ -65,7 +65,7 @@ SITES = [
         boundary_layer="v1_working_boundary",
         crs_label="EPSG:32735",
         status_note="controlled prototype boundary, not final thesis boundary",
-        active_criteria_note="displayed v0.4 run uses 6 criterion families, including exposure indicators and rainfall",
+        active_criteria_note="current six-criteria run includes exposure indicators and rainfall",
     ),
     Site(
         label="Peru",
@@ -81,7 +81,7 @@ SITES = [
         boundary_layer="peru_pilot_boundary",
         crs_label="EPSG:32718",
         status_note="engineering-pilot site, replace if mentor names a Peru site",
-        active_criteria_note="displayed PE1 priority run uses 6 criterion families, including exposure indicators and rainfall",
+        active_criteria_note="current engineering-pilot priority run uses 6 criterion families, including exposure indicators and rainfall",
     ),
 ]
 
@@ -301,15 +301,15 @@ Date: 2026-06-30
 
 Status: `mentor_review_ready` evidence packet for prototype discussion.
 
-This package compares the current Zimbabwe controlled prototype (`boundary_v1`) with the current
-Peru engineering pilot (`PE1`). It is not a final flood-risk map, not an intervention-priority
+This package compares the current Upper Mzingwane controlled prototype with the current
+Peru engineering pilot catchment. It is not a final flood-risk map, not an intervention-priority
 claim, and not a final Zimbabwe-Peru thesis comparison.
 
 ## Main reading
 
-- Zimbabwe `boundary_v1` has a six-criteria rainfall + exposure run with a stable top-20% hotspot area of
+- The Upper Mzingwane prototype has a six-criteria rainfall + exposure run with a stable top-20% hotspot area of
   {zimbabwe['stable_top20_area_km2']} km2.
-- Peru `PE1` has a six-criteria engineering-pilot stack with a stable top-20% hotspot area of
+- The Peru engineering pilot has a six-criteria stack with a stable top-20% hotspot area of
   {peru['stable_top20_area_km2']} km2.
 - Both displayed runs now use six active criterion families: flood conditioning factors, soil
   erosion factors, land use/land cover, mining/ASM activity, exposure indicators, and rainfall.
@@ -327,14 +327,14 @@ claim, and not a final Zimbabwe-Peru thesis comparison.
 
 ## Mentor question
 
-Can I use `boundary_v1` and `PE1` as prototype sites for the comparative pipeline, while keeping the
-final study sites and final claims open?
+Can I use the Upper Mzingwane prototype and the Peru engineering pilot as test sites for the
+comparative pipeline, while keeping the final study sites and final claims open?
 
 ## Data to request during the trip
 
 1. Zimbabwe official mining / ASM footprints or active-site points.
 2. Observed flood-impact or damaged-road / affected-settlement evidence.
-3. Confirmation whether PE1 is acceptable as a Peru pilot, or whether a different Peru site should
+3. Confirmation whether the current Peru pilot catchment is acceptable, or whether a different Peru site should
    replace it.
 4. Any local rainfall station or high-frequency rainfall data that can support the R-factor range.
 """

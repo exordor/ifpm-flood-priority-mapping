@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plot separate V1 full-methodology evidence panels and handoff notes."""
+"""Plot separate Upper Mzingwane methodology evidence panels and handoff notes."""
 
 from __future__ import annotations
 
@@ -230,7 +230,7 @@ def write_handoff() -> None:
     wdpca = summary[summary["layer"] == "wdpca_protected_areas_v1"].iloc[0]
     factors = ", ".join(matrix["factor"].drop_duplicates())
     top_land = "; ".join(f"{row.class_name}: {row.share_of_valid_pct:.1f}%" for row in land.sort_values("share_of_valid_pct", ascending=False).head(5).itertuples())
-    text = f"""# V1 Full Methodology Evidence Sweep
+    text = f"""# Upper Mzingwane Methodology Evidence Sweep
 
 Status: candidate evidence package generated for mentor review. This is not an AHP overlay, not a
 flood-risk map, and not final thesis boundary evidence.
@@ -244,22 +244,22 @@ flood-risk map, and not final thesis boundary evidence.
 - Existing integrated inputs: CHIRPS rainfall comparison, SRTM terrain diagnostics, Geoportal
   rivers/water/flood-prone zones, HydroRIVERS, and Geofabrik OSM roads/places/landuse.
 - DFO Global Flood Archive is processed as Zimbabwe-level historical flood context from the HDX
-  SHP package, not as V1 flood extent.
+  SHP package, not as event flood extent for the prototype catchment.
 
 ## Key Local Evidence
 
-- WorldCover dominant classes in V1: {top_land}.
-- WorldPop 2020 V1 population sum from native raster cells: {worldpop['sum']:.0f}.
-- GHSL 2025 V1 population sum from native raster cells: {ghsl_pop['sum']:.0f}; built-up surface
+- WorldCover dominant classes in the Upper Mzingwane prototype: {top_land}.
+- WorldPop 2020 population sum for the Upper Mzingwane prototype from native raster cells: {worldpop['sum']:.0f}.
+- GHSL 2025 population sum for the Upper Mzingwane prototype from native raster cells: {ghsl_pop['sum']:.0f}; built-up surface
   sum: {ghsl_built['sum']:.1f} in native GHSL units.
-- Geoportal Flood Prone Zones local overlap remains 0 features in the current V1 review layers.
-- DFO Zimbabwe-related flood records: {int(dfo['feature_count'])}; valid event points within V1
-  plus 1 degree: {int(dfo['v1_context_points_plus_1deg'])}.
-- WDPCA protected/conserved areas overlapping V1: {int(wdpca['feature_count'])} features,
+- Geoportal Flood Prone Zones local overlap remains 0 features in the current Upper Mzingwane review layers.
+- DFO Zimbabwe-related flood records: {int(dfo['feature_count'])}; valid event points within a
+  one-degree context window around the Upper Mzingwane prototype: {int(dfo['v1_context_points_plus_1deg'])}.
+- WDPCA protected/conserved areas overlapping the Upper Mzingwane prototype: {int(wdpca['feature_count'])} features,
   about {wdpca['area_km2']:.1f} km2 of polygon overlap.
-- OSM mining pressure remains weak proxy evidence: quarry/industrial polygons only, not official
+- OSM mining pressure remains limited indicator evidence: quarry/industrial polygons only, not official
   active ASM footprints.
-- Distance/proximity components were generated for rivers, roads, and mining proxy on the V1
+- Distance/proximity components were generated for rivers, roads, and mining indicators on the Upper Mzingwane
   30 m terrain grid; they are rehabilitation/accessibility components only.
 
 ## Main Artifacts
@@ -271,7 +271,7 @@ flood-risk map, and not final thesis boundary evidence.
 - Land-cover class table: `{rel(LANDCOVER)}`.
 - JRC surface-water summary: `{rel(GSW)}`.
 - GHSL built-up/population summary: `{rel(OUT_DIR / 'v1_ghsl_summary.csv')}`.
-- Rehabilitation proxy components: `{rel(OUT_DIR / 'v1_rehabilitation_indicator_components.csv')}`.
+- Rehabilitation/accessibility components: `{rel(OUT_DIR / 'v1_rehabilitation_indicator_components.csv')}`.
 - DFO Zimbabwe historical flood records: `{rel(OUT_DIR / 'v1_dfo_zimbabwe_flood_events.csv')}`.
 - WDPCA protected/conserved-area summary: `{rel(OUT_DIR / 'v1_wdpca_protected_area_summary.csv')}`.
 - Separate figure panels:
@@ -284,7 +284,7 @@ flood-risk map, and not final thesis boundary evidence.
 ## Mentor Decisions Still Needed
 
 1. Which evidence families may enter the first prototype criteria set?
-2. Should mining pressure remain weak proxy evidence, or is official mining/cadastre data required?
+2. Should mining pressure remain limited indicator evidence, or is official mining/cadastre data required?
 3. Should WDPCA protected-area overlap be used as an environmental sensitivity criterion or
    context only?
 4. Should rehabilitation potential be represented by separate components or a mentor-approved
@@ -292,8 +292,8 @@ flood-risk map, and not final thesis boundary evidence.
 5. Which rainfall interpretation should be used if rainfall becomes an AHP criterion?
 """
     HANDOFF.write_text(text, encoding="utf-8")
-    caption = """Figure set. V1 full methodology evidence panels for mentor review. The panels show land-cover evidence from ESA WorldCover 2021, surface-water history from JRC Global Surface Water, protected/conserved-area overlap from WDPCA, population and built-up exposure from WorldPop 2020 and GHSL 2025, and rehabilitation/accessibility proximity components derived from rivers, roads, and weak mining-proxy features. These panels are candidate evidence only and should not be interpreted as a flood-risk map, weighted overlay, intervention-priority map, or final thesis boundary evidence."""
-    CAPTION_MD.write_text("# Caption: V1 Full Methodology Evidence Panels\n\n" + caption + "\n", encoding="utf-8")
+    caption = """Figure set. Upper Mzingwane methodology evidence panels for mentor review. The panels show land-cover evidence from ESA WorldCover 2021, surface-water history from JRC Global Surface Water, protected/conserved-area overlap from WDPCA, population and built-up exposure from WorldPop 2020 and GHSL 2025, and rehabilitation/accessibility proximity components derived from rivers, roads, and limited mining-indicator features. These panels are candidate evidence only and should not be interpreted as a flood-risk map, weighted overlay, intervention-priority map, or final thesis boundary evidence."""
+    CAPTION_MD.write_text("# Caption: Upper Mzingwane Methodology Evidence Panels\n\n" + caption + "\n", encoding="utf-8")
     CAPTION_TXT.write_text(caption + "\n", encoding="utf-8")
 
 

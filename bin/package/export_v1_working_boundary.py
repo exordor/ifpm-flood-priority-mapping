@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export the V1 working boundary package for controlled prototype use."""
+"""Export the Upper Mzingwane working boundary package for controlled prototype use."""
 
 from __future__ import annotations
 
@@ -190,7 +190,7 @@ def plot_diagnostic(v1_boundary: gpd.GeoDataFrame, v1_outlet: gpd.GeoDataFrame, 
         )
     outlet_point = v1_outlet.geometry.iloc[0]
     ax.annotate(
-        "Prototype outlet proxy",
+        "Reference outlet point",
         (outlet_point.x, outlet_point.y),
         xytext=(12, 8),
         textcoords="offset points",

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a mentor-facing V1 methodology evidence report package."""
+"""Build a mentor-facing Upper Mzingwane methodology evidence report package."""
 
 from __future__ import annotations
 
@@ -100,18 +100,18 @@ def factor_summary() -> pd.DataFrame:
 def mentor_message() -> str:
     return """Hi Supervisor,
 
-I prepared a small V1 evidence package for the Upper Mzingwane prototype.
+I prepared a small evidence package for the Upper Mzingwane prototype.
 
 This is not a flood-risk map yet. It has no AHP weights and no weighted overlay. It only shows the data layers we can use for the first prototype.
 
-The package includes rainfall, terrain, land cover, rivers/water, protected areas, population/built-up areas, roads, and mining proxy data.
+The package includes rainfall, terrain, land cover, rivers/water, protected areas, population/built-up areas, roads, and provisional mining-indicator data.
 
 Could you please help me decide:
 
 1. Which data groups should be used as criteria?
 2. For rainfall, should I use long-term average, rainy-season total, recent anomaly, or extreme rainfall?
 3. For terrain, should I use low-slope areas, high-slope runoff pressure, or keep terrain only as background context?
-4. Is the OSM mining/quarry proxy okay for the prototype, or should I wait for official mining data?
+4. Are the OSM mining/quarry indicators acceptable for the prototype, or should I wait for official mining data?
 5. Should protected areas and water proximity be used as environmental sensitivity criteria, or only as context?
 
 After your feedback, I can prepare the first AHP criteria table. I will not run the weighted overlay before the criteria and weights are agreed.
@@ -124,20 +124,20 @@ def mentor_brief(factors: pd.DataFrame, figures: list[dict[str, str]]) -> str:
         for row in factors.itertuples()
     )
     figure_lines = "\n".join(f"- `{row['png']}` / `{row['pdf']}`" for row in figures)
-    return f"""# V1 Multi-Criteria Evidence Package For Mentor Review
+    return f"""# Upper Mzingwane Multi-Criteria Evidence Package For Mentor Review
 
 Status: mentor-review package only. This is not a final thesis boundary, not a flood-risk map,
 not an intervention-priority map, and not an AHP weighted overlay.
 
 ## Purpose
 
-The purpose of this package is to show which data layers are currently available for the V1
+The purpose of this package is to show which data layers are currently available for the
 Upper Mzingwane controlled prototype and to ask which evidence families should become criteria in
 the first prototype model.
 
 ## One-Sentence Summary
 
-V1 now has candidate evidence for flood/water context, rainfall, terrain, land cover / ASM proxy,
+The Upper Mzingwane prototype now has candidate evidence for flood/water context, rainfall, terrain, land cover / ASM indicators,
 environmental sensitivity, socioeconomic exposure, and rehabilitation/accessibility, but the
 criteria hierarchy and AHP weights still need mentor approval before any overlay.
 
@@ -147,19 +147,19 @@ criteria hierarchy and AHP weights still need mentor approval before any overlay
 
 ## Key Results To Mention
 
-- V1 is still a controlled prototype working boundary, accepted with waiver, not the final thesis
+- The Upper Mzingwane catchment is still a controlled prototype working boundary, accepted with waiver, not the final thesis
   boundary.
-- Geoportal Flood Prone Zones have zero local overlap inside current V1 review layers, so they are
+- Geoportal Flood Prone Zones have zero local overlap inside the current Upper Mzingwane review layers, so they are
   a gap/weak evidence item, not a flood hazard layer.
 - CHIRPS rainfall is processed at native scale and summarized for comparison; it is not resampled
   into a fake 30 m rainfall raster.
 - ESA WorldCover gives land-cover and bare/sparse land context, but it does not prove active ASM.
-- OSM quarry/industrial features are weak mining proxy evidence only.
+- OSM quarry/industrial features are limited mining-indicator evidence only.
 - WorldPop and GHSL provide socioeconomic exposure cross-checks, not full vulnerability.
-- WDPCA protected/conserved areas overlap V1 and can support environmental sensitivity review if
+- WDPCA protected/conserved areas overlap the Upper Mzingwane prototype and can support environmental sensitivity review if
   the mentor agrees.
 - Rehabilitation potential is represented by components only: land cover, slope context, and
-  distance/proximity to rivers, roads, and weak mining proxy features.
+  distance/proximity to rivers, roads, and limited mining-indicator features.
 
 ## Recommended Mentor Decision
 
@@ -193,7 +193,7 @@ sensitivity before creating AHP pairwise comparisons.
 def readme() -> str:
     return """# 汇报包使用说明
 
-这个包用于和 mentor 汇报 V1 原型已经处理过哪些证据层，以及下一步需要她决定什么。
+这个包用于和 mentor 汇报 Upper Mzingwane 原型已经处理过哪些证据层，以及下一步需要她决定什么。
 
 建议发送顺序：
 

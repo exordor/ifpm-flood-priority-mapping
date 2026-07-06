@@ -4,7 +4,7 @@
 This is the single main figure for the 7/18 mentor preview. It carries the
 mentor's three asks at once:
 
-1. bilateral comparison (Zimbabwe V1 vs Peru PE1, side by side);
+1. bilateral comparison (Zimbabwe Upper Mzingwane vs Peru engineering pilot, side by side);
 2. per-pixel priority-criterion colouring (the "pixel colouring" she asked for);
 3. a clear one-line takeaway stating *why* the two sites differ.
 
@@ -376,7 +376,7 @@ def write_caption(path: Path, products_by_site: list[dict[str, object]]) -> None
         "to the prototype priority score under the current sensitivity scenarios. "
         "Bottom row: how often each cell appears in the top-20% priority hotspot set across scenarios. "
         "Left column: Zimbabwe Upper Mzingwane prototype catchment. "
-        "Right column: Peru engineering-pilot site (PE1).",
+        "Right column: Peru engineering-pilot site.",
         "",
         f"Takeaway: {takeaway}",
         "",

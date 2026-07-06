@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plot the V1 multi-criteria evidence board for mentor review."""
+"""Plot the Upper Mzingwane multi-criteria evidence board for mentor review."""
 
 from __future__ import annotations
 
@@ -212,7 +212,7 @@ def draw_exposure_mining(ax, legend_ax, layers: dict[str, gpd.GeoDataFrame]) -> 
     if not layers["osm_mining_indicator_v1"].empty:
         layers["osm_mining_indicator_v1"].plot(ax=ax, color="#D55E00", alpha=0.45, edgecolor="#D55E00", linewidth=0.7)
     boundary.boundary.plot(ax=ax, color="#111111", linewidth=1.2)
-    style_map(ax, "C. Exposure and weak mining proxy evidence", boundary)
+    style_map(ax, "C. Exposure and limited mining-indicator evidence", boundary)
     add_north_arrow(ax)
     add_scale_bar(ax)
     draw_panel_legend(
@@ -220,9 +220,9 @@ def draw_exposure_mining(ax, legend_ax, layers: dict[str, gpd.GeoDataFrame]) -> 
         [
             Line2D([0], [0], color="#8C8C8C", lw=1.0, label="OSM roads"),
             Line2D([0], [0], color="#0072B2", lw=1.0, label="Rivers"),
-            Line2D([0], [0], marker="o", color="w", markerfacecolor="#E69F00", label="Road-river crossing proxy"),
+            Line2D([0], [0], marker="o", color="w", markerfacecolor="#E69F00", label="Road-river crossing indicator"),
             Line2D([0], [0], marker="o", color="w", markerfacecolor="#CC79A7", label="OSM places"),
-            Patch(facecolor="#D55E00", alpha=0.45, label="OSM quarry/industrial proxy"),
+            Patch(facecolor="#D55E00", alpha=0.45, label="OSM quarry/industrial indicator"),
         ],
         columns=2,
     )
@@ -240,7 +240,7 @@ def draw_decision_table(ax, evidence: pd.DataFrame, counts: pd.DataFrame) -> Non
         "flood_prone_zones": "Flood-prone zones",
         "settlement_places": "Settlement places",
         "roads_and_crossings": "Roads and crossings",
-        "osm_quarry_industrial_indicator": "OSM quarry / industrial proxy",
+        "osm_quarry_industrial_indicator": "OSM quarry / industrial indicator",
         "chirps_rainfall": "CHIRPS rainfall",
     }
     display["Family"] = display["Family"].str.replace("_", " ").str.title()
@@ -261,7 +261,7 @@ def draw_decision_table(ax, evidence: pd.DataFrame, counts: pd.DataFrame) -> Non
     ax.text(
         0,
         -0.08,
-        f"Rainfall: CHIRPS comparison available separately. Flood-prone local overlap: {flood_count}. Mining proxy polygons: {mining_count}.",
+        f"Rainfall: CHIRPS comparison available separately. Flood-prone local overlap: {flood_count}. Mining-indicator polygons: {mining_count}.",
         transform=ax.transAxes,
         fontsize=8,
         color="#333333",
@@ -330,11 +330,11 @@ def plot_board(layers: dict[str, gpd.GeoDataFrame], evidence: pd.DataFrame, coun
 
 
 def caption_text() -> str:
-    return """Figure X. Upper Mzingwane multi-criteria evidence package for mentor review. The package is provided as separate panels first: river/flood context, terrain diagnostics, exposure and mining-pressure proxy evidence, and a candidate-criteria decision table. The combined board is a secondary overview only.
+    return """Figure X. Upper Mzingwane multi-criteria evidence package for mentor review. The package is provided as separate panels first: river/flood context, terrain diagnostics, exposure and limited mining-indicator evidence, and a candidate-criteria decision table. The combined board is a secondary overview only.
 
 Source note: The board uses existing terrain diagnostics for the Upper Mzingwane prototype catchment, HydroRIVERS, Zimbabwe Geoportal river/water/flood-prone layers, and Geofabrik OSM roads/places/landuse. A separate CHIRPS rainfall-sensitivity package is available; CHIRPS is not resampled or overlaid in this figure.
 
-Interpretation note: This is a candidate-criteria evidence package, not a model output. Geoportal Flood Prone Zones have zero local overlap in the current review layers, and OSM quarry/industrial features are weak proxy evidence rather than official mining truth.
+Interpretation note: This is a candidate-criteria evidence package, not a model output. Geoportal Flood Prone Zones have zero local overlap in the current review layers, and OSM quarry/industrial features are provisional mining-indicator evidence rather than official mining data.
 
 Limitation note: This figure is not a flood-risk map, not an AHP-MCDA overlay, not an intervention-priority map, and not final thesis boundary evidence.
 """
@@ -357,8 +357,8 @@ def write_text_outputs() -> None:
                 f"- Panel A river context PDF: `{rel(PANEL_A_PDF)}`",
                 f"- Panel B terrain diagnostics PNG: `{rel(PANEL_B_PNG)}`",
                 f"- Panel B terrain diagnostics PDF: `{rel(PANEL_B_PDF)}`",
-                f"- Panel C exposure/mining proxy PNG: `{rel(PANEL_C_PNG)}`",
-                f"- Panel C exposure/mining proxy PDF: `{rel(PANEL_C_PDF)}`",
+                f"- Panel C exposure/mining-indicator PNG: `{rel(PANEL_C_PNG)}`",
+                f"- Panel C exposure/mining-indicator PDF: `{rel(PANEL_C_PDF)}`",
                 f"- Panel D decision table PNG: `{rel(PANEL_D_PNG)}`",
                 f"- Panel D decision table PDF: `{rel(PANEL_D_PDF)}`",
                 f"- Board PNG: `{rel(BOARD_PNG)}`",
@@ -371,7 +371,7 @@ def write_text_outputs() -> None:
                 "",
                 "Recommended mentor question: Which evidence families should enter the first prototype criteria set: terrain, rainfall, exposure, mining pressure, and/or river-flood context?",
                 "",
-                "Specific decisions needed: slope direction, which CHIRPS rainfall interpretation to use, exposure role, and whether OSM mining proxies are acceptable or official mining data is required.",
+                "Specific decisions needed: slope direction, which CHIRPS rainfall interpretation to use, exposure role, and whether OSM mining indicators are acceptable or official mining data is required.",
                 "",
                 "Scope limits: no AHP weights, no overlay, no 30 m CHIRPS resampling, no flood-risk map, and no final thesis boundary claim.",
                 "",

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create mentor/boss-facing colour-coded priority-criteria explanation figures."""
+"""Create presentation-ready colour-coded priority-criteria explanation figures."""
 
 from __future__ import annotations
 
@@ -306,8 +306,7 @@ def plot_process() -> None:
     fig, ax = plt.subplots(figsize=(8.4, 10.3))
     ax.set_axis_off()
 
-    # Goal header: why this analysis exists. The boss is a non-participant, so
-    # the figure must state its purpose before listing steps.
+    # Goal header: why this analysis exists for a non-specialist review audience.
     goal_y = 0.945
     ax.add_patch(Rectangle((0.09, goal_y - 0.075), 0.82, 0.075, facecolor="#2A9D8F", edgecolor="none"))
     ax.text(0.5, goal_y - 0.0375, "Goal: identify which criteria drive flood-risk priority\nin two mountain catchments — Zimbabwe vs Peru",
@@ -357,7 +356,7 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
 
 
 def write_text_outputs(manifest_rows: list[dict[str, object]], products_by_site: list[dict[str, object]]) -> None:
-    captions = """# Captions: Mentor/Boss Priority Criteria Explanation Package
+    captions = """# Captions: Prototype Priority Criteria Explanation Package
 
 Fig. 1. Colour-coded dominant priority-driver map. Each pixel is coloured by the criterion family that contributes the largest share to the prototype priority score under the current sensitivity scenarios. The map is meant to make the priority criteria visually clear; it is not a final flood-risk map.
 
@@ -365,7 +364,7 @@ Fig. 2. Zimbabwe criterion contribution share maps. Each panel shows where one c
 
 Fig. 3. Peru criterion contribution share maps. Each panel shows the same contribution-share logic for the Peru pilot site. Peru remains an engineering pilot unless a final Peru study site is confirmed.
 
-Fig. 4. Data analysis process for a short boss presentation. The workflow runs from input data through grid preparation, criterion standardization, sensitivity scenarios, map outputs, and mentor review.
+Fig. 4. Data analysis process for a concise review briefing. The workflow runs from input data through grid preparation, criterion standardization, sensitivity scenarios, map outputs, and mentor review.
 """
     (OUT_DIR / "mentor_boss_priority_explanation_captions.md").write_text(captions, encoding="utf-8")
     (OUT_DIR / "mentor_boss_priority_explanation_captions.txt").write_text(captions.replace("# Captions: ", ""), encoding="utf-8")
@@ -380,7 +379,7 @@ Fig. 4. Data analysis process for a short boss presentation. The workflow runs f
             f"({float(top[0]['dominant_pixel_share']) * 100:.1f}%), then {top[1]['criterion_label']} "
             f"({float(top[1]['dominant_pixel_share']) * 100:.1f}%)."
         )
-    handoff = f"""# Mentor/Boss Priority Criteria Explanation Package
+    handoff = f"""# Prototype Priority Criteria Explanation Package
 
 Date: 2026-07-01
 
@@ -453,7 +452,7 @@ def main() -> None:
         plot_contributions(products)
     plot_process()
     write_text_outputs(manifest_rows, products_by_site)
-    print(f"Wrote mentor/boss priority explanation package to {OUT_DIR}")
+    print(f"Wrote prototype priority explanation package to {OUT_DIR}")
 
 
 if __name__ == "__main__":

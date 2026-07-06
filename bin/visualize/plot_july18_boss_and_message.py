@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-"""Build the July 18 boss-facing process figure and mentor message draft.
+"""Build the July 18 review process figure and mentor message draft.
 
 Split out of ``plot_july18_integrated_priority_board.py`` so that script holds
 only its single responsibility (the integrated priority board). This script
 holds the two non-map deliverables that accompany the board:
 
-- a short data-analysis process figure for the boss (goal header + 6 steps);
+- a short data-analysis process figure for a review briefing (goal header + 6 steps);
 - a one-paragraph mentor message draft.
 
 Both reuse the same output directory as the board so the 7/18 pack stays in
@@ -88,7 +88,7 @@ def write_boss_process_caption(path: Path) -> None:
     lines = [
         "# Caption",
         "",
-        "Fig. X. Data-analysis process for the 18 July mentor/boss preview. "
+        "Fig. X. Data-analysis process for the 18 July review briefing. "
         "The workflow starts with existing GIS and rainfall inputs, prepares each prototype "
         "catchment on its own common grid, converts the evidence layers into 0-1 criteria, "
         "runs candidate weight scenarios, and produces priority maps, hotspot-frequency maps, "
@@ -123,7 +123,7 @@ def main() -> None:
     plot_boss_process()
     write_boss_process_caption(OUT_DIR / "july18_boss_process_caption.md")
     write_mentor_message(OUT_DIR / "july18_mentor_message_draft.txt")
-    print(f"Wrote July 18 boss figure + mentor message to {OUT_DIR}")
+    print(f"Wrote July 18 process figure + mentor message to {OUT_DIR}")
 
 
 if __name__ == "__main__":
