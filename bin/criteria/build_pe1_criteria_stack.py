@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build grid-compatible PE1 component rasters for the PIM criteria.
 
-Mirrors `build_boundary_v1_criteria_stack_v0_2.py` plus the v0.3 rainfall
+Mirrors `build_boundary_v1_criteria_stack.py` plus the rainfall criterion
 sensitivity layer. PE1 follows the mentor 5-main-criterion AHP framework. This
 script prepares the component rasters that are combined later into PIM main
 criteria:

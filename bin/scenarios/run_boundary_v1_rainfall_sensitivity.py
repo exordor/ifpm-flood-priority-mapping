@@ -51,7 +51,7 @@ V1_GPKG = MAIN_OUTPUTS / "v1_working_boundary/v1_working_boundary.gpkg"
 V02_CRITERIA = MAIN_OUTPUTS / f"{BOUNDARY_ID}/criteria_stack_v0_2/criteria"
 V02_BASELINE = MAIN_OUTPUTS / f"{BOUNDARY_ID}/priority_scenarios_v0_2"
 
-# Rainfall criterion built by build_boundary_v1_rainfall_criterion_v0_3.py
+# Rainfall criterion built by build_boundary_v1_rainfall_criterion.py
 # (lives in this worktree's outputs/).
 RAINFALL_CRITERION = OUT_DIR / "criteria/rainfall_climatology_0_1_PROVISIONAL_30m.tif"
 

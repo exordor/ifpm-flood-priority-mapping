@@ -13,13 +13,13 @@ DEFAULT_OUTPUT = ROOT / "outputs/zimbabwe_peru_prototype_comparison/active_termi
 
 ACTIVE_FILES = [
     ROOT / "context/configs/boundary_v1_criteria_stack_v0_2.csv",
-    ROOT / "bin/criteria/build_boundary_v1_criteria_stack_v0_2.py",
+    ROOT / "bin/criteria/build_boundary_v1_criteria_stack.py",
     ROOT / "bin/criteria/build_pe1_criteria_stack.py",
-    ROOT / "bin/criteria/build_boundary_v1_rainfall_criterion_v0_3.py",
+    ROOT / "bin/criteria/build_boundary_v1_rainfall_criterion.py",
     ROOT / "bin/criteria/build_pe1_rainfall_criterion.py",
     ROOT / "bin/scenarios/run_boundary_v1_priority_scenarios.py",
-    ROOT / "bin/scenarios/run_boundary_v1_rainfall_sensitivity_v0_3.py",
-    ROOT / "bin/scenarios/run_boundary_v1_rainfall_exposure_v0_4.py",
+    ROOT / "bin/scenarios/run_boundary_v1_rainfall_sensitivity.py",
+    ROOT / "bin/scenarios/run_boundary_v1_rainfall_exposure.py",
     ROOT / "bin/scenarios/run_pe1_priority_scenarios.py",
     ROOT / "bin/visualize/plot_july18_integrated_priority_board.py",
     ROOT / "bin/visualize/plot_mentor_boss_priority_explanation_package.py",

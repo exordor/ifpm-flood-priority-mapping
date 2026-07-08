@@ -14,14 +14,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 CHECK_PATHS = [
-    ROOT / "bin/scenarios/run_boundary_v1_rainfall_exposure_v0_4.py",
+    ROOT / "bin/scenarios/run_boundary_v1_rainfall_exposure.py",
     ROOT / "bin/scenarios/run_pe1_priority_scenarios.py",
     ROOT / "bin/scenarios/run_boundary_v1_priority_scenarios.py",
-    ROOT / "bin/scenarios/run_boundary_v1_rainfall_sensitivity_v0_3.py",
-    ROOT / "bin/criteria/diagnose_boundary_v1_hotspot_exposure_v0_3.py",
+    ROOT / "bin/scenarios/run_boundary_v1_rainfall_sensitivity.py",
+    ROOT / "bin/criteria/diagnose_boundary_v1_hotspot_exposure.py",
     ROOT / "bin/factors/derive_peru_pilot_usle_soil_loss.py",
     ROOT / "bin/investigate/run_v1_mining_decay_priority_sensitivity.py",
-    ROOT / "bin/package/prepare_boundary_v1_criteria_stack_v0_2_inventory.py",
+    ROOT / "bin/package/prepare_boundary_v1_criteria_stack_inventory.py",
     ROOT / "bin/visualize/plot_july18_integrated_priority_board.py",
     ROOT / "bin/visualize/plot_mentor_boss_priority_explanation_package.py",
     ROOT / "bin/visualize/plot_zimbabwe_peru_prototype_comparison.py",

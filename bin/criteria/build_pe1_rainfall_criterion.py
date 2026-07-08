@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build a CHIRPS-derived rainfall criterion on the PE1 reference grid.
 
-Mirrors `build_boundary_v1_rainfall_criterion_v0_3.py` but for Peru PE1. Differences:
+Mirrors `build_boundary_v1_rainfall_criterion.py` but for Peru PE1. Differences:
 - source: CHIRPS v3 latam (Latin America) monthly GeoTIFFs, not Africa;
 - rainy season: Dec-Mar (southern Peru austral summer), same months as Zimbabwe's Nov-Mar
   choice (Zimbabwe also uses Nov-Mar); 

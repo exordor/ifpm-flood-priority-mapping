@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCENARIO_SCRIPT = ROOT / "bin/scenarios/run_pe1_priority_scenarios.py"
-ES_SCRIPT = ROOT / "bin/criteria/build_pim_environmental_sensitivity_v0_1.py"
+ES_SCRIPT = ROOT / "bin/criteria/build_pim_environmental_sensitivity.py"
 SCENARIO_WEIGHTS_CSV = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_weights.csv"
 SUBCRITERIA_CSV = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_subcriteria_weights.csv"
 
@@ -68,7 +68,7 @@ def assert_weights(actual: dict[str, float], expected: dict[str, float], label: 
 
 def check_script_constants() -> None:
     scenarios = load_module(SCENARIO_SCRIPT, "run_pe1_priority_scenarios")
-    es = load_module(ES_SCRIPT, "build_pim_environmental_sensitivity_v0_1")
+    es = load_module(ES_SCRIPT, "build_pim_environmental_sensitivity")
 
     assert_weights(scenarios.MENTOR_PERU_MAIN_WEIGHTS, EXPECTED_MAIN_WEIGHTS, "main weights")
     if "mentor_peru_direct_pim" not in scenarios.SCENARIOS:

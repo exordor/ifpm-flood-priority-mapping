@@ -107,12 +107,12 @@ then. The packages stay archived as the analysis behind each default.
 
 ## Next implementation step (criteria_stack_v0_2)
 
-Inventory script implemented: `bin/package/prepare_boundary_v1_criteria_stack_v0_2_inventory.py`
+Inventory script implemented: `bin/package/prepare_boundary_v1_criteria_stack_inventory.py`
 (inspect existing local outputs; produce gap/upgrade tables for mining/ASM and
 exposure; should not download, plot, or overlay).
 
 Criteria repair script implemented:
-`bin/criteria/build_boundary_v1_criteria_stack_v0_2.py` (read the v0.2 config,
+`bin/criteria/build_boundary_v1_criteria_stack.py` (read the v0.2 config,
 build honest-label grid-compatible criteria rasters, preserve NoData, write a
 NoData coverage report + small preview map).
 

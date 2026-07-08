@@ -19,7 +19,7 @@ historical provenance only; they are not part of the active pipeline.
 `outputs/v1_usle_soil_loss/a_structure_K_LS_C_30m.tif`, which **is still
 consumed by 4 active scripts**:
 
-- `bin/criteria/build_boundary_v1_criteria_stack_v0_2.py`
+- `bin/criteria/build_boundary_v1_criteria_stack.py`
 - `bin/criteria/build_pe1_criteria_stack.py`
 - `bin/factors/derive_peru_pilot_usle_soil_loss.py` (mirrors its logic)
 - `bin/criteria/build_era5_rfactor_raster.py`
