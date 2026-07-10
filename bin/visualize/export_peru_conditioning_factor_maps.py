@@ -41,6 +41,50 @@ ES_DIR = ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1"
 BOUNDARY_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 BOUNDARY_LAYER = "peru_pilot_boundary"
 
+INPUTS = [
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/twi_wetness_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/drainage_proximity_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/ls_factor_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/c_factor_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/water_wetland_context_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/protected_area_context_0_1.tif",
+    ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
+]
+OUTPUTS = [
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_rainfall_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_rainfall_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_twi_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_twi_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_drainage_proximity_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_drainage_proximity_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_ls_factor_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_ls_factor_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_c_factor_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_c_factor_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_soil_erosion_structure_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_soil_erosion_structure_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_land_cover_pressure_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_land_cover_pressure_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_mining_pressure_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_mining_pressure_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_road_access_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_road_access_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_water_wetland_context_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_water_wetland_context_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_protected_ecological_context_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/individual/peru_protected_ecological_context_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/peru_physical_conditioning_factors_panel_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/peru_physical_conditioning_factors_panel_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/peru_human_environment_conditioning_factors_panel_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/peru_human_environment_conditioning_factors_panel_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_conditioning_factor_maps/index.csv",
+]
+
 BOUNDS = [0.0, 0.2, 0.4, 0.6, 0.8, 1.000001]
 LABELS = ["0.0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1.0"]
 SCORE_COLORS = ["#ffffcc", "#ffeda0", "#feb24c", "#f03b20", "#bd0026"]

@@ -8,6 +8,7 @@ map shows a standardized 0-1 PIM criterion score, not a validated risk layer.
 from __future__ import annotations
 
 import csv
+import hashlib
 import math
 from dataclasses import dataclass
 from pathlib import Path
@@ -34,6 +35,28 @@ DST_CRS = CRS.from_epsg(4326)
 CRITERIA_DIR = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria"
 BOUNDARY_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 BOUNDARY_LAYER = "peru_pilot_boundary"
+
+INPUTS = [
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/flood_hazard_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/sediment_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/landuse_asm_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/environmental_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/socioeconomic_0_1.tif",
+    ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
+]
+OUTPUTS = [
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_flood_hazard_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_flood_hazard_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_sediment_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_sediment_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_landuse_asm_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_landuse_asm_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_environmental_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_environmental_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_socioeconomic_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_socioeconomic_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/index.csv",
+]
 
 BOUNDS = [0.0, 0.2, 0.4, 0.6, 0.8, 1.000001]
 LABELS = ["0.0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1.0"]
@@ -93,14 +116,22 @@ CRITERIA = [
         source_raster=CRITERIA_DIR / "socioeconomic_0_1.tif",
         colors=["#ffffe5", "#fff7bc", "#fec44f", "#fe9929", "#cc4c02"],
         claim_level="provisional",
-        data_basis="OSM road/access proximity",
-        limitation="access indicator, not observed vulnerability",
+        data_basis="OSM road/access proximity plus WorldPop population and OSM mapped-building exposure",
+        limitation="provisional exposure indicator; poverty and health context are excluded from the current AHP overlay",
     ),
 ]
 
 
 def rel(path: Path) -> str:
     return str(path.resolve().relative_to(ROOT))
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def read_raster(path: Path) -> tuple[np.ndarray, dict]:
@@ -228,6 +259,7 @@ def add_north_arrow(ax) -> None:
 
 def add_boundary_and_frame(ax, extent: tuple[float, float, float, float]) -> None:
     boundary = gpd.read_file(BOUNDARY_GPKG, layer=BOUNDARY_LAYER).to_crs(DST_CRS)
+    boundary.plot(ax=ax, facecolor="#d9d9d9", edgecolor="#222222", linewidth=0.9, zorder=0)
     boundary.boundary.plot(ax=ax, color="#222222", linewidth=0.9, zorder=4)
     ax.set_xlim(extent[0], extent[1])
     ax.set_ylim(extent[2], extent[3])
@@ -244,6 +276,7 @@ def add_boundary_and_frame(ax, extent: tuple[float, float, float, float]) -> Non
 
 def add_legend(ax, title: str, colors: list[str]) -> None:
     handles = [Patch(facecolor=color, edgecolor="0.4", label=label) for label, color in zip(LABELS, colors, strict=True)]
+    handles.append(Patch(facecolor="#d9d9d9", edgecolor="0.4", label="Unscored (missing criterion evidence)"))
     legend = ax.legend(
         handles=handles,
         title=title,
@@ -302,6 +335,7 @@ def save_criterion_map(criterion: Criterion) -> list[dict[str, object]]:
                 "figure_format": fmt,
                 "figure_path": rel(path),
                 "source_raster": rel(criterion.source_raster),
+                "source_sha256": sha256(criterion.source_raster),
                 "classification": "equal interval 0-1, five classes",
                 "claim_level": criterion.claim_level,
                 "data_basis": criterion.data_basis,

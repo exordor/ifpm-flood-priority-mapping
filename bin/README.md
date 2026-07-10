@@ -27,6 +27,24 @@ and orchestrated by `pipeline.py`.
 # Run one script only (no upstream)
 .venv/bin/python bin/pipeline.py run --target run_pe1_priority_scenarios --no-deps
 
+# Rebuild the Peru exposure indicators directly before a scenario rerun.
+.venv/bin/python bin/criteria/build_peru_exposure_indicators.py
+
+# Refresh Peru population accounting and SINPAD co-location tables from the current mentor PIM.
+.venv/bin/python bin/pipeline.py run --target summarize_peru_population_by_pim_class
+.venv/bin/python bin/pipeline.py run --target compare_peru_pim_sinpad_colocation
+
+# Refresh remote source data only when network access is intentional.
+.venv/bin/python bin/pipeline.py run --target download_peru_worldpop_population_subset --allow-network
+.venv/bin/python bin/pipeline.py run --target query_peru_sinpad_flood_events --allow-network
+
+# Without --allow-network, remote producers are omitted from dependency chains.
+# A downstream step fails clearly if its required local input is absent.
+
+# Refresh the direct-weight result maps and weighted-contribution map.
+.venv/bin/python bin/pipeline.py run --target export_peru_direct_weight_priority_maps
+.venv/bin/python bin/pipeline.py run --target export_peru_pim_contribution_map
+
 # Force re-run even if outputs are up-to-date
 .venv/bin/python bin/pipeline.py run --target <name> --force
 ```
@@ -44,7 +62,7 @@ stage's outputs.
 | **scenarios** | `run_` | Weighted overlay + sensitivity/stability analysis |
 | **visualize** | `plot_` | Generate mentor/boss-facing figures and boards |
 | **package** | `prepare_` `standardize_` `export_` `diagnose_` `check_v1_raster_grid` | Boundary export, evidence packaging, grid checks |
-| **investigate** | `explore_` `compute_` `compare_` `verify_` | One-off R-factor investigation and literature checks |
+| **investigate** | `explore_` `compute_` `compare_` `verify_` `summarize_` | One-off diagnostics, comparisons, and summaries |
 
 ## Two parallel country chains
 

@@ -37,6 +37,11 @@ exclude:
   - download_v1_methodology_inputs    # needs raw data already planned
   - intake_mentor_voi_rainfall        # needs mentor zip
   - inventory_mentor_voi_rainfall_archive  # needs mentor zip
+  - download_peru_worldpop_population_subset # network/large-download step; run explicitly
+  - query_peru_sinpad_flood_events         # network ArcGIS query; run explicitly
+  - compare_peru_exposure_refresh          # one-off before/after diagnostic needs archived raster
+  - export_paper_style_single_maps         # scenario-mean sensitivity appendix; run explicitly
+  - export_single_priority_maps            # legacy cross-site sensitivity appendix; run explicitly
 
 # When true, re-run scripts even if their outputs are newer than inputs.
 force: false
@@ -44,3 +49,9 @@ force: false
 # When true, stop at the first failed script. When false, continue and
 # report all failures at the end.
 stop_on_failure: true
+
+# Scripts that may access remote services or download large files. They are
+# removed from target dependency chains unless --allow-network is explicit.
+network_scripts:
+  - download_peru_worldpop_population_subset
+  - query_peru_sinpad_flood_events

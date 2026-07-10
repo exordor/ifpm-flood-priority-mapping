@@ -35,10 +35,10 @@ mainline uses newer direct Peru weights: `FH=0.35`, `SE=0.25`, `LM=0.20`,
 Motivation: first complete a Peru flood-prioritisation prototype that uses the
 stronger Peru data stack, especially the INGEMMET small-mining evidence, then
 use Zimbabwe or Voi/Kenya only as secondary comparison cases if the research
-story needs them. The end product is a prototype priority map indicating where
-flood-rescue or intervention measures should be prioritised, followed by an
-overlay with mining data to test whether mining areas coincide with high-
-priority zones.
+story needs them. The end product is a prototype screening map indicating where
+further flood-impact assessment and intervention planning should focus,
+followed by a mining overlay to test whether mapped mining evidence coincides
+with higher-priority screening zones.
 
 ## Research scope
 
@@ -95,6 +95,11 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
   Peru first until the end
 - [x] Current Peru direct mentor weights implemented in `pe1_priority_scenarios`
   with equal-weight baseline
+- [x] Peru socioeconomic criterion upgraded from road-only to the supplied
+  0.45 road/access + 0.55 infrastructure split using WorldPop and OSM mapped
+  buildings; INEI poverty and health remoteness exported as diagnostic context
+- [x] Peru WorldPop exposure accounting and SINPAD co-location rerun against the refreshed
+  mentor PIM with checksum lineage
 - [x] Secondary Zimbabwe direct weights implemented in `rainfall_exposure_v0_4`
   with equal-weight baseline
 - [ ] Peru-only final prototype briefing set: input criteria maps, AHP
@@ -135,11 +140,15 @@ does not maintain a queue of "questions to ask the mentor".
    Zimbabwe contacts. Default after the Peru-first switch: do not spend the
    current mainline on Zimbabwe mining repair; keep Zimbabwe as secondary /
    background unless stronger data arrives.
-3. **Socioeconomic exposure evidence** — only road/access proximity in the
-   current Peru and Zimbabwe runs; no independent infrastructure-exposure
-   raster and no observed flood-impact / damaged-infrastructure /
-   affected-settlement data. Default: label as access indicator, keep
-   building.
+3. **Socioeconomic exposure evidence** — Peru now combines road/access,
+   WorldPop population, and OSM mapped-building evidence. The 0.50/0.50
+   population/building split inside infrastructure exposure is still an
+   implementation placeholder. INEI poverty and OSM health remoteness are
+   diagnostic context outside the PIM; Zimbabwe remains road/access-only. Default: label Peru as a
+   provisional socioeconomic exposure indicator, not observed vulnerability.
+   The current road value function accounts for 94.4% of the criterion's
+   realized spatial mean contribution despite the nominal 0.45 road weight;
+   value-function calibration remains an explicit sensitivity task.
 4. **Peru boundary** — PE1 is HydroBASINS L7 `6070641200`, the active
    Peru-first main case, but still a provisional
    southern Peru comparison catchment in Arequipa Region, mainly the
@@ -147,7 +156,9 @@ does not maintain a queue of "questions to ask the mentor".
    by a selection rule, not a final research-selected site. Default: keep PE1
    and complete the Peru workflow first; replace only if the mentor names a
    different Peru site.
-5. **Validation data** — effectively zero for both sites. Default: outputs stay
+5. **Validation data** — Peru now has 25 in-boundary SINPAD flood-relevant
+   emergency records for point comparison, but this is sparse event evidence,
+   not observed flood extent. Default: outputs stay
    at priority/susceptibility level, never labelled as validated risk.
 6. **Sediment criterion** — uses K×LS×C erosion-source structure (R-factor
    quarantined out of the critical path, see `DECISION_LOG.md`

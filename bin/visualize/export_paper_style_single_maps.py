@@ -8,6 +8,7 @@ large in-image titles/captions so slide text can provide the interpretation.
 from __future__ import annotations
 
 import csv
+import hashlib
 import math
 from dataclasses import dataclass
 from pathlib import Path
@@ -29,8 +30,32 @@ from rasterio.warp import calculate_default_transform, reproject
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT_DIR = ROOT / "outputs/slide_ready_figures/paper_style_single_maps"
+OUT_DIR = ROOT / "outputs/sensitivity_figures/paper_style_single_maps"
 DST_CRS = CRS.from_epsg(4326)
+
+INPUTS = [
+    ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/priority_mean.tif",
+    ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif",
+    ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_conditioning_factors_0_1.tif",
+    ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
+]
+OUTPUTS = [
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/zimbabwe_mean_priority_5class_paper_style_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/zimbabwe_mean_priority_5class_paper_style_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/zimbabwe_top20_priority_areas_paper_style_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/zimbabwe_top20_priority_areas_paper_style_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/zimbabwe_flood_conditioning_5class_paper_style_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/zimbabwe_flood_conditioning_5class_paper_style_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/peru_mean_priority_5class_paper_style_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/peru_mean_priority_5class_paper_style_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/peru_top20_priority_areas_paper_style_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/peru_top20_priority_areas_paper_style_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/peru_flood_conditioning_5class_paper_style_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/peru_flood_conditioning_5class_paper_style_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/index.csv",
+]
 
 PRIORITY_BOUNDS = [0.0, 0.2, 0.4, 0.6, 0.8, 1.000001]
 PRIORITY_LABELS = ["0.0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1.0"]
@@ -78,6 +103,14 @@ SITES = [
 
 def rel(path: Path) -> str:
     return str(path.resolve().relative_to(ROOT))
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def read_raster(path: Path) -> tuple[np.ndarray, dict]:
@@ -215,6 +248,7 @@ def add_north_arrow(ax) -> None:
 
 def add_boundary_and_frame(ax, site: Site, extent: tuple[float, float, float, float]) -> None:
     boundary = gpd.read_file(site.boundary_gpkg, layer=site.boundary_layer).to_crs(DST_CRS)
+    boundary.plot(ax=ax, facecolor="#d9d9d9", edgecolor="#222222", linewidth=0.9, zorder=0)
     boundary.boundary.plot(ax=ax, color="#222222", linewidth=0.9, zorder=4)
     ax.set_xlim(extent[0], extent[1])
     ax.set_ylim(extent[2], extent[3])
@@ -231,6 +265,7 @@ def add_boundary_and_frame(ax, site: Site, extent: tuple[float, float, float, fl
 
 def add_legend(ax, title: str, labels: list[str], colors: list[str]) -> None:
     handles = [Patch(facecolor=color, edgecolor="0.4", label=label) for label, color in zip(labels, colors, strict=True)]
+    handles.append(Patch(facecolor="#d9d9d9", edgecolor="0.4", label="Unscored (missing criterion evidence)"))
     legend = ax.legend(
         handles=handles,
         title=title,
@@ -275,8 +310,8 @@ def save_class_map(
     fig.savefig(pdf, bbox_inches="tight", pad_inches=0.03)
     plt.close(fig)
     return [
-        {"site": site.label, "map_type": stem, "format": "png", "path": rel(png), "source": rel(source), "class_note": class_note, "claim_level": site.claim_level},
-        {"site": site.label, "map_type": stem, "format": "pdf", "path": rel(pdf), "source": rel(source), "class_note": class_note, "claim_level": site.claim_level},
+        {"site": site.label, "map_type": stem, "format": "png", "path": rel(png), "source": rel(source), "source_sha256": sha256(source), "class_note": class_note, "claim_level": site.claim_level},
+        {"site": site.label, "map_type": stem, "format": "pdf", "path": rel(pdf), "source": rel(source), "source_sha256": sha256(source), "class_note": class_note, "claim_level": site.claim_level},
     ]
 
 

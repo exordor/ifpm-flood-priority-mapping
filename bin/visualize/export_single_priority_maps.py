@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export slide-ready single-map figures from current priority outputs.
+"""Export sensitivity-appendix single-map figures from current priority outputs.
 
 The figures deliberately have no title and no caption. They keep only the map,
 boundary, axes, and the minimum legend/colorbar needed to read a single image.
@@ -25,7 +25,43 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT_DIR = ROOT / "outputs/slide_ready_figures/single_priority_maps"
+OUT_DIR = ROOT / "outputs/sensitivity_figures/single_priority_maps"
+
+INPUTS = [
+    ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/priority_mean.tif",
+    ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/top20_frequency.tif",
+    ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/scenario_weights.csv",
+    ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg",
+    ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/pim_criteria/flood_hazard_0_1.tif",
+    ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/pim_criteria/sediment_0_1.tif",
+    ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/pim_criteria/landuse_asm_0_1.tif",
+    ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/pim_criteria/environmental_0_1.tif",
+    ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/pim_criteria/socioeconomic_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_weights.csv",
+    ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/flood_hazard_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/sediment_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/landuse_asm_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/environmental_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/socioeconomic_0_1.tif",
+]
+OUTPUTS = [
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/zimbabwe_mean_priority_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/zimbabwe_mean_priority_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/zimbabwe_top20_priority_selection_frequency_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/zimbabwe_top20_priority_selection_frequency_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/zimbabwe_dominant_priority_driver_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/zimbabwe_dominant_priority_driver_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/peru_mean_priority_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/peru_mean_priority_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/peru_top20_priority_selection_frequency_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/peru_top20_priority_selection_frequency_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/peru_dominant_priority_driver_no_title_caption.png",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/peru_dominant_priority_driver_no_title_caption.pdf",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/index.csv",
+]
 
 COLORS = {
     "flood": "#0072B2",

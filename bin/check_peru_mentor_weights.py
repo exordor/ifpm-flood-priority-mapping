@@ -125,8 +125,20 @@ def check_outputs() -> None:
     missing = [item for item in required if item not in implemented]
     if missing:
         raise AssertionError(f"missing subcriteria rows: {missing}")
-    if implemented[("socioeconomic", "infrastructure_exposure")] != "not_available_current_run":
-        raise AssertionError("infrastructure exposure must be explicitly marked unavailable")
+    expected_socioeconomic_status = "implemented_upstream_in_exposure_indicators"
+    for component in ("road_access_proximity", "infrastructure_exposure"):
+        if implemented[("socioeconomic", component)] != expected_socioeconomic_status:
+            raise AssertionError(f"{component} must be marked as implemented upstream")
+    applied = {
+        row["component"]: float(row["applied_weight_in_current_run"])
+        for row in sub_rows
+        if row["pim_criterion"] == "socioeconomic"
+    }
+    assert_weights(
+        applied,
+        {"road_access_proximity": 0.45, "infrastructure_exposure": 0.55},
+        "socioeconomic subcriteria weights",
+    )
     if implemented[("sediment", "soil_k_factor")] != "not_independently_weighted_current_run":
         raise AssertionError("SoilGrids K-factor must be marked as not independently weighted")
     for component in ("ls_factor", "c_factor"):

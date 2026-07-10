@@ -125,16 +125,19 @@ D-PE1-CATCHMENT and D-PERU-FIRST.
   D-PE1-CATCHMENT, D-PERU-FIRST
 - **Claim level:** `provisional`
 
-## RQ7: Validation evidence — default: none available; outputs stay at priority/susceptibility level
+## RQ7: Validation evidence — SINPAD point context available; independent validation remains unavailable
 
 Determines whether outputs are susceptibility maps, risk maps, or intervention
-maps. Current validation data is effectively zero (EM-DAT country profile only;
-GloFAS downgraded as not publicly accessible; no in-situ flood-impact data).
+maps. Peru now has 25 in-boundary SINPAD hydrometeorological records at 11
+unique coordinates. Only 4 records at 2 unique coordinates are explicitly
+flood-labelled, and the geometries are event reference points rather than
+observed flood extents. This supports a co-location diagnostic, not validation.
 
 **Default taken:** label all outputs as priority/susceptibility prototypes,
-never as validated risk maps. Do not block progress waiting for validation
-data that does not exist. If the mentor can supply flood-impact observations
-or a validation dataset, the project will add a validation layer then.
+never as validated risk maps. Report SINPAD by all records, unique coordinates,
+flood-specific records, and unique flood coordinates. If observed flood extent
+or impact evidence becomes available, add a separate independent validation
+layer then.
 
 - **Decision id:** IFPM-D03 (default taken)
 - **Related:** `RESULTS.md` §exposure diagnostic
@@ -220,10 +223,11 @@ decision id:
 | A-015 | Peru is the active mainline case after the 2026-07-06 mentor direction to work with Peru first until the end. PE1 remains provisional, but new maps and PPT structure should lead with Peru. | provisional | Peru-first workflow |
 | A-016 | Current Peru PIM main weights are the mentor direct table: FH 0.35, SE 0.25, LM 0.20, ES 0.12, SV 0.08. Equal weights remain baseline. No CR is reported because no pairwise matrix was supplied for this new table. | sensitivity_scenario | Peru AHP weights |
 | A-017 | Peru sediment subweights K 0.30 / LS 0.45 / C 0.25 are recorded but not independently applied in the current overlay; sediment uses the current K x LS x C erosion-source structure until a grid-compatible independent K layer is rebuilt. | diagnostic_only | Peru sediment criterion |
-| A-018 | Peru socioeconomic exposure uses road/access proximity only; independent infrastructure exposure is not available in the current run. | diagnostic_only | Peru socioeconomic criterion |
+| A-018 | Peru exposure indicators implement the supplied socioeconomic split: 0.45 road/access + 0.55 infrastructure. Infrastructure exposure is a provisional 0.50 WorldPop population + 0.50 OSM mapped-building implementation indicator. | provisional | Peru socioeconomic criterion |
 | A-019 | Current secondary Zimbabwe PIM main weights are the direct table: FH 0.32, SE 0.23, LM 0.18, ES 0.12, SV 0.15. Equal weights remain baseline. No CR is reported because no pairwise matrix was supplied for this new table. | sensitivity_scenario | Zimbabwe AHP weights |
 | A-020 | Zimbabwe sediment subweights K 0.35 / LS 0.35 / C 0.30 are recorded but not independently applied in the current overlay; sediment uses the current K x LS x C erosion-source structure until a grid-compatible independent K layer is rebuilt. | diagnostic_only | Zimbabwe sediment criterion |
 | A-021 | Zimbabwe socioeconomic exposure uses road/access proximity only; independent infrastructure exposure is not available in the current run. | diagnostic_only | Zimbabwe socioeconomic criterion |
+| A-022 | INEI district poverty and OSM health-service remoteness are response-capacity context layers and are excluded from the current Peru AHP overlay because no mentor subweights were supplied for them. | diagnostic_only | Peru response-capacity context |
 
 ## Lineage
 
@@ -232,4 +236,4 @@ Absorbs content from:
 - `mentor_methodology_slide_interpretation_2026-06-16.md` (Rehab-Potential role, AHP)
 - `task_progress_board.md` §Blocked Or Needs Decision (IFPM-D01..D06)
 - `rfactor_investigation_consolidated.md` §7 (R-factor open question)
-- `assumptions_log.md` (original A-001..A-014 register; A-015..A-021 added in research-map)
+- `assumptions_log.md` (original A-001..A-014 register; A-015..A-022 added in research-map)

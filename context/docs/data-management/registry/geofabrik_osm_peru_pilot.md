@@ -33,7 +33,7 @@ and license as the already-downloaded Geofabrik Zimbabwe extract.
 
 ## Used Layers (PE1)
 
-- `gis_osm_roads_free_1.shp` -> socioeconomic_exposure proximity criterion (6210 features in
+- `gis_osm_roads_free_1.shp` -> exposure_indicators proximity criterion (6210 features in
   PE1 + 5km).
 - `gis_osm_landuse_a_free_1.shp` -> mining_pressure proximity criterion (32 quarry/industrial
   polygons in PE1 + 5km; stronger than Zimbabwe V1's 2 polygons).

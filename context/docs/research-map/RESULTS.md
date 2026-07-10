@@ -171,8 +171,15 @@ symmetry.
   baseline scenario.
 - Component rasters: rainfall_climatology, twi_wetness, drainage_proximity,
   soil_erosion_factors, land_cover_pressure, mining_pressure (INGEMMET
-  11 official ASM points), environmental_sensitivity, and exposure_indicators
-  (OSM roads). LS and C are also exported as diagnostic sediment sublayers.
+  11 official ASM points), environmental_sensitivity, and exposure_indicators.
+  The socioeconomic exposure indicator combines road/access proximity (0.45) with
+  infrastructure exposure (0.55); infrastructure exposure is an explicit
+  equal placeholder blend of WorldPop population and OSM mapped-building
+  exposure. LS and C are also exported as diagnostic sediment sublayers.
+- The nominal 0.45/0.55 split is not the realized spatial influence: after the
+  current value functions, road/access contributes **94.4%** of the criterion's
+  spatial mean and infrastructure **5.6%**. The formula is implemented as
+  supplied, but value-function calibration remains open.
 - Flood subweights are implemented as rainfall 0.40, TWI 0.30, drainage
   proximity 0.30.
 - Land Use / ASM subweights are implemented as land-cover pressure 0.35 and
@@ -183,11 +190,30 @@ symmetry.
   executable criterion. The mentor's K/LS/C subweights are recorded as a gap
   because the current independent K-factor raster is not grid-compatible for
   PE1 overlay.
-- Socioeconomic still uses road/access proximity only; independent
-  infrastructure exposure is not available in the current run.
-- Area selected in the top 20% under both current scenarios: **431.827 km²**.
+- INEI district poverty and OSM health-service remoteness are exported as
+  response-capacity context only and are not hidden AHP inputs.
+- Area selected in the top 20% under both current scenarios: **435.063 km²**.
   Area selected in the top 20% under at least one current scenario:
-  **622.660 km²**.
+  **619.421 km²**.
+- Common valid coverage is **96.1734%**. The remaining **3.8266%** is kept
+  unscored because the current hillslope sediment layer does not cover those
+  channel cells; NoData is not treated as low priority. Those unscored cells
+  contain about **2,116** of the **47,301** WorldPop population count inside
+  the boundary, so the map is a common-valid screening result rather than a
+  complete-basin priority result.
+- The exposure-indicator refresh changed the mentor PIM by mean absolute
+  **0.0321**; Spearman rank correlation with the pre-refresh PIM is **0.9897**,
+  and independently defined highest-priority quintiles have Jaccard overlap
+  **0.9099**.
+- WorldPop accounting gives **9,955 people** in current highest-priority-quintile
+  cells (**22.0%** of population with valid PIM overlap). WorldPop is itself a
+  PIM exposure input, so this is endogenous exposure accounting, not validation
+  or an observed affected-population count.
+- SINPAD co-location: **3 of 25** hydrometeorological records fall in current
+  highest-priority-quintile cells. The 25 records represent **11 unique
+  coordinates**; only **4 records at 2 unique coordinates** are explicitly
+  flood-labelled. These point references are diagnostic context, not flood
+  extents or independent model validation.
 
 ### Interpretation
 
@@ -218,9 +244,10 @@ official INGEMMET point evidence.
   Pequeña Minería ASM points (ArcGIS REST, no login).
 - PE1 mining upgrade shifted the area selected in the top 20% under all scenarios from 368 km² (OSM) to
   **307.356 km²** in the earlier three-scenario run; the current Peru direct
-  weights rerun selects **431.827 km²** under both current scenarios. Official
+  weights rerun with the refreshed exposure indicators selects **435.063 km²**
+  under both current scenarios. Official
   ASM locations produce a more precise mining-pressure pattern than the old OSM
-  mining proxy.
+  mining indicator.
 
 ### Interpretation
 

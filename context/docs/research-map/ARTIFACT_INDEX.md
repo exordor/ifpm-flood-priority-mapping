@@ -108,7 +108,11 @@ but not centrally indexed.
 
 | package | location | status |
 |---|---|---|
-| Peru-first paper-style single maps | `outputs/slide_ready_figures/paper_style_single_maps/` | current Peru-first figure source; includes both sites, but Peru maps should lead |
+| Scenario-mean paper-style single maps | `outputs/sensitivity_figures/paper_style_single_maps/` | sensitivity/appendix figures only; not the public direct-weight main result |
+| Peru five PIM criterion maps | `outputs/slide_ready_figures/peru_pim_criteria_maps/` | refreshed from current PIM criteria; no global titles or captions |
+| Peru exposure and capacity-context maps | `outputs/slide_ready_figures/peru_exposure_context_maps/` | WorldPop, mapped buildings, exposure indicators, INEI poverty, and health remoteness; poverty/health context layers are not PIM inputs |
+| Peru direct-weight priority screening maps | `outputs/slide_ready_figures/peru_direct_weight_priority_maps/` | five-class and highest-priority-quintile single maps from the current direct-weight scenario; unscored cells shown explicitly |
+| Peru weighted-contribution map | `outputs/slide_ready_figures/peru_pim_contribution_map/` | largest weighted criterion contribution per common-valid cell plus realized contribution summary; not a sensitivity or causal-driver map |
 | July 18 integrated comparison board | `outputs/zimbabwe_peru_prototype_comparison/` | mentor_review_ready; secondary/background after D-PERU-FIRST |
 | Dominant-criterion pixel map | `outputs/mentor_boss_priority_explanation/{zimbabwe,peru}/` | mentor_review_ready |
 | Boss process figure | `outputs/mentor_boss_priority_explanation/data_analysis_process_for_boss.pdf` | mentor_review_ready |

@@ -47,8 +47,8 @@ CHECK_PATHS = [
     ROOT / "outputs/report_image_catalog_2026-07-06/AUDIT.md",
     ROOT / "outputs/report_image_catalog_2026-07-06/README.md",
     ROOT / "outputs/report_image_catalog_2026-07-06/image_catalog.csv",
-    ROOT / "outputs/slide_ready_figures/paper_style_single_maps/index.csv",
-    ROOT / "outputs/slide_ready_figures/single_priority_maps/index.csv",
+    ROOT / "outputs/sensitivity_figures/paper_style_single_maps/index.csv",
+    ROOT / "outputs/sensitivity_figures/single_priority_maps/index.csv",
 ]
 
 DISALLOWED_PHRASES = (

@@ -11,8 +11,9 @@ scored in the current executable prototype:
   grid-compatible K layer is rebuilt.
 - Land Use / ASM: land-cover pressure + mining pressure.
 - Environmental: water/wetland and protected/ecological context.
-- Socioeconomic: current road/access exposure indicator; independent
-  infrastructure exposure is explicitly unavailable in the current run.
+- Socioeconomic: road/access proximity plus population and mapped-building
+  infrastructure exposure. Poverty and health-service remoteness remain
+  response-capacity context layers outside the current AHP overlay.
 
 Current scenarios: equal baseline and mentor-recommended Peru direct weights.
 
@@ -28,6 +29,9 @@ and a board figure. All provisional / sensitivity_scenario.
 from __future__ import annotations
 
 import csv
+import hashlib
+import json
+import subprocess
 from pathlib import Path
 
 import geopandas as gpd
@@ -40,8 +44,44 @@ from matplotlib.ticker import FuncFormatter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/twi_wetness_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/drainage_proximity_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/ls_factor_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/c_factor_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
-OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/hotspot_stability_summary.csv"]
+INPUTS = [
+    ROOT / "bin/_lib/ifpm_tools.py",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/twi_wetness_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/drainage_proximity_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/ls_factor_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/c_factor_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators/exposure_indicators_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif",
+    ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
+]
+OUTPUTS = [
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_std.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pe1_priority_scenarios_board.png",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pe1_priority_scenarios_board.pdf",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_equal_active_pim.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_mentor_peru_direct_pim.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/top20_equal_active_pim.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/top20_mentor_peru_direct_pim.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/flood_hazard_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/sediment_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/landuse_asm_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/environmental_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/socioeconomic_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_weights.csv",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_subcriteria_weights.csv",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/hotspot_stability_summary.csv",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_priority_summary.csv",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/component_grid_check.csv",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria_grid_check.csv",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/run_manifest.json",
+]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
@@ -53,6 +93,7 @@ OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
 SCENARIO_DIR = OUT_DIR / "scenarios"
 PIM_CRITERIA_DIR = OUT_DIR / "pim_criteria"
 CRITERIA_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria"
+EXPOSURE_INDICATORS_DIR = ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators"
 REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
 PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 # Common-mask overlay must reject true data gaps, but PE1 erosion_structure deliberately
@@ -69,7 +110,7 @@ COMPONENT_PATHS = {
     "c_factor": CRITERIA_DIR / "c_factor_0_1.tif",
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
     "mining_pressure": CRITERIA_DIR / "mining_pressure_0_1.tif",
-    "exposure_indicators": CRITERIA_DIR / "exposure_indicators_0_1.tif",
+    "exposure_indicators": EXPOSURE_INDICATORS_DIR / "exposure_indicators_0_1.tif",
     "environmental_sensitivity": ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif",
 }
 
@@ -102,6 +143,37 @@ SCENARIOS = {
 
 def rel(path: Path) -> str:
     return str(path.resolve().relative_to(ROOT))
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def git_state() -> dict[str, object]:
+    """Return private run-lineage context without changing the worktree."""
+
+    try:
+        head = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout.strip()
+        status = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout.splitlines()
+        return {"head": head, "dirty": bool(status), "changed_paths": status}
+    except (OSError, subprocess.CalledProcessError) as exc:
+        return {"head": None, "dirty": None, "error": str(exc)}
 
 
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
@@ -254,7 +326,7 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
             "applied_weight_in_current_run": 0.00,
             "implementation_status": "not_independently_weighted_current_run",
             "source_layer": "outputs/soilgrids_250m_peru_pilot/k_factor_pe1_0_5cm_250m.tif",
-            "note": "current PIM uses the validated K x LS x C sediment structure; independent grid-compatible K weighting is deferred",
+            "note": "current PIM uses the provisional K x LS x C erosion-source structure; independent grid-compatible K weighting is deferred",
         },
         {
             "pim_criterion": "sediment",
@@ -263,7 +335,7 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
             "applied_weight_in_current_run": 0.00,
             "implementation_status": "available_but_not_independently_weighted_current_run",
             "source_layer": rel(COMPONENT_PATHS["ls_factor"]),
-            "note": "available as a diagnostic layer; current PIM sediment criterion uses K x LS x C as one validated structure layer",
+            "note": "available as a diagnostic layer; current PIM sediment criterion uses K x LS x C as one provisional structure layer",
         },
         {
             "pim_criterion": "sediment",
@@ -272,7 +344,7 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
             "applied_weight_in_current_run": 0.00,
             "implementation_status": "available_but_not_independently_weighted_current_run",
             "source_layer": rel(COMPONENT_PATHS["c_factor"]),
-            "note": "available as a diagnostic layer; current PIM sediment criterion uses K x LS x C as one validated structure layer",
+            "note": "available as a diagnostic layer; current PIM sediment criterion uses K x LS x C as one provisional structure layer",
         },
         {
             "pim_criterion": "landuse_asm",
@@ -314,19 +386,19 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
             "pim_criterion": "socioeconomic",
             "component": "road_access_proximity",
             "suggested_local_weight": 0.45,
-            "applied_weight_in_current_run": 1.00,
-            "implementation_status": "implemented_as_only_available_component",
-            "source_layer": rel(COMPONENT_PATHS["exposure_indicators"]),
-            "note": "current socioeconomic criterion is road/access proximity only",
+            "applied_weight_in_current_run": 0.45,
+            "implementation_status": "implemented_upstream_in_exposure_indicators",
+            "source_layer": rel(CRITERIA_DIR / "exposure_indicators_0_1.tif"),
+            "note": "combined upstream with infrastructure evidence in exposure_indicators",
         },
         {
             "pim_criterion": "socioeconomic",
             "component": "infrastructure_exposure",
             "suggested_local_weight": 0.55,
-            "applied_weight_in_current_run": 0.00,
-            "implementation_status": "not_available_current_run",
-            "source_layer": "",
-            "note": "no independent Peru infrastructure-exposure raster is present in the current workspace",
+            "applied_weight_in_current_run": 0.55,
+            "implementation_status": "implemented_upstream_in_exposure_indicators",
+            "source_layer": rel(EXPOSURE_INDICATORS_DIR / "infrastructure_exposure_0_1.tif"),
+            "note": "equal placeholder blend of WorldPop population and OSM mapped-building exposure",
         },
     ]
     return rows
@@ -433,7 +505,7 @@ def main() -> None:
                 "weight_source": (
                     "equal baseline"
                     if scenario == "equal_active_pim"
-                    else "mentor-recommended Peru direct AHP weights, July 2026"
+                    else "mentor-recommended Peru direct weights, July 2026; no pairwise matrix supplied"
                 ),
                 "claim_level": "sensitivity_scenario",
             })
@@ -444,10 +516,11 @@ def main() -> None:
         write_raster(SCENARIO_DIR / f"priority_{scenario}.tif", score, profile)
         threshold = float(np.nanpercentile(score, 80))
         top20 = np.where(common_valid, score >= threshold, np.nan).astype("float32")
+        write_raster(SCENARIO_DIR / f"top20_{scenario}.tif", top20, profile)
         top20_masks.append(top20)
         summary_rows.append({
             "boundary_id": boundary_id, "experiment_id": experiment_id,
-            "scenario": scenario, "top20_threshold": round(threshold, 6),
+            "scenario": scenario, "top20_threshold": threshold,
             "common_valid_fraction": round(common_valid_fraction, 6),
             **raster_stats(score),
         })
@@ -472,6 +545,8 @@ def main() -> None:
         {"metric": "mentor_peru_direct_weights", "value": "flood_hazard=0.35, sediment=0.25, landuse_asm=0.20, environmental=0.12, socioeconomic=0.08"},
         {"metric": "mentor_peru_weight_type", "value": "direct recommended weights; no pairwise matrix consistency ratio supplied in the current note"},
         {"metric": "common_valid_fraction", "value": round(common_valid_fraction, 6)},
+        {"metric": "unscored_boundary_fraction", "value": round(1.0 - common_valid_fraction, 6)},
+        {"metric": "interpretation_domain", "value": "common-valid screening cells; channel cells without sediment evidence remain unscored"},
         {"metric": "top20_all_scenarios_cells", "value": int(np.nansum(top20_frequency == 1.0))},
         {"metric": "top20_any_scenario_cells", "value": int(np.nansum(top20_frequency > 0.0))},
         {"metric": "top20_all_scenarios_area_km2", "value": round(float(np.nansum(top20_frequency == 1.0) * cell_km2), 3)},
@@ -484,7 +559,8 @@ def main() -> None:
         {"metric": "active_scored_pim_criteria", "value": ", ".join(ACTIVE_PIM_CRITERIA)},
         {"metric": "component_layers", "value": ", ".join(COMPONENT_PATHS)},
         {"metric": "environmental_sensitivity_status", "value": "provisional"},
-        {"metric": "socioeconomic_infrastructure_exposure_status", "value": "not_available_current_run; road/access proximity is used as the only available component"},
+        {"metric": "exposure_indicators_status", "value": "implemented_provisional; 0.45 road/access + 0.55 infrastructure; infrastructure is 0.50 WorldPop population + 0.50 OSM mapped-building evidence"},
+        {"metric": "socioeconomic_response_capacity_context_status", "value": "INEI district poverty and OSM health-service remoteness exported outside the AHP overlay"},
     ]
     write_csv(OUT_DIR / "scenario_weights.csv", weight_rows)
     write_csv(OUT_DIR / "pim_subcriteria_weights.csv", build_subcriteria_weight_rows())
@@ -492,6 +568,37 @@ def main() -> None:
     write_csv(OUT_DIR / "hotspot_stability_summary.csv", stability_rows)
     write_csv(OUT_DIR / "component_grid_check.csv", build_grid_check(profile, components))
     write_csv(OUT_DIR / "pim_criteria_grid_check.csv", build_grid_check(profile, criteria))
+    manifest_path = OUT_DIR / "run_manifest.json"
+    manifest = {
+        "boundary_id": boundary_id,
+        "experiment_id": experiment_id,
+        "claim_level": "sensitivity_scenario",
+        "scenario_ids": list(all_scenarios),
+        "weights": all_scenarios,
+        "mentor_weight_type": (
+            "direct recommended weights; no pairwise matrix or consistency ratio supplied"
+        ),
+        "common_valid_fraction": common_valid_fraction,
+        "unscored_boundary_fraction": 1.0 - common_valid_fraction,
+        "interpretation_domain": (
+            "common-valid screening cells; channel cells without sediment evidence remain unscored"
+        ),
+        "script": {
+            "path": rel(Path(__file__)),
+            "sha256": sha256(Path(__file__)),
+        },
+        "git": git_state(),
+        "inputs": [
+            {"path": rel(path), "sha256": sha256(path)}
+            for path in INPUTS
+        ],
+        "outputs": [
+            {"path": rel(path), "sha256": sha256(path)}
+            for path in OUTPUTS
+            if path != manifest_path
+        ],
+    }
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     stable_area = next(
         row["value"] for row in stability_rows
         if row["metric"] == "top20_all_scenarios_area_km2"
@@ -500,7 +607,7 @@ def main() -> None:
     print(f"  common valid coverage: {common_valid_fraction:.6f}")
     print(f"  top-20% selected by both scenarios: {stable_area} km2")
     print("  mentor Peru direct weights: 0.35 FH, 0.25 SE, 0.20 LM, 0.12 ES, 0.08 SV")
-    print("  (Socioeconomic infrastructure exposure is not available in the current run)")
+    print("  socioeconomic criterion: 0.45 road/access + 0.55 population/building exposure indicators")
 
 
 if __name__ == "__main__":

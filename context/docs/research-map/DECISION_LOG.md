@@ -132,8 +132,30 @@ decision, reason, alternatives, consequences.
   - Sediment still uses the current `K x LS x C` erosion-source structure as a
     single executable criterion; the new K/LS/C local subweights are recorded
     as a gap until a grid-compatible independent K-factor layer is rebuilt.
-  - Socioeconomic still uses road/access proximity only; independent
-    infrastructure exposure is recorded as missing.
+  - At the time of this decision, socioeconomic used road/access proximity
+    only. This implementation gap is superseded by
+    D-PERU-EXPOSURE-REFRESH (2026-07-10).
+
+## D-PERU-EXPOSURE-REFRESH — implement exposure while keeping capacity context separate
+
+- **Date:** 2026-07-10.
+- **Context:** WorldPop population, INEI district poverty, OSM buildings and
+  health-service points, and SINPAD emergency records are now locally available.
+  The supplied Peru sub-criteria table specifies 0.45 road/access and 0.55
+  infrastructure exposure, but does not assign poverty or health weights.
+- **Decision:** Implement the PIM socioeconomic criterion as 0.45 road/access
+  proximity plus 0.55 infrastructure exposure. Implement infrastructure
+  exposure as an explicitly provisional 0.50 WorldPop population + 0.50 OSM
+  mapped-building blend. Export INEI poverty and OSM health remoteness as
+  response-capacity context outside the PIM overlay. Use SINPAD only for
+  point co-location diagnostics.
+- **Reason:** This closes the road-only exposure gap while preserving the
+  supplied AHP hierarchy and avoiding unapproved poverty/health subweights or
+  validation leakage.
+- **Consequences:** The equal and mentor Peru scenarios are rerun from the new
+  fifth criterion. The result remains `sensitivity_scenario`; WorldPop numbers
+  provide endogenous exposure accounting, and SINPAD remains diagnostic point
+  context rather than a validated flood extent.
 
 ## D-ZIMBABWE-MENTOR-WEIGHTS — Zimbabwe direct AHP weights recorded as secondary scenario
 
@@ -343,7 +365,7 @@ They are not project decisions; they are mentor decisions awaiting input.
 |---|---|---|
 | IFPM-D01 | Final modelling unit (pixel / sub-basin / mixed) | blocked |
 | IFPM-D02 | Peru boundary rule (admin / hydrographic / clipped) | concrete candidates exist; mentor-gated |
-| IFPM-D03 | Validation evidence hierarchy | blocked (validation data ~zero) |
+| IFPM-D03 | Validation evidence hierarchy | blocked for final validation; sparse SINPAD point context only |
 | IFPM-D04 | AHP weighting protocol + matrix authorisation | candidate matrix exists as `sensitivity_scenario`; auth open |
 | IFPM-D05 | Mining-data interpretation rule + Rehabilitation Potential role | open |
 | IFPM-D06 | Upper Mzingwane boundary acceptance (final thesis) | V1 waiver only |

@@ -115,13 +115,16 @@ the neutral baseline.
 - **Evidence:** `pe1_priority_scenarios` now runs `equal_active_pim` and
   `mentor_peru_direct_pim` with main weights `FH=0.35`, `SE=0.25`, `LM=0.20`,
   `ES=0.12`, `SV=0.08`. The area selected in the top 20% under both current
-  scenarios is **431.827 km²**; top-20% in at least one current scenario is
-  **622.660 km²**.
+  scenarios is **435.063 km²**; top-20% in at least one current scenario is
+  **619.421 km²**.
 - **Caveat:** no pairwise matrix was supplied for these new direct weights, so
   no consistency ratio is reported. Sediment subweights are recorded but not
   independently applied because the current independent K-factor layer is not
-  grid-compatible for PE1 overlay. Socioeconomic infrastructure exposure is
-  missing, so road/access proximity is the only active socioeconomic component.
+  grid-compatible for PE1 overlay. Socioeconomic now applies the supplied
+  0.45 road/access and 0.55 infrastructure split; infrastructure exposure is a
+  provisional equal blend of WorldPop population and OSM mapped-building
+  exposure. INEI poverty and health remoteness remain diagnostic context
+  outside the PIM.
 - **Verdict:** **supported** as the current Peru `sensitivity_scenario`
 - **Status:** active.
 - **Claim level:** `sensitivity_scenario`
@@ -183,7 +186,7 @@ structurally compared with the same scenario logic.
   environmental, and socioeconomic as top-level PIM criteria. Flood and Land
   Use / ASM have internal component rasters, and Environmental is implemented as
   a provisional water/wetland and protected-area sensitivity indicator. The area
-  selected in the top 20% under both current PE1 PIM scenarios is 431.827 km²
+  selected in the top 20% under both current PE1 PIM scenarios is 435.063 km²
   (Zimbabwe boundary_v1 / rainfall_exposure_v0_4: 622.048 km² under its
   equal-baseline + direct Zimbabwe scenarios);
   PE1 mining upgraded to official INGEMMET point evidence (strictly stronger
@@ -218,7 +221,9 @@ observed socioeconomic vulnerability.
 - **Related RQ:** RQ7, RQ8
 - **Evidence:** V1 top-20% priority-area exposure diagnostic shows weak co-location of
   repeatedly selected top-20% priority areas with exposure indicators; selected areas reflect natural-pressure
-  overlap, not observed exposure.
+  overlap, not observed exposure. In the current Peru run, road/access is no
+  longer the only socioeconomic input: it is combined with provisional
+  WorldPop population and OSM mapped-building exposure.
 - **Verdict:** **supported** as an indicator
 - **Status:** active. A-006 / A-011. Needs observed flood-impact data to
   upgrade.

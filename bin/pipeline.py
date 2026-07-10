@@ -27,7 +27,7 @@ from a verb-prefix mapping that mirrors the 7 pipeline stages:
     scenarios   run_                            (weighted-overlay scenarios)
     visualize   plot_                           (figure/board generation)
     package     prepare_, standardize_, export_, diagnose_
-    investigate explore_, compute_, compare_, verify_
+    investigate explore_, compute_, compare_, verify_, summarize_
 
 Scripts under bin/_archive/ and bin/_deprecated/ are ignored.
 
@@ -64,7 +64,7 @@ STAGE_PREFIXES: list[tuple[str, tuple[str, ...]]] = [
     ("scenarios", ("run_",)),
     ("visualize", ("plot_",)),
     ("package", ("prepare_", "standardize_", "export_", "diagnose_", "check_v1_raster_grid")),
-    ("investigate", ("explore_", "compute_", "compare_", "verify_")),
+    ("investigate", ("explore_", "compute_", "compare_", "verify_", "summarize_")),
 ]
 
 IGNORED_DIRS = {"_archive", "_deprecated", "_lib", "__pycache__"}
@@ -276,18 +276,28 @@ def is_fresh(script: Script) -> bool:
     """A script is fresh (skip it) iff all outputs exist and are newer than all inputs."""
     if not script.outputs:
         return False  # no declared outputs -> never skip
+    if any(not path.exists() for path in script.inputs):
+        return False
     for o in script.outputs:
         if not o.exists():
             return False
     out_mtime = min(o.stat().st_mtime for o in script.outputs)
+    if script.path.exists() and script.path.stat().st_mtime > out_mtime:
+        return False
     for i in script.inputs:
-        if i.exists() and i.stat().st_mtime > out_mtime:
+        if i.stat().st_mtime > out_mtime:
             return False
     return True
 
 
 def run_script(script: Script, force: bool = False) -> int:
     """Run a single script via subprocess. Returns exit code."""
+    missing = [path for path in script.inputs if not path.exists()]
+    if missing:
+        print(f"  [FAIL]  {script.rel} (missing declared inputs)", file=sys.stderr)
+        for path in missing:
+            print(f"          {path}", file=sys.stderr)
+        return 2
     if not force and is_fresh(script):
         print(f"  [fresh] {script.rel}  (outputs newer than inputs)")
         return 0
@@ -296,6 +306,40 @@ def run_script(script: Script, force: bool = False) -> int:
     if completed.returncode != 0:
         print(f"  [FAIL]  {script.rel} (exit {completed.returncode})", file=sys.stderr)
     return completed.returncode
+
+
+def scripts_for_config(
+    scripts: list[Script],
+    deps: dict[str, list[str]],
+    config: dict,
+) -> list[Script]:
+    """Return the deterministic default execution set for a pipeline config."""
+
+    cfg_stages = set(config.get("stages", []))
+    cfg_exclude = set(config.get("exclude", []))
+    return [
+        script
+        for script in topo_sort(scripts, deps)
+        if script.stage in cfg_stages and script.name not in cfg_exclude
+    ]
+
+
+def apply_network_policy(
+    order: list[Script],
+    *,
+    network_script_names: set[str],
+    allow_network: bool,
+    target: str | None,
+) -> list[Script]:
+    """Remove network acquisition steps unless the caller explicitly opts in."""
+
+    if allow_network:
+        return order
+    if target and target in network_script_names:
+        raise PermissionError(
+            f"target '{target}' requires network access; rerun with --allow-network"
+        )
+    return [script for script in order if script.name not in network_script_names]
 
 
 # ---------------------------------------------------------------------------
@@ -375,6 +419,7 @@ def cmd_run(
     no_deps: bool,
     force: bool,
     config: dict | None,
+    allow_network: bool,
 ) -> int:
     by_name = {s.name: s for s in scripts}
 
@@ -402,19 +447,25 @@ def cmd_run(
             return 1
     elif config:
         # Full pipeline from YAML config.
-        cfg_stages = set(config.get("stages", []))
-        cfg_exclude = set(config.get("exclude", []))
-        order = [
-            s for s in topo_sort(scripts, deps)
-            if s.stage in cfg_stages
-            and s.name not in cfg_exclude
-        ]
+        order = scripts_for_config(scripts, deps, config)
         # Apply config-level force override only if CLI didn't set it.
         if not force:
             force = config.get("force", False)
     else:
         print("error: provide --target <name>, a stage name, or --config", file=sys.stderr)
         return 1
+
+    network_script_names = set((config or {}).get("network_scripts", []))
+    try:
+        order = apply_network_policy(
+            order,
+            network_script_names=network_script_names,
+            allow_network=allow_network,
+            target=target,
+        )
+    except PermissionError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
 
     stop_on_failure = config.get("stop_on_failure", True) if config else True
 
@@ -468,6 +519,11 @@ def main() -> int:
     p_run.add_argument("--target", help="run this script and its full upstream")
     p_run.add_argument("--no-deps", action="store_true", help="run only the target, not its upstream")
     p_run.add_argument("--force", action="store_true", help="re-run even if outputs are fresh")
+    p_run.add_argument(
+        "--allow-network",
+        action="store_true",
+        help="allow network acquisition scripts in a target dependency chain",
+    )
     p_run.add_argument("--config", default="pipeline.yaml",
                        help="pipeline config YAML (default: pipeline.yaml)")
 
@@ -483,10 +539,10 @@ def main() -> int:
     if args.command == "deps":
         return cmd_deps(scripts, deps, args.name)
     if args.command == "run":
-        config = None
-        # Load config when running the full pipeline (no target, no stage).
+        config = _load_config(Path(args.config))
+        # The full pipeline requires a config; target/stage runs use it for
+        # network-safety metadata when available.
         if not args.target and not args.stage:
-            config = _load_config(Path(args.config))
             if config is None:
                 print(f"error: no config found at {args.config} "
                       f"(needed for full-pipeline run). "
@@ -494,7 +550,7 @@ def main() -> int:
                       file=sys.stderr)
                 return 1
         return cmd_run(scripts, deps, args.target, args.stage, args.no_deps,
-                       args.force, config)
+                       args.force, config, args.allow_network)
     return 1
 
 
