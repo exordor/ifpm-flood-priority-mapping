@@ -172,3 +172,47 @@ context layers are not included in `exposure_indicators` in this run.
 - Poverty and health layers are reproducible context evidence, not hidden AHP inputs.
 - No version-numbered script is added.
 - No raw data, generated outputs, or unrelated `pre/` files are staged.
+
+## Approved one-page Peru board design (2026-07-13)
+
+**Single claim:** the direct-weight Peru prototype identifies relative priority
+patterns on 95.0998% complete five-criterion support, with flood conditioning
+providing the largest weighted contribution across 85.4% of scoreable cells.
+The board must not imply validated flood risk or rescue priority.
+
+**Target and format:** one 3:2 landscape board at 3600 x 2400 px for mentor
+review, exported as PNG and PDF. Existing governed maps remain the evidence
+source; the generator may crop redundant white margins and legends for
+thumbnails but may not redraw or alter their map evidence.
+
+**Layout:**
+
+1. Header: public-facing action title, Arequipa/PE1 location, direct-weight
+   equation, and `prototype / not validated flood risk` status.
+2. Main row: raw-input factor overview on the left, direct-weight PIM as the
+   largest central panel, and mining/population, weighted-contribution, and
+   SINPAD diagnostics on the right.
+3. Criteria strip: five equally sized criterion thumbnails in framework order
+   (FH, SE, LM, ES, SV), each showing its main weight and plain evidence label.
+4. Bottom table: five rows with `Criterion`, `Weight`, `Implementation`,
+   `Coverage`, and `Evidence limitation`. Long diagnostic prose stays out of the
+   visible board and remains in the source CSV.
+
+**Evidence sources:**
+
+- `outputs/peru_report_figure_chain/current/01..10_*.png`
+- `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/criterion_data_strength.csv`
+- `outputs/slide_ready_figures/peru_pim_contribution_map/contribution_summary.csv`
+- `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_screening_summary.csv`
+
+**Outputs:**
+
+- `outputs/peru_integrated_briefing_board/peru_integrated_briefing_board.png`
+- `outputs/peru_integrated_briefing_board/peru_integrated_briefing_board.pdf`
+- `outputs/peru_integrated_briefing_board/manifest.csv`
+
+**QA:** all visible text must remain readable at full-slide display; no map,
+legend, table cell, or status label may overlap; the result map must remain the
+visual focus; source and packaged checksums must be recorded; rendered PNG and
+PDF must be visually inspected; and the active terminology, five-criterion,
+mentor-weight, and repository-boundary checks must pass.
