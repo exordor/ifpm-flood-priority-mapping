@@ -1,6 +1,6 @@
 # Dataset Registry: Geofabrik OSM Zimbabwe Prototype
 
-Status: downloaded and verified for visual review.
+Status: downloaded, verified, and used for V1 comparable road/water distance factors.
 
 ## Dataset Identity
 
@@ -77,10 +77,16 @@ Status: downloaded and verified for visual review.
 ## Processing And Use
 
 - Raw data path: `data/raw/geofabrik_osm_zimbabwe_prototype/`
-- Derived output path: `outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/`
-- Scripts or commands used: guarded `curl`, `shasum -a 256`, `unzip`,
-  `bin/_archive/superseded_outlet_exploration_2026-06/prepare_outlet_review_sources.py`
-- Standardization/preprocessing notes: filter to search envelope before analysis
+- Derived output paths:
+  - `outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/`
+  - `outputs/srtm_1arcsec_zimbabwe_prototype/comparable_distance_factors/`
+- Scripts or commands used: guarded `curl`, `shasum -a 256`, and
+  `bin/factors/build_v1_comparable_distance_factors.py`; the current script reads the GeoPackage
+  directly through GDAL `/vsizip/` without duplicating the 1.1 GB uncompressed file
+- Standardization/preprocessing notes: read OSM roads and water features over a 25 km padded
+  EPSG:32735 reference-grid envelope, rasterize on that padded 30 m grid, calculate Euclidean
+  distance in kilometres, crop back to the reference grid, and preserve the V1 mask. The padding
+  prevents edge cells from ignoring nearer mapped features immediately outside the study area.
 - Known limitations: OSM completeness varies; tags do not prove active mining or flood impact
 - Replacement or update rule: replace with newer dated extract only if needed and documented
 - Validation role: supporting evidence only

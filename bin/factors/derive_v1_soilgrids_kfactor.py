@@ -33,22 +33,23 @@ from pathlib import Path
 import numpy as np
 import rasterio
 from rasterio.features import rasterize
-from rasterio.transform import from_bounds
 from rasterio.windows import from_bounds as window_from_bounds
+from rasterio.warp import Resampling, reproject, transform_bounds
 
 ROOT = Path(__file__).resolve().parents[2]
 INPUTS = [ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
-OUTPUTS = [ROOT / "outputs/soilgrids_250m_sediment_candidate/k_factor_diagnostics.json"]
+OUTPUTS = [
+    ROOT / "outputs/soilgrids_250m_sediment_candidate/k_factor_0_5cm_250m.tif",
+    ROOT / "outputs/soilgrids_250m_sediment_candidate/k_factor_0_30cm_avg_250m.tif",
+    ROOT / "outputs/soilgrids_250m_sediment_candidate/k_factor_diagnostics.json",
+]
 
 try:
     import geopandas as gpd
-    from pyproj import Transformer
 except ImportError as exc:
-    raise SystemExit(f"missing dependency: {exc}. Install geopandas/pyproj in .venv.") from exc
+    raise SystemExit(f"missing dependency: {exc}. Install geopandas in .venv.") from exc
 
 SOILGRIDS_BASE = "https://files.isric.org/soilgrids/latest/data"
-SOILGRIDS_CRS = "ESRI:54017"  # Interrupted Goode Homolosine
-
 # V1 bounding box in EPSG:4326 (from srtm_v1_tile_plan / v1_working_boundary)
 V1_LON_MIN, V1_LAT_MIN, V1_LON_MAX, V1_LAT_MAX = 28.514, -21.008, 29.398, -19.984
 V1_BOUNDARY_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
@@ -68,15 +69,57 @@ OUTPUT_DIR = ROOT / "outputs/soilgrids_250m_sediment_candidate"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def read_vrt_window(property_name: str, depth: str, window, transform, crs):
-    """Read a SoilGrids mean VRT window; return float32 array in percent units + nodata mask."""
+def v1_bounds_in_source_crs(source_crs) -> tuple[float, float, float, float]:
+    """Project the V1 bounds with the exact CRS advertised by the SoilGrids VRT."""
+
+    return tuple(
+        float(value)
+        for value in transform_bounds(
+            "EPSG:4326",
+            source_crs,
+            V1_LON_MIN,
+            V1_LAT_MIN,
+            V1_LON_MAX,
+            V1_LAT_MAX,
+            densify_pts=21,
+        )
+    )
+
+
+def read_vrt_window(
+    property_name: str,
+    depth: str,
+    source_bounds: tuple[float, float, float, float],
+    target_shape: tuple[int, int],
+    target_transform,
+    target_crs,
+):
+    """Read one property window and align it to the common V1 SoilGrids grid."""
+
     url = f"{SOILGRIDS_BASE}/{property_name}/{property_name}_{depth}_mean.vrt"
     with rasterio.open(url) as ds:
-        arr = ds.read(1, window=window).astype("float32")
-    nodata_mask = arr == SOILGRIDS_NODATA
-    arr = arr / SCALE_TO_PERCENT[property_name]
-    arr[nodata_mask] = np.nan
-    return arr, nodata_mask
+        if ds.crs != target_crs:
+            raise ValueError(f"SoilGrids VRT CRS mismatch for {property_name} {depth}: {ds.crs} != {target_crs}")
+        source_window = window_from_bounds(*source_bounds, ds.transform).round_offsets().round_lengths()
+        source = ds.read(1, window=source_window).astype("float32")
+        source_transform = ds.window_transform(source_window)
+        source_nodata = ds.nodata if ds.nodata is not None else SOILGRIDS_NODATA
+    source[source == source_nodata] = np.nan
+    aligned = np.full(target_shape, np.nan, dtype="float32")
+    reproject(
+        source=source,
+        destination=aligned,
+        src_transform=source_transform,
+        src_crs=target_crs,
+        src_nodata=np.nan,
+        dst_transform=target_transform,
+        dst_crs=target_crs,
+        dst_nodata=np.nan,
+        resampling=Resampling.bilinear,
+    )
+    aligned = aligned / SCALE_TO_PERCENT[property_name]
+    nodata_mask = ~np.isfinite(aligned)
+    return aligned, nodata_mask
 
 
 def williams_k(clay, silt, sand, soc):
@@ -98,27 +141,21 @@ def williams_k(clay, silt, sand, soc):
 
 
 def main() -> None:
-    # 1. V1 bbox -> Goode Homolosine
-    transformer = Transformer.from_crs("EPSG:4326", SOILGRIDS_CRS, always_xy=True)
-    x1, y1 = transformer.transform(V1_LON_MIN, V1_LAT_MAX)
-    x2, y2 = transformer.transform(V1_LON_MAX, V1_LAT_MIN)
-    gx_min, gx_max = min(x1, x2), max(x1, x2)
-    gy_min, gy_max = min(y1, y2), max(y1, y2)
-    print(f"V1 bbox in Goode Homolosine: x[{gx_min:.0f},{gx_max:.0f}] y[{gy_min:.0f},{gy_max:.0f}]")
-
-    # 2. Open one VRT to get transform/window aligned to SoilGrids grid
     ref_url = f"{SOILGRIDS_BASE}/clay/clay_0-5cm_mean.vrt"
     with rasterio.open(ref_url) as ds:
+        gx_min, gy_min, gx_max, gy_max = v1_bounds_in_source_crs(ds.crs)
         win = window_from_bounds(gx_min, gy_min, gx_max, gy_max, ds.transform)
+        win = win.round_offsets().round_lengths()
         win_transform = ds.window_transform(win)
         win_crs = ds.crs
         pix_w, pix_h = int(round(win.width)), int(round(win.height))
+    print(f"V1 bbox in SoilGrids VRT CRS: x[{gx_min:.0f},{gx_max:.0f}] y[{gy_min:.0f},{gy_max:.0f}]")
     print(f"V1 window: {pix_w} x {pix_h} px @ 250 m (Goode Homolosine)")
 
     # 3. Rasterize V1 boundary onto the window grid as a boolean mask
     v1_mask = np.ones((pix_h, pix_w), dtype="uint8")
     if V1_BOUNDARY_GPKG.exists():
-        gdf = gpd.read_file(V1_BOUNDARY_GPKG, layer="v1_working_boundary").to_crs(SOILGRIDS_CRS)
+        gdf = gpd.read_file(V1_BOUNDARY_GPKG, layer="v1_working_boundary").to_crs(win_crs)
         shapes = [(geom, 1) for geom in gdf.geometry if geom is not None]
         if shapes:
             v1_mask = rasterize(shapes, out_shape=(pix_h, pix_w), transform=win_transform,
@@ -133,14 +170,21 @@ def main() -> None:
     raw_ranges: dict[str, dict] = {}
     for depth in DEPTH_SLICES:
         layers = {}
-        shared_valid = None
+        source_invalid = None
         for prop in PROPERTIES:
-            arr, nd = read_vrt_window(prop, depth, win, win_transform, win_crs)
+            arr, nd = read_vrt_window(
+                prop,
+                depth,
+                (gx_min, gy_min, gx_max, gy_max),
+                (pix_h, pix_w),
+                win_transform,
+                win_crs,
+            )
             layers[prop] = arr
-            shared_valid = nd if shared_valid is None else (shared_valid & nd)
+            source_invalid = nd if source_invalid is None else (source_invalid | nd)
         # K-factor
         k = williams_k(layers["clay"], layers["silt"], layers["sand"], layers["soc"])
-        invalid = np.isnan(k) | shared_valid | (v1_mask == 0)
+        invalid = np.isnan(k) | source_invalid
         k = np.where(invalid, np.nan, k)
         k_by_depth[depth] = k
         raw_ranges[depth] = {
@@ -164,7 +208,9 @@ def main() -> None:
         m = np.isfinite(kd)
         k_0_30 = np.where(m, k_0_30 + kd * w, k_0_30)
         w_sum = np.where(m, w_sum + w, w_sum)
-    k_0_30 = np.where(w_sum > 0, k_0_30 / w_sum, np.nan)
+    averaged = np.full_like(k_0_30, np.nan, dtype="float32")
+    np.divide(k_0_30, w_sum, out=averaged, where=w_sum > 0)
+    k_0_30 = averaged
 
     # 6. Write 250m rasters (Goode Homolosine, native) - NOT resampled to 30m
     profile = {
@@ -211,12 +257,18 @@ def main() -> None:
         "tool": "bin/factors/derive_v1_soilgrids_kfactor.py",
         "source": "SoilGrids 250m VRT (files.isric.org), windowed HTTP read",
         "v1_window_px": {"width": pix_w, "height": pix_h, "crs": str(win_crs)},
+        "source_bounds": [gx_min, gy_min, gx_max, gy_max],
+        "grid_compatibility": "each property/depth VRT window reprojected to the clay 0-5 cm reference window",
         "v1_mask_cells": int(v1_mask.sum()),
         "formula": "Williams 1995 EPIC/RUSLE (see module docstring)",
         "depth_note": "0-5cm = surface topsoil; 0-30cm = depth-weighted average of 0-5/5-15/15-30",
         "units_note": "K in US units; multiply by 0.1317 for SI (t ha h / ha MJ mm)",
         "property_ranges_by_depth": raw_ranges,
         "v1_zonal_summary": zonal_summary,
+        "not_resampled_note": (
+            "K remains native 250 m evidence; surrounding source-window cells are retained "
+            "for downstream reprojection support and are clipped to V1 after alignment."
+        ),
     }
     diag_path = OUTPUT_DIR / "k_factor_diagnostics.json"
     diag_path.write_text(json.dumps(diagnostics, indent=2), encoding="utf-8")

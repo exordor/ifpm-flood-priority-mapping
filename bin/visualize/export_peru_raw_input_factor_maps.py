@@ -181,7 +181,7 @@ def flow_cells_to_upstream_area_km2(data_cells: np.ndarray) -> np.ndarray:
 RASTER_SPECS = [
     RasterSpec(
         slug="rainfall_climatology",
-        label="Rainfall climatology",
+        label="Rainfall climatology (Dec-Mar)",
         unit="mm / rainy season",
         group="hydrology_terrain",
         source_path=ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_raw_mm_per_season_PROVISIONAL_30m.tif",
@@ -339,6 +339,22 @@ CATEGORY_SPECS = [
         limitation="10 m global land-cover map resampled to display resolution",
     )
 ]
+
+
+PERU_MAIN_12_FACTOR_ORDER = (
+    "rainfall_climatology",
+    "elevation",
+    "slope_degrees",
+    "twi",
+    "distance_to_drainage",
+    "upstream_area",
+    "soil_k_factor",
+    "ls_factor",
+    "c_factor",
+    "esa_worldcover_2021",
+    "distance_to_roads",
+    "distance_to_water_features",
+)
 
 
 def rel(path: Path) -> str:
@@ -989,7 +1005,8 @@ def main() -> None:
                 }
             )
 
-    main_items = by_group["hydrology_terrain"] + by_group["erosion_land_human"][:5] + by_group["environmental_context"][:1]
+    prepared_by_slug = {item["spec"].slug: item for item in prepared}
+    main_items = [prepared_by_slug[slug] for slug in PERU_MAIN_12_FACTOR_ORDER]
     png, pdf = save_panel("main_12", main_items, boundary_wgs84)
     source_paths = tuple(
         dict.fromkeys(
