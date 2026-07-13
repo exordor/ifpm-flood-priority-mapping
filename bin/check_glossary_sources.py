@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_GLOSSARY = ROOT / "context/docs/glossary.md"
-DEFAULT_OUTPUT = ROOT / "outputs/zimbabwe_peru_prototype_comparison/glossary_source_check.csv"
+DEFAULT_OUTPUT = ROOT / "outputs/project_checks/glossary_source_check.csv"
 
 SOURCE_REF_RE = re.compile(r"\[S(\d+)(?:,\s*S\d+)*\]")
 SOURCE_ID_RE = re.compile(r"^- \*\*S(\d+)\*\*\s+(.*)$")

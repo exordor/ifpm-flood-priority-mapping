@@ -114,7 +114,8 @@ decision, reason, alternatives, consequences.
   `FH=0.35`, `SE=0.25`, `LM=0.20`, `ES=0.12`, `SV=0.08`, plus local
   sub-criteria weights.
 - **Decision:** Use those direct Peru weights as the current main PIM scenario
-  (`mentor_peru_direct_pim`) and keep equal weights as a neutral baseline. Do
+  (`mentor_peru_direct_pim`) and as the only weight set shown in the reporting
+  result. Keep equal weights as an internal sensitivity/QA artifact only. Do
   not use the older slide pairwise matrix as the current Peru mainline scenario.
 - **Reason:** The new table is site-specific and newer than the generic
   example matrix. It matches the mentor's current Peru-first direction.
@@ -124,7 +125,8 @@ decision, reason, alternatives, consequences.
   the weighted prioritisation model, not extra scenario storytelling).
 - **Consequences:**
   - Current Peru scenario outputs contain two scenarios: `equal_active_pim`
-    and `mentor_peru_direct_pim`.
+    and `mentor_peru_direct_pim`, but only `mentor_peru_direct_pim` enters the
+    reporting mainline.
   - The direct weights have no supplied pairwise matrix or consistency ratio,
     so the current run must not report a CR for them.
   - Flood, Land Use / ASM, and Environmental subweights are implemented where
@@ -355,6 +357,28 @@ decision, reason, alternatives, consequences.
   mentor/boss-facing package. 5 v0.1 + 6-13 files archived 2026-07-03; 3 live
   files rewritten; `violation` count stayed at 0. Remaining hits of the coined
   shorthand are all in the dead V2 set or living docs to fix opportunistically.
+
+## D-PERU-FIGURE-CHAIN — one authoritative Peru reporting entrypoint
+
+- **Date:** 2026-07-11.
+- **Context:** multiple old comparison boards, scenario maps, report catalogs,
+  and internal QA figures remained discoverable beside current Peru outputs.
+  This made it unclear which figures represented the active study mainline.
+- **Decision:** the only current reporting entrypoint is
+  `outputs/peru_report_figure_chain/current/`, generated from
+  `context/docs/research-map/peru_authoritative_figure_chain.csv`. Its order is
+  raw inputs → five standardized criteria → direct-weight AHP PIM →
+  mining/population context → weighted-contribution explanation → SINPAD
+  co-location diagnostic.
+- **Claim boundary:** the AHP PIM remains a `sensitivity_scenario`;
+  mining/population overlays are model-input context; SINPAD is
+  `diagnostic_only`, not independent model validation.
+- **Consequences:** superseded report surfaces and legacy slide-ready scenario
+  figures moved to `outputs/_archive/2026-07-11_peru_figure_governance/` with an
+  archive manifest. Current QA checks write to `outputs/project_checks/` so
+  they do not recreate archived report directories. Historical generation
+  scripts remain available for traceability but their outputs are not included
+  in the authoritative chain.
 
 ## IFPM-DNN decision register (mentor-gated)
 

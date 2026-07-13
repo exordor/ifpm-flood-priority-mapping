@@ -108,8 +108,8 @@ historical / generic sensitivity-scenario weight set.
 ## H-PERU-DIRECT-WEIGHTS
 
 **Statement:** The current Peru direct mentor weights can drive the Peru-first
-PIM prototype as the main sensitivity scenario, with equal weights retained as
-the neutral baseline.
+PIM prototype as the reporting sensitivity scenario. Equal weights remain an
+internal QA artifact and are not a reporting comparison.
 
 - **Related RQ:** RQ2
 - **Evidence:** `pe1_priority_scenarios` now runs `equal_active_pim` and

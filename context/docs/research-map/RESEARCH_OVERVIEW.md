@@ -30,7 +30,8 @@ Environmental (ES), Socioeconomic (SV). A pairwise matrix was supplied (CR 0.022
 consistent) but labelled "example" — recorded as `sensitivity_scenario`, not
 final weights. After the 2026-07-06 Peru-first discussion, the current Peru
 mainline uses newer direct Peru weights: `FH=0.35`, `SE=0.25`, `LM=0.20`,
-`ES=0.12`, `SV=0.08`, with equal weights retained as baseline.
+`ES=0.12`, `SV=0.08`. Equal weights are retained only as an internal
+sensitivity/QA artifact and are not part of the reporting comparison.
 
 Motivation: first complete a Peru flood-prioritisation prototype that uses the
 stronger Peru data stack, especially the INGEMMET small-mining evidence, then
@@ -82,7 +83,7 @@ The workspace has a clean split between private context and deliverable code:
 The deliverable pipeline must not depend on `../context`, `../data`, or
 `../outputs`. Public release packages come from `ifpm-flood-pipeline/` only.
 
-## Current status (2026-07-06)
+## Current status (2026-07-13)
 
 - [x] Idea exploration and project framing
 - [x] Minimal AHP-overlay pipeline built and synthetic-tested
@@ -90,24 +91,26 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
 - [x] Terrain chain end-to-end on both sites (SRTM DEM, slope, hydrology, LS)
 - [x] USLE factor chain (K, LS, C) verified; R-factor quarantined out of critical path
 - [x] Five-main-criterion PIM prototype priority maps on both sites
-- [x] July 18 mentor/boss comparison pack generated
+- [x] July 18 mentor/boss comparison pack generated and later moved to the
+  historical figure-governance archive after the Peru-first switch
 - [x] Peru-first mainline switch recorded after mentor direction to work with
   Peru first until the end
-- [x] Current Peru direct mentor weights implemented in `pe1_priority_scenarios`
-  with equal-weight baseline
+- [x] Current Peru direct mentor weights implemented in `pe1_priority_scenarios`;
+  equal weights are retained internally but excluded from the reporting mainline
 - [x] Peru socioeconomic criterion upgraded from road-only to the supplied
   0.45 road/access + 0.55 infrastructure split using WorldPop and OSM mapped
   buildings; INEI poverty and health remoteness exported as diagnostic context
 - [x] Peru WorldPop exposure accounting and SINPAD co-location rerun against the refreshed
   mentor PIM with checksum lineage
+- [x] Peru authoritative report figure chain generated with one current entry:
+  raw inputs → five criteria → direct-weight PIM → mining/population context →
+  weighted contribution → SINPAD co-location diagnostic
 - [x] Secondary Zimbabwe direct weights implemented in `rainfall_exposure_v0_4`
   with equal-weight baseline
-- [ ] Peru-only final prototype briefing set: input criteria maps, AHP
-  prioritisation map, top-priority classes, mining overlay, and data-strength
-  table
+- [ ] Peru-only final prototype briefing board: governed source figures are
+  ready; the data-strength table and final one-board composition remain
 - [ ] Sediment criterion on K×LS×C shown to mentor (R-factor quarantined; default taken)
-- [ ] Peru direct mentor-weight priority map shown with equal-weight baseline
-  and data-gap table
+- [ ] Peru direct mentor-weight priority map shown with the data-gap table
 - [ ] Rehabilitation Potential: default not built (not in PIM formula); revisit if a use appears
 - [ ] Final boundary acceptance (V1 = Upper Mzingwane, ~3689 km², accepted with waiver for prototype)
 - [ ] Harmonised Zimbabwe-Peru comparison claim (secondary; not current mainline)
@@ -130,7 +133,8 @@ does not maintain a queue of "questions to ask the mentor".
 
 1. **AHP weights** — current Peru direct weights are implemented as the main
    `sensitivity_scenario` (`FH=0.35`, `SE=0.25`, `LM=0.20`, `ES=0.12`,
-   `SV=0.08`), with equal weights as baseline. The secondary Zimbabwe run uses
+   `SV=0.08`). Equal weights remain internal QA only and are not a reporting
+   comparison. The secondary Zimbabwe run uses
    its own direct table (`FH=0.32`, `SE=0.23`, `LM=0.18`, `ES=0.12`,
    `SV=0.15`), also with equal weights as baseline. The older slide matrix
    (CR 0.022) remains a historical/generic sensitivity record. Default: no

@@ -240,7 +240,7 @@ RASTER_SPECS = [
         colors=("#f6eff7", "#d0d1e6", "#a6bddb", "#67a9cf", "#1c9099", "#016c59"),
         bins=(0, 0.1, 1, 10, 100, 1000, 3000),
         data_basis="D8 flow accumulation converted from cells to upstream area",
-        limitation="DEM-routing proxy; not calibrated discharge",
+        limitation="DEM-derived routing indicator; not calibrated discharge",
         transform=flow_cells_to_upstream_area_km2,
         resampling=Resampling.nearest,
     ),
@@ -264,7 +264,7 @@ RASTER_SPECS = [
         colors=("#006837", "#31a354", "#addd8e", "#ffffbf", "#fdae61", "#d7191c"),
         bins=(0, 0.05, 0.1, 0.2, 0.4, 0.7, 1.0),
         data_basis="ESA WorldCover-derived cover-management C-factor",
-        limitation="class-based C-factor proxy, not locally measured cover management",
+        limitation="class-based C-factor estimate, not locally measured cover management",
     ),
 ]
 

@@ -9,8 +9,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT = ROOT / "outputs/zimbabwe_peru_prototype_comparison/full_project_terminology_check.csv"
-DEFAULT_SUMMARY = ROOT / "outputs/zimbabwe_peru_prototype_comparison/full_project_terminology_check.md"
+DEFAULT_OUTPUT = ROOT / "outputs/project_checks/full_project_terminology_check.csv"
+DEFAULT_SUMMARY = ROOT / "outputs/project_checks/full_project_terminology_check.md"
 
 TEXT_SUFFIXES = {".csv", ".md", ".py", ".txt", ".json", ".yaml", ".yml", ".toml", ".rst"}
 SKIP_DIRS = {
@@ -85,8 +85,12 @@ ACTIVE_PREFIXES = (
     "outputs/srtm_1arcsec_peru_pilot/criteria_stack/",
     "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/",
     "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/",
-    "outputs/zimbabwe_peru_prototype_comparison/",
-    "outputs/mentor_boss_priority_explanation/",
+    "outputs/slide_ready_figures/peru_raw_input_factor_maps/",
+    "outputs/slide_ready_figures/peru_pim_criteria_maps/",
+    "outputs/slide_ready_figures/peru_direct_weight_priority_maps/",
+    "outputs/slide_ready_figures/peru_pim_contribution_map/",
+    "outputs/slide_ready_figures/peru_evidence_overlays/",
+    "outputs/peru_report_figure_chain/",
 )
 
 ACTIVE_FILES = {
@@ -102,9 +106,12 @@ ACTIVE_FILES = {
     "bin/scenarios/run_boundary_v1_rainfall_sensitivity.py",
     "bin/scenarios/run_boundary_v1_rainfall_exposure.py",
     "bin/scenarios/run_pe1_priority_scenarios.py",
-    "bin/visualize/plot_july18_integrated_priority_board.py",
-    "bin/visualize/plot_mentor_boss_priority_explanation_package.py",
-    "bin/visualize/plot_zimbabwe_peru_prototype_comparison.py",
+    "bin/visualize/export_peru_raw_input_factor_maps.py",
+    "bin/visualize/export_peru_pim_criteria_maps.py",
+    "bin/visualize/export_peru_direct_weight_priority_maps.py",
+    "bin/visualize/export_peru_pim_contribution_map.py",
+    "bin/visualize/export_peru_evidence_overlay_maps.py",
+    "bin/package/build_peru_report_figure_chain.py",
 }
 
 ARCHIVAL_MARKERS = (

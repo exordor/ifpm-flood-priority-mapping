@@ -12,15 +12,16 @@ not nested under `boundary_v1`). After D-PERU-FIRST (2026-07-06), `pe1` is the
 active mainline; `boundary_v1` is secondary/background unless explicitly
 reopened.
 
-## Current mainline focus (2026-07-06)
+## Current mainline focus (2026-07-13)
 
 Peru-first work should build on `pe1_priority_scenarios` and its upstream
-criteria stack. The next output set should be Peru-only: five PIM criterion
-maps, AHP prototype prioritisation map, high-priority class map, mining overlay,
-and a data-strength table. Current weighting is the Peru direct mentor-weight
-scenario (`FH=0.35`, `SE=0.25`, `LM=0.20`, `ES=0.12`, `SV=0.08`) plus an equal
-baseline. Zimbabwe comparison outputs remain available but should not drive the
-next modelling sequence.
+criteria stack. The five PIM criterion maps, direct-weight prioritisation map,
+mining/population overlay, contribution map, and SINPAD diagnostic are complete
+and governed by `peru_report_figure_chain`. The next output is the Peru-only
+integrated briefing board plus its data-strength table. Current reporting uses
+the Peru direct mentor-weight scenario (`FH=0.35`, `SE=0.25`, `LM=0.20`,
+`ES=0.12`, `SV=0.08`). The equal scenario remains internal QA only. Zimbabwe
+outputs should not drive the next modelling sequence.
 
 ## Secondary Zimbabwe experiments (`outputs/boundary_v1/<experiment_id>/`)
 
@@ -104,9 +105,10 @@ Outputs at: `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/` and
 
 | package | IFPM-NNN | status | claim_level | contents |
 |---|---|---|---|---|
-| `zimbabwe_peru_prototype_comparison` | IFPM-097 | complete; secondary after D-PERU-FIRST | sensitivity_scenario | 2×2 main board, dominant-criterion colouring, top-20% selection frequency, claim-level note, Teams draft |
-| `mentor_boss_priority_explanation` | (july18 work) | complete | mentor_review_ready | Per-pixel winning criterion, contribution shares, boss process figure |
-| `mentor_boundary_decision` | IFPM-040 | complete | mentor_review_ready | Mentor-facing boundary decision package |
+| `peru_report_figure_chain` | (figure governance) | current | mixed; see manifest | Only current reporting entrypoint: raw inputs, five criteria, direct-weight PIM, evidence context, contribution explanation, and SINPAD diagnostic |
+| `zimbabwe_peru_prototype_comparison` | IFPM-097 | archived after D-PERU-FIRST | sensitivity_scenario | Historical 2×2 comparison board under the 2026-07-11 figure-governance archive |
+| `mentor_boss_priority_explanation` | (july18 work) | archived | mentor_review_ready | Historical per-pixel winning criterion and boss-process package under the figure-governance archive |
+| `mentor_boundary_decision` | IFPM-040 | archived | mentor_review_ready | Historical mentor-facing boundary decision package under the figure-governance archive |
 | `mentor_voi_rainfall_intake` | IFPM-086 | complete | diagnostic_only | Mentor Voi rainfall archive intake; daily records, no strict EI30 |
 | `teams_handoff` | (various) | complete | mentor_review_ready | Mentor Teams message drafts |
 

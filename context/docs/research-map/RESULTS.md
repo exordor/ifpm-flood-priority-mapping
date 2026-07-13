@@ -16,11 +16,12 @@ ladder is stricter.
 > (ton/ha/yr) are no longer required for the prototype. See
 > `DECISION_LOG.md` D-RFACTOR-QUARANTINE.
 
-> **Peru-first notice (2026-07-06):** after D-PERU-FIRST, PE1 is the active
+> **Peru-first notice (updated 2026-07-13):** after D-PERU-FIRST, PE1 is the active
 > mainline working case. Existing Zimbabwe results remain useful as background
-> and method-development evidence, but the next result sequence should lead with
-> Peru: input criteria maps, AHP prototype prioritisation map, mining overlay,
-> and data-strength table.
+> and method-development evidence. Peru input-factor maps, five criterion maps,
+> the direct-weight prototype PIM, mining/population overlay, contribution map,
+> and SINPAD diagnostic are complete. The next result artifact is the integrated
+> Peru briefing board with its data-strength table.
 
 ## R-factor investigation (RQ1) — DEFERRED RECORD
 
@@ -223,9 +224,10 @@ regimes differ fundamentally from Zimbabwe: arid Andean
 Pacific slope (C=0.61, bare; soil loss 8.74) vs semi-humid savanna (C=0.04,
 shrub/grass; soil loss 0.50). That contrast remains useful background, but the
 next result claim should be Peru-only unless a comparison is explicitly needed.
-The current Peru priority map is a prototype prioritisation product under the
-mentor direct weights and equal baseline; it is not validated flood risk and not
-a rescue-decision product.
+The current Peru reporting map is a prototype prioritisation product under the
+mentor direct weights. The equal scenario is retained for internal QA only; it
+is not part of the presentation comparison. The map is not validated flood risk
+and not a rescue-decision product.
 
 ### Claim level: `provisional` / `sensitivity_scenario`. PE1 remains a
 provisional working boundary; no validated flood-risk or rescue-decision claim.
@@ -254,9 +256,10 @@ official INGEMMET point evidence.
 PE1's mining criterion is `provisional` official-source evidence; V1's is
 `diagnostic_only` indicator only. This is the one criterion where Peru is
 strictly better evidenced than Zimbabwe, and it is the main reason Peru is now
-the active mainline case. The next Peru map should overlay INGEMMET mining
-points on the priority classes and report whether they coincide with high /
-very-high priority zones.
+the active mainline case. The governed Peru overlay now shows the INGEMMET
+reference locations with the priority classes and distinguishes 2 unique
+locations inside the PE1 boundary from 4 nearby locations. These are point
+references and model-input context, not mining footprints or validation.
 
 ### Claim level: V1 `diagnostic_only` / PE1 `provisional`.
 

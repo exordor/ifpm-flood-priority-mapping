@@ -80,13 +80,20 @@ Per-output manifests and `handoff.md` files are the authoritative record. See
 file lists here.**
 
 Key index files that already exist:
+- `context/docs/research-map/peru_authoritative_figure_chain.csv`
+  (binding source list and claim status for the Peru reporting chain)
+- `outputs/peru_report_figure_chain/manifest.csv`
+  (generated source/package checksums for the current Peru reporting chain)
 - `exports/v1_methodology_mentor_report_package_2026-06-13/figure_index.csv`
   (one mentor packet)
 - Per-experiment: `outputs/boundary_v1/<experiment_id>/*_manifest.csv`,
   `outputs/<group>/*_manifest.csv`
 
-No central figure/output index exists across all of `outputs/`. If needed, a
-generated `outputs/_index.csv` could be added by a small script.
+The authoritative reporting index is intentionally Peru-only rather than a
+catalogue of every historical output. Build it with
+`.venv/bin/python bin/package/build_peru_report_figure_chain.py`. Historical,
+cross-site, sensitivity, and internal QA outputs remain outside this current
+reporting entrypoint.
 
 ## Configurations
 
@@ -108,17 +115,15 @@ but not centrally indexed.
 
 | package | location | status |
 |---|---|---|
-| Scenario-mean paper-style single maps | `outputs/sensitivity_figures/paper_style_single_maps/` | sensitivity/appendix figures only; not the public direct-weight main result |
+| **Peru authoritative report figure chain** | `outputs/peru_report_figure_chain/current/` | **current reporting entrypoint**; ordered raw inputs → five criteria → direct-weight PIM → mining/population context → weighted contribution → SINPAD co-location diagnostic |
+| Peru authoritative chain manifest | `outputs/peru_report_figure_chain/manifest.csv` | source paths, claim levels, evidence roles, and source/package checksums |
+| Peru raw input factor maps | `outputs/slide_ready_figures/peru_raw_input_factor_maps/` | source figures for the current chain; physical units and source-specific palettes |
 | Peru five PIM criterion maps | `outputs/slide_ready_figures/peru_pim_criteria_maps/` | refreshed from current PIM criteria; no global titles or captions |
-| Peru exposure and capacity-context maps | `outputs/slide_ready_figures/peru_exposure_context_maps/` | WorldPop, mapped buildings, exposure indicators, INEI poverty, and health remoteness; poverty/health context layers are not PIM inputs |
-| Peru direct-weight priority screening maps | `outputs/slide_ready_figures/peru_direct_weight_priority_maps/` | five-class and highest-priority-quintile single maps from the current direct-weight scenario; unscored cells shown explicitly |
+| Peru direct-weight priority screening maps | `outputs/slide_ready_figures/peru_direct_weight_priority_maps/` | source directory; only the five-class map enters the current chain, while the highest-priority-quintile map remains auxiliary |
 | Peru weighted-contribution map | `outputs/slide_ready_figures/peru_pim_contribution_map/` | largest weighted criterion contribution per common-valid cell plus realized contribution summary; not a sensitivity or causal-driver map |
-| July 18 integrated comparison board | `outputs/zimbabwe_peru_prototype_comparison/` | mentor_review_ready; secondary/background after D-PERU-FIRST |
-| Dominant-criterion pixel map | `outputs/mentor_boss_priority_explanation/{zimbabwe,peru}/` | mentor_review_ready |
-| Boss process figure | `outputs/mentor_boss_priority_explanation/data_analysis_process_for_boss.pdf` | mentor_review_ready |
+| Peru mining/population and SINPAD overlays | `outputs/slide_ready_figures/peru_evidence_overlays/` | current chain sources; mining/population are model-input context and SINPAD is diagnostic only |
+| Superseded report surfaces and legacy slide figures | `outputs/_archive/2026-07-11_peru_figure_governance/` | archived with `ARCHIVE_MANIFEST.csv`; excluded from the current reporting chain |
 | R-factor send packet | `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/mentor_rfactor_exploration_board.png`, `outputs/v1_usle_soil_loss/rfactor_empirical_era5/mentor_era5_empirical_rfactor_board.png` | conditional send (Fig 1, Fig 2 only) |
-| Terrain mentor package | `outputs/v1_terrain_mentor_package/mentor_v1_terrain_diagnostic_board.png` | mentor_review_ready |
-| Multi-criteria evidence board | `outputs/v1_multicriteria_evidence_package/mentor_v1_multicriteria_evidence_board.png` | superseded |
 
 ## Terminology dead/alive verdict (from 2026-07-02 audit)
 

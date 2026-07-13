@@ -123,6 +123,7 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
         for key in row:
             if key not in fields:
                 fields.append(key)
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
@@ -374,7 +375,7 @@ def build_site(config: SiteConfig) -> dict[str, object]:
 def main() -> None:
     rows = [build_site(config) for config in SITES]
     write_csv(
-        ROOT / "outputs/zimbabwe_peru_prototype_comparison/environmental_sensitivity_v0_1_summary.csv",
+        ROOT / "outputs/pim_environmental_sensitivity/environmental_sensitivity_v0_1_summary.csv",
         rows,
     )
     for row in rows:

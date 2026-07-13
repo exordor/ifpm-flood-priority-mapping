@@ -39,7 +39,7 @@ explicit method choice.
 - **Claim level:** `deferred` (was `sensitivity_scenario`); all V1/V2 R and
   USLE A absolute values remain deprecated and are no longer needed.
 
-## RQ2: AHP weight set — default: Peru direct mentor weights plus equal baseline
+## RQ2: AHP weight set — default: Peru direct mentor weights for reporting
 
 The 2026-06-16 slide matrix (CR 0.022) is internally consistent and remains a
 historical / generic sensitivity record. After the 2026-07-06 Peru-first
@@ -49,12 +49,12 @@ Zimbabwe has a newer site-specific direct table for the secondary Upper
 Mzingwane run: `FH=0.32`, `SE=0.23`, `LM=0.18`, `ES=0.12`, `SV=0.15`.
 
 **Default taken:** use the Peru direct weights as the current main
-`sensitivity_scenario`, keep equal weights as the baseline, and report the
-top-20% priority-area agreement between them. Use the Zimbabwe direct weights
-only in the secondary Zimbabwe run, also with equal weights as baseline. Do not
-report a consistency ratio for either direct table because no pairwise matrix
-was supplied with the new tables. Do not call the result final; it remains a
-prototype priority map.
+`sensitivity_scenario` and as the only weight set shown in the reporting
+result. Keep equal weights only as an internal sensitivity/QA artifact; do not
+present an equal-versus-direct comparison. Use the Zimbabwe direct weights only
+in the secondary Zimbabwe run. Do not report a consistency ratio for either
+direct table because no pairwise matrix was supplied with the new tables. Do
+not call the result final; it remains a prototype priority map.
 
 - **Decision id:** D-PERU-MENTOR-WEIGHTS; D-ZIMBABWE-MENTOR-WEIGHTS
 - **Related:** `HYPOTHESES.md` H-PERU-DIRECT-WEIGHTS,
@@ -115,10 +115,11 @@ Arequipa-Moquegua-Tacna discovery envelope, area comparable to V1,
 non-terminal), not as a final research-selected site.
 
 **Default taken:** keep PE1 as the active Peru-first working case and complete
-the Peru workflow first. This includes input-criteria maps, the AHP prototype
-prioritisation map, top-priority classes, and mining overlay. If the mentor
-names a different Peru site later, rebuild there. See `DECISION_LOG.md`
-D-PE1-CATCHMENT and D-PERU-FIRST.
+the Peru workflow first. The input-criteria maps, direct-weight prototype PIM,
+priority classes, mining/population overlay, contribution map, and SINPAD
+diagnostic are complete; the integrated briefing board and data-strength table
+remain. If the mentor names a different Peru site later, rebuild there. See
+`DECISION_LOG.md` D-PE1-CATCHMENT and D-PERU-FIRST.
 
 - **Decision id:** IFPM-D02 (default taken)
 - **Related:** `EXPERIMENTS.md` §Peru PE1 chain; `DECISION_LOG.md`

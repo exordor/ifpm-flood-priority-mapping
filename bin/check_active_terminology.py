@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT = ROOT / "outputs/zimbabwe_peru_prototype_comparison/active_terminology_check.csv"
+DEFAULT_OUTPUT = ROOT / "outputs/project_checks/active_terminology_check.csv"
 
 ACTIVE_FILES = [
     ROOT / "context/configs/boundary_v1_criteria_stack_v0_2.csv",
@@ -21,9 +21,12 @@ ACTIVE_FILES = [
     ROOT / "bin/scenarios/run_boundary_v1_rainfall_sensitivity.py",
     ROOT / "bin/scenarios/run_boundary_v1_rainfall_exposure.py",
     ROOT / "bin/scenarios/run_pe1_priority_scenarios.py",
-    ROOT / "bin/visualize/plot_july18_integrated_priority_board.py",
-    ROOT / "bin/visualize/plot_mentor_boss_priority_explanation_package.py",
-    ROOT / "bin/visualize/plot_zimbabwe_peru_prototype_comparison.py",
+    ROOT / "bin/visualize/export_peru_raw_input_factor_maps.py",
+    ROOT / "bin/visualize/export_peru_pim_criteria_maps.py",
+    ROOT / "bin/visualize/export_peru_direct_weight_priority_maps.py",
+    ROOT / "bin/visualize/export_peru_pim_contribution_map.py",
+    ROOT / "bin/visualize/export_peru_evidence_overlay_maps.py",
+    ROOT / "bin/package/build_peru_report_figure_chain.py",
 ]
 
 ACTIVE_OUTPUT_DIRS = [
@@ -33,8 +36,12 @@ ACTIVE_OUTPUT_DIRS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios",
-    ROOT / "outputs/zimbabwe_peru_prototype_comparison",
-    ROOT / "outputs/mentor_boss_priority_explanation",
+    ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps",
+    ROOT / "outputs/slide_ready_figures/peru_direct_weight_priority_maps",
+    ROOT / "outputs/slide_ready_figures/peru_pim_contribution_map",
+    ROOT / "outputs/slide_ready_figures/peru_evidence_overlays",
+    ROOT / "outputs/peru_report_figure_chain",
 ]
 
 # Active research-map governance docs. These are active and scanned, but a line

@@ -13,10 +13,9 @@ LOCAL_MAP_OUTPUTS_READY = all(
     path.exists()
     for path in (
         ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/index.csv",
-        ROOT / "outputs/slide_ready_figures/peru_exposure_context_maps/index.csv",
-        ROOT / "outputs/sensitivity_figures/paper_style_single_maps/index.csv",
         ROOT / "outputs/slide_ready_figures/peru_direct_weight_priority_maps/index.csv",
         ROOT / "outputs/slide_ready_figures/peru_pim_contribution_map/index.csv",
+        ROOT / "outputs/slide_ready_figures/peru_evidence_overlays/index.csv",
     )
 )
 
@@ -65,8 +64,6 @@ class PeruSlideMapSourceTest(unittest.TestCase):
     def test_slide_ready_indexes_bind_figures_to_source_checksums(self):
         indexes = (
             ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/index.csv",
-            ROOT / "outputs/slide_ready_figures/peru_exposure_context_maps/index.csv",
-            ROOT / "outputs/sensitivity_figures/paper_style_single_maps/index.csv",
         )
         for path in indexes:
             with path.open(newline="", encoding="utf-8") as handle:
