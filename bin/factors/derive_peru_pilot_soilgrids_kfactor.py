@@ -21,20 +21,22 @@ import numpy as np
 import rasterio
 from rasterio.features import rasterize
 from rasterio.windows import from_bounds as window_from_bounds
+from rasterio.warp import transform_bounds
 
 ROOT = Path(__file__).resolve().parents[2]
 INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
-OUTPUTS = [ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_diagnostics.json"]
+OUTPUTS = [
+    ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_pe1_0_5cm_250m.tif",
+    ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_pe1_0_30cm_avg_250m.tif",
+    ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_diagnostics.json",
+]
 
 try:
     import geopandas as gpd
-    from pyproj import Transformer
 except ImportError as exc:
-    raise SystemExit(f"missing dependency: {exc}. Install geopandas/pyproj in .venv.") from exc
+    raise SystemExit(f"missing dependency: {exc}. Install geopandas in .venv.") from exc
 
 SOILGRIDS_BASE = "https://files.isric.org/soilgrids/latest/data"
-SOILGRIDS_CRS = "ESRI:54017"  # Interrupted Goode Homolosine
-
 # PE1 bounding box in EPSG:4326 (from peru_pilot_boundary)
 PE1_LON_MIN, PE1_LAT_MIN, PE1_LON_MAX, PE1_LAT_MAX = -72.3083, -16.8547, -71.5875, -16.1411
 PE1_BOUNDARY_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
@@ -49,6 +51,23 @@ SOILGRIDS_NODATA = -32768
 
 OUTPUT_DIR = ROOT / "outputs/soilgrids_250m_peru_pilot"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def pe1_bounds_in_source_crs(source_crs) -> tuple[float, float, float, float]:
+    """Project PE1 bounds with the exact CRS advertised by the SoilGrids VRT."""
+
+    return tuple(
+        float(value)
+        for value in transform_bounds(
+            "EPSG:4326",
+            source_crs,
+            PE1_LON_MIN,
+            PE1_LAT_MIN,
+            PE1_LON_MAX,
+            PE1_LAT_MAX,
+            densify_pts=21,
+        )
+    )
 
 
 def read_vrt_window(property_name: str, depth: str, window, transform, crs):
@@ -78,25 +97,27 @@ def williams_k(clay, silt, sand, soc):
     return k
 
 
-def main() -> None:
-    transformer = Transformer.from_crs("EPSG:4326", SOILGRIDS_CRS, always_xy=True)
-    x1, y1 = transformer.transform(PE1_LON_MIN, PE1_LAT_MAX)
-    x2, y2 = transformer.transform(PE1_LON_MAX, PE1_LAT_MIN)
-    gx_min, gx_max = min(x1, x2), max(x1, x2)
-    gy_min, gy_max = min(y1, y2), max(y1, y2)
-    print(f"PE1 bbox in Goode Homolosine: x[{gx_min:.0f},{gx_max:.0f}] y[{gy_min:.0f},{gy_max:.0f}]")
+def preserve_source_window_support(k: np.ndarray, source_invalid: np.ndarray) -> np.ndarray:
+    """Keep valid source-window neighbours for later reprojection edge support."""
 
+    return np.where(np.asarray(source_invalid, dtype=bool) | ~np.isfinite(k), np.nan, k)
+
+
+def main() -> None:
     ref_url = f"{SOILGRIDS_BASE}/clay/clay_0-5cm_mean.vrt"
     with rasterio.open(ref_url) as ds:
+        gx_min, gy_min, gx_max, gy_max = pe1_bounds_in_source_crs(ds.crs)
         win = window_from_bounds(gx_min, gy_min, gx_max, gy_max, ds.transform)
+        win = win.round_offsets().round_lengths()
         win_transform = ds.window_transform(win)
         win_crs = ds.crs
         pix_w, pix_h = int(round(win.width)), int(round(win.height))
+    print(f"PE1 bbox in SoilGrids VRT CRS: x[{gx_min:.0f},{gx_max:.0f}] y[{gy_min:.0f},{gy_max:.0f}]")
     print(f"PE1 window: {pix_w} x {pix_h} px @ 250 m (Goode Homolosine)")
 
     pe1_mask = np.ones((pix_h, pix_w), dtype="uint8")
     if PE1_BOUNDARY_GPKG.exists():
-        gdf = gpd.read_file(PE1_BOUNDARY_GPKG, layer="peru_pilot_boundary").to_crs(SOILGRIDS_CRS)
+        gdf = gpd.read_file(PE1_BOUNDARY_GPKG, layer="peru_pilot_boundary").to_crs(win_crs)
         shapes = [(geom, 1) for geom in gdf.geometry if geom is not None]
         if shapes:
             pe1_mask = rasterize(shapes, out_shape=(pix_h, pix_w), transform=win_transform,
@@ -116,8 +137,7 @@ def main() -> None:
             layers[prop] = arr
             shared_valid = nd if shared_valid is None else (shared_valid & nd)
         k = williams_k(layers["clay"], layers["silt"], layers["sand"], layers["soc"])
-        invalid = np.isnan(k) | shared_valid | (pe1_mask == 0)
-        k = np.where(invalid, np.nan, k)
+        k = preserve_source_window_support(k, shared_valid)
         k_by_depth[depth] = k
         raw_ranges[depth] = {
             "clay_pct": (float(np.nanmin(layers["clay"])), float(np.nanmax(layers["clay"]))),
@@ -185,7 +205,11 @@ def main() -> None:
         "depth_note": "0-5cm = surface topsoil; 0-30cm = depth-weighted average of 0-5/5-15/15-30",
         "units_note": "K in US units; multiply by 0.1317 for SI (t ha h / ha MJ mm)",
         "boundary_status": "provisional_comparison_catchment_not_final_study_area",
-        "not_resampled_note": "kept at SoilGrids native 250m; NOT resampled to PE1 30m grid",
+        "not_resampled_note": (
+            "kept at SoilGrids native 250m over the PE1 source window; surrounding valid cells "
+            "are retained for reprojection support, and the downstream 30m criterion is clipped "
+            "to the PE1 boundary"
+        ),
         "property_ranges_by_depth": raw_ranges,
         "pe1_zonal_summary": zonal_summary,
     }

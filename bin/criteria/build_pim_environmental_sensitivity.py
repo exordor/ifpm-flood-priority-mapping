@@ -21,6 +21,31 @@ from scipy.ndimage import distance_transform_edt
 
 
 ROOT = Path(__file__).resolve().parents[2]
+PERU_SERNANP = (
+    ROOT / "data/raw/sernanp_peru_protected_areas/pe1_sernanp_protected_areas.gpkg"
+)
+INPUTS = [
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif",
+    ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
+    ROOT / "data/raw/esa_worldcover_2021_peru_pilot/ESA_WorldCover_10m_2021_v200_S18W072_Map.tif",
+    ROOT / "data/raw/esa_worldcover_2021_peru_pilot/ESA_WorldCover_10m_2021_v200_S18W075_Map.tif",
+    ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_water_a_free_1.shp",
+    ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_waterways_free_1.shp",
+    ROOT / "data/raw/sernanp_peru_protected_areas/pe1_sernanp_protected_areas.gpkg",
+]
+OUTPUTS = [
+    ROOT
+    / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif",
+    ROOT
+    / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/water_wetland_context_0_1.tif",
+    ROOT
+    / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/protected_area_context_0_1.tif",
+    ROOT
+    / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_manifest.csv",
+    ROOT
+    / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_components.csv",
+    ROOT / "outputs/pim_environmental_sensitivity/environmental_sensitivity_v0_1_summary.csv",
+]
 WORLDCOVER_SENSITIVE_CLASSES = {80, 90, 95}
 ENVIRONMENTAL_CONTEXT_WEIGHTS = {
     "Zimbabwe": {
@@ -97,8 +122,8 @@ SITES = [
         ),
         protected_vectors=(
             (
-                ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_protected_areas_a_free_1.shp",
-                None,
+                PERU_SERNANP,
+                "sernanp_protected_areas",
             ),
         ),
     ),
@@ -214,7 +239,7 @@ def read_vector_features(
     clip_gdf = gpd.GeoDataFrame(geometry=[clip_geom], crs=target_crs)
     for path, layer in vector_specs:
         if not path.exists():
-            continue
+            raise FileNotFoundError(path)
         gdf = gpd.read_file(path, layer=layer) if layer else gpd.read_file(path)
         total_raw += len(gdf)
         if gdf.empty:
@@ -250,6 +275,15 @@ def vector_proximity_score(
         all_touched=True,
     )
     return binary_proximity_score(burned == 1, profile, mask)
+
+
+def vector_evidence_state(features_in_context: int, raw_features: int) -> str:
+    """Describe whether a checked vector source contributes local evidence."""
+    if features_in_context > 0:
+        return "features_present_within_context_zone"
+    if raw_features > 0:
+        return "sernanp_national_definitive_layer_checked_no_feature_within_context_zone"
+    return "source_returned_no_features"
 
 
 def build_site(config: SiteConfig) -> dict[str, object]:
@@ -319,6 +353,10 @@ def build_site(config: SiteConfig) -> dict[str, object]:
         "source": "; ".join(rel(path) if layer is None else f"{rel(path)}:{layer}" for path, layer in config.protected_vectors),
         "source_feature_count": len(protected_features),
         "raw_feature_count": protected_raw_count,
+        "evidence_state": vector_evidence_state(
+            features_in_context=len(protected_features),
+            raw_features=protected_raw_count,
+        ),
         "claim_level": "provisional",
         **stats(protected_score, mask),
     })
@@ -356,14 +394,18 @@ def build_site(config: SiteConfig) -> dict[str, object]:
         "boundary_id": config.boundary_id,
         "criterion": "environmental_sensitivity",
         "path": rel(out_path),
-        "components": "water/wetland context; protected-area proximity",
+        "components": "water/wetland context; SERNANP national definitive protected-area proximity (layer 0)",
         "component_rule": (
             f"{context_weights['water_wetland_context']} * water/wetland context + "
-            f"{context_weights['protected_ecological_context']} * protected-area proximity; "
+            f"{context_weights['protected_ecological_context']} * SERNANP layer-0 protected-area proximity; "
             "water context is an equal-weight average of available water/wetland evidence"
         ),
         "claim_level": "provisional",
-        "semantic_meaning": "environmental sensitivity indicator, not ecological valuation",
+        "semantic_meaning": (
+            "water/wetland-led environmental context indicator with SERNANP "
+            "national definitive layer-0 context; not complete ecological "
+            "sensitivity valuation"
+        ),
         "nodata_policy": "preserve NoData outside boundary; no NoData-to-zero imputation",
         **stats(environmental, mask),
     }]
@@ -372,8 +414,15 @@ def build_site(config: SiteConfig) -> dict[str, object]:
     return manifest[0]
 
 
+def active_site_configs(site: str = "Peru") -> list[SiteConfig]:
+    selected = [config for config in SITES if config.site == site]
+    if not selected:
+        raise ValueError(f"unknown environmental-sensitivity site: {site}")
+    return selected
+
+
 def main() -> None:
-    rows = [build_site(config) for config in SITES]
+    rows = [build_site(config) for config in active_site_configs()]
     write_csv(
         ROOT / "outputs/pim_environmental_sensitivity/environmental_sensitivity_v0_1_summary.csv",
         rows,

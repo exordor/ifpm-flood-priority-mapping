@@ -20,8 +20,8 @@ mining/population overlay, contribution map, and SINPAD diagnostic are complete
 and governed by `peru_report_figure_chain`. The next output is the Peru-only
 integrated briefing board plus its data-strength table. Current reporting uses
 the Peru direct mentor-weight scenario (`FH=0.35`, `SE=0.25`, `LM=0.20`,
-`ES=0.12`, `SV=0.08`). The equal scenario remains internal QA only. Zimbabwe
-outputs should not drive the next modelling sequence.
+`ES=0.12`, `SV=0.08`). No equal-weight Peru scenario is active. Zimbabwe outputs
+should not drive the next modelling sequence.
 
 ## Secondary Zimbabwe experiments (`outputs/boundary_v1/<experiment_id>/`)
 
@@ -41,11 +41,13 @@ outputs should not drive the next modelling sequence.
 | `pe1_criteria_stack` (3-criteria) | IFPM-093 | complete | provisional | First PE1 stack: flood, erosion, land cover | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
 | `pe1_criteria_stack` (5-criteria) | IFPM-094 | complete | provisional | +mining (OSM indicator) +exposure (OSM roads) | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
 | `pe1_criteria_stack` (component rasters, INGEMMET mining) | IFPM-095/096 | complete | provisional | component inputs for flood, sediment, land use/ASM, environmental, socioeconomic, rainfall; includes TWI/drainage and LS/C diagnostic sublayers | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_environmental_sensitivity_v0_1` | IFPM-096 | complete | provisional | WorldCover/OSM water-wetland context plus protected/ecological context, now combined 0.60 / 0.40 | `outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/` |
+| `pe1_environmental_sensitivity_v0_1` | IFPM-096 | complete | provisional | WorldCover/OSM water-wetland context 0.60 plus SERNANP national definitive protected-area layer 0 context 0.40; layer 0 checked, with no geometry in PE1 + 5 km; other protected-area layers not queried | `outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/` |
 | `pe1_exposure_indicators` | IFPM-096 gap closure | complete | provisional | 0.45 road/access + 0.55 infrastructure exposure; infrastructure is an explicit 0.50 WorldPop population + 0.50 OSM mapped-building placeholder. INEI poverty and OSM health remoteness remain diagnostic context outside the PIM. | `outputs/srtm_1arcsec_peru_pilot/exposure_indicators/` |
-| `pe1_priority_scenarios` | IFPM-093/094/095/096 | complete | sensitivity_scenario | Equal baseline + Peru direct weights over five PIM criteria; refreshed exposure indicators; 435.063 km² selected in the highest-priority quintile under both scenarios; 3.83% of the boundary and about 2,116 WorldPop population count remain unscored where sediment evidence is missing | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/` |
-| `pe1_gap_closure_analysis` | Peru evidence-gap work | complete | diagnostic_only | WorldPop exposure accounting and SINPAD point co-location bound to the current mentor PIM checksum; 9,955 people in the highest-priority quintile (endogenous accounting, not validation); SINPAD reported as 25 records / 11 unique locations and 4 flood records / 2 unique flood locations | `outputs/peru_gap_closure_analysis/` |
-| `pe1_rainfall_criterion` | IFPM-096 | complete | sensitivity_scenario | CHIRPS latam Dec-Mar mean, bilinear to PE1 30 m grid (A-012) | `outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/` |
+| `pe1_soil_k_factor` | criteria governance | complete | provisional | Corrected SoilGrids source-window extraction; K aligns to PE1 and is bilinear-aligned to 30 m while retaining a 250 m effective-resolution warning; 98.8674% PE1 coverage | `outputs/srtm_1arcsec_peru_pilot/soil_k_factor/` |
+| `pe1_priority_scenarios` | IFPM-093/094/095/096 | complete | sensitivity_scenario | Peru direct weights only; Sediment uses K/LS/C 0.30/0.45/0.25 and Land Use uses a value function distinct from C; 521.356 km² in the highest-priority quintile; 95.0998% five-criterion common-support coverage; 4.9002% remains unscored with LS/K/other causes exposed by support rasters | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/` |
+| `pe1_gap_closure_analysis` | Peru evidence-gap work | complete | diagnostic_only | WorldPop accounting is checksum-bound in the output CSV and remains endogenous. Of 25 SINPAD records, 12 are scoreable and 2 are selected; 1 of 4 flood-specific records is scoreable and none is selected. This is not validation. | `outputs/peru_gap_closure_analysis/` |
+| `pe1_criterion_dependency_diagnostics` | criteria governance | complete | diagnostic_only | Quantifies shared WorldCover dependence, road-led Socioeconomic ordering, water-led Environmental context, and selected-quintile changes under component-removal alternatives; does not recalibrate supplied AHP weights | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/criterion_dependency_diagnostics.csv` |
+| `pe1_rainfall_criterion` | IFPM-096 | complete | sensitivity_scenario | CHIRPS latam Dec-Mar mean, bilinear to PE1 30 m grid and normalized from PE1 boundary values only (A-012); effective resolution remains ~5 km | `outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/` |
 | `pe1_ls_factor` | IFPM-093 | complete | diagnostic_only | PE1 LS hillslope mean 3.70 (vs V1 1.563) | `outputs/srtm_1arcsec_peru_pilot/ls_factor/` |
 | `pe1_usle_soil_loss` | IFPM-093 | complete | provisional | PE1 USLE A mean 8.74 t/ha/yr (LOW R=238.6); vs V1 0.50 | `outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/` |
 
@@ -74,10 +76,9 @@ outputs should not drive the next modelling sequence.
 ## R-factor investigation experiments — DEFERRED RECORD (out of critical path since 2026-07-06, see D-RFACTOR-QUARANTINE)
 
 These experiments are preserved as a deferred technical record. R-factor is no
-longer on the critical path: the sediment criterion is served by the K×LS×C
-erosion-source structure layer, and top-20% priority areas are independent of the
-rainfall-erosivity factor R (H-TOP20-R-INVARIANT). Reopened only if the mentor requires a quantitative
-USLE A (ton/ha/yr) or rejects the K×LS×C approach.
+longer on the current Peru critical path: the active Sediment criterion combines
+normalized K, LS, and C with local AHP subweights and does not calculate USLE A.
+Reopen R only if a quantitative soil-loss rate (ton/ha/yr) becomes necessary.
 
 Outputs at: `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/` and
 `outputs/v1_usle_soil_loss/rfactor_empirical_era5/`.

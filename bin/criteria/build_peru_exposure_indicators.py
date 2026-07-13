@@ -50,7 +50,7 @@ OUT_DIR = ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators"
 REFERENCE = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
 BOUNDARY = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 WORLDPOP = ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_pe1_bbox.tif"
-ROAD_ACCESS = ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif"
+ROAD_ACCESS = ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/road_access_proximity_0_1.tif"
 OSM_DIR = ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted"
 OSM_BUILDINGS = OSM_DIR / "gis_osm_buildings_a_free_1.shp"
 OSM_HEALTH_POIS = OSM_DIR / "gis_osm_pois_free_1.shp"
@@ -68,7 +68,7 @@ INPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif",
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
     ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_pe1_bbox.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/road_access_proximity_0_1.tif",
     ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_buildings_a_free_1.shp",
     ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_pois_free_1.shp",
     ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_adminareas_a_free_1.shp",
@@ -438,6 +438,49 @@ def stats(name: str, data: np.ndarray, boundary_mask: np.ndarray) -> dict[str, o
     }
 
 
+def component_influence_diagnostics(
+    layers: dict[str, np.ndarray],
+    weights: dict[str, float],
+    valid: np.ndarray,
+) -> list[dict[str, object]]:
+    """Describe component prevalence and spatial variability without rewriting weights."""
+
+    if set(layers) != set(weights):
+        raise ValueError("diagnostic layers and weights must use the same component names")
+    metrics: dict[str, dict[str, float]] = {}
+    for name, layer in layers.items():
+        values = layer[valid & np.isfinite(layer)]
+        if values.size == 0:
+            raise ValueError(f"no finite diagnostic values for {name}")
+        metrics[name] = {
+            "mean_component_score": float(np.mean(values)),
+            "std_component_score": float(np.std(values)),
+            "p95_component_score": float(np.percentile(values, 95)),
+            "weighted_mean_contribution": float(np.mean(values) * weights[name]),
+            "weighted_std_contribution": float(np.std(values) * weights[name]),
+        }
+    mean_total = sum(item["weighted_mean_contribution"] for item in metrics.values())
+    std_total = sum(item["weighted_std_contribution"] for item in metrics.values())
+    rows = []
+    for name, item in metrics.items():
+        rows.append({
+            "component": name,
+            "nominal_weight": weights[name],
+            **item,
+            "realized_mean_contribution_share": (
+                item["weighted_mean_contribution"] / mean_total if mean_total else 0.0
+            ),
+            "marginal_weighted_sd_share": (
+                item["weighted_std_contribution"] / std_total if std_total else 0.0
+            ),
+            "interpretation": (
+                "Descriptive marginal weighted SD share; ignores covariance, is not an "
+                "effective weight, not ranking attribution, and not a calibration target."
+            ),
+        })
+    return rows
+
+
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
     fields: list[str] = []
     for row in rows:
@@ -551,27 +594,15 @@ def main() -> None:
     ]
     write_csv(OUT_DIR / "exposure_indicators_components.csv", component_rows)
 
-    contribution_rows = []
-    weighted_means: dict[str, float] = {}
     valid = boundary_mask & np.isfinite(exposure_indicators)
-    for name, layer in {
-        "road_access_proximity": road_access,
-        "infrastructure_exposure": infrastructure,
-    }.items():
-        weighted_means[name] = float(np.mean(layer[valid]) * SOCIOECONOMIC_WEIGHTS[name])
-    weighted_total = sum(weighted_means.values())
-    for name, weighted_mean in weighted_means.items():
-        contribution_rows.append(
-            {
-                "component": name,
-                "nominal_weight": SOCIOECONOMIC_WEIGHTS[name],
-                "mean_component_score": float(np.mean(
-                    {"road_access_proximity": road_access, "infrastructure_exposure": infrastructure}[name][valid]
-                )),
-                "weighted_mean_contribution": weighted_mean,
-                "realized_mean_contribution_share": weighted_mean / weighted_total if weighted_total else 0.0,
-            }
-        )
+    contribution_rows = component_influence_diagnostics(
+        {
+            "road_access_proximity": road_access,
+            "infrastructure_exposure": infrastructure,
+        },
+        SOCIOECONOMIC_WEIGHTS,
+        valid,
+    )
     write_csv(OUT_DIR / "exposure_indicators_contribution_diagnostics.csv", contribution_rows)
 
     manifest = {
@@ -595,6 +626,11 @@ def main() -> None:
             "The 0.45/0.55 split follows the supplied Peru sub-criteria table; the 0.50/0.50 "
             "population/building split is an implementation placeholder. Nominal weights do "
             "not imply equal realized mean contributions; see the contribution diagnostics."
+        ),
+        "calibration_decision": (
+            "Retain the supplied 0.45/0.55 coefficients. Do not force equal component means: "
+            "mean-contribution share describes spatial prevalence, while marginal weighted SD "
+            "share is only a covariance-blind descriptive diagnostic, not ranking attribution."
         ),
         "nodata_policy": "complete-case within the boundary; any required component NoData stays NoData",
         "population": population_meta,

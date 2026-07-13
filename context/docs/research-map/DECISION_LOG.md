@@ -99,8 +99,8 @@ decision, reason, alternatives, consequences.
   - Zimbabwe outputs remain usable for background, contrast, or later
     comparison, but not as the active endpoint.
   - PE1 is still provisional and not a final research-selected Peru boundary.
-  - Equal weights remain baseline/sensitivity only; the current Peru main
-    weight scenario is superseded by D-PERU-MENTOR-WEIGHTS.
+  - The current Peru weight scenario is superseded by
+    D-PERU-MENTOR-WEIGHTS; no equal-weight Peru result remains active.
   - The final map label should be "prototype flood prioritisation map", not
     "validated flood-risk map" or "rescue-decision map".
   - Mining overlay is an interpretation layer over the Peru prioritisation map;
@@ -115,7 +115,7 @@ decision, reason, alternatives, consequences.
   sub-criteria weights.
 - **Decision:** Use those direct Peru weights as the current main PIM scenario
   (`mentor_peru_direct_pim`) and as the only weight set shown in the reporting
-  result. Keep equal weights as an internal sensitivity/QA artifact only. Do
+  result. Do not retain or regenerate an active equal-weight Peru scenario. Do
   not use the older slide pairwise matrix as the current Peru mainline scenario.
 - **Reason:** The new table is site-specific and newer than the generic
   example matrix. It matches the mentor's current Peru-first direction.
@@ -124,16 +124,12 @@ decision, reason, alternatives, consequences.
   scenario (rejected for the current PPT/mainline because the mentor asked for
   the weighted prioritisation model, not extra scenario storytelling).
 - **Consequences:**
-  - Current Peru scenario outputs contain two scenarios: `equal_active_pim`
-    and `mentor_peru_direct_pim`, but only `mentor_peru_direct_pim` enters the
-    reporting mainline.
+  - Current Peru scenario outputs contain only `mentor_peru_direct_pim`.
   - The direct weights have no supplied pairwise matrix or consistency ratio,
     so the current run must not report a CR for them.
-  - Flood, Land Use / ASM, and Environmental subweights are implemented where
-    the current data support them.
-  - Sediment still uses the current `K x LS x C` erosion-source structure as a
-    single executable criterion; the new K/LS/C local subweights are recorded
-    as a gap until a grid-compatible independent K-factor layer is rebuilt.
+  - All supplied Peru local subweights are now executable. Sediment applies
+    normalized K/LS/C at 0.30/0.45/0.25; Land Use uses a value function distinct
+    from C; Environmental records official SERNANP evidence state.
   - At the time of this decision, socioeconomic used road/access proximity
     only. This implementation gap is superseded by
     D-PERU-EXPOSURE-REFRESH (2026-07-10).
@@ -154,23 +150,54 @@ decision, reason, alternatives, consequences.
 - **Reason:** This closes the road-only exposure gap while preserving the
   supplied AHP hierarchy and avoiding unapproved poverty/health subweights or
   validation leakage.
-- **Consequences:** The equal and mentor Peru scenarios are rerun from the new
-  fifth criterion. The result remains `sensitivity_scenario`; WorldPop numbers
+- **Consequences:** The direct Peru scenario is rerun from the new fifth
+  criterion. Mean contribution and variability diagnostics are exported so
+  spatial prevalence is not misreported as an effective weight. The result remains
+  `sensitivity_scenario`; WorldPop numbers
   provide endogenous exposure accounting, and SINPAD remains diagnostic point
   context rather than a validated flood extent.
 
-## D-ZIMBABWE-MENTOR-WEIGHTS — Zimbabwe direct AHP weights recorded as secondary scenario
+## D-PERU-CRITERIA-GOVERNANCE — align the five executable criteria with current evidence
+
+- **Date:** 2026-07-13.
+- **Context:** Audit found a mislocated Peru SoilGrids K extraction, rainfall
+  normalization influenced by values outside PE1, reuse of the RUSLE C value
+  function for Land Use, an unqualified empty protected-area component, and
+  obsolete equal-weight Peru outputs.
+- **Decision:** Correct the SoilGrids source window and align K with an explicit
+  250 m effective-resolution warning; normalize rainfall from PE1 boundary
+  cells only; implement Sediment as additive normalized K/LS/C with local
+  weights 0.30/0.45/0.25; use a separate WorldCover land-use pressure function;
+  use official SERNANP protected areas and record verified local absence; retain
+  socioeconomic weights 0.45/0.55 while exporting prevalence diagnostics; run
+  only the direct Peru weight set.
+- **Reason:** This makes the executable hierarchy match the supplied five-
+  criterion and subcriterion tables without turning missing evidence into a
+  validated claim or confusing source prevalence with AHP weights.
+- **Consequences:** Scoreable PIM coverage is 95.0998% on the five-criterion
+  common-support domain. The remaining 4.9002% stays unscored; evidence-support
+  rasters distinguish LS, K, and other missing inputs. The direct
+  highest-priority quintile is 521.356 km². Environmental is driven by
+  water/wetland evidence because no SERNANP national definitive layer-0 geometry
+  occurs within PE1 + 5 km; other protected-area layers were not queried. All outputs remain
+  provisional or `sensitivity_scenario`, not validated flood risk.
+  Dependency diagnostics are kept separate from the AHP calculation: shared
+  WorldCover use (`rho=0.498`), road-led Socioeconomic ordering (`rho=0.970`),
+  and water-led Environmental ordering are reported, but no absent subweight is
+  silently reassigned and no supplied weight is recalibrated from raster means.
+
+## D-ZIMBABWE-MENTOR-WEIGHTS — Zimbabwe direct AHP weights archived as a secondary experiment
 
 - **Date:** 2026-07-06.
 - **Context:** After the Peru-first switch, a Zimbabwe-specific recommended
   weight table was supplied for the Upper Mzingwane catchment:
   `FH=0.32`, `SE=0.23`, `LM=0.18`, `ES=0.12`, `SV=0.15`, plus local
   sub-criteria weights.
-- **Decision:** Use those direct Zimbabwe weights in the secondary
-  `boundary_v1 / rainfall_exposure_v0_4` run as
-  `mentor_zimbabwe_direct_pim`, with equal weights retained as baseline.
-  Do not use the older generic slide matrix or the former flood/sediment-heavy
-  scenario in the current Zimbabwe output directory.
+- **Decision:** The secondary `boundary_v1 / rainfall_exposure_v0_4` experiment
+  used the direct Zimbabwe weights as `mentor_zimbabwe_direct_pim`. Its former
+  equal-weight comparison is historical only. Exclude the experiment and its
+  downstream comparisons from the default Peru-first pipeline and current
+  reporting chain.
 - **Reason:** The new table is site-specific and aligns the secondary
   Zimbabwe prototype with the same five-main-criterion framework used by
   Peru, while keeping Peru as the active mainline.
@@ -179,8 +206,9 @@ decision, reason, alternatives, consequences.
   promote Zimbabwe back to mainline (rejected because D-PERU-FIRST still
   applies).
 - **Consequences:**
-  - Current Zimbabwe scenario outputs contain two scenarios:
-    `equal_active_pim` and `mentor_zimbabwe_direct_pim`.
+  - Historical Zimbabwe outputs may still contain `equal_active_pim` and
+    `mentor_zimbabwe_direct_pim`, but neither is regenerated or compared by the
+    current default pipeline.
   - The direct weights have no supplied pairwise matrix or consistency ratio,
     so the current run must not report a CR for them.
   - Flood subweights are implemented as rainfall 0.35, TWI 0.30, and drainage
@@ -307,18 +335,16 @@ decision, reason, alternatives, consequences.
   bound) was interesting enough to keep pulling focus. Meanwhile R-factor is
   one sub-component of one criterion (sediment) out of five, not the project
   mainline.
-- **Decision:** Quarantine R-factor out of the critical path. The sediment
-  criterion is served by the K×LS×C erosion-source structure layer
-  (`a_structure_K_LS_C_30m.tif`), which is independent of R, already built, and
-  grid-compatible. USLE A absolute values (ton/ha/yr) are no longer required
+- **Decision:** Quarantine R-factor out of the critical path. At the time of
+  this decision the prototype used a K×LS×C structure layer; current Peru work
+  supersedes that implementation with normalized K/LS/C AHP subcriteria, which
+  also do not require R. USLE A absolute values (ton/ha/yr) are no longer required
   for the prototype priority map. RQ1, H-RF-FAMILIES, and the R-factor
   experiments move to `deferred` status. The R-factor record stays in
   `RESULTS.md` §R-factor as a deferred technical record, not an active blocker.
-- **Reason:** Top-20% priority areas are independent of the rainfall-erosivity
-  factor R (H-TOP20-R-INVARIANT,
-  supported): R only scales absolute magnitude (ton/ha/yr), it does not change
-  which area ranks first. For the PIM priority-map output, the R-method choice
-  is irrelevant. The v0.2 honest-label repair already renamed this criterion
+- **Reason:** In the historical multiplicative structure test, R only scaled
+  absolute magnitude and did not change rank. In the current Peru additive
+  K/LS/C criterion, R is not an input at all. The v0.2 honest-label repair already renamed this criterion
   `soil_erosion_factors` (not "sediment risk") — the quarantine completes what
   that rename started. This decision operationalises the existing
   D-EXECUTION-POLICY rule that the project was not applying to R-factor.
@@ -334,9 +360,7 @@ decision, reason, alternatives, consequences.
     live with honest evidence.)
 - **Consequences:**
   - The PIM prototype priority map no longer waits on R-factor.
-  - One-sentence mentor question drafted (see TODO + mentor-explanation draft)
-    asking whether the K×LS×C sediment-criterion approach is acceptable.
-  - Reversible: if the mentor rejects K×LS×C and requires USLE A (ton/ha/yr),
+  - Reversible: if a quantitative USLE A product is required,
     R-factor is reopened and the deferred record in `RESULTS.md` becomes the
     active starting point.
   - IFPM-074 (V2 R-factor) and the dead V2 set stay deferred; no rework now.

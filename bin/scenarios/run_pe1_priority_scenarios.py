@@ -6,24 +6,24 @@ Land Use / ASM, Environmental, and Socioeconomic. Five criteria are actively
 scored in the current executable prototype:
 
 - Flood hazard: rainfall climatology, TWI, and drainage proximity.
-- Sediment: current K x LS x C erosion-source structure; the mentor K/LS/C
-  local subweights are recorded as a data gap until an independent
-  grid-compatible K layer is rebuilt.
+- Sediment: independently scored SoilGrids K, LS, and C components using the
+  supplied 0.30 / 0.45 / 0.25 local weights.
 - Land Use / ASM: land-cover pressure + mining pressure.
 - Environmental: water/wetland and protected/ecological context.
 - Socioeconomic: road/access proximity plus population and mapped-building
   infrastructure exposure. Poverty and health-service remoteness remain
   response-capacity context layers outside the current AHP overlay.
 
-Current scenarios: equal baseline and mentor-recommended Peru direct weights.
+Current scenario: mentor-recommended Peru direct weights only.
 
-Soil-erosion normalization note: the soil_erosion_factors criterion is max-normalized to [0,1] for
-MCDA scoring, so its 0-1 value is a relative high-priority intensity, not absolute t/ha/yr. Rank
-is not affected by the chosen scalar R-factor.
+Sediment note: K, LS, and C are independently normalized and combined by the
+supplied local AHP subweights. The resulting 0-1 score is a relative
+erosion/sediment-source priority indicator, not an absolute soil-loss rate.
 
 Outputs (gitignored under outputs/srtm_1arcsec_peru_pilot/priority_scenarios/):
-priority mean/std/top20-frequency rasters, per-scenario rasters, weights + summary CSVs,
-and a board figure. All provisional / sensitivity_scenario.
+the direct-weight priority raster, highest-priority-quintile selection, five
+criterion rasters, weights, diagnostics, and a board figure. All provisional /
+sensitivity_scenario.
 """
 
 from __future__ import annotations
@@ -48,7 +48,7 @@ INPUTS = [
     ROOT / "bin/_lib/ifpm_tools.py",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/twi_wetness_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/drainage_proximity_0_1.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_k_factor_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/ls_factor_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/c_factor_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif",
@@ -60,23 +60,22 @@ INPUTS = [
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
 ]
 OUTPUTS = [
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_std.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pe1_priority_scenarios_board.png",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pe1_priority_scenarios_board.pdf",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_equal_active_pim.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_mentor_peru_direct_pim.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/top20_equal_active_pim.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/top20_mentor_peru_direct_pim.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/flood_hazard_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/sediment_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/landuse_asm_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/environmental_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/socioeconomic_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/criteria_evidence_count.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/available_main_weight.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/sediment_component_count.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/evidence_support_class.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_weights.csv",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_subcriteria_weights.csv",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/hotspot_stability_summary.csv",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_screening_summary.csv",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_priority_summary.csv",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/component_grid_check.csv",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria_grid_check.csv",
@@ -96,16 +95,16 @@ CRITERIA_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria"
 EXPOSURE_INDICATORS_DIR = ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators"
 REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
 PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
-# Common-mask overlay must reject true data gaps, but PE1 erosion_structure deliberately
-# masks main-channel cells inherited from hillslope LS. Keep those cells NoData and require
-# enough common coverage to catch tile seams / missing active criteria.
-MIN_COMMON_VALID_FRACTION = 0.95
+# Common-mask overlay must reject true data gaps. PE1 LS deliberately masks
+# main-channel cells; K also preserves source-edge NoData. Keep those cells
+# unscored and require enough common coverage to catch missing active evidence.
+MIN_SCOREABLE_VALID_FRACTION = 0.95
 
 COMPONENT_PATHS = {
     "rainfall_climatology": CRITERIA_DIR / "rainfall_climatology_0_1.tif",
     "twi_wetness": CRITERIA_DIR / "twi_wetness_0_1.tif",
     "drainage_proximity": CRITERIA_DIR / "drainage_proximity_0_1.tif",
-    "soil_erosion_factors": CRITERIA_DIR / "soil_erosion_factors_0_1.tif",
+    "soil_k_factor": CRITERIA_DIR / "soil_k_factor_0_1.tif",
     "ls_factor": CRITERIA_DIR / "ls_factor_0_1.tif",
     "c_factor": CRITERIA_DIR / "c_factor_0_1.tif",
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
@@ -118,12 +117,11 @@ PIM_CRITERIA_ORDER = ["flood_hazard", "sediment", "landuse_asm", "environmental"
 ACTIVE_PIM_CRITERIA = PIM_CRITERIA_ORDER
 PIM_COMPONENTS = {
     "flood_hazard": {"rainfall_climatology": 0.40, "twi_wetness": 0.30, "drainage_proximity": 0.30},
-    "sediment": {"soil_erosion_factors": 1.0},
+    "sediment": {"soil_k_factor": 0.30, "ls_factor": 0.45, "c_factor": 0.25},
     "landuse_asm": {"land_cover_pressure": 0.35, "mining_pressure": 0.65},
     "environmental": {"environmental_sensitivity": 1.0},
     "socioeconomic": {"exposure_indicators": 1.0},
 }
-
 MENTOR_PERU_MAIN_WEIGHTS = {
     "flood_hazard": 0.35,
     "sediment": 0.25,
@@ -133,12 +131,18 @@ MENTOR_PERU_MAIN_WEIGHTS = {
 }
 
 
-# Equal is retained as a neutral baseline; mentor_peru_direct_pim is the current
-# Peru-first scenario from the latest recommended AHP weights.
 SCENARIOS = {
-    "equal_active_pim": {name: 1/len(ACTIVE_PIM_CRITERIA) for name in ACTIVE_PIM_CRITERIA},
     "mentor_peru_direct_pim": MENTOR_PERU_MAIN_WEIGHTS,
 }
+
+STALE_MULTI_SCENARIO_OUTPUTS = [
+    OUT_DIR / "priority_mean.tif",
+    OUT_DIR / "priority_std.tif",
+    OUT_DIR / "top20_frequency.tif",
+    SCENARIO_DIR / "priority_equal_active_pim.tif",
+    SCENARIO_DIR / "top20_equal_active_pim.tif",
+    OUT_DIR / "hotspot_stability_summary.csv",
+]
 
 
 def rel(path: Path) -> str:
@@ -171,7 +175,14 @@ def git_state() -> dict[str, object]:
             text=True,
             capture_output=True,
         ).stdout.splitlines()
-        return {"head": head, "dirty": bool(status), "changed_paths": status}
+        return {
+            "head": head,
+            "dirty": bool(status),
+            "scope_note": (
+                "dirty is repository-wide; worktree paths are intentionally omitted "
+                "because unrelated local work is outside this run's lineage"
+            ),
+        }
     except (OSError, subprocess.CalledProcessError) as exc:
         return {"head": None, "dirty": None, "error": str(exc)}
 
@@ -239,16 +250,60 @@ def combine_weighted_layers(
 ) -> np.ndarray:
     first = next(iter(source_layers.values()))
     numerator = np.zeros(first.shape, dtype="float32")
-    valid_all = np.ones(first.shape, dtype=bool)
-    total_weight = float(sum(component_weights.values()))
+    common_support = np.ones(first.shape, dtype=bool)
     for component, weight in component_weights.items():
         layer = source_layers[component]
         valid = np.isfinite(layer)
         numerator[valid] += layer[valid] * weight
-        valid_all &= valid
+        common_support &= valid
     combined = np.full(first.shape, np.nan, dtype="float32")
-    combined[valid_all] = numerator[valid_all] / total_weight
+    combined[common_support] = numerator[common_support]
     return np.clip(combined, 0.0, 1.0).astype("float32")
+
+
+def combine_common_support_criteria(
+    criteria: dict[str, np.ndarray],
+    weights: dict[str, float],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Combine criteria only where all five inputs share finite support."""
+
+    first = next(iter(criteria.values()))
+    numerator = np.zeros(first.shape, dtype="float32")
+    available_weight = np.zeros(first.shape, dtype="float32")
+    evidence_count = np.zeros(first.shape, dtype="uint8")
+    common_support = np.ones(first.shape, dtype=bool)
+    for criterion, weight in weights.items():
+        layer = criteria[criterion]
+        valid = np.isfinite(layer)
+        numerator[valid] += layer[valid] * weight
+        available_weight[valid] += weight
+        evidence_count[valid] += 1
+        common_support &= valid
+
+    score = np.full(first.shape, np.nan, dtype="float32")
+    score[common_support] = numerator[common_support]
+    return np.clip(score, 0.0, 1.0), available_weight, evidence_count
+
+
+def classify_evidence_support(
+    components: dict[str, np.ndarray],
+    criteria: dict[str, np.ndarray],
+    boundary_mask: np.ndarray,
+) -> np.ndarray:
+    """Classify why a boundary cell is or is not eligible for the final PIM."""
+
+    support = np.zeros(boundary_mask.shape, dtype="uint8")
+    support[boundary_mask] = 4
+    k_valid = np.isfinite(components["soil_k_factor"])
+    ls_valid = np.isfinite(components["ls_factor"])
+    c_valid = np.isfinite(components["c_factor"])
+    support[boundary_mask & ~k_valid] = 3
+    support[boundary_mask & k_valid & c_valid & ~ls_valid] = 2
+    common_support = boundary_mask.copy()
+    for layer in criteria.values():
+        common_support &= np.isfinite(layer)
+    support[common_support] = 1
+    return support
 
 
 def build_pim_criteria(components: dict[str, np.ndarray], profile: dict) -> dict[str, np.ndarray]:
@@ -312,39 +367,33 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
         },
         {
             "pim_criterion": "sediment",
-            "component": "soil_erosion_factors",
-            "suggested_local_weight": "",
-            "applied_weight_in_current_run": 1.00,
-            "implementation_status": "implemented_as_current_composite",
-            "source_layer": rel(COMPONENT_PATHS["soil_erosion_factors"]),
-            "note": "current executable sediment criterion: standardized K x LS x C erosion-source structure",
-        },
-        {
-            "pim_criterion": "sediment",
             "component": "soil_k_factor",
             "suggested_local_weight": 0.30,
-            "applied_weight_in_current_run": 0.00,
-            "implementation_status": "not_independently_weighted_current_run",
-            "source_layer": "outputs/soilgrids_250m_peru_pilot/k_factor_pe1_0_5cm_250m.tif",
-            "note": "current PIM uses the provisional K x LS x C erosion-source structure; independent grid-compatible K weighting is deferred",
+            "applied_weight_in_current_run": 0.30,
+            "implementation_status": "implemented",
+            "source_layer": rel(COMPONENT_PATHS["soil_k_factor"]),
+            "note": "SoilGrids 250 m K aligned to the reference grid; effective resolution remains 250 m",
         },
         {
             "pim_criterion": "sediment",
             "component": "ls_factor",
             "suggested_local_weight": 0.45,
-            "applied_weight_in_current_run": 0.00,
-            "implementation_status": "available_but_not_independently_weighted_current_run",
+            "applied_weight_in_current_run": 0.45,
+            "implementation_status": "implemented",
             "source_layer": rel(COMPONENT_PATHS["ls_factor"]),
-            "note": "available as a diagnostic layer; current PIM sediment criterion uses K x LS x C as one provisional structure layer",
+            "note": (
+                "SRTM-derived hillslope LS; channel-mask NoData remains unscored and "
+                "is not replaced or weight-renormalized"
+            ),
         },
         {
             "pim_criterion": "sediment",
             "component": "c_factor",
             "suggested_local_weight": 0.25,
-            "applied_weight_in_current_run": 0.00,
-            "implementation_status": "available_but_not_independently_weighted_current_run",
+            "applied_weight_in_current_run": 0.25,
+            "implementation_status": "implemented",
             "source_layer": rel(COMPONENT_PATHS["c_factor"]),
-            "note": "available as a diagnostic layer; current PIM sediment criterion uses K x LS x C as one provisional structure layer",
+            "note": "WorldCover-derived RUSLE C-factor, independently scored inside Sediment",
         },
         {
             "pim_criterion": "landuse_asm",
@@ -388,7 +437,7 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
             "suggested_local_weight": 0.45,
             "applied_weight_in_current_run": 0.45,
             "implementation_status": "implemented_upstream_in_exposure_indicators",
-            "source_layer": rel(CRITERIA_DIR / "exposure_indicators_0_1.tif"),
+            "source_layer": rel(CRITERIA_DIR / "road_access_proximity_0_1.tif"),
             "note": "combined upstream with infrastructure evidence in exposure_indicators",
         },
         {
@@ -424,17 +473,16 @@ def add_colorbar(fig, ax, image, label: str) -> None:
     cb.set_label(label, fontsize=8)
 
 
-def plot_board(priority_mean, top20_frequency, equal_score, profile) -> None:
+def plot_board(direct_score, direct_top20, profile) -> None:
     boundary = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs(profile["crs"])
     bounds = rasterio.transform.array_bounds(profile["height"], profile["width"], profile["transform"])
     extent = (bounds[0], bounds[2], bounds[1], bounds[3])
 
-    fig, axes = plt.subplots(1, 3, figsize=(16.2, 4.9), constrained_layout=True)
+    fig, axes = plt.subplots(1, 2, figsize=(11.0, 4.9), constrained_layout=True)
     fig.set_constrained_layout_pads(w_pad=0.12, h_pad=0.08, wspace=0.18, hspace=0.02)
     panels = [
-        ("A. Mean priority score across scenarios", priority_mean, "YlOrRd", "0-1 priority score"),
-        ("B. Equal-weight priority score", equal_score, "YlOrRd", "0-1 priority score"),
-        ("C. Top-20% priority selection frequency", top20_frequency, "Blues", "selection frequency"),
+        ("A. Direct-weight priority score", direct_score, "YlOrRd", "0-1 priority score"),
+        ("B. Highest-priority quintile", direct_top20, "Reds", "selected cell"),
     ]
     for ax, (title, data, cmap, label) in zip(axes, panels, strict=True):
         image = ax.imshow(np.ma.masked_invalid(data), extent=extent, origin="upper", cmap=cmap, vmin=0, vmax=1)
@@ -464,95 +512,110 @@ def main() -> None:
     experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     SCENARIO_DIR.mkdir(parents=True, exist_ok=True)
+    for stale_path in STALE_MULTI_SCENARIO_OUTPUTS:
+        stale_path.unlink(missing_ok=True)
     profile = read_reference()
     components = {name: read_band(path, profile) for name, path in COMPONENT_PATHS.items()}
     criteria = build_pim_criteria(components, profile)
     boundary_mask = read_boundary_mask(profile)
-    common_valid = boundary_mask.copy()
+    full_five_valid = boundary_mask.copy()
     for layer in criteria.values():
-        common_valid &= np.isfinite(layer)
-    common_valid_fraction = float(common_valid.sum() / boundary_mask.sum())
-    if common_valid_fraction < MIN_COMMON_VALID_FRACTION:
+        full_five_valid &= np.isfinite(layer)
+    scoreable_valid_fraction = float(full_five_valid.sum() / boundary_mask.sum())
+    full_five_fraction = scoreable_valid_fraction
+    if scoreable_valid_fraction < MIN_SCOREABLE_VALID_FRACTION:
         missing = []
-        for name, layer in criteria.items():
+        for name in PIM_CRITERIA_ORDER:
+            layer = criteria[name]
             frac = float((boundary_mask & np.isfinite(layer)).sum() / boundary_mask.sum())
-            if frac < MIN_COMMON_VALID_FRACTION:
+            if frac < MIN_SCOREABLE_VALID_FRACTION:
                 missing.append(f"{name}={frac:.6f}")
         raise RuntimeError(
-            "PE1 active criteria do not share enough valid coverage; "
-            f"common={common_valid_fraction:.6f}, threshold={MIN_COMMON_VALID_FRACTION}; "
+            "PE1 five-criterion common support does not provide enough scoreable coverage; "
+            f"scoreable={scoreable_valid_fraction:.6f}, threshold={MIN_SCOREABLE_VALID_FRACTION}; "
             f"low layers: {', '.join(missing) if missing else 'none'}"
         )
 
     scenario_arrays: dict[str, np.ndarray] = {}
     weight_rows: list[dict[str, object]] = []
     summary_rows: list[dict[str, object]] = []
-    top20_masks: list[np.ndarray] = []
+    top20_arrays: dict[str, np.ndarray] = {}
 
     all_scenarios = dict(SCENARIOS)
     for scenario, weights in all_scenarios.items():
         total = round(sum(weights.values()), 10)
         if total != 1.0:
             raise ValueError(f"weights for {scenario} sum to {total}")
-        numerator = np.zeros((profile["height"], profile["width"]), dtype="float32")
         for criterion, weight in weights.items():
-            layer = criteria[criterion]
-            numerator[common_valid] += layer[common_valid] * weight
             weight_rows.append({
                 "boundary_id": boundary_id, "experiment_id": experiment_id,
                 "scenario": scenario, "criterion": criterion,
                 "weight": round(weight, 8),
-                "weight_source": (
-                    "equal baseline"
-                    if scenario == "equal_active_pim"
-                    else "mentor-recommended Peru direct weights, July 2026; no pairwise matrix supplied"
-                ),
+                "weight_source": "mentor-recommended Peru direct weights, July 2026; no pairwise matrix supplied",
                 "claim_level": "sensitivity_scenario",
             })
-        score = np.full_like(numerator, np.nan, dtype="float32")
-        score[common_valid] = numerator[common_valid]
-        score = np.clip(score, 0.0, 1.0).astype("float32")
+        score, available_weight, evidence_count = combine_common_support_criteria(criteria, weights)
+        score[~boundary_mask] = np.nan
+        available_weight = available_weight.astype("float32")
+        available_weight[~boundary_mask] = np.nan
+        evidence_count_output = evidence_count.astype("float32")
+        evidence_count_output[~boundary_mask] = np.nan
+        sediment_component_count = sum(
+            np.isfinite(components[name]).astype("uint8")
+            for name in ("soil_k_factor", "ls_factor", "c_factor")
+        )
+        sediment_component_count_output = sediment_component_count.astype("float32")
+        sediment_component_count_output[~boundary_mask] = np.nan
+        evidence_support = classify_evidence_support(components, criteria, boundary_mask)
+        evidence_support_output = evidence_support.astype("float32")
+        evidence_support_output[~boundary_mask] = np.nan
+        write_raster(OUT_DIR / "available_main_weight.tif", available_weight, profile)
+        write_raster(OUT_DIR / "criteria_evidence_count.tif", evidence_count_output, profile)
+        write_raster(OUT_DIR / "sediment_component_count.tif", sediment_component_count_output, profile)
+        write_raster(OUT_DIR / "evidence_support_class.tif", evidence_support_output, profile)
+        scoreable = boundary_mask & np.isfinite(score)
+        incomplete_evidence_fraction = float((boundary_mask & ~scoreable).sum() / boundary_mask.sum())
+        ls_missing_fraction = float(np.sum(evidence_support == 2) / boundary_mask.sum())
+        k_missing_fraction = float(np.sum(evidence_support == 3) / boundary_mask.sum())
+        other_missing_fraction = float(np.sum(evidence_support == 4) / boundary_mask.sum())
         scenario_arrays[scenario] = score
         write_raster(SCENARIO_DIR / f"priority_{scenario}.tif", score, profile)
         threshold = float(np.nanpercentile(score, 80))
-        top20 = np.where(common_valid, score >= threshold, np.nan).astype("float32")
+        top20 = np.where(scoreable, score >= threshold, np.nan).astype("float32")
         write_raster(SCENARIO_DIR / f"top20_{scenario}.tif", top20, profile)
-        top20_masks.append(top20)
+        top20_arrays[scenario] = top20
         summary_rows.append({
             "boundary_id": boundary_id, "experiment_id": experiment_id,
             "scenario": scenario, "top20_threshold": threshold,
-            "common_valid_fraction": round(common_valid_fraction, 6),
+            "scoreable_valid_fraction": round(scoreable_valid_fraction, 6),
+            "full_five_criterion_fraction": round(full_five_fraction, 6),
+            "incomplete_evidence_fraction": round(incomplete_evidence_fraction, 6),
+            "ls_missing_fraction": round(ls_missing_fraction, 6),
+            "k_missing_fraction": round(k_missing_fraction, 6),
+            "other_missing_fraction": round(other_missing_fraction, 6),
+            "common_valid_fraction": round(full_five_fraction, 6),
             **raster_stats(score),
         })
 
-    stack = np.stack(list(scenario_arrays.values())).astype("float32")
-    priority_mean = np.full(stack.shape[1:], np.nan, dtype="float32")
-    priority_std = np.full(stack.shape[1:], np.nan, dtype="float32")
-    top20_frequency = np.full(stack.shape[1:], np.nan, dtype="float32")
-    priority_mean[common_valid] = np.mean(stack[:, common_valid], axis=0).astype("float32")
-    priority_std[common_valid] = np.std(stack[:, common_valid], axis=0).astype("float32")
-    top20_stack = np.stack(top20_masks).astype("float32")
-    top20_frequency[common_valid] = np.mean(top20_stack[:, common_valid], axis=0).astype("float32")
-
-    write_raster(OUT_DIR / "priority_mean.tif", priority_mean, profile)
-    write_raster(OUT_DIR / "priority_std.tif", priority_std, profile)
-    write_raster(OUT_DIR / "top20_frequency.tif", top20_frequency, profile)
-    plot_board(priority_mean, top20_frequency, scenario_arrays["equal_active_pim"], profile)
+    direct_score = scenario_arrays["mentor_peru_direct_pim"]
+    direct_top20 = top20_arrays["mentor_peru_direct_pim"]
+    plot_board(direct_score, direct_top20, profile)
 
     cell_km2 = 30.0 * 30.0 / 1e6
-    stability_rows = [
+    screening_summary_rows = [
         {"metric": "scenario_count", "value": len(all_scenarios)},
         {"metric": "mentor_peru_direct_weights", "value": "flood_hazard=0.35, sediment=0.25, landuse_asm=0.20, environmental=0.12, socioeconomic=0.08"},
         {"metric": "mentor_peru_weight_type", "value": "direct recommended weights; no pairwise matrix consistency ratio supplied in the current note"},
-        {"metric": "common_valid_fraction", "value": round(common_valid_fraction, 6)},
-        {"metric": "unscored_boundary_fraction", "value": round(1.0 - common_valid_fraction, 6)},
-        {"metric": "interpretation_domain", "value": "common-valid screening cells; channel cells without sediment evidence remain unscored"},
-        {"metric": "top20_all_scenarios_cells", "value": int(np.nansum(top20_frequency == 1.0))},
-        {"metric": "top20_any_scenario_cells", "value": int(np.nansum(top20_frequency > 0.0))},
-        {"metric": "top20_all_scenarios_area_km2", "value": round(float(np.nansum(top20_frequency == 1.0) * cell_km2), 3)},
-        {"metric": "top20_any_scenario_area_km2", "value": round(float(np.nansum(top20_frequency > 0.0) * cell_km2), 3)},
-        {"metric": "priority_std_mean", "value": round(float(np.nanmean(priority_std)), 6)},
-        {"metric": "priority_std_p95", "value": round(float(np.nanpercentile(priority_std, 95)), 6)},
+        {"metric": "scoreable_valid_fraction", "value": round(scoreable_valid_fraction, 6)},
+        {"metric": "full_five_criterion_fraction", "value": round(full_five_fraction, 6)},
+        {"metric": "incomplete_evidence_fraction", "value": round(incomplete_evidence_fraction, 6)},
+        {"metric": "ls_missing_fraction", "value": round(ls_missing_fraction, 6)},
+        {"metric": "k_missing_fraction", "value": round(k_missing_fraction, 6)},
+        {"metric": "other_missing_fraction", "value": round(other_missing_fraction, 6)},
+        {"metric": "unscored_boundary_fraction", "value": round(1.0 - scoreable_valid_fraction, 6)},
+        {"metric": "interpretation_domain", "value": "five-criterion common-support cells only; NoData is never converted to low priority or compensated by weight renormalization"},
+        {"metric": "direct_top20_cells", "value": int(np.nansum(direct_top20 == 1.0))},
+        {"metric": "direct_top20_area_km2", "value": round(float(np.nansum(direct_top20 == 1.0) * cell_km2), 3)},
         {"metric": "pim_main_criteria_count", "value": len(PIM_CRITERIA_ORDER)},
         {"metric": "active_scored_pim_criteria_count", "value": len(ACTIVE_PIM_CRITERIA)},
         {"metric": "component_layer_count", "value": len(COMPONENT_PATHS)},
@@ -565,7 +628,7 @@ def main() -> None:
     write_csv(OUT_DIR / "scenario_weights.csv", weight_rows)
     write_csv(OUT_DIR / "pim_subcriteria_weights.csv", build_subcriteria_weight_rows())
     write_csv(OUT_DIR / "scenario_priority_summary.csv", summary_rows)
-    write_csv(OUT_DIR / "hotspot_stability_summary.csv", stability_rows)
+    write_csv(OUT_DIR / "priority_screening_summary.csv", screening_summary_rows)
     write_csv(OUT_DIR / "component_grid_check.csv", build_grid_check(profile, components))
     write_csv(OUT_DIR / "pim_criteria_grid_check.csv", build_grid_check(profile, criteria))
     manifest_path = OUT_DIR / "run_manifest.json"
@@ -578,10 +641,16 @@ def main() -> None:
         "mentor_weight_type": (
             "direct recommended weights; no pairwise matrix or consistency ratio supplied"
         ),
-        "common_valid_fraction": common_valid_fraction,
-        "unscored_boundary_fraction": 1.0 - common_valid_fraction,
+        "scoreable_valid_fraction": scoreable_valid_fraction,
+        "full_five_criterion_fraction": full_five_fraction,
+        "incomplete_evidence_fraction": incomplete_evidence_fraction,
+        "ls_missing_fraction": ls_missing_fraction,
+        "k_missing_fraction": k_missing_fraction,
+        "other_missing_fraction": other_missing_fraction,
+        "unscored_boundary_fraction": 1.0 - scoreable_valid_fraction,
         "interpretation_domain": (
-            "common-valid screening cells; channel cells without sediment evidence remain unscored"
+            "five-criterion common-support cells only; NoData is never converted to low "
+            "priority or compensated by weight renormalization"
         ),
         "script": {
             "path": rel(Path(__file__)),
@@ -599,13 +668,14 @@ def main() -> None:
         ],
     }
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    stable_area = next(
-        row["value"] for row in stability_rows
-        if row["metric"] == "top20_all_scenarios_area_km2"
+    direct_area = next(
+        row["value"] for row in screening_summary_rows
+        if row["metric"] == "direct_top20_area_km2"
     )
     print(f"wrote Peru-first priority scenarios to {rel(OUT_DIR)}")
-    print(f"  common valid coverage: {common_valid_fraction:.6f}")
-    print(f"  top-20% selected by both scenarios: {stable_area} km2")
+    print(f"  scoreable coverage: {scoreable_valid_fraction:.6f}")
+    print(f"  full five-criterion coverage: {full_five_fraction:.6f}")
+    print(f"  highest-priority quintile area: {direct_area} km2")
     print("  mentor Peru direct weights: 0.35 FH, 0.25 SE, 0.20 LM, 0.12 ES, 0.08 SV")
     print("  socioeconomic criterion: 0.45 road/access + 0.55 population/building exposure indicators")
 

@@ -18,6 +18,55 @@ CURRENT_DIR = OUTPUT_ROOT / "current"
 MANIFEST = OUTPUT_ROOT / "manifest.csv"
 ARCHIVE_DIR = ROOT / "outputs/_archive/2026-07-11_peru_figure_governance"
 
+INPUTS = [
+    ROOT / "context/docs/research-map/peru_authoritative_figure_chain.csv",
+    ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/peru_raw_main_12_input_factors_panel_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/peru_raw_main_12_input_factors_panel_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_flood_hazard_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_flood_hazard_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_sediment_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_sediment_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_landuse_asm_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_landuse_asm_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_environmental_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_environmental_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_socioeconomic_5class_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_socioeconomic_5class_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_direct_weight_priority_maps/peru_direct_weight_priority_screening_5class_paper_style_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_direct_weight_priority_maps/peru_direct_weight_priority_screening_5class_paper_style_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_evidence_overlays/peru_priority_mining_population_overlay_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_evidence_overlays/peru_priority_mining_population_overlay_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_pim_contribution_map/peru_largest_weighted_contribution_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_pim_contribution_map/peru_largest_weighted_contribution_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_evidence_overlays/peru_sinpad_colocation_diagnostic_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_evidence_overlays/peru_sinpad_colocation_diagnostic_no_title_caption.pdf",
+]
+
+OUTPUTS = [
+    ROOT / "outputs/peru_report_figure_chain/current/01_peru_raw_input_factors.png",
+    ROOT / "outputs/peru_report_figure_chain/current/01_peru_raw_input_factors.pdf",
+    ROOT / "outputs/peru_report_figure_chain/current/02_peru_flood_hazard_criterion.png",
+    ROOT / "outputs/peru_report_figure_chain/current/02_peru_flood_hazard_criterion.pdf",
+    ROOT / "outputs/peru_report_figure_chain/current/03_peru_sediment_criterion.png",
+    ROOT / "outputs/peru_report_figure_chain/current/03_peru_sediment_criterion.pdf",
+    ROOT / "outputs/peru_report_figure_chain/current/04_peru_landuse_asm_criterion.png",
+    ROOT / "outputs/peru_report_figure_chain/current/04_peru_landuse_asm_criterion.pdf",
+    ROOT / "outputs/peru_report_figure_chain/current/05_peru_environmental_criterion.png",
+    ROOT / "outputs/peru_report_figure_chain/current/05_peru_environmental_criterion.pdf",
+    ROOT / "outputs/peru_report_figure_chain/current/06_peru_socioeconomic_criterion.png",
+    ROOT / "outputs/peru_report_figure_chain/current/06_peru_socioeconomic_criterion.pdf",
+    ROOT / "outputs/peru_report_figure_chain/current/07_peru_direct_weight_pim.png",
+    ROOT / "outputs/peru_report_figure_chain/current/07_peru_direct_weight_pim.pdf",
+    ROOT / "outputs/peru_report_figure_chain/current/08_peru_priority_mining_population_overlay.png",
+    ROOT / "outputs/peru_report_figure_chain/current/08_peru_priority_mining_population_overlay.pdf",
+    ROOT / "outputs/peru_report_figure_chain/current/09_peru_weighted_contribution.png",
+    ROOT / "outputs/peru_report_figure_chain/current/09_peru_weighted_contribution.pdf",
+    ROOT / "outputs/peru_report_figure_chain/current/10_peru_sinpad_colocation_diagnostic.png",
+    ROOT / "outputs/peru_report_figure_chain/current/10_peru_sinpad_colocation_diagnostic.pdf",
+    ROOT / "outputs/peru_report_figure_chain/current/README.md",
+    ROOT / "outputs/peru_report_figure_chain/manifest.csv",
+]
+
 EXPECTED_STAGES = [
     "raw_inputs",
     "pim_criteria",
@@ -150,7 +199,11 @@ def write_readme(rows: list[dict[str, str]]) -> None:
             "",
             "Claim boundary: the AHP map is a sensitivity scenario. Mining and population",
             "overlays are model-input context. SINPAD is a co-location diagnostic, not",
-            "independent model validation. See `../manifest.csv` for source paths and checksums.",
+            "independent model validation. Flood is a conditioning indicator, Environmental",
+            "is water/wetland-led context, and Socioeconomic is an exposure indicator. The PIM",
+            "covers 95.0998% of PE1 on strict five-criterion common support; the remaining",
+            "4.9002% is hatched and unscored. It is not a catchment-wide rescue map. See",
+            "`../manifest.csv` for source paths and checksums.",
             "",
         ]
     )

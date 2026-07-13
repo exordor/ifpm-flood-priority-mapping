@@ -31,6 +31,27 @@ def load_module(name: str, path: Path):
 
 
 class PeruSlideMapSourceTest(unittest.TestCase):
+    def test_direct_weight_maps_declare_evidence_support_overlay(self):
+        module = load_module(
+            "export_peru_direct_weight_priority_maps_evidence_overlay",
+            ROOT / "bin/visualize/export_peru_direct_weight_priority_maps.py",
+        )
+
+        self.assertIn(module.EVIDENCE_SUPPORT, module.INPUTS)
+        self.assertEqual(module.EVIDENCE_SUPPORT.name, "evidence_support_class.tif")
+
+    def test_raw_input_exporter_includes_physical_soil_k_factor(self):
+        module = load_module(
+            "export_peru_raw_input_factor_maps_soil_k",
+            ROOT / "bin/visualize/export_peru_raw_input_factor_maps.py",
+        )
+        specs = {item.slug: item for item in module.RASTER_SPECS}
+
+        self.assertIn("soil_k_factor", specs)
+        self.assertIn(specs["soil_k_factor"].source_path, module.INPUTS)
+        self.assertIn("250 m", specs["soil_k_factor"].limitation)
+        self.assertNotIn("SKIPPED_RAW_FACTORS", vars(module))
+
     def test_pim_socioeconomic_map_describes_current_source(self):
         module = load_module(
             "export_peru_pim_criteria_maps",
@@ -41,6 +62,19 @@ class PeruSlideMapSourceTest(unittest.TestCase):
         self.assertIn("WorldPop", criterion.data_basis)
         self.assertIn("building", criterion.data_basis.lower())
         self.assertNotIn("road/access proximity only", criterion.limitation.lower())
+
+    def test_pim_sediment_and_landuse_maps_describe_governed_components(self):
+        module = load_module(
+            "export_peru_pim_criteria_maps_governed",
+            ROOT / "bin/visualize/export_peru_pim_criteria_maps.py",
+        )
+        criteria = {item.slug: item for item in module.CRITERIA}
+
+        self.assertIn("0.30", criteria["sediment"].data_basis)
+        self.assertIn("0.45", criteria["sediment"].data_basis)
+        self.assertIn("0.25", criteria["sediment"].data_basis)
+        self.assertNotIn("K x LS x C structure", criteria["sediment"].limitation)
+        self.assertIn("distinct from RUSLE C-factor", criteria["landuse_asm"].data_basis)
 
     def test_context_exporter_covers_all_new_socioeconomic_layers(self):
         module = load_module(

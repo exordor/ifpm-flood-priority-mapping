@@ -25,6 +25,8 @@ import export_peru_pim_criteria_maps as maps
 
 CRITERIA_DIR = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria"
 OUT_DIR = ROOT / "outputs/slide_ready_figures/peru_pim_contribution_map"
+PIM = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_mentor_peru_direct_pim.tif"
+EVIDENCE_SUPPORT = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/evidence_support_class.tif"
 
 CRITERIA = {
     "flood_hazard": CRITERIA_DIR / "flood_hazard_0_1.tif",
@@ -41,11 +43,11 @@ WEIGHTS = {
     "socioeconomic": 0.08,
 }
 LABELS = {
-    "flood_hazard": "Flood hazard",
+    "flood_hazard": "Flood-conditioning indicator (FH)",
     "sediment": "Sediment / erosion",
     "landuse_asm": "Land use / ASM",
-    "environmental": "Environmental sensitivity",
-    "socioeconomic": "Socioeconomic exposure",
+    "environmental": "Environmental context indicator (ES)",
+    "socioeconomic": "Socioeconomic exposure indicator",
 }
 COLORS = ["#2b83ba", "#d95f0e", "#31a354", "#9e9ac8", "#636363"]
 
@@ -56,6 +58,8 @@ INPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/landuse_asm_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/environmental_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/socioeconomic_0_1.tif",
+    PIM,
+    EVIDENCE_SUPPORT,
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
 ]
 OUTPUTS = [
@@ -90,6 +94,20 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
         writer.writerows(rows)
 
 
+def weighted_contribution_stack(
+    layers: dict[str, np.ndarray],
+    weights: dict[str, float],
+    scoreable: np.ndarray,
+) -> np.ndarray:
+    """Return direct weighted contributions on the final PIM support only."""
+
+    stack = np.full((len(layers), *scoreable.shape), np.nan, dtype="float32")
+    for index, (name, layer) in enumerate(layers.items()):
+        valid = scoreable & np.isfinite(layer)
+        stack[index, valid] = layer[valid] * weights[name]
+    return stack
+
+
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     layers: dict[str, np.ndarray] = {}
@@ -108,11 +126,22 @@ def main() -> None:
         layers[name] = data
     assert profile is not None
 
+    priority, pim_profile = maps.read_raster(PIM)
+    evidence_support, evidence_profile = maps.read_raster(EVIDENCE_SUPPORT)
+    for label, current in (("PIM", pim_profile), ("evidence support", evidence_profile)):
+        if (
+            current["crs"] != profile["crs"]
+            or current["transform"] != profile["transform"]
+            or current["width"] != profile["width"]
+            or current["height"] != profile["height"]
+        ):
+            raise ValueError(f"{label} grid mismatch")
+
     order = list(CRITERIA)
-    common_valid = np.logical_and.reduce([np.isfinite(layers[name]) for name in order])
-    contributions = np.stack([layers[name] * WEIGHTS[name] for name in order])
-    dominant = np.zeros(common_valid.shape, dtype="uint8")
-    dominant[common_valid] = np.argmax(contributions[:, common_valid], axis=0).astype("uint8") + 1
+    scoreable = np.isfinite(priority)
+    contributions = weighted_contribution_stack(layers, WEIGHTS, scoreable)
+    dominant = np.zeros(scoreable.shape, dtype="uint8")
+    dominant[scoreable] = np.argmax(contributions[:, scoreable], axis=0).astype("uint8") + 1
 
     projected, extent = maps.reproject_class(dominant, profile)
     frame_extent = maps.frame_extent_for_legend(extent)
@@ -122,6 +151,26 @@ def main() -> None:
 
     fig, ax = plt.subplots(figsize=(7.0, 8.4), constrained_layout=True)
     ax.imshow(masked, extent=extent, origin="upper", cmap=cmap, norm=norm, interpolation="nearest", zorder=1)
+    support_classes = np.nan_to_num(evidence_support, nan=0).astype("uint8")
+    support_overlays = [
+        (2, "////"),
+        (3, "xxxx"),
+        (4, "...."),
+    ]
+    for support_value, hatch in support_overlays:
+        support_projected, support_extent = maps.reproject_class(support_classes, profile)
+        if support_extent != extent:
+            raise ValueError("evidence-support overlay extent mismatch")
+        overlay = np.ma.masked_where(support_projected != support_value, support_projected)
+        ax.contourf(
+            overlay,
+            levels=[support_value - 0.5, support_value + 0.5],
+            colors="none",
+            hatches=[hatch],
+            extent=extent,
+            origin="upper",
+            zorder=3,
+        )
     maps.add_boundary_and_frame(ax, frame_extent)
     maps.add_north_arrow(ax)
     maps.add_scale_bar(ax, frame_extent)
@@ -129,7 +178,13 @@ def main() -> None:
         Patch(facecolor=color, edgecolor="0.4", label=LABELS[name])
         for name, color in zip(order, COLORS, strict=True)
     ]
-    handles.append(Patch(facecolor="#d9d9d9", edgecolor="0.4", label="Unscored (missing sediment evidence)"))
+    handles.extend(
+        [
+            Patch(facecolor="none", edgecolor="#555555", hatch="////", label="Unscored: LS unavailable"),
+            Patch(facecolor="none", edgecolor="#555555", hatch="xxxx", label="Unscored: K unavailable"),
+            Patch(facecolor="none", edgecolor="#555555", hatch="....", label="Unscored: other evidence"),
+        ]
+    )
     legend = ax.legend(
         handles=handles,
         title="Largest weighted contribution",
@@ -151,7 +206,7 @@ def main() -> None:
     plt.close(fig)
 
     weighted_means = {
-        name: float(np.mean(contributions[index][common_valid]))
+        name: float(np.mean(contributions[index][scoreable]))
         for index, name in enumerate(order)
     }
     total_mean = sum(weighted_means.values())
@@ -161,11 +216,11 @@ def main() -> None:
             {
                 "criterion": name,
                 "direct_weight": WEIGHTS[name],
-                "mean_criterion_score_common_valid": float(np.mean(layers[name][common_valid])),
+                "mean_criterion_score_available_cells": float(np.nanmean(layers[name][scoreable])),
                 "weighted_mean_contribution": weighted_means[name],
                 "realized_mean_contribution_share": weighted_means[name] / total_mean if total_mean else 0.0,
                 "dominant_cells": int(np.sum(dominant == index)),
-                "dominant_cell_share_common_valid": float(np.sum(dominant == index) / common_valid.sum()),
+                "dominant_cell_share_scoreable": float(np.sum(dominant == index) / scoreable.sum()),
             }
         )
     write_csv(OUT_DIR / "contribution_summary.csv", rows)
@@ -180,7 +235,11 @@ def main() -> None:
                 "figure_format": path.suffix.lstrip("."),
                 "source_rasters": ";".join(rel(path) for path in CRITERIA.values()),
                 "source_sha256": source_hashes,
-                "classification": "criterion with largest weighted contribution per common-valid cell",
+                "pim_source": rel(PIM),
+                "pim_sha256": sha256(PIM),
+                "evidence_support_source": rel(EVIDENCE_SUPPORT),
+                "evidence_support_sha256": sha256(EVIDENCE_SUPPORT),
+                "classification": "criterion with largest direct weighted contribution on five-criterion common-support cells; hatches identify unscored evidence gaps",
                 "weight_type": "direct recommended weights; no pairwise matrix or consistency ratio supplied",
                 "claim_level": "sensitivity_scenario",
             }

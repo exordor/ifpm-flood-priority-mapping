@@ -108,19 +108,19 @@ historical / generic sensitivity-scenario weight set.
 ## H-PERU-DIRECT-WEIGHTS
 
 **Statement:** The current Peru direct mentor weights can drive the Peru-first
-PIM prototype as the reporting sensitivity scenario. Equal weights remain an
-internal QA artifact and are not a reporting comparison.
+PIM prototype as the only active reporting sensitivity scenario.
 
 - **Related RQ:** RQ2
-- **Evidence:** `pe1_priority_scenarios` now runs `equal_active_pim` and
+- **Evidence:** `pe1_priority_scenarios` runs only
   `mentor_peru_direct_pim` with main weights `FH=0.35`, `SE=0.25`, `LM=0.20`,
-  `ES=0.12`, `SV=0.08`. The area selected in the top 20% under both current
-  scenarios is **435.063 km²**; top-20% in at least one current scenario is
-  **619.421 km²**.
+  `ES=0.12`, `SV=0.08`. The direct highest-priority quintile is
+  **521.356 km²**. Scoreable coverage is **95.0998%**, restricted to the
+  five-criterion common-support domain; **4.9002%** remains unscored and is
+  classified by missing LS, K, or other evidence.
 - **Caveat:** no pairwise matrix was supplied for these new direct weights, so
-  no consistency ratio is reported. Sediment subweights are recorded but not
-  independently applied because the current independent K-factor layer is not
-  grid-compatible for PE1 overlay. Socioeconomic now applies the supplied
+  no consistency ratio is reported. Sediment now applies normalized K/LS/C at
+  0.30/0.45/0.25, but K remains 250 m effective evidence. Unscored evidence-gap
+  cells are exposed by support rasters and map hatching. Socioeconomic applies the supplied
   0.45 road/access and 0.55 infrastructure split; infrastructure exposure is a
   provisional equal blend of WorldPop population and OSM mapped-building
   exposure. INEI poverty and health remoteness remain diagnostic context
@@ -131,12 +131,12 @@ internal QA artifact and are not a reporting comparison.
 
 ## H-ZIMBABWE-DIRECT-WEIGHTS
 
-**Statement:** The current Zimbabwe direct recommended weights can drive the
-secondary Upper Mzingwane PIM prototype, with equal weights retained as the
-neutral baseline.
+**Statement:** The Zimbabwe direct recommended weights can drive the archived
+secondary Upper Mzingwane PIM prototype. The historical equal-weight scenario
+is not part of the current Peru-first reporting chain.
 
 - **Related RQ:** RQ2
-- **Evidence:** `boundary_v1 / rainfall_exposure_v0_4` now runs
+- **Evidence:** `boundary_v1 / rainfall_exposure_v0_4` historically ran
   `equal_active_pim` and `mentor_zimbabwe_direct_pim` with main weights
   `FH=0.32`, `SE=0.23`, `LM=0.18`, `ES=0.12`, `SV=0.15`. The area selected in
   the top 20% under both current scenarios is **622.048 km²**; top-20% in at
@@ -148,7 +148,8 @@ neutral baseline.
   Socioeconomic infrastructure exposure is missing, so road/access proximity
   is the only active socioeconomic component.
 - **Verdict:** **supported** as a secondary Zimbabwe `sensitivity_scenario`
-- **Status:** active as background after D-PERU-FIRST.
+- **Status:** archived background after D-PERU-FIRST; excluded from the default
+  pipeline and current reporting.
 - **Claim level:** `sensitivity_scenario`
 
 ## H-TOP20-R-INVARIANT
@@ -185,10 +186,9 @@ structurally compared with the same scenario logic.
 - **Evidence:** PE1 and V1 both use flood_hazard, sediment, landuse_asm,
   environmental, and socioeconomic as top-level PIM criteria. Flood and Land
   Use / ASM have internal component rasters, and Environmental is implemented as
-  a provisional water/wetland and protected-area sensitivity indicator. The area
-  selected in the top 20% under both current PE1 PIM scenarios is 435.063 km²
-  (Zimbabwe boundary_v1 / rainfall_exposure_v0_4: 622.048 km² under its
-  equal-baseline + direct Zimbabwe scenarios);
+  a provisional water/wetland and protected-area sensitivity indicator. The
+  active PE1 direct highest-priority quintile is 521.356 km² on the strict
+  five-criterion common support;
   PE1 mining upgraded to official INGEMMET point evidence (strictly stronger
   than V1).
 - **Verdict:** **supported** at `provisional` level

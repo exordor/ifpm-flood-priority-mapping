@@ -50,7 +50,7 @@ INPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/road_access_proximity_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/water_wetland_context_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/protected_area_context_0_1.tif",
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
@@ -177,7 +177,7 @@ FACTORS = [
     Factor(
         slug="road_access",
         label="Road/access proximity",
-        source_raster=CRITERIA_DIR / "exposure_indicators_0_1.tif",
+        source_raster=CRITERIA_DIR / "road_access_proximity_0_1.tif",
         group="human_environment",
         claim_level="provisional",
         data_basis="OSM road/access proximity",

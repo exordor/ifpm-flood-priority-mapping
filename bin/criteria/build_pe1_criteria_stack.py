@@ -5,8 +5,8 @@ Mirrors `build_boundary_v1_criteria_stack.py` plus the rainfall criterion
 sensitivity layer. PE1 follows the mentor 5-main-criterion AHP framework. This
 script prepares the component rasters that are combined later into PIM main
 criteria:
-flood_conditioning, soil_erosion_factors, land_cover_pressure,
-mining_pressure (INGEMMET), exposure_indicators (OSM roads), and
+flood_conditioning, SoilGrids K, LS, RUSLE C, land_cover_pressure,
+mining_pressure (INGEMMET), road_access_proximity (OSM roads), and
 rainfall_climatology (CHIRPS coarse-to-grid, sensitivity).
 
 Outputs standardized 0-1 rasters on the PE1 30m reference grid (EPSG:32718).
@@ -25,28 +25,43 @@ import rasterio
 from rasterio.features import geometry_mask
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = {
+RASTER_INPUTS = {
     "twi": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_twi.tif",
     "drainage": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_distance_to_drainage_t500.tif",
     "ls_factor": ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/pe1_ls_factor_capped50_hillslope_30m.tif",
-    "structure": ROOT / "outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/a_structure_K_LS_C_30m.tif",
     "c_factor": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
-    "roads": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
+    "soil_k_factor": ROOT / "outputs/srtm_1arcsec_peru_pilot/soil_k_factor/soil_k_factor_0_1.tif",
+    "land_use_pressure": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_pe1_30m.tif",
+    "road_access_proximity": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
     "mining": ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif",
     "rainfall": ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif",
 }
+
+INPUTS = [
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_twi.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_distance_to_drainage_t500.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/pe1_ls_factor_capped50_hillslope_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/soil_k_factor/soil_k_factor_0_1.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_pe1_30m.tif",
+    ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
+    ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif",
+    ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
+]
 
 
 OUTPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_conditioning_factors_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/twi_wetness_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/drainage_proximity_0_1.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/ls_factor_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/c_factor_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_k_factor_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/road_access_proximity_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif",
 ]
 import sys
@@ -61,9 +76,8 @@ OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
 CRITERIA_DIR = OUT_DIR / "criteria"
 REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
 PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
-# PE1 erosion_structure intentionally inherits hillslope LS NoData on main-channel cells
-# (about 3.8% of PE1). A 0.95 gate catches tile/data gaps such as the old C-factor seam
-# while allowing this documented channel mask to remain NoData instead of being filled.
+# A 0.95 component gate catches tile/data gaps while allowing the documented
+# hillslope LS channel mask and limited SoilGrids K support to remain NoData.
 MIN_VALID_FRACTION = 0.95
 
 def rel(path: Path) -> str:
@@ -146,33 +160,33 @@ def main() -> None:
     experiment_id = opts.get("experiment_id", EXPERIMENT_ID)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     CRITERIA_DIR.mkdir(parents=True, exist_ok=True)
+    (CRITERIA_DIR / "soil_erosion_factors_0_1.tif").unlink(missing_ok=True)
+    (CRITERIA_DIR / "exposure_indicators_0_1.tif").unlink(missing_ok=True)
     profile, mask = read_reference()
-    rasters = {key: read_band(path, profile) for key, path in INPUTS.items()}
+    rasters = {key: read_band(path, profile) for key, path in RASTER_INPUTS.items()}
 
-    # Standardize: TWI high->high (wetness), drainage inverted (closer->higher),
-    # LS/C high->high for diagnostics, and K x LS x C structure high->high for
-    # the current executable sediment criterion. SoilGrids K remains embedded as
-    # the current scalar K in the structure layer until a grid-compatible K raster
-    # is rebuilt.
+    # Standardize TWI, drainage, LS, and C. SoilGrids K is already aligned and
+    # normalized by its dedicated builder.
     twi_std, twi_lo, twi_hi = normalize_2_98(rasters["twi"], mask, invert=False)
     drain_std, drain_lo, drain_hi = normalize_2_98(rasters["drainage"], mask, invert=True)
     ls_std, ls_lo, ls_hi = normalize_2_98(rasters["ls_factor"], mask, invert=False)
-    structure_std, s_lo, s_hi = normalize_2_98(rasters["structure"], mask, invert=False)
     c_std, c_lo, c_hi = normalize_2_98(rasters["c_factor"], mask, invert=False)
-    # roads + mining are already 0-1 proximity rasters from build_pe1_osm_proximity_criteria.py
-    roads_std = rasters["roads"]
+    # K, land use, roads, and mining are already 0-1 scored rasters.
+    soil_k_std = rasters["soil_k_factor"]
+    land_use_std = rasters["land_use_pressure"]
+    road_access_std = rasters["road_access_proximity"]
     mining_std = rasters["mining"]
 
     criteria = {
         "flood_conditioning_factors": weighted_average([(twi_std, 0.5), (drain_std, 0.5)], mask),
         "twi_wetness": twi_std,
         "drainage_proximity": drain_std,
-        "soil_erosion_factors": structure_std,
         "ls_factor": ls_std,
         "c_factor": c_std,
-        "land_cover_pressure": c_std,
+        "soil_k_factor": soil_k_std,
+        "land_cover_pressure": land_use_std,
         "mining_pressure": mining_std,
-        "exposure_indicators": roads_std,
+        "road_access_proximity": road_access_std,
         "rainfall_climatology": rasters["rainfall"],
     }
 
@@ -181,24 +195,24 @@ def main() -> None:
         "flood_conditioning_factors": "TWI high-wetness + drainage proximity (inverted)",
         "twi_wetness": "DEM-derived TWI standardized high wetness -> high flood susceptibility",
         "drainage_proximity": "distance to drainage standardized as closer drainage -> higher flood susceptibility",
-        "soil_erosion_factors": "K x LS x C erosion source structure standardized 2-98; rainfall erosivity not applied",
         "ls_factor": "SRTM-derived LS-factor, capped at 50, hillslope/channel mask preserved",
-        "c_factor": "ESA WorldCover C-factor pressure, also used as land-cover pressure evidence",
-        "land_cover_pressure": "WorldCover C-factor pressure",
+        "c_factor": "ESA WorldCover RUSLE C-factor used only in the Sediment criterion",
+        "soil_k_factor": "SoilGrids 250 m K aligned to the 30 m reference grid; effective resolution remains 250 m",
+        "land_cover_pressure": "WorldCover human land-use intensity value function; distinct from RUSLE C-factor",
         "mining_pressure": "INGEMMET Pequeña Minería ASM-point proximity (inverted); official source",
-        "exposure_indicators": "OSM roads proximity (inverted); access/exposure indicator",
+        "road_access_proximity": "OSM roads proximity (inverted); access indicator used upstream of the combined socioeconomic criterion",
         "rainfall_climatology": "CHIRPS latam Dec-Mar mean coarse-to-grid (sensitivity_scenario)",
     }
     claim_map = {
         "flood_conditioning_factors": "provisional",
         "twi_wetness": "provisional",
         "drainage_proximity": "provisional",
-        "soil_erosion_factors": "diagnostic_only",
         "ls_factor": "diagnostic_only",
         "c_factor": "provisional",
+        "soil_k_factor": "provisional",
         "land_cover_pressure": "provisional",
         "mining_pressure": "provisional",
-        "exposure_indicators": "provisional",
+        "road_access_proximity": "provisional",
         "rainfall_climatology": "sensitivity_scenario",
     }
     for name, arr in criteria.items():
@@ -216,25 +230,20 @@ def main() -> None:
             "coverage_threshold": MIN_VALID_FRACTION,
             "nodata_policy": (
                 "preserve NoData; inherits intentional channel mask from hillslope LS"
-                if name in {"soil_erosion_factors", "ls_factor"} else "preserve NoData; no score imputation"
+                if name == "ls_factor" else "preserve NoData; no score imputation"
             ),
             **stats(arr, mask),
         })
 
     # Readiness table: these are component rasters mapped into the mentor
     # 5-main-criterion framework by run_pe1_priority_scenarios.py.
-    readiness = manifest_rows + [
-        {"criterion": "rainfall_r_factor", "path": "", "components": "provisional R=238.6 (LOW family, shared default)",
-         "status": "scalar R in soil-loss (absolute magnitude); the rainfall_climatology criterion handles the spatial overlay role",
-         "grid_compatible": "not_applicable"},
-    ]
+    readiness = manifest_rows
 
     write_csv(OUT_DIR / "criteria_stack_manifest.csv", manifest_rows)
     write_csv(OUT_DIR / "criteria_readiness_table.csv", readiness)
     write_csv(OUT_DIR / "standardization_notes.csv", [
         {"component": "twi", "method": "percentile_clip_minmax_2_98", "clip_low": twi_lo, "clip_high": twi_hi},
         {"component": "drainage", "method": "percentile_clip_minmax_2_98_inverted", "clip_low": drain_lo, "clip_high": drain_hi},
-        {"component": "structure", "method": "percentile_clip_minmax_2_98", "clip_low": s_lo, "clip_high": s_hi},
         {"component": "ls_factor", "method": "percentile_clip_minmax_2_98", "clip_low": ls_lo, "clip_high": ls_hi},
         {"component": "c_factor", "method": "percentile_clip_minmax_2_98", "clip_low": c_lo, "clip_high": c_hi},
     ])

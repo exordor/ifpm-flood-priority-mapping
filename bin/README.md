@@ -33,6 +33,7 @@ and orchestrated by `pipeline.py`.
 # Refresh Peru population accounting and SINPAD co-location tables from the current mentor PIM.
 .venv/bin/python bin/pipeline.py run --target summarize_peru_population_by_pim_class
 .venv/bin/python bin/pipeline.py run --target compare_peru_pim_sinpad_colocation
+.venv/bin/python bin/pipeline.py run --target summarize_peru_criterion_data_strength
 
 # Refresh remote source data only when network access is intentional.
 .venv/bin/python bin/pipeline.py run --target download_peru_worldpop_population_subset --allow-network
@@ -41,7 +42,9 @@ and orchestrated by `pipeline.py`.
 # Without --allow-network, remote producers are omitted from dependency chains.
 # A downstream step fails clearly if its required local input is absent.
 
-# Refresh the direct-weight result maps and weighted-contribution map.
+# Refresh the direct-weight result maps and weighted-contribution map. Four-
+# criterion cells with unavailable Sediment evidence are hatched and bound to
+# criteria_evidence_count.tif in each figure index.
 .venv/bin/python bin/pipeline.py run --target export_peru_direct_weight_priority_maps
 .venv/bin/python bin/pipeline.py run --target export_peru_pim_contribution_map
 
@@ -79,9 +82,11 @@ Peru PE1:      ...   pe1_dem →  slope   →  pe1_criteria_stack   →  pe1_pri
 
 The two chains now follow the mentor five-main-criterion framework (Flood,
 Sediment, Land Use / ASM, Environmental, Socioeconomic). The executable overlay
-uses those five PIM main criteria as top-level weights. Flood and Land Use / ASM
-still have internal component rasters, and Environmental is implemented as a
-provisional water/wetland plus protected-area sensitivity indicator.
+uses those five PIM main criteria as top-level weights. The active Peru run uses
+only the direct 0.35/0.25/0.20/0.12/0.08 weight set. Sediment applies the local
+K/LS/C subweights 0.30/0.45/0.25, Land Use uses a WorldCover pressure function
+that is distinct from RUSLE C, and Environmental uses water/wetland context plus
+SERNANP national definitive protected-area evidence from MapServer layer 0.
 
 ## Shared helpers (`_lib/`)
 

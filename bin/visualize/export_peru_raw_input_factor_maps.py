@@ -9,6 +9,7 @@ not as final priority or validated flood-risk maps.
 from __future__ import annotations
 
 import csv
+import hashlib
 import math
 import textwrap
 from collections.abc import Callable, Iterable
@@ -53,6 +54,7 @@ INPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_twi.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_distance_to_drainage_t500.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_flow_accumulation.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/soil_k_factor/soil_k_factor_aligned_250m_effective_30m.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/pe1_ls_factor_capped50_hillslope_30m.tif",
     ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
     ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_roads_free_1.shp",
@@ -75,6 +77,8 @@ OUTPUTS = [
     ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/individual/peru_raw_distance_to_drainage_no_title_caption.pdf",
     ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/individual/peru_raw_upstream_area_no_title_caption.png",
     ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/individual/peru_raw_upstream_area_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/individual/peru_raw_soil_k_factor_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/individual/peru_raw_soil_k_factor_no_title_caption.pdf",
     ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/individual/peru_raw_ls_factor_no_title_caption.png",
     ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/individual/peru_raw_ls_factor_no_title_caption.pdf",
     ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/individual/peru_raw_c_factor_no_title_caption.png",
@@ -245,6 +249,18 @@ RASTER_SPECS = [
         resampling=Resampling.nearest,
     ),
     RasterSpec(
+        slug="soil_k_factor",
+        label="Soil erodibility K-factor",
+        unit="K (US customary)",
+        group="erosion_land_human",
+        source_path=ROOT / "outputs/srtm_1arcsec_peru_pilot/soil_k_factor/soil_k_factor_aligned_250m_effective_30m.tif",
+        colors=("#f7fcf5", "#c7e9c0", "#74c476", "#31a354", "#006d2c", "#00441b"),
+        bins=(0.10, 0.13, 0.16, 0.19, 0.22, 0.25, 0.28),
+        data_basis="SoilGrids-derived 0-5 cm soil-erodibility K-factor aligned to the Peru reference grid",
+        limitation="displayed on the 30 m grid for alignment; effective source resolution remains 250 m",
+        resampling=Resampling.nearest,
+    ),
+    RasterSpec(
         slug="ls_factor",
         label="LS-factor",
         unit="LS",
@@ -329,21 +345,6 @@ def rel(path: Path) -> str:
     return str(path.resolve().relative_to(ROOT))
 
 
-SKIPPED_RAW_FACTORS = [
-    {
-        "factor": "soil_k_factor",
-        "label": "Soil K-factor",
-        "group": "erosion_land_human",
-        "unit": "K",
-        "map_type": "not_generated_georeferencing_mismatch",
-        "source_path": rel(ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_pe1_0_30cm_avg_250m.tif"),
-        "classification": "not rendered",
-        "data_basis": "SoilGrids-derived K-factor, 0-30 cm average",
-        "limitation": "Current native SoilGrids Interrupted Goode Homolosine raster does not reproject to the Peru boundary location cleanly for slide-ready mapping; treat K as an unresolved raw-map issue.",
-    }
-]
-
-
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
     fields: list[str] = []
     for row in rows:
@@ -354,6 +355,24 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         writer.writerows(rows)
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def source_paths_for_spec(spec: RasterSpec | VectorDistanceSpec | CategorySpec) -> tuple[Path, ...]:
+    if isinstance(spec, RasterSpec):
+        return (spec.source_path,)
+    return spec.source_paths
+
+
+def source_hash_record(paths: Iterable[Path]) -> str:
+    return "; ".join(f"{rel(path)}:{sha256(path)}" for path in paths)
 
 
 def load_boundary() -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame]:
@@ -852,6 +871,7 @@ def main() -> None:
                     "figure_format": fmt,
                     "figure_path": rel(path),
                     "source_path": rel(spec.source_path),
+                    "source_sha256": sha256(spec.source_path),
                     "classification": "variable-specific physical-unit classes",
                     "data_basis": spec.data_basis,
                     "limitation": spec.limitation,
@@ -893,6 +913,7 @@ def main() -> None:
                 "figure_format": fmt,
                 "figure_path": rel(path),
                 "source_path": "; ".join(rel(path) for path in worldcover_spec.source_paths),
+                "source_sha256": source_hash_record(worldcover_spec.source_paths),
                 "classification": "ESA WorldCover 2021 class codes",
                 "data_basis": worldcover_spec.data_basis,
                 "limitation": worldcover_spec.limitation,
@@ -930,6 +951,7 @@ def main() -> None:
                     "figure_format": fmt,
                     "figure_path": rel(path),
                     "source_path": "; ".join(rel(path) for path in spec.source_paths),
+                    "source_sha256": source_hash_record(spec.source_paths),
                     "classification": "variable-specific physical-distance classes",
                     "source_feature_count_after_bbox_filter": feature_count,
                     "data_basis": spec.data_basis,
@@ -947,6 +969,13 @@ def main() -> None:
         if not items:
             continue
         png, pdf = save_panel(group, items, boundary_wgs84)
+        source_paths = tuple(
+            dict.fromkeys(
+                source
+                for item in items
+                for source in source_paths_for_spec(item["spec"])
+            )
+        )
         for fmt, path in (("png", png), ("pdf", pdf)):
             rows.append(
                 {
@@ -954,12 +983,21 @@ def main() -> None:
                     "figure_format": fmt,
                     "figure_path": rel(path),
                     "factors": ", ".join(item["spec"].slug for item in items),
+                    "source_path": "; ".join(rel(source) for source in source_paths),
+                    "source_sha256": source_hash_record(source_paths),
                     "classification": "raw unit/category classes; no 0-1 normalization legend",
                 }
             )
 
     main_items = by_group["hydrology_terrain"] + by_group["erosion_land_human"][:5] + by_group["environmental_context"][:1]
     png, pdf = save_panel("main_12", main_items, boundary_wgs84)
+    source_paths = tuple(
+        dict.fromkeys(
+            source
+            for item in main_items
+            for source in source_paths_for_spec(item["spec"])
+        )
+    )
     for fmt, path in (("png", png), ("pdf", pdf)):
         rows.append(
             {
@@ -967,11 +1005,12 @@ def main() -> None:
                 "figure_format": fmt,
                 "figure_path": rel(path),
                 "factors": ", ".join(item["spec"].slug for item in main_items),
+                "source_path": "; ".join(rel(source) for source in source_paths),
+                "source_sha256": source_hash_record(source_paths),
                 "classification": "raw unit/category classes; no 0-1 normalization legend",
             }
         )
 
-    rows.extend(SKIPPED_RAW_FACTORS)
     write_csv(OUT_DIR / "index.csv", rows)
     print(f"wrote {len(rows)} raw input-factor map records to {rel(OUT_DIR)}")
 

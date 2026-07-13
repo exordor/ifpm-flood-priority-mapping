@@ -119,9 +119,11 @@ but not centrally indexed.
 | Peru authoritative chain manifest | `outputs/peru_report_figure_chain/manifest.csv` | source paths, claim levels, evidence roles, and source/package checksums |
 | Peru raw input factor maps | `outputs/slide_ready_figures/peru_raw_input_factor_maps/` | source figures for the current chain; physical units and source-specific palettes |
 | Peru five PIM criterion maps | `outputs/slide_ready_figures/peru_pim_criteria_maps/` | refreshed from current PIM criteria; no global titles or captions |
-| Peru direct-weight priority screening maps | `outputs/slide_ready_figures/peru_direct_weight_priority_maps/` | source directory; only the five-class map enters the current chain, while the highest-priority-quintile map remains auxiliary |
-| Peru weighted-contribution map | `outputs/slide_ready_figures/peru_pim_contribution_map/` | largest weighted criterion contribution per common-valid cell plus realized contribution summary; not a sensitivity or causal-driver map |
-| Peru mining/population and SINPAD overlays | `outputs/slide_ready_figures/peru_evidence_overlays/` | current chain sources; mining/population are model-input context and SINPAD is diagnostic only |
+| Peru direct-weight priority screening maps | `outputs/slide_ready_figures/peru_direct_weight_priority_maps/` | source directory; five-class map enters the current chain; hatching identifies unscored LS, K, and other evidence gaps |
+| Peru weighted-contribution map | `outputs/slide_ready_figures/peru_pim_contribution_map/` | largest direct weighted contribution on five-criterion common-support cells with the same evidence hatching; not a causal-driver map |
+| Peru mining/population and SINPAD overlays | `outputs/slide_ready_figures/peru_evidence_overlays/` | current chain sources with evidence hatching; mining/population are model-input context and SINPAD is diagnostic only |
+| Peru criterion data-strength table | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/criterion_data_strength.csv` | live five-row audit of implementation, source evidence, coverage, limitations, validation state, and next upgrade |
+| Peru criterion-dependence diagnostics | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/criterion_dependency_diagnostics.csv` | Spearman and component-removal diagnostics for shared WorldCover use, road-led socioeconomic ordering, and water-led Environmental context; diagnostic only, not validation or weight calibration |
 | Superseded report surfaces and legacy slide figures | `outputs/_archive/2026-07-11_peru_figure_governance/` | archived with `ARCHIVE_MANIFEST.csv`; excluded from the current reporting chain |
 | R-factor send packet | `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/mentor_rfactor_exploration_board.png`, `outputs/v1_usle_soil_loss/rfactor_empirical_era5/mentor_era5_empirical_rfactor_board.png` | conditional send (Fig 1, Fig 2 only) |
 
@@ -129,7 +131,7 @@ but not centrally indexed.
 
 | file | verdict | action |
 |---|---|---|
-| `bin/factors/derive_peru_pilot_usle_soil_loss.py` | LIVE | rewritten 2026-07-03 (5× deprecated shorthand → standard "K×LS×C erosion-source structure" wording) |
+| `bin/factors/derive_peru_pilot_usle_soil_loss.py` | legacy/manual-only | excluded from the default Peru pipeline; active Sediment uses independent normalized K/LS/C subcriteria |
 | `bin/_archive/superseded_rfactor_chain_2026-06/derive_v2_usle_soil_loss.py` | dead (V2 paused, archived) | do not rewrite now; handle when V2 resumes |
 | `bin/_archive/superseded_rfactor_chain_2026-06/plot_v2_rfactor_comparison_board.py` | dead (V2 paused, archived) | same |
 | `bin/criteria/build_era5_rfactor_raster.py` | dead (R-factor route changed; still in place, not archived) | same |

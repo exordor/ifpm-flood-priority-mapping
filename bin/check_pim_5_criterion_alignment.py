@@ -11,7 +11,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 OUTPUT_DIRS = [
-    ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios",
 ]
 
@@ -38,7 +37,7 @@ FORBIDDEN_TOP_LEVEL_COMPONENTS = {
     "rainfall_climatology",
 }
 
-REQUIRED_STABILITY_METRICS = {
+REQUIRED_SUMMARY_METRICS = {
     "pim_main_criteria_count": "5",
     "active_scored_pim_criteria_count": "5",
     "environmental_sensitivity_status": "provisional",
@@ -85,11 +84,11 @@ def check_weights(out_dir: Path) -> list[str]:
     return errors
 
 
-def check_stability_summary(out_dir: Path) -> list[str]:
+def check_priority_summary(out_dir: Path) -> list[str]:
     errors: list[str] = []
-    rows = read_csv(out_dir / "hotspot_stability_summary.csv")
+    rows = read_csv(out_dir / "priority_screening_summary.csv")
     metrics = {row["metric"]: row["value"] for row in rows}
-    for metric, expected in REQUIRED_STABILITY_METRICS.items():
+    for metric, expected in REQUIRED_SUMMARY_METRICS.items():
         actual = metrics.get(metric)
         if actual != expected:
             errors.append(
@@ -122,7 +121,7 @@ def main() -> int:
     errors: list[str] = []
     for out_dir in OUTPUT_DIRS:
         errors.extend(check_weights(out_dir))
-        errors.extend(check_stability_summary(out_dir))
+        errors.extend(check_priority_summary(out_dir))
         errors.extend(check_pim_criteria_outputs(out_dir))
     if errors:
         print("PIM 5-criterion implementation alignment check failed:")

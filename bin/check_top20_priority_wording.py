@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Check that active report wording does not call top-20% priority areas hotspots.
 
-The project still has internal filenames such as ``hotspot_stability_summary.csv``.
-Those are not presentation wording. This checker targets human-facing text in
+Archived Zimbabwe experiments may retain legacy internal filenames such as
+``hotspot_stability_summary.csv``. The current Peru output uses
+``priority_screening_summary.csv``. This checker targets human-facing text in
 active scripts, docs, and current output notes.
 """
 

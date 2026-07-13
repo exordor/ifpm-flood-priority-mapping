@@ -317,11 +317,30 @@ def scripts_for_config(
 
     cfg_stages = set(config.get("stages", []))
     cfg_exclude = set(config.get("exclude", []))
+    cfg_include = set(config.get("include", []))
+    known_names = {script.name for script in scripts}
+    unknown = cfg_include - known_names
+    if unknown:
+        raise ValueError(f"pipeline include contains unknown scripts: {sorted(unknown)}")
     return [
         script
         for script in topo_sort(scripts, deps)
-        if script.stage in cfg_stages and script.name not in cfg_exclude
+        if script.stage in cfg_stages
+        and script.name not in cfg_exclude
+        and (not cfg_include or script.name in cfg_include)
     ]
+
+
+def scripts_for_stage(
+    scripts: list[Script],
+    deps: dict[str, list[str]],
+    config: dict | None,
+    stage: str,
+) -> list[Script]:
+    """Select a stage without bypassing the configured current-workflow boundary."""
+
+    configured = scripts_for_config(scripts, deps, config) if config else topo_sort(scripts, deps)
+    return [script for script in configured if script.stage == stage]
 
 
 def apply_network_policy(
@@ -441,7 +460,7 @@ def cmd_run(
                 stack.extend(deps.get(n, []))
             order = [s for s in topo_sort(scripts, deps) if s.name in full]
     elif stage:
-        order = [s for s in topo_sort(scripts, deps) if s.stage == stage]
+        order = scripts_for_stage(scripts, deps, config, stage)
         if not order:
             print(f"error: stage '{stage}' has no scripts", file=sys.stderr)
             return 1

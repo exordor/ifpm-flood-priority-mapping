@@ -37,6 +37,7 @@ PIM = ROOT / (
     "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/"
     "priority_mentor_peru_direct_pim.tif"
 )
+EVIDENCE_SUPPORT = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/evidence_support_class.tif"
 POPULATION_EXPOSURE = ROOT / (
     "outputs/srtm_1arcsec_peru_pilot/exposure_indicators/"
     "population_exposure_0_1.tif"
@@ -46,10 +47,26 @@ SINPAD = ROOT / "outputs/peru_gap_closure_analysis/pe1_sinpad_pim_colocation.gpk
 BOUNDARY = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 OUT_DIR = ROOT / "outputs/slide_ready_figures/peru_evidence_overlays"
 
+INPUTS = [
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_mentor_peru_direct_pim.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/evidence_support_class.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators/population_exposure_0_1.tif",
+    ROOT / "data/raw/ingemmet_catastro_minero_peru_pilot/pe1_pequena_mineria.gpkg",
+    ROOT / "outputs/peru_gap_closure_analysis/pe1_sinpad_pim_colocation.gpkg",
+    ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
+]
+OUTPUTS = [
+    ROOT / "outputs/slide_ready_figures/peru_evidence_overlays/peru_priority_mining_population_overlay_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_evidence_overlays/peru_priority_mining_population_overlay_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_evidence_overlays/peru_sinpad_colocation_diagnostic_no_title_caption.png",
+    ROOT / "outputs/slide_ready_figures/peru_evidence_overlays/peru_sinpad_colocation_diagnostic_no_title_caption.pdf",
+    ROOT / "outputs/slide_ready_figures/peru_evidence_overlays/index.csv",
+]
+
 SINPAD_CLAIM_LEVEL = "diagnostic_only"
 SINPAD_NOTE = (
     "SINPAD event reference points are shown as a co-location diagnostic, "
-    "not independent model validation."
+    "with unscored evidence gaps exposed; not independent model validation."
 )
 
 SITE = maps.Site(
@@ -79,7 +96,7 @@ def sha256(path: Path) -> str:
 
 
 def require_inputs() -> None:
-    missing = [path for path in (PIM, POPULATION_EXPOSURE, MINING, SINPAD, BOUNDARY) if not path.exists()]
+    missing = [path for path in (PIM, EVIDENCE_SUPPORT, POPULATION_EXPOSURE, MINING, SINPAD, BOUNDARY) if not path.exists()]
     if missing:
         raise FileNotFoundError("missing overlay inputs: " + ", ".join(str(path) for path in missing))
 
@@ -119,6 +136,24 @@ def priority_base(ax) -> tuple[tuple[float, float, float, float], tuple[float, f
     cmap = ListedColormap(maps.PRIORITY_COLORS)
     norm = BoundaryNorm(np.arange(0.5, len(maps.PRIORITY_COLORS) + 1.5), len(maps.PRIORITY_COLORS))
     ax.imshow(masked, extent=extent, origin="upper", cmap=cmap, norm=norm, interpolation="nearest", zorder=1)
+    evidence_support, evidence_profile = maps.read_raster(EVIDENCE_SUPPORT)
+    if evidence_profile != profile:
+        raise ValueError("evidence-support raster does not match the PIM grid")
+    support = np.nan_to_num(evidence_support, nan=0).astype("uint8")
+    support_projected, support_extent = maps.reproject_class(support, profile)
+    if support_extent != extent:
+        raise ValueError("evidence-support overlay extent mismatch")
+    for support_value, hatch in ((2, "////"), (3, "xxxx"), (4, "....")):
+        overlay = np.ma.masked_where(support_projected != support_value, support_projected)
+        ax.contourf(
+            overlay,
+            levels=[support_value - 0.5, support_value + 0.5],
+            colors="none",
+            hatches=[hatch],
+            extent=extent,
+            origin="upper",
+            zorder=3,
+        )
     maps.add_boundary_and_frame(ax, SITE, frame_extent)
     maps.add_north_arrow(ax)
     maps.add_scale_bar(ax, frame_extent)
@@ -130,7 +165,13 @@ def priority_handles() -> list[Patch]:
         Patch(facecolor=color, edgecolor="0.4", label=label)
         for label, color in zip(maps.PRIORITY_LABELS, maps.PRIORITY_COLORS, strict=True)
     ]
-    handles.append(Patch(facecolor="#d9d9d9", edgecolor="0.4", label="Unscored (missing criterion evidence)"))
+    handles.extend(
+        [
+            Patch(facecolor="none", edgecolor="#555555", hatch="////", label="Unscored: LS unavailable"),
+            Patch(facecolor="none", edgecolor="#555555", hatch="xxxx", label="Unscored: K unavailable"),
+            Patch(facecolor="none", edgecolor="#555555", hatch="....", label="Unscored: other evidence"),
+        ]
+    )
     return handles
 
 
@@ -271,6 +312,8 @@ def export_mining_population_overlay() -> list[dict[str, str]]:
             "evidence_role": "model_input_context",
             "pim_source": rel(PIM),
             "pim_sha256": sha256(PIM),
+            "evidence_support_source": rel(EVIDENCE_SUPPORT),
+            "evidence_support_sha256": sha256(EVIDENCE_SUPPORT),
             "population_source": rel(POPULATION_EXPOSURE),
             "population_sha256": sha256(POPULATION_EXPOSURE),
             "mining_source": rel(MINING),
@@ -357,6 +400,8 @@ def export_sinpad_diagnostic() -> list[dict[str, str]]:
             "evidence_role": "event_point_colocation_context",
             "pim_source": rel(PIM),
             "pim_sha256": sha256(PIM),
+            "evidence_support_source": rel(EVIDENCE_SUPPORT),
+            "evidence_support_sha256": sha256(EVIDENCE_SUPPORT),
             "event_source": rel(SINPAD),
             "event_sha256": sha256(SINPAD),
             "boundary_source": rel(BOUNDARY),

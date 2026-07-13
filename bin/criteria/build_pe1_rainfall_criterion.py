@@ -138,6 +138,7 @@ def fill_edge_nodata(data: np.ndarray, inside: np.ndarray) -> tuple[np.ndarray, 
     work = data.astype("float64").copy()
     holes = inside & ~np.isfinite(work)
     if not holes.any():
+        work[~inside] = np.nan
         return work, {"hole_cells": 0, "interior_holes": 0, "edge_sliver_holes": 0}
     outside = ~inside
     labeled, n = ndimage_label(holes)
@@ -158,6 +159,26 @@ def fill_edge_nodata(data: np.ndarray, inside: np.ndarray) -> tuple[np.ndarray, 
     filled = work[row_idx, col_idx]
     filled[~inside] = np.nan
     return filled, {"hole_cells": int(holes.sum()), "interior_holes": interior, "edge_sliver_holes": edge_sliver}
+
+
+def normalize_within_boundary(
+    data: np.ndarray,
+    inside: np.ndarray,
+) -> tuple[np.ndarray, float, float]:
+    """Normalize rainfall on the study-area support using a 2-98% value function."""
+
+    valid = inside & np.isfinite(data)
+    values = data[valid]
+    if values.size == 0:
+        raise ValueError("cannot normalize rainfall without finite boundary cells")
+    low, high = np.percentile(values, [2.0, 98.0])
+    if not np.isfinite(low) or not np.isfinite(high) or high <= low:
+        raise ValueError(f"invalid boundary rainfall range: low={low}, high={high}")
+    score = np.full(data.shape, np.nan, dtype="float32")
+    score[valid] = np.clip((data[valid] - low) / (high - low), 0.0, 1.0).astype("float32")
+    return score, float(low), float(high)
+
+
 def main() -> None:
     opts = parse_script_args(boundary_id=BOUNDARY_ID, experiment_id=EXPERIMENT_ID)
     boundary_id = opts.get("boundary_id", BOUNDARY_ID)
@@ -181,11 +202,11 @@ def main() -> None:
     if fill_stats["interior_holes"] > 0:
         raise ValueError(f"{fill_stats['interior_holes']} interior hole(s); refusing to impute real gaps")
 
-    raw_min = float(np.nanmin(raw)); raw_mean = float(np.nanmean(raw)); raw_max = float(np.nanmax(raw))
+    raw_values = raw[inside & np.isfinite(raw)]
+    raw_min = float(np.min(raw_values)); raw_mean = float(np.mean(raw_values)); raw_max = float(np.max(raw_values))
     if raw_max <= 0:
         raise ValueError(f"non-positive rainfall range, max={raw_max}")
-    score = np.clip(raw / raw_max, 0.0, 1.0).astype("float32")
-    score[~valid] = np.nan
+    score, score_low, score_high = normalize_within_boundary(raw, inside)
 
     raw_path = OUT_DIR / f"{CRITERION_NAME}_raw_mm_per_season_PROVISIONAL_30m.tif"
     score_path = OUT_DIR / f"{CRITERION_NAME}_0_1_PROVISIONAL_30m.tif"
@@ -200,6 +221,9 @@ def main() -> None:
         {"field": "native_resolution", "value": "0.05 deg (~5 km) CHIRPS v3.0 latam"},
         {"field": "target_grid", "value": "PE1 reference: EPSG:32718, 30 m"},
         {"field": "resampling_method", "value": "bilinear"},
+        {"field": "normalization_method", "value": "PE1 boundary 2-98 percentile min-max"},
+        {"field": "normalization_clip_low_mm_per_season", "value": round(score_low, 3)},
+        {"field": "normalization_clip_high_mm_per_season", "value": round(score_high, 3)},
         {"field": "effective_resolution_warning", "value": "Effective resolution ~5 km despite 30 m cells; smooth climatology, NOT pixel-level rainfall"},
         {"field": "raw_min_mm_per_season", "value": round(raw_min, 3)},
         {"field": "raw_mean_mm_per_season", "value": round(raw_mean, 3)},

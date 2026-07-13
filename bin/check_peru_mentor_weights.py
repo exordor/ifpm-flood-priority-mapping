@@ -30,7 +30,9 @@ EXPECTED_COMPONENT_WEIGHTS = {
         "drainage_proximity": 0.30,
     },
     "sediment": {
-        "soil_erosion_factors": 1.0,
+        "soil_k_factor": 0.30,
+        "ls_factor": 0.45,
+        "c_factor": 0.25,
     },
     "landuse_asm": {
         "land_cover_pressure": 0.35,
@@ -71,8 +73,10 @@ def check_script_constants() -> None:
     es = load_module(ES_SCRIPT, "build_pim_environmental_sensitivity")
 
     assert_weights(scenarios.MENTOR_PERU_MAIN_WEIGHTS, EXPECTED_MAIN_WEIGHTS, "main weights")
-    if "mentor_peru_direct_pim" not in scenarios.SCENARIOS:
-        raise AssertionError("missing mentor_peru_direct_pim scenario")
+    if set(scenarios.SCENARIOS) != {"mentor_peru_direct_pim"}:
+        raise AssertionError(
+            f"active Peru scenarios must contain only mentor_peru_direct_pim: {sorted(scenarios.SCENARIOS)}"
+        )
     assert_weights(
         scenarios.SCENARIOS["mentor_peru_direct_pim"],
         EXPECTED_MAIN_WEIGHTS,
@@ -96,6 +100,9 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 
 def check_outputs() -> None:
     rows = read_csv(SCENARIO_WEIGHTS_CSV)
+    output_scenarios = {row["scenario"] for row in rows}
+    if output_scenarios != {"mentor_peru_direct_pim"}:
+        raise AssertionError(f"unexpected active Peru output scenarios: {sorted(output_scenarios)}")
     mentor = {
         row["criterion"]: float(row["weight"])
         for row in rows
@@ -139,11 +146,19 @@ def check_outputs() -> None:
         {"road_access_proximity": 0.45, "infrastructure_exposure": 0.55},
         "socioeconomic subcriteria weights",
     )
-    if implemented[("sediment", "soil_k_factor")] != "not_independently_weighted_current_run":
-        raise AssertionError("SoilGrids K-factor must be marked as not independently weighted")
-    for component in ("ls_factor", "c_factor"):
-        if implemented[("sediment", component)] != "available_but_not_independently_weighted_current_run":
-            raise AssertionError(f"{component} must be marked available but not independently weighted")
+    sediment_applied = {
+        row["component"]: float(row["applied_weight_in_current_run"])
+        for row in sub_rows
+        if row["pim_criterion"] == "sediment"
+    }
+    assert_weights(
+        sediment_applied,
+        {"soil_k_factor": 0.30, "ls_factor": 0.45, "c_factor": 0.25},
+        "sediment subcriteria weights",
+    )
+    for component in ("soil_k_factor", "ls_factor", "c_factor"):
+        if implemented[("sediment", component)] != "implemented":
+            raise AssertionError(f"{component} must be marked implemented")
 
 
 def main() -> int:

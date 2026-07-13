@@ -16,19 +16,18 @@ Status: active. Open scientific and methodological questions.
 ## RQ1: What is the appropriate R-factor method for semi-arid Zimbabwe? (DEFERRED — out of critical path as of 2026-07-06)
 
 **Status: deferred.** R-factor is quarantined out of the critical path (see
-`DECISION_LOG.md` D-RFACTOR-QUARANTINE). The sediment criterion is served by
-the K×LS×C erosion-source structure layer, which is independent of R; top-20%
-priority areas are independent of the rainfall-erosivity factor R
-(H-TOP20-R-INVARIANT). USLE A absolute values (ton/ha/yr) are no longer
-required for the prototype priority map.
+`DECISION_LOG.md` D-RFACTOR-QUARANTINE). The active Peru Sediment criterion
+combines normalized K, LS, and C with local AHP weights and does not calculate
+USLE A. The older Zimbabwe K×LS×C structure remains diagnostic lineage. USLE A
+absolute values (ton/ha/yr) are not required for the prototype priority map.
 
 The technical record stays for transparency: six literature methods run on the
 same V1 CHIRPS inputs split into two incompatible families ~6× apart. The only
 independent check (ERA5 hourly EI30 lower-bound) sits in the lower range. There
 is no independent measured EI30 R for the V1 catchment.
 
-**Default taken:** use K×LS×C for the sediment criterion. Revisit R-factor only
-if a quantitative soil-loss rate (ton/ha/yr) becomes needed for the thesis —
+**Default taken:** use normalized K/LS/C subcriteria for current Peru Sediment.
+Revisit R-factor only if a quantitative soil-loss rate (ton/ha/yr) becomes needed for the thesis —
 that would require a primary EI30 dataset (sub-daily gauge or GPM IMERG) or an
 explicit method choice.
 
@@ -49,9 +48,8 @@ Zimbabwe has a newer site-specific direct table for the secondary Upper
 Mzingwane run: `FH=0.32`, `SE=0.23`, `LM=0.18`, `ES=0.12`, `SV=0.15`.
 
 **Default taken:** use the Peru direct weights as the current main
-`sensitivity_scenario` and as the only weight set shown in the reporting
-result. Keep equal weights only as an internal sensitivity/QA artifact; do not
-present an equal-versus-direct comparison. Use the Zimbabwe direct weights only
+`sensitivity_scenario` and as the only active or reported Peru weight set. Do
+not generate an equal-versus-direct comparison. Use the Zimbabwe direct weights only
 in the secondary Zimbabwe run. Do not report a consistency ratio for either
 direct table because no pairwise matrix was supplied with the new tables. Do
 not call the result final; it remains a prototype priority map.
@@ -162,10 +160,8 @@ returns with official Zimbabwe ASM data, swap it in.
 
 ## RQ9: Are the V1 prototype top-20% priority areas robust to weighting assumptions?
 
-Tested via top-20% priority-area stability across multiple weight scenarios. The
-top-20% selection-survival test is valid only as a structure test (LS×C governs
-the selected high-priority areas, independent of R), not as a candidate-quality
-ranking.
+Earlier multi-scenario top-20% tests remain historical structure diagnostics;
+they are not part of the active Peru reporting chain.
 
 - **Decision id:** none
 - **Related:** `EXPERIMENTS.md` §priority scenarios; `RESULTS.md` §top-20% priority-area stability
@@ -218,17 +214,19 @@ decision id:
 | A-009 | PE1 is the southern Peru comparison catchment in Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It is chosen by a selection rule, NOT a final research-selected site. | provisional | Peru terrain chain |
 | A-010 | The `rainfall_climatology` criterion (rainfall_sensitivity_v0_3) is a 0.05° CHIRPS rainy-season mean bilinear-resampled to the V1 30 m grid; resampling-edge NoData slivers inside V1 are nearest-EDT filled. Effective resolution ~5 km, NOT native 30 m. | sensitivity_scenario | rainfall criterion |
 | A-011 | The top-20% priority-area exposure diagnostic measures spatial co-location of v0.2 repeatedly selected top-20% priority areas with exposure indicators; weak co-location means selected priority areas reflect natural-pressure overlap, not observed exposure. | diagnostic_only | exposure diagnostic |
-| A-012 | The PE1 `rainfall_climatology` criterion mirrors Zimbabwe A-010 (CHIRPS latam Dec-Mar mean, bilinear-resampled to PE1 30 m grid). Effective resolution ~5 km. | sensitivity_scenario | PE1 rainfall criterion |
+| A-012 | The PE1 `rainfall_climatology` criterion uses CHIRPS latam Dec-Mar mean, bilinear-resampled to the 30 m reference grid and normalized from PE1 boundary values only. Effective resolution remains ~5 km. | sensitivity_scenario | PE1 rainfall criterion |
 | A-013 | Zimbabwe ASM is structurally artisanal and scattered; no official footprint exists and none is expected before the mentor's 2026-07-18 conference ask. The OSM quarry/industrial indicator (A-005) remains the current mining layer. | diagnostic_only | Zimbabwe mining criterion |
 | A-014 | If Zimbabwe ASM data is not obtainable, the mentor may switch the Zimbabwe site to Voi (Kenya). Voi rainfall is already in managed storage. NOT a current action — strategic fallback only. | contingency | Zimbabwe site / boundary |
 | A-015 | Peru is the active mainline case after the 2026-07-06 mentor direction to work with Peru first until the end. PE1 remains provisional, but new maps and PPT structure should lead with Peru. | provisional | Peru-first workflow |
-| A-016 | Current Peru PIM main weights are the mentor direct table: FH 0.35, SE 0.25, LM 0.20, ES 0.12, SV 0.08. Equal weights remain baseline. No CR is reported because no pairwise matrix was supplied for this new table. | sensitivity_scenario | Peru AHP weights |
-| A-017 | Peru sediment subweights K 0.30 / LS 0.45 / C 0.25 are recorded but not independently applied in the current overlay; sediment uses the current K x LS x C erosion-source structure until a grid-compatible independent K layer is rebuilt. | diagnostic_only | Peru sediment criterion |
+| A-016 | Current Peru PIM main weights are the mentor direct table: FH 0.35, SE 0.25, LM 0.20, ES 0.12, SV 0.08. This is the only active Peru scenario. No CR is reported because no pairwise matrix was supplied for this direct table. | sensitivity_scenario | Peru AHP weights |
+| A-017 | Peru Sediment independently applies normalized K 0.30 / LS 0.45 / C 0.25. SoilGrids K is aligned to the reference grid but remains 250 m effective evidence. The final PIM is scored only on 95.0998% five-criterion common support; 4.9002% remains unscored and is classified by missing LS, K, or other evidence. | provisional | Peru sediment criterion |
 | A-018 | Peru exposure indicators implement the supplied socioeconomic split: 0.45 road/access + 0.55 infrastructure. Infrastructure exposure is a provisional 0.50 WorldPop population + 0.50 OSM mapped-building implementation indicator. | provisional | Peru socioeconomic criterion |
-| A-019 | Current secondary Zimbabwe PIM main weights are the direct table: FH 0.32, SE 0.23, LM 0.18, ES 0.12, SV 0.15. Equal weights remain baseline. No CR is reported because no pairwise matrix was supplied for this new table. | sensitivity_scenario | Zimbabwe AHP weights |
+| A-019 | Current secondary Zimbabwe PIM main weights are the direct table: FH 0.32, SE 0.23, LM 0.18, ES 0.12, SV 0.15. Zimbabwe remains background and no equal-weight comparison enters the current Peru report. No CR is reported because no pairwise matrix was supplied for this table. | sensitivity_scenario | Zimbabwe AHP weights |
 | A-020 | Zimbabwe sediment subweights K 0.35 / LS 0.35 / C 0.30 are recorded but not independently applied in the current overlay; sediment uses the current K x LS x C erosion-source structure until a grid-compatible independent K layer is rebuilt. | diagnostic_only | Zimbabwe sediment criterion |
 | A-021 | Zimbabwe socioeconomic exposure uses road/access proximity only; independent infrastructure exposure is not available in the current run. | diagnostic_only | Zimbabwe socioeconomic criterion |
 | A-022 | INEI district poverty and OSM health-service remoteness are response-capacity context layers and are excluded from the current Peru AHP overlay because no mentor subweights were supplied for them. | diagnostic_only | Peru response-capacity context |
+| A-023 | SERNANP national definitive protected-area MapServer layer 0 was checked for PE1 plus a 5 km context zone. No layer-0 geometry occurs in that zone; regional, private, and transitional layers were not queried. The current Environmental score is therefore driven by water/wetland evidence rather than a missing layer-0 download. | provisional | Peru environmental criterion |
+| A-024 | Peru Land Use pressure uses a WorldCover human-intensity value function distinct from the RUSLE C-factor used inside Sediment. | provisional | Peru land-use criterion |
 
 ## Lineage
 

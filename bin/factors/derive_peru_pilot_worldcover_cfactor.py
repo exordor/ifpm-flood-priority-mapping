@@ -30,7 +30,10 @@ from rasterio.warp import reproject
 
 ROOT = Path(__file__).resolve().parents[2]
 INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"]
-OUTPUTS = [ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif"]
+OUTPUTS = [
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_pe1_30m.tif",
+]
 
 WORLDCOVER_RAW_DIR = ROOT / "data/raw/esa_worldcover_2021_peru_pilot"
 WORLDCOVER_GLOB = "ESA_WorldCover_10m_2021_v200_*_Map.tif"
@@ -56,6 +59,24 @@ C_FACTOR_LUT: dict[int, tuple[str, float]] = {
     90:  ("Herbaceous wetland", 0.050),
     95:  ("Mangroves", 0.010),
     100: ("Moss / lichen", 0.030),
+}
+
+# Separate land-use intensity value function. This is intentionally not the
+# RUSLE C-factor: cropland and built-up land represent direct human land-use
+# pressure, while naturally bare semi-arid ground is not treated as equivalent
+# to built-up land.
+LAND_USE_PRESSURE_LUT: dict[int, float] = {
+    10: 0.10,   # tree cover
+    20: 0.15,   # shrubland
+    30: 0.20,   # grassland
+    40: 0.80,   # cropland
+    50: 1.00,   # built-up
+    60: 0.25,   # bare / sparse vegetation; natural disturbance is ambiguous
+    70: 0.00,   # snow / ice
+    80: 0.00,   # permanent water
+    90: 0.00,   # herbaceous wetland
+    95: 0.00,   # mangroves
+    100: 0.10,  # moss / lichen
 }
 
 
@@ -142,6 +163,13 @@ def class_to_c(class_arr: np.ndarray) -> np.ndarray:
     return out
 
 
+def class_to_land_use_pressure(class_arr: np.ndarray) -> np.ndarray:
+    out = np.full(class_arr.shape, np.nan, dtype="float32")
+    for code, value in LAND_USE_PRESSURE_LUT.items():
+        out[class_arr == code] = value
+    return out
+
+
 def mask_on_grid(geometry, transform, shape) -> np.ndarray:
     return rasterize(
         [(geometry, 1)], out_shape=shape, transform=transform, fill=0, dtype="uint8", all_touched=False
@@ -197,6 +225,8 @@ def main() -> None:
     )
     c_30m = class_to_c(class_30m.astype("int32"))
     c_30m_masked = np.where(pe1_mask_ref, c_30m, np.nan)
+    land_use_30m = class_to_land_use_pressure(class_30m.astype("int32"))
+    land_use_30m_masked = np.where(pe1_mask_ref, land_use_30m, np.nan)
 
     out_profile = ref_profile.copy()
     out_profile.update(dtype="float32", nodata=NODATA, count=1, compress="deflate", tiled=True)
@@ -204,6 +234,10 @@ def main() -> None:
     with rasterio.open(OUTPUT_DIR / "c_factor_pe1_30m.tif", "w", **out_profile) as ds:
         ds.write(c_30m_out, 1)
     print(f"wrote {OUTPUT_DIR / 'c_factor_pe1_30m.tif'}")
+    land_use_out = np.where(np.isfinite(land_use_30m_masked), land_use_30m_masked, NODATA).astype("float32")
+    with rasterio.open(OUTPUT_DIR / "land_use_pressure_pe1_30m.tif", "w", **out_profile) as ds:
+        ds.write(land_use_out, 1)
+    print(f"wrote {OUTPUT_DIR / 'land_use_pressure_pe1_30m.tif'}")
 
     # 3. stats + class-area on PE1 (30m)
     valid = np.isfinite(c_30m_masked) & pe1_mask_ref
@@ -220,6 +254,10 @@ def main() -> None:
         "tool": "bin/factors/derive_peru_pilot_worldcover_cfactor.py",
         "source_tiles": [rel(path) for path in source_tiles],
         "lut": "RUSLE C-factor lookup (literature-derived; identical to Zimbabwe LUT)",
+        "land_use_pressure_lut": LAND_USE_PRESSURE_LUT,
+        "land_use_pressure_note": (
+            "Separate provisional human land-use intensity value function; not a copy of RUSLE C."
+        ),
         "resample_method": "MODE (10m->30m, legitimate fine->coarse aggregation); lookup applied AFTER resample",
         "boundary_status": "provisional_comparison_catchment_not_final_study_area",
         "c_factor_30m_stats": {
@@ -244,7 +282,8 @@ def main() -> None:
            "--reference", str(PE1_REFERENCE_DEM),
            "--boundary", str(PE1_BOUNDARY_GPKG), "--boundary-layer", PE1_BOUNDARY_LAYER,
            "--output", str(OUTPUT_DIR / "c_factor_grid_check.csv"),
-           "--rasters", str(OUTPUT_DIR / "c_factor_pe1_30m.tif")]
+           "--rasters", str(OUTPUT_DIR / "c_factor_pe1_30m.tif"),
+           str(OUTPUT_DIR / "land_use_pressure_pe1_30m.tif")]
     proc = subprocess.run(cmd, capture_output=True, text=True)
     print(proc.stdout.strip())
     if proc.stderr.strip():

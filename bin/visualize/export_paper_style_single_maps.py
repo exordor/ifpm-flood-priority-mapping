@@ -263,9 +263,31 @@ def add_boundary_and_frame(ax, site: Site, extent: tuple[float, float, float, fl
         spine.set_linewidth(0.8)
 
 
-def add_legend(ax, title: str, labels: list[str], colors: list[str]) -> None:
+def add_legend(
+    ax,
+    title: str,
+    labels: list[str],
+    colors: list[str],
+    overlay_label: str | None = None,
+    overlay_legend: list[tuple[str, str]] | None = None,
+) -> None:
     handles = [Patch(facecolor=color, edgecolor="0.4", label=label) for label, color in zip(labels, colors, strict=True)]
-    handles.append(Patch(facecolor="#d9d9d9", edgecolor="0.4", label="Unscored (missing criterion evidence)"))
+    if overlay_label is not None:
+        handles.append(
+            Patch(facecolor="none", edgecolor="#555555", hatch="////", label=overlay_label)
+        )
+    for label, hatch in overlay_legend or []:
+        handles.append(
+            Patch(facecolor="none", edgecolor="#555555", hatch=hatch, label=label)
+        )
+    if not overlay_legend:
+        handles.append(
+            Patch(
+                facecolor="#d9d9d9",
+                edgecolor="0.4",
+                label="Unscored (missing criterion evidence)",
+            )
+        )
     legend = ax.legend(
         handles=handles,
         title=title,
@@ -291,6 +313,10 @@ def save_class_map(
     labels: list[str],
     colors: list[str],
     class_note: str,
+    overlay_classes: np.ndarray | None = None,
+    overlay_value: int = 1,
+    overlay_label: str | None = None,
+    overlay_specs: list[tuple[np.ndarray, int, str, str]] | None = None,
 ) -> list[dict[str, object]]:
     dst, extent = reproject_class(classes, profile)
     frame_extent = frame_extent_for_legend(extent)
@@ -300,10 +326,37 @@ def save_class_map(
 
     fig, ax = plt.subplots(figsize=(7.0, 8.4), constrained_layout=True)
     ax.imshow(masked, extent=extent, origin="upper", cmap=cmap, norm=norm, interpolation="nearest", zorder=1)
+    resolved_overlays = list(overlay_specs or [])
+    if overlay_classes is not None:
+        resolved_overlays.append(
+            (overlay_classes, overlay_value, overlay_label or "Evidence overlay", "////")
+        )
+    overlay_legend: list[tuple[str, str]] = []
+    for overlay_classes_current, overlay_value_current, overlay_label_current, hatch in resolved_overlays:
+        overlay_dst, overlay_extent = reproject_class(overlay_classes_current, profile)
+        if overlay_extent != extent:
+            raise ValueError("evidence overlay extent does not match the map extent")
+        overlay = np.ma.masked_where(overlay_dst != overlay_value_current, overlay_dst)
+        ax.contourf(
+            overlay,
+            levels=[overlay_value_current - 0.5, overlay_value_current + 0.5],
+            colors="none",
+            hatches=[hatch],
+            extent=extent,
+            origin="upper",
+            zorder=3,
+        )
+        overlay_legend.append((overlay_label_current, hatch))
     add_boundary_and_frame(ax, site, frame_extent)
     add_north_arrow(ax)
     add_scale_bar(ax, frame_extent)
-    add_legend(ax, legend_title, labels, colors)
+    add_legend(
+        ax,
+        legend_title,
+        labels,
+        colors,
+        overlay_legend=overlay_legend,
+    )
     png = OUT_DIR / f"{site.slug}_{stem}_paper_style_no_title_caption.png"
     pdf = png.with_suffix(".pdf")
     fig.savefig(png, dpi=300, bbox_inches="tight", pad_inches=0.03)

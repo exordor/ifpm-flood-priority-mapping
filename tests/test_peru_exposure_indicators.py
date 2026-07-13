@@ -120,6 +120,28 @@ class PeruExposureIndicatorsTest(unittest.TestCase):
         self.assertGreater(float(density[3, 5]), 0.0)
         self.assertAlmostEqual(float(density[1, 1]), 0.0, places=6)
 
+    def test_component_diagnostics_separate_prevalence_from_spatial_variability(self):
+        module = load_module()
+        valid = np.ones((2, 2), dtype=bool)
+        layers = {
+            "road": np.array([[0.8, 0.9], [0.8, 0.9]], dtype="float32"),
+            "infrastructure": np.array([[0.0, 0.0], [0.0, 1.0]], dtype="float32"),
+        }
+        weights = {"road": 0.45, "infrastructure": 0.55}
+
+        rows = module.component_influence_diagnostics(layers, weights, valid)
+
+        self.assertEqual({row["component"] for row in rows}, set(layers))
+        self.assertAlmostEqual(
+            sum(float(row["realized_mean_contribution_share"]) for row in rows),
+            1.0,
+        )
+        self.assertAlmostEqual(
+            sum(float(row["marginal_weighted_sd_share"]) for row in rows),
+            1.0,
+        )
+        self.assertTrue(all("not ranking attribution" in row["interpretation"] for row in rows))
+
 
 if __name__ == "__main__":
     unittest.main()

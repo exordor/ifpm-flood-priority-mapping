@@ -7,11 +7,9 @@ mentor_review_ready → final_claim), not the framework's low/medium/high — IF
 ladder is stricter.
 
 > **R-factor quarantine notice (2026-07-06):** R-factor is removed from the
-> critical path. The sediment criterion is served by the K×LS×C erosion-source
-> structure layer (`a_structure_K_LS_C_30m.tif`), which is independent of R.
-> Top-20% priority areas are independent of the rainfall-erosivity factor R
-> (H-TOP20-R-INVARIANT), so the PIM output
-> does not depend on the R-method choice. The R-factor section below is kept as
+> critical path. The active Peru Sediment criterion now combines normalized K,
+> LS, and C with local AHP weights and does not calculate USLE A. The older
+> K×LS×C structure is diagnostic lineage only. The R-factor section below is kept as
 > a deferred technical record, not an active blocker. USLE A absolute values
 > (ton/ha/yr) are no longer required for the prototype. See
 > `DECISION_LOG.md` D-RFACTOR-QUARANTINE.
@@ -104,10 +102,11 @@ A waits on the R-method decision (RQ1).
 
 ### Observation
 
-Five PIM main criteria built on the V1 reference grid; current secondary
-Zimbabwe run tests equal weights against the Zimbabwe direct recommended
-weights. Flood and Land Use / ASM are derived from internal component rasters,
-and Environmental is a provisional water/wetland plus protected-area
+Five PIM main criteria were built on the V1 reference grid in an archived
+secondary Zimbabwe experiment. That experiment compared equal and direct
+weights, but it is excluded from the current default pipeline and current
+reporting chain. Flood and Land Use / ASM were derived from internal component
+rasters, and Environmental was a provisional water/wetland plus protected-area
 sensitivity indicator.
 
 ### Evidence
@@ -123,9 +122,10 @@ sensitivity indicator.
   the top 20% across both current scenarios **622.048 km²**; top-20% in at
   least one scenario **808.752 km²**.
 - All criteria and checked priority rasters passed the V1 raster grid gate.
-- Current secondary Zimbabwe main weights: `FH=0.32`, `SE=0.23`, `LM=0.18`,
-  `ES=0.12`, `SV=0.15`; equal weights remain baseline. No CR is reported
-  because no pairwise matrix was supplied with this direct table.
+- Archived secondary Zimbabwe direct weights: `FH=0.32`, `SE=0.23`, `LM=0.18`,
+  `ES=0.12`, `SV=0.15`. The historical equal-weight comparison is not used in
+  the current Peru-first reporting chain. No CR is reported because no
+  pairwise matrix was supplied with this direct table.
 - Flood subweights are implemented as rainfall 0.35, TWI 0.30, drainage
   proximity 0.35.
 - Land Use / ASM subweights are implemented as land-cover pressure 0.40 and
@@ -163,70 +163,77 @@ symmetry.
   ~17 km west of Arequipa city.
 - PE1 DEM: EPSG:32718, 30 m, elevation 144.9-3188.3 m, valid fraction 0.4506.
 - LS hillslope mean 3.70 (vs V1 1.563).
-- K (0-1815 US, native 250m); C mean 0.6096 (bare/sparse dominant).
+- K (0-5 cm US, native/effective 250 m) mean 0.2084, range 0.100-0.266;
+  C mean 0.6096 (bare/sparse dominant).
 - USLE A (LOW R=238.6) mean 8.74 t/ha/yr (vs V1 0.50).
 - Active PIM criteria: flood_hazard, sediment, landuse_asm, environmental,
   socioeconomic.
 - Current main weights: `FH=0.35`, `SE=0.25`, `LM=0.20`, `ES=0.12`,
-  `SV=0.08` from the Peru mentor-weight table; equal weights remain the
-  baseline scenario.
+  `SV=0.08` from the Peru mentor-weight table; this is the only active Peru scenario.
 - Component rasters: rainfall_climatology, twi_wetness, drainage_proximity,
-  soil_erosion_factors, land_cover_pressure, mining_pressure (INGEMMET
+  soil_k_factor, ls_factor, c_factor, land_cover_pressure, mining_pressure (INGEMMET
   11 official ASM points), environmental_sensitivity, and exposure_indicators.
   The socioeconomic exposure indicator combines road/access proximity (0.45) with
   infrastructure exposure (0.55); infrastructure exposure is an explicit
-  equal placeholder blend of WorldPop population and OSM mapped-building
-  exposure. LS and C are also exported as diagnostic sediment sublayers.
-- The nominal 0.45/0.55 split is not the realized spatial influence: after the
-  current value functions, road/access contributes **94.4%** of the criterion's
-  spatial mean and infrastructure **5.6%**. The formula is implemented as
-  supplied, but value-function calibration remains open.
+  provisional 0.50/0.50 blend of WorldPop population and OSM mapped-building
+  exposure.
+- The nominal 0.45/0.55 split is implemented. Road/access contributes 94.4%
+  of the weighted spatial mean and 66.6% of the marginal weighted SD share;
+  infrastructure contributes 5.6% and 33.4%. These covariance-blind diagnostics
+  are not effective weights, ranking attribution, or a calibration target.
 - Flood subweights are implemented as rainfall 0.40, TWI 0.30, drainage
   proximity 0.30.
 - Land Use / ASM subweights are implemented as land-cover pressure 0.35 and
   mining pressure 0.65.
-- Environmental is provisional: water/wetland context 0.60 plus protected /
-  ecological context 0.40, not ecological valuation.
-- Sediment still uses the current `K x LS x C` erosion-source structure as one
-  executable criterion. The mentor's K/LS/C subweights are recorded as a gap
-  because the current independent K-factor raster is not grid-compatible for
-  PE1 overlay.
+- Environmental is provisional: water/wetland context 0.60 plus SERNANP national
+  definitive protected-area layer 0 context 0.40, not ecological valuation.
+  Layer 0 was checked; no geometry occurs within PE1 + 5 km, and regional,
+  private, or transitional protected-area layers were not queried. The current
+  criterion is therefore driven by water/wetland evidence.
+- Sediment applies normalized SoilGrids K 0.30, SRTM LS 0.45, and WorldCover C
+  0.25. A cell missing any one component remains NoData; neither component nor
+  main-criterion weights are renormalized around missing evidence.
 - INEI district poverty and OSM health-service remoteness are exported as
   response-capacity context only and are not hidden AHP inputs.
-- Area selected in the top 20% under both current scenarios: **435.063 km²**.
-  Area selected in the top 20% under at least one current scenario:
-  **619.421 km²**.
-- Common valid coverage is **96.1734%**. The remaining **3.8266%** is kept
-  unscored because the current hillslope sediment layer does not cover those
-  channel cells; NoData is not treated as low priority. Those unscored cells
-  contain about **2,116** of the **47,301** WorldPop population count inside
-  the boundary, so the map is a common-valid screening result rather than a
-  complete-basin priority result.
-- The exposure-indicator refresh changed the mentor PIM by mean absolute
-  **0.0321**; Spearman rank correlation with the pre-refresh PIM is **0.9897**,
-  and independently defined highest-priority quintiles have Jaccard overlap
-  **0.9099**.
-- WorldPop accounting gives **9,955 people** in current highest-priority-quintile
-  cells (**22.0%** of population with valid PIM overlap). WorldPop is itself a
-  PIM exposure input, so this is endogenous exposure accounting, not validation
-  or an observed affected-population count.
-- SINPAD co-location: **3 of 25** hydrometeorological records fall in current
-  highest-priority-quintile cells. The 25 records represent **11 unique
-  coordinates**; only **4 records at 2 unique coordinates** are explicitly
-  flood-labelled. These point references are diagnostic context, not flood
-  extents or independent model validation.
+- The direct highest-priority quintile covers **521.356 km²**.
+- Scoreable coverage is **95.0998%**, exactly the five-criterion common-support
+  domain. **4.9002%** remains unscored: **3.7573%** lacks LS, **1.1326%** lacks
+  K, and **0.0103%** lacks other required evidence. These cells are hatched by
+  cause on the reporting maps.
+- WorldPop accounting is recorded in the checksum-bound
+  `outputs/peru_gap_closure_analysis/peru_population_by_pim_class.csv`. WorldPop
+  is itself a PIM exposure input, so this is endogenous exposure accounting, not
+  validation or an observed affected-population count.
+- SINPAD co-location: **12 of 25** hydrometeorological records are scoreable and
+  **2 of those 12** fall in the highest-priority quintile. For flood-specific
+  records, **1 of 4** is scoreable and **0** is selected. Thirteen records fall
+  outside complete support, all at K-factor gaps. This is a point co-location
+  diagnostic and not independent validation.
+- Criterion-dependence diagnostics show that distinct Sediment C and Land Use
+  pressure functions still share WorldCover (`Spearman rho=0.498`). Replacing
+  the Land Use / Mining criterion with mining pressure only gives a selected-
+  quintile Jaccard of **0.778** against the current PIM.
+- The combined Socioeconomic proxy is strongly rank-aligned with road/access
+  (`rho=0.970`). Road-only and infrastructure-only alternatives give selected-
+  quintile Jaccard values of **0.880** and **0.895**. This diagnoses source
+  influence; it does not justify changing the supplied 0.45/0.55 subweights.
+- Environmental versus water/wetland context has effectively identical rank
+  ordering because SERNANP national definitive layer 0 contributes no nonzero
+  local cells. A water-only rescaling alternative gives a selected-quintile
+  Jaccard of **0.847**. The current layer is therefore an Environmental context
+  proxy, not complete ecological sensitivity valuation.
 
 ### Interpretation
 
 PE1 is the best current mainline case because it has the stronger mining
 evidence (INGEMMET points) and a coherent five-criterion PIM stack. Physical
-regimes differ fundamentally from Zimbabwe: arid Andean
-Pacific slope (C=0.61, bare; soil loss 8.74) vs semi-humid savanna (C=0.04,
-shrub/grass; soil loss 0.50). That contrast remains useful background, but the
+regimes differ fundamentally from Zimbabwe: arid Andean Pacific slopes and
+bare-ground cover versus semi-humid savanna and shrub/grass cover. That contrast
+remains useful background, but the
 next result claim should be Peru-only unless a comparison is explicitly needed.
 The current Peru reporting map is a prototype prioritisation product under the
-mentor direct weights. The equal scenario is retained for internal QA only; it
-is not part of the presentation comparison. The map is not validated flood risk
+direct Peru weights. Flood is a conditioning proxy based partly on rainy-season
+climatology, not an event-extreme rainfall product. The map is not validated flood risk
 and not a rescue-decision product.
 
 ### Claim level: `provisional` / `sensitivity_scenario`. PE1 remains a
@@ -246,8 +253,8 @@ official INGEMMET point evidence.
   Pequeña Minería ASM points (ArcGIS REST, no login).
 - PE1 mining upgrade shifted the area selected in the top 20% under all scenarios from 368 km² (OSM) to
   **307.356 km²** in the earlier three-scenario run; the current Peru direct
-  weights rerun with the refreshed exposure indicators selects **435.063 km²**
-  under both current scenarios. Official
+  weights select **521.356 km²** in the highest-priority quintile on the strict
+  five-criterion common support. Official
   ASM locations produce a more precise mining-pressure pattern than the old OSM
   mining indicator.
 
@@ -324,9 +331,7 @@ diagnostics; top-20% selection-survival structure test (with caveats).
 (ERA5 lower-bound) are no longer active send items as of D-RFACTOR-QUARANTINE.
 They remain available in
 `context/docs/mentor-explanation/Mentor_RFactor_Figure_Send_Packet_2026-06-19.md`
-if the mentor asks for the R-factor detail after seeing the one-sentence
-quarantine question, or if the mentor rejects the K×LS×C sediment-criterion
-approach and R-factor is reopened.
+if a quantitative USLE A product later requires reopening the R-factor record.
 
 Blocked: Figure 3 (V1/V2 comparison board); any soil-loss A magnitude as a final
 result; any flood-risk / sediment-risk / intervention-priority claim.

@@ -25,9 +25,12 @@ Status: active. Backlog, in-progress, and next steps.
   the Peru mentor direct weights. Keep the language `prototype` /
   `provisional` / `sensitivity_scenario`, not final rescue decision.
 - **Evidence-strength closure** — expose the remaining limitations directly on
-  the board: provisional PE1 boundary, coarse CHIRPS effective resolution,
-  composite sediment implementation, provisional infrastructure blend, 3.83%
-  unscored area, and no independent flood-extent validation.
+  the board: provisional PE1 boundary, CHIRPS climatology rather than event-
+  extreme rainfall, 250 m effective K evidence, 4.9002% unscored K/LS/other
+  support gaps, shared WorldCover dependence, road-led Socioeconomic ordering,
+  water-led Environmental context, point-only mining evidence, and no
+  independent flood-extent validation. The diagnostic tables are complete;
+  the remaining task is presentation, not hidden weight retuning.
 
 ## Default decisions taken (was "awaiting mentor")
 
@@ -41,7 +44,7 @@ the calls autonomously and showing results. The defaults now in effect:
 | IFPM-D01 | Modelling unit | pixel-raster on the 30 m reference grid, with zonal summaries when needed | provisional |
 | IFPM-D02 | Peru boundary | PE1 southern Peru comparison catchment in Arequipa Region; replaced only if mentor names a site | provisional |
 | IFPM-D03 | Validation evidence | SINPAD point context is available for co-location diagnosis; independent flood-extent validation is unavailable | diagnostic_only |
-| IFPM-D04 | AHP weights | Peru direct mentor weights are the reporting scenario; equal weights remain internal QA only; Zimbabwe direct weights are secondary; old slide matrix stays historical/background | sensitivity_scenario |
+| IFPM-D04 | AHP weights | Peru direct mentor weights are the only active/reporting Peru scenario; Zimbabwe direct weights are secondary; old slide matrix stays historical/background | sensitivity_scenario |
 | IFPM-D05 | Mining + Rehabilitation | mining = OSM/INGEMMET indicator; Rehabilitation Potential = deferred (not built until a use is needed) | diagnostic_only |
 | IFPM-D06 | Upper Mzingwane boundary | V1 — Upper Mzingwane catchment (~3689 km²); accepted with waiver for prototype | provisional |
 
@@ -54,17 +57,24 @@ then. The packages stay archived as the analysis behind each default.
 
 - Compose the final Peru-only integrated briefing board from the governed
   figure chain; do not regenerate or substitute ungoverned legacy figures.
-- Add a Peru data-strength table that separates stronger evidence
-  (SRTM terrain, CHIRPS rainfall context, WorldCover, INGEMMET mining) from
-  weaker or provisional evidence (coarse rainfall, composite sediment,
-  environmental context, socioeconomic implementation, sparse SINPAD points).
-- Rebuild or replace the independent Peru K-factor layer before applying the
-  mentor K/LS/C sediment subweights directly; until then, keep sediment as the
-  current `K x LS x C` composite criterion.
-- Calibrate or replace the provisional infrastructure implementation. The
-  supplied 0.45 road/access + 0.55 infrastructure split is implemented, but
-  the current value functions produce 94.4% realized road influence and only
-  5.6% infrastructure influence.
+- Upgrade K resolution and erosion/sediment observations if a stronger
+  Sediment claim is required; current K/LS/C subweights are implemented, K
+  remains 250 m effective evidence, and the current 4.9002% incomplete-support
+  area stays unscored rather than being weight-renormalized.
+- Replace point proximity with date-matched active mining footprints or
+  intensity evidence if a stronger Land Use / Mining claim is required.
+- Revisit the provisional 0.50 WorldPop / 0.50 OSM-building infrastructure
+  split when observed exposure or damage evidence becomes available. Do not
+  reinterpret the 94.4% weighted-mean share as an effective road weight.
+- Replace CHIRPS climatology with event-matched rainfall evidence only when an
+  event-scale Flood claim is required; do not describe the current layer as a
+  rainfall-extreme product.
+- Add local ecological/riparian evidence before calling Environmental a
+  complete sensitivity assessment; the current ES criterion is water/wetland-
+  led context because checked SERNANP national layer 0 is locally empty.
+- Treat C-factor and land-use pressure as distinct functions with a shared
+  WorldCover source. The dependency diagnostic is complete; a stronger claim
+  requires an independent land-use/disturbance source, not another renaming.
 - Seek independent flood extent or impact evidence if a validation claim is
   required. SINPAD points remain a co-location diagnostic, not validation.
 - Prepare a short mentor-facing explanation: final product is a prototype flood
@@ -83,6 +93,8 @@ then. The packages stay archived as the analysis behind each default.
 - Largest weighted-contribution map and SINPAD co-location diagnostic.
 - One authoritative current figure chain plus source/package checksums; legacy
   report surfaces and QA panels archived.
+- Auditable five-row criterion data-strength table with live coverage and
+  validation-state fields.
 
 ### Deferred secondary work
 
@@ -126,8 +138,8 @@ then. The packages stay archived as the analysis behind each default.
 
 ## Next implementation step
 
-Create the Peru-only integrated briefing board and its data-strength table from
-the governed figure chain. Do not reopen Zimbabwe comparison, R-factor,
+Create the Peru-only integrated briefing board from the governed figure chain
+and the completed data-strength table. Do not reopen Zimbabwe comparison, R-factor,
 Rehabilitation Potential, or dashboard work for this deliverable.
 
 ## Verification Gates (binding)

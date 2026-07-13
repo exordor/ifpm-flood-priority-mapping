@@ -90,18 +90,16 @@ status / claim level.
 
 ### R-factor rule (QUARANTINED 2026-07-06, see D-RFACTOR-QUARANTINE)
 
-R-factor is removed from the critical path. The sediment criterion is served by
-the K×LS×C erosion-source structure layer (`a_structure_K_LS_C_30m.tif`), which
-is independent of R and already built. Top-20% priority areas are independent of the
-rainfall-erosivity factor R (H-TOP20-R-INVARIANT), so the PIM priority map
-does not depend on the R-method
-choice. USLE A absolute values (ton/ha/yr) are no longer required for the
+R-factor is removed from the critical path. The active Peru sediment criterion
+combines independently normalized SoilGrids K, SRTM LS, and WorldCover C using
+the supplied local weights 0.30/0.45/0.25; it does not calculate USLE A and does
+not require R. The older K×LS×C erosion-source structure remains a diagnostic
+factor product only. USLE A absolute values (ton/ha/yr) are not required for the
 prototype.
 
 Known-invalid V1/V2 R/A products remain deprecated. R-factor experiments move to
-`deferred` status. R-factor is reopened only if: the mentor requires a
-quantitative soil-loss rate (ton/ha/yr), or the mentor rejects the K×LS×C
-sediment-criterion approach. If reopened, new R-factor products may be generated
+`deferred` status. R-factor is reopened only if a quantitative soil-loss rate
+(ton/ha/yr) is required. If reopened, new R-factor products may be generated
 as `provisional` or `sensitivity_scenario` with documented method, source, value
 range, uncertainty, and lineage.
 

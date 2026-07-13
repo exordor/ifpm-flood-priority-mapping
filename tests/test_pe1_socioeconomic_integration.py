@@ -30,11 +30,15 @@ class Pe1SocioeconomicIntegrationTest(unittest.TestCase):
         )
         self.assertEqual(module.PIM_COMPONENTS["socioeconomic"], {"exposure_indicators": 1.0})
 
-    def test_only_equal_and_mentor_peru_scenarios_remain_active(self):
+    def test_only_mentor_peru_direct_scenario_is_active(self):
         module = load_module()
 
-        self.assertEqual(set(module.SCENARIOS), {"equal_active_pim", "mentor_peru_direct_pim"})
+        self.assertEqual(set(module.SCENARIOS), {"mentor_peru_direct_pim"})
         self.assertEqual(module.MENTOR_PERU_MAIN_WEIGHTS["socioeconomic"], 0.08)
+        output_names = {path.name for path in module.OUTPUTS}
+        self.assertNotIn("priority_equal_active_pim.tif", output_names)
+        self.assertNotIn("top20_equal_active_pim.tif", output_names)
+        self.assertNotIn("priority_std.tif", output_names)
 
     def test_subcriteria_manifest_records_supplied_socioeconomic_split(self):
         module = load_module()
@@ -91,11 +95,65 @@ class Pe1SocioeconomicIntegrationTest(unittest.TestCase):
         config = pipeline._load_config(ROOT / "pipeline.yaml")
         selected = {item.name for item in pipeline.scripts_for_config(scripts, dependencies, config)}
 
+        self.assertTrue(config["include"])
+        self.assertEqual(selected, set(config["include"]))
+
         self.assertNotIn("download_peru_worldpop_population_subset", selected)
         self.assertNotIn("query_peru_sinpad_flood_events", selected)
+        self.assertNotIn("query_peru_sernanp_protected_areas", selected)
+        self.assertNotIn("derive_peru_pilot_soilgrids_kfactor", selected)
+        self.assertNotIn("build_pe1_rainfall_criterion", selected)
         self.assertNotIn("compare_peru_exposure_refresh", selected)
+        self.assertNotIn("derive_peru_pilot_usle_soil_loss", selected)
+        self.assertNotIn("export_peru_conditioning_factor_maps", selected)
+        self.assertNotIn("plot_zimbabwe_peru_prototype_comparison", selected)
+        self.assertNotIn("plot_july18_integrated_priority_board", selected)
+        self.assertNotIn("plot_mentor_boss_priority_explanation_package", selected)
+        self.assertNotIn("run_boundary_v1_priority_scenarios", selected)
+        self.assertNotIn("run_boundary_v1_rainfall_exposure", selected)
+        self.assertNotIn("run_boundary_v1_rainfall_sensitivity", selected)
+        self.assertNotIn("diagnose_boundary_v1_hotspot_exposure", selected)
+        self.assertNotIn("run_v1_mining_decay_priority_sensitivity", selected)
+        self.assertNotIn("write_zimbabwe_peru_source_tables", selected)
         self.assertIn("build_peru_exposure_indicators", selected)
         self.assertIn("run_pe1_priority_scenarios", selected)
+        self.assertIn("summarize_peru_criterion_data_strength", selected)
+
+        self.assertIn("build_pe1_rainfall_criterion", config["network_scripts"])
+        stale_tokens = (
+            "srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif",
+            "srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif",
+            "srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_erosion_factors_0_1.tif",
+        )
+        for item in pipeline.scripts_for_config(scripts, dependencies, config):
+            source = item.path.read_text(encoding="utf-8")
+            self.assertFalse(
+                any(token in source for token in stale_tokens),
+                f"default pipeline selected stale Peru consumer: {item.name}",
+            )
+
+    def test_stage_execution_uses_the_same_default_allowlist(self):
+        spec = importlib.util.spec_from_file_location("ifpm_pipeline_stage", PIPELINE_PATH)
+        if spec is None or spec.loader is None:
+            raise RuntimeError(f"cannot load module: {PIPELINE_PATH}")
+        pipeline = importlib.util.module_from_spec(spec)
+        sys.modules["ifpm_pipeline_stage"] = pipeline
+        spec.loader.exec_module(pipeline)
+
+        scripts = pipeline.discover_scripts()
+        dependencies = pipeline.build_dag(scripts)
+        config = pipeline._load_config(ROOT / "pipeline.yaml")
+        selected = {
+            item.name
+            for item in pipeline.scripts_for_stage(
+                scripts,
+                dependencies,
+                config,
+                "scenarios",
+            )
+        }
+
+        self.assertEqual(selected, {"run_pe1_priority_scenarios"})
 
 
 if __name__ == "__main__":

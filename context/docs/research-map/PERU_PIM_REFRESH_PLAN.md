@@ -4,7 +4,7 @@
 > verification checkpoints. Do not create version-numbered script names.
 
 **Goal:** Upgrade the Peru socioeconomic criterion with population and built-
-infrastructure exposure, rerun the equal and mentor AHP PIM scenarios, refresh
+infrastructure exposure, rerun the mentor direct AHP PIM scenario, refresh
 slide-ready maps, and rerun WorldPop exposure accounting and SINPAD co-location diagnostics.
 
 **Architecture:** A new upstream criterion builder writes one grid-compatible
@@ -23,8 +23,7 @@ standard-library `unittest`, existing IFPM raster helpers.
 - Work on branch `codex/peru-pim-refresh`; do not implement on `main`.
 - Use stable semantic script names. Put run identity in manifests, outputs, or Git.
 - Preserve the five main criteria: FH, SE, LM, ES, SV.
-- Preserve the two public scenarios: `equal_active_pim` and
-  `mentor_peru_direct_pim`.
+- Preserve only the current `mentor_peru_direct_pim` scenario.
 - Preserve NoData outside the study boundary and report component coverage.
 - Keep CHIRPS scale warnings and all current non-SV criteria unchanged.
 - Label the result `provisional` / `mentor_review_ready`, not `validated` or final.
@@ -42,7 +41,7 @@ standard-library `unittest`, existing IFPM raster helpers.
 - Reference grid: `outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif`
 - Boundary: `outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg`
 - Population: `data/raw/worldpop_peru_population/per_ppp_2020_UNadj_pe1_bbox.tif`
-- Roads: `outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/exposure_indicators_0_1.tif`
+- Roads: `outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/road_access_proximity_0_1.tif`
 - Buildings and health POIs: `data/raw/geofabrik_osm_peru_pilot/extracted/`
 - Poverty table: `data/raw/inei_peru_poverty_2018/arequipa_district_poverty_2018.csv`
 - District polygons: Geofabrik `admin_level8` polygons intersecting the study boundary.
@@ -98,11 +97,11 @@ context layers are not included in `exposure_indicators` in this run.
 
 **Produces:**
 - Updated `pim_criteria/socioeconomic_0_1.tif` and subcriteria lineage rows.
-- The same two scenario IDs and unchanged main weights.
+- The direct scenario ID and unchanged main weights.
 
 - [x] Write an integration test asserting that the scenario runner consumes
   the new socioeconomic raster, records road 0.45 and infrastructure 0.55, and
-  retains exactly the equal and mentor scenarios.
+  retains only the mentor direct scenario.
 - [x] Replace the road-only PIM component with the upstream exposure indicators.
 - [x] Update the module description, `INPUTS`, `OUTPUTS`, `COMPONENT_PATHS`, and subcriteria
   manifest rows without changing FH/SE/LM/ES logic.
@@ -120,9 +119,9 @@ context layers are not included in `exposure_indicators` in this run.
   temporary run comparison record under `outputs/`.
 - [x] Run
   `.venv/bin/python bin/pipeline.py run --target run_pe1_priority_scenarios`.
-- [x] Require common valid coverage >= 0.95 and two scenario rows only.
+- [x] Require common valid coverage >= 0.95 and one direct scenario row only.
 - [x] Verify the mentor weights remain FH=0.35, SE=0.25, LM=0.20, ES=0.12,
-  SV=0.08 and the equal baseline remains 0.20 each.
+  SV=0.08.
 - [x] Write `exposure_refresh_comparison.csv` with old/new raster checksums,
   mean absolute PIM change, Spearman rank correlation, top-20% overlap, and area.
 
@@ -167,7 +166,7 @@ context layers are not included in `exposure_indicators` in this run.
 ## Acceptance Criteria
 
 - The scenario runner no longer describes or implements socioeconomic as road-only.
-- Both scenario rasters are regenerated from the new fifth criterion.
+- The direct scenario raster is regenerated from the new fifth criterion.
 - The five criterion maps and single priority maps are refreshed and visually valid.
 - WorldPop and SINPAD summaries reference the refreshed mentor PIM checksum.
 - Poverty and health layers are reproducible context evidence, not hidden AHP inputs.
