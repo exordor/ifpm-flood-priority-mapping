@@ -96,26 +96,18 @@ RASTER_SPECS = [
         "Displayed on the 30 m grid for alignment; effective source resolution remains 250 m",
     ),
     base.RasterSpec(
-        "soil_erosion_composite", "Relative erosion-source pattern (LS x C)", "relative score", "sediment",
-        ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/soil_erosion_factors_0_1.tif",
-        ("#fff7ec", "#fee8c8", "#fdbb84", "#e34a33", "#7f0000"),
-        (0, 0.2, 0.4, 0.6, 0.8, 1.0),
-        "Current executable sediment layer used one historical mean-K scalar with spatial LS and C; normalization leaves an LS x C spatial pattern",
-        "The active PIM predates the corrected spatial K layer and has not yet migrated to the supplied K / LS / C subweights",
-    ),
-    base.RasterSpec(
-        "ls_factor", "LS-factor", "LS", "sediment_diagnostic",
+        "ls_factor", "LS-factor", "LS", "sediment",
         ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/ls_factor/v1_ls_factor_capped50_hillslope_30m.tif",
         ("#ffffd4", "#fee391", "#fec44f", "#fe9929", "#d95f0e", "#993404"),
         (0, 0.5, 1, 2, 5, 10, 50), "SRTM-derived hillslope LS-factor, capped at 50",
-        "Diagnostic component; main-channel cells are masked and it is not independently weighted",
+        "Current Sediment component at local weight 0.35; main-channel cells remain masked",
     ),
     base.RasterSpec(
-        "c_factor", "C-factor", "C", "sediment_diagnostic",
+        "c_factor", "C-factor", "C", "sediment",
         ROOT / "outputs/esa_worldcover_2021_v1_methodology/c_factor/c_factor_v1_30m.tif",
         ("#006837", "#31a354", "#addd8e", "#ffffbf", "#fdae61", "#d7191c"),
         (0, 0.01, 0.03, 0.05, 0.1, 0.3, 0.7), "ESA WorldCover-derived cover-management factor",
-        "Class-based estimate; also informs land-cover pressure and is not independently weighted in sediment",
+        "Class-based estimate; current Sediment component at local weight 0.30 and related to the separate land-cover evidence family",
         resampling=Resampling.nearest,
     ),
     base.RasterSpec(
@@ -189,6 +181,8 @@ INPUTS = [spec.source_path for spec in RASTER_SPECS] + [BOUNDARY_GPKG, REFERENCE
 STALE_OUTPUTS = [
     OUT_DIR / "zimbabwe_current_input_evidence_panel_no_title_caption.png",
     OUT_DIR / "zimbabwe_current_input_evidence_panel_no_title_caption.pdf",
+    INDIVIDUAL_DIR / "zimbabwe_evidence_soil_erosion_composite_no_title_caption.png",
+    INDIVIDUAL_DIR / "zimbabwe_evidence_soil_erosion_composite_no_title_caption.pdf",
 ]
 
 
@@ -284,6 +278,17 @@ def panel_axes(count: int):
         grid = fig.add_gridspec(2, 6, left=0.035, right=0.985, top=0.98, bottom=0.04, wspace=0.22, hspace=0.22)
         spans = [(0, 0, 2), (0, 2, 4), (0, 4, 6), (1, 1, 3), (1, 3, 5)]
         return fig, [fig.add_subplot(grid[row, start:end]) for row, start, end in spans]
+    if count == 6:
+        fig = plt.figure(figsize=(14.1, 10.5))
+        grid = fig.add_gridspec(
+            2, 3, left=0.035, right=0.985, top=0.98, bottom=0.04,
+            wspace=0.20, hspace=0.22,
+        )
+        return fig, [
+            fig.add_subplot(grid[row, column])
+            for row in range(2)
+            for column in range(3)
+        ]
     if count == 2:
         fig = plt.figure(figsize=(9.0, 5.8))
         grid = fig.add_gridspec(1, 2, left=0.05, right=0.98, top=0.97, bottom=0.05, wspace=0.20)
@@ -379,14 +384,18 @@ def main() -> None:
         ],
         "flood_sediment_direct": [
             by_slug["rainfall_climatology"], by_slug["twi"], by_slug["distance_to_drainage"],
-            by_slug["soil_erosion_composite"],
+            by_slug["soil_k_factor"], by_slug["ls_factor"], by_slug["c_factor"],
         ],
         "land_environment_access_direct": [
             by_slug["land_cover_pressure"], by_slug["mineral_reference_proximity"],
             by_slug["water_wetland_context"], by_slug["protected_area_context"],
             by_slug["road_access_proximity"],
         ],
-        "supporting_diagnostics": [by_slug["ls_factor"], by_slug["c_factor"], by_slug["esa_worldcover_2021"]],
+        "supporting_diagnostics": [
+            by_slug["elevation"], by_slug["slope_degrees"], by_slug["upstream_area"],
+            by_slug["esa_worldcover_2021"], by_slug["distance_to_roads"],
+            by_slug["distance_to_water_features"],
+        ],
     }
     for panel_slug, items in panels.items():
         png, pdf = save_panel(panel_slug, items, boundary_wgs84)

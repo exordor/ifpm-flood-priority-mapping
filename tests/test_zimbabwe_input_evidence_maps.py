@@ -26,9 +26,9 @@ class ZimbabweInputEvidenceMapsTest(unittest.TestCase):
         module = load_module()
         self.assertEqual((module.MAIN_12_ROWS, module.MAIN_12_COLUMNS), (4, 3))
         factors = {spec.slug for spec in module.RASTER_SPECS} | {module.CATEGORY_SPEC.slug}
-        self.assertEqual(len(factors), 18)
+        self.assertEqual(len(factors), 17)
         self.assertIn("rainfall_climatology", factors)
-        self.assertIn("soil_erosion_composite", factors)
+        self.assertNotIn("soil_erosion_composite", factors)
         self.assertIn("mineral_reference_proximity", factors)
         self.assertIn("land_cover_pressure", factors)
         self.assertIn("protected_area_context", factors)
@@ -64,8 +64,8 @@ class ZimbabweInputEvidenceMapsTest(unittest.TestCase):
         module.main()
         with module.INDEX.open(newline="", encoding="utf-8") as handle:
             rows = list(csv.DictReader(handle))
-        self.assertEqual(len(rows), 44)
-        self.assertEqual(len({row["factor"] for row in rows if row.get("factor")}), 18)
+        self.assertEqual(len(rows), 42)
+        self.assertEqual(len({row["factor"] for row in rows if row.get("factor")}), 17)
         for row in rows:
             path = ROOT / row["figure_path"]
             self.assertTrue(path.exists(), path)
@@ -83,6 +83,15 @@ class ZimbabweInputEvidenceMapsTest(unittest.TestCase):
         self.assertTrue((module.OUT_DIR / "zimbabwe_supporting_diagnostics_evidence_panel_no_title_caption.png").exists())
         self.assertFalse((module.OUT_DIR / "zimbabwe_current_input_evidence_panel_no_title_caption.png").exists())
         self.assertTrue((module.INDIVIDUAL_DIR / "zimbabwe_evidence_soil_k_factor_no_title_caption.png").exists())
+        self.assertFalse((module.INDIVIDUAL_DIR / "zimbabwe_evidence_soil_erosion_composite_no_title_caption.png").exists())
+        flood_sediment = next(
+            row for row in rows
+            if row.get("panel") == "flood_sediment_direct" and row["figure_format"] == "png"
+        )
+        self.assertEqual(
+            flood_sediment["factors"],
+            "rainfall_climatology; twi; distance_to_drainage; soil_k_factor; ls_factor; c_factor",
+        )
 
     def test_claim_levels_and_coverage_are_governed(self):
         module = load_module()
