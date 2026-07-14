@@ -80,9 +80,9 @@ def main() -> None:
             raise ValueError("evidence-support raster does not match the direct-weight PIM grid")
         evidence_support = np.nan_to_num(evidence_support, nan=0).astype("uint8")
         support_overlays = [
-            (evidence_support, 2, "Unscored: LS unavailable", "////"),
-            (evidence_support, 3, "Unscored: K unavailable", "xxxx"),
-            (evidence_support, 4, "Unscored: other required evidence", "...."),
+            (evidence_support, 2, "LS data gap", "////"),
+            (evidence_support, 3, "K data gap", "xxxx"),
+            (evidence_support, 4, "Other data gap", "...."),
         ]
         classes = maps.classify_equal_interval(priority, maps.PRIORITY_BOUNDS)
         rows = maps.save_class_map(
@@ -91,7 +91,7 @@ def main() -> None:
             classes,
             profile,
             "direct_weight_priority_screening_5class",
-            "Priority screening score",
+            "Relative priority index",
             maps.PRIORITY_LABELS,
             maps.PRIORITY_COLORS,
             "equal interval classes on five-criterion common-support cells; direct weights 0.35/0.25/0.20/0.12/0.08; hatches identify unscored evidence gaps",
@@ -111,8 +111,8 @@ def main() -> None:
                 top20_classes,
                 profile,
                 "direct_weight_top20_scored_cells",
-                "Highest-priority scored cells",
-                ["Other scored cells", "Highest-priority quintile"],
+                "Highest-priority fifth",
+                ["Other mapped cells", "Highest-priority fifth"],
                 maps.TOP20_COLORS,
                 f"highest-priority quintile among five-criterion common-support cells; threshold={threshold:.9f}; hatches identify unscored evidence gaps",
                 overlay_specs=support_overlays,
