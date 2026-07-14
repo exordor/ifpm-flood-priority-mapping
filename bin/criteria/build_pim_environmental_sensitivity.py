@@ -389,22 +389,27 @@ def build_site(config: SiteConfig) -> dict[str, object]:
     write_raster(protected_path, protected_score, profile)
     write_raster(out_path, environmental, profile)
 
+    protected_source_label = (
+        "SERNANP national definitive protected-area proximity (layer 0)"
+        if config.site == "Peru"
+        else "WDPA protected/conserved-area proximity context"
+    )
+
     manifest = [{
         "site": config.site,
         "boundary_id": config.boundary_id,
         "criterion": "environmental_sensitivity",
         "path": rel(out_path),
-        "components": "water/wetland context; SERNANP national definitive protected-area proximity (layer 0)",
+        "components": f"water/wetland context; {protected_source_label}",
         "component_rule": (
             f"{context_weights['water_wetland_context']} * water/wetland context + "
-            f"{context_weights['protected_ecological_context']} * SERNANP layer-0 protected-area proximity; "
+            f"{context_weights['protected_ecological_context']} * {protected_source_label}; "
             "water context is an equal-weight average of available water/wetland evidence"
         ),
         "claim_level": "provisional",
         "semantic_meaning": (
-            "water/wetland-led environmental context indicator with SERNANP "
-            "national definitive layer-0 context; not complete ecological "
-            "sensitivity valuation"
+            f"water/wetland-led environmental context indicator with {protected_source_label}; "
+            "not complete ecological sensitivity valuation"
         ),
         "nodata_policy": "preserve NoData outside boundary; no NoData-to-zero imputation",
         **stats(environmental, mask),

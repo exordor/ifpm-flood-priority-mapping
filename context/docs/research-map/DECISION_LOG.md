@@ -206,21 +206,20 @@ decision, reason, alternatives, consequences.
   promote Zimbabwe back to mainline (rejected because D-PERU-FIRST still
   applies).
 - **Consequences:**
-  - Historical Zimbabwe outputs may still contain `equal_active_pim` and
-    `mentor_zimbabwe_direct_pim`, but neither is regenerated or compared by the
-    current default pipeline.
+  - Historical Zimbabwe outputs may still contain equal-weight artifacts, but
+    the current pipeline regenerates only `mentor_zimbabwe_direct_pim`.
   - The direct weights have no supplied pairwise matrix or consistency ratio,
     so the current run must not report a CR for them.
   - Flood subweights are implemented as rainfall 0.35, TWI 0.30, and drainage
     proximity 0.35.
   - Land Use / ASM subweights are implemented as land-cover pressure 0.40 and
-    mining pressure 0.60, but Zimbabwe mining evidence remains OSM-only and
-    weak.
+    mining pressure 0.60, but Zimbabwe mining evidence remains a weak USGS
+    mineral-reference proximity indicator rather than a verified ASM footprint.
   - Environmental is implemented as water/wetland context 0.55 plus protected /
     ecological context 0.45.
-  - Sediment still uses the current `K x LS x C` erosion-source structure as a
-    single executable criterion; the new K/LS/C subweights are recorded as a
-    gap until a grid-compatible independent K-factor layer is rebuilt.
+  - Sediment independently applies boundary-standardized spatial K / LS / C at
+    0.35 / 0.35 / 0.30; SoilGrids K remains 250 m effective evidence after
+    alignment to the reference grid.
   - Socioeconomic still uses road/access proximity only; independent
     infrastructure exposure is recorded as missing.
 

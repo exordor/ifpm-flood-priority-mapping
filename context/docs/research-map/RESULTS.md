@@ -114,13 +114,13 @@ sensitivity indicator.
 - Active PIM criteria: flood_hazard, sediment, landuse_asm, environmental,
   socioeconomic.
 - Component rasters: rainfall_climatology, TWI wetness, drainage proximity,
-  soil_erosion_factors, land_cover_pressure, mining_pressure,
+  spatial SoilGrids K, SRTM LS, WorldCover C, land_cover_pressure, mining_pressure,
   environmental_sensitivity, exposure_indicators.
 - Area selected in the top 20% across all four scenarios: **436.907 km²** (v0.1) /
   **431.907 km²** (v0.2).
-- Current PIM 5-criterion run (`rainfall_exposure_v0_4`): area selected in
-  the top 20% across both current scenarios **622.048 km²**; top-20% in at
-  least one scenario **808.752 km²**.
+- Current PIM 5-criterion run (`rainfall_exposure_v0_4`): Zimbabwe direct
+  weights only; **96.609%** five-criterion common-support coverage and
+  **3.391%** remains unscored.
 - All criteria and checked priority rasters passed the V1 raster grid gate.
 - Archived secondary Zimbabwe direct weights: `FH=0.32`, `SE=0.23`, `LM=0.18`,
   `ES=0.12`, `SV=0.15`. The historical equal-weight comparison is not used in
@@ -132,10 +132,10 @@ sensitivity indicator.
   mining pressure 0.60.
 - Environmental is provisional: water/wetland context 0.55 plus protected /
   ecological context 0.45, not ecological valuation.
-- Sediment still uses the current `K x LS x C` erosion-source structure as one
-  executable criterion. The Zimbabwe K/LS/C subweights are recorded as a gap
-  because the current independent K-factor raster is not a grid-compatible
-  30 m weighted layer.
+- Sediment independently combines boundary-standardized spatial K / LS / C at
+  0.35 / 0.35 / 0.30. The spatial K layer is grid-compatible for overlay but
+  retains a 250 m effective-resolution warning; the result is an erosion-source
+  indicator, not measured sediment transport.
 - Socioeconomic still uses road/access proximity only; independent
   infrastructure exposure is not available in the current run.
 

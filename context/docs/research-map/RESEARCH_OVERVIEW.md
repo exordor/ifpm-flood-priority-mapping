@@ -116,7 +116,8 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
 - [x] Criterion-dependence diagnostics generated for shared WorldCover use,
   road-led socioeconomic ordering, and water-led Environmental context
 - [x] Secondary Zimbabwe direct weights retained as historical/background work;
-  no equal-weight comparison enters the current Peru reporting chain
+  no equal-weight comparison enters either active reporting chain; Zimbabwe
+  Sediment now uses independent K / LS / C subcriteria at 0.35 / 0.35 / 0.30
 - [ ] Peru-only final prototype briefing board: governed source figures are
   ready; the data-strength table and final one-board composition remain
 - [ ] Current K/LS/C Sediment criterion and per-cell evidence-support hatching shown to mentor
@@ -148,8 +149,9 @@ does not maintain a queue of "questions to ask the mentor".
    `SV=0.15`) remains background only. The older slide matrix
    (CR 0.022) remains a historical/generic sensitivity record. Default: no
    single weight set is called final.
-2. **Mining/ASM evidence (Zimbabwe)** — only OSM quarry/industrial indicator;
-   official ASM data does not exist publicly and the mentor may be able to ask
+2. **Mining/ASM evidence (Zimbabwe)** — USGS Africa GIS mineral facilities and
+   deposits are used as a proximity-based reference; a verified active ASM
+   footprint does not exist publicly and the mentor may be able to ask
    Zimbabwe contacts. Default after the Peru-first switch: do not spend the
    current mainline on Zimbabwe mining repair; keep Zimbabwe as secondary /
    background unless stronger data arrives.

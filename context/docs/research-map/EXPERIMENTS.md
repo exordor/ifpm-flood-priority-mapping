@@ -31,7 +31,7 @@ should not drive the next modelling sequence.
 | `priority_scenarios_v0_2` | IFPM-089 | complete | sensitivity_scenario | 4 weight scenarios on v0.2 criteria; 431.907 km² selected in the top 20% under all scenarios | `outputs/boundary_v1/priority_scenarios_v0_2/handoff.md` |
 | `rainfall_sensitivity_v0_3` | IFPM-090 | complete | sensitivity_scenario | Adds rainfall_climatology (CHIRPS coarse-to-grid, A-010); effective res ~5 km | `outputs/boundary_v1/rainfall_sensitivity_v0_3/` |
 | `hotspot_exposure_diagnostic_v0_3` | IFPM-090 | complete | diagnostic_only | Tests co-location of v0.2 top-20% priority areas with exposure indicators; weak co-location | `outputs/boundary_v1/hotspot_exposure_diagnostic_v0_3/` |
-| `rainfall_exposure_v0_4` | IFPM-097 | complete | sensitivity_scenario | Secondary Zimbabwe PIM run with equal baseline + direct Zimbabwe weights; 622.048 km² selected in the top 20% under both scenarios | `outputs/boundary_v1/rainfall_exposure_v0_4/` |
+| `rainfall_exposure_v0_4` | IFPM-097 | complete | sensitivity_scenario | Zimbabwe direct weights only; Sediment uses independent K/LS/C 0.35/0.35/0.30; 96.609% five-criterion common-support coverage and 3.391% remains unscored | `outputs/boundary_v1/rainfall_exposure_v0_4/` |
 | `mining_decay_priority_sensitivity` | IFPM-074 track | complete | sensitivity_scenario | Decay-function sensitivity on mining proximity; structure test only | `outputs/boundary_v1/mining_decay_priority_sensitivity/` |
 
 ## Current mainline Peru experiments (`outputs/srtm_1arcsec_peru_pilot/`)
@@ -60,7 +60,7 @@ should not drive the next modelling sequence.
 | `ls_factor` | IFPM-077 | complete | diagnostic_only | LS hillslope mean 1.563, p95 5.511 (Moore-Nieber, channel-masked, capped 50) |
 | `terrain_standardization` | IFPM-055 | complete | diagnostic_only | Lowland/low-slope/high-slope candidates, 2-98 pct min-max |
 | `hydrology_standardization` | IFPM-084 | complete | mentor_review_ready (candidates only) | TWI + drainage proximity 0-1 candidates; grid_compatible=true |
-| `k_factor` (soilgrids_250m_sediment_candidate) | IFPM-072 | complete | diagnostic_only | K (0-5 cm, US) mean 0.1695, range [0.082, 0.251]; native 250 m, NOT resampled |
+| `k_factor` | IFPM-072 / criteria alignment | complete | provisional | Corrected SoilGrids spatial K aligned to the V1 30 m reference grid while retaining a 250 m effective-resolution warning; normalized layer used in the direct Zimbabwe Sediment criterion |
 | `c_factor` (esa_worldcover_2021_v1_methodology) | IFPM-076 | complete | diagnostic_only | V1 area-weighted mean C 0.0429; lookup after mode resampling 10m→30m |
 
 ## Zimbabwe prototype iterations (legacy flat names)
