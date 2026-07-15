@@ -22,16 +22,16 @@ from scipy.ndimage import distance_transform_edt
 
 ROOT = Path(__file__).resolve().parents[2]
 PERU_SERNANP = (
-    ROOT / "data/raw/sernanp_peru_protected_areas/pe1_sernanp_protected_areas.gpkg"
+    ROOT / "data/raw/sernanp_peru_protected_areas/peru_hybas_l7_6070641200_sernanp_protected_areas.gpkg"
 )
 INPUTS = [
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif",
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
     ROOT / "data/raw/esa_worldcover_2021_peru_pilot/ESA_WorldCover_10m_2021_v200_S18W072_Map.tif",
     ROOT / "data/raw/esa_worldcover_2021_peru_pilot/ESA_WorldCover_10m_2021_v200_S18W075_Map.tif",
     ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_water_a_free_1.shp",
     ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_waterways_free_1.shp",
-    ROOT / "data/raw/sernanp_peru_protected_areas/pe1_sernanp_protected_areas.gpkg",
+    ROOT / "data/raw/sernanp_peru_protected_areas/peru_hybas_l7_6070641200_sernanp_protected_areas.gpkg",
 ]
 OUTPUTS = [
     ROOT
@@ -100,8 +100,8 @@ SITES = [
     ),
     SiteConfig(
         site="Peru",
-        boundary_id="pe1",
-        ref=ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif",
+        boundary_id="peru_hybas_l7_6070641200",
+        ref=ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif",
         boundary_gpkg=ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
         boundary_layer="peru_pilot_boundary",
         output_dir=ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1",

@@ -1,14 +1,14 @@
-# Dataset Registry: Geofabrik OSM Southern Peru PE1
+# Dataset Registry: Geofabrik OSM Southern Peru Arequipa Region
 
-Status: downloaded and processed for PE1 proximity-criteria derivation. Same source family
+Status: downloaded and processed for Arequipa Region proximity-criteria derivation. Same source family
 and license as the already-downloaded Geofabrik Zimbabwe extract.
 
 ## Dataset Identity
 
 - Dataset id: `geofabrik_osm_peru_pilot`
 - Short name: Geofabrik Peru OSM extract
-- Reusable download: yes, for PE1 mining/exposure proximity criteria
-- Spatial unit or mask: clip to PE1 boundary + 5 km buffer after download
+- Reusable download: yes, for Arequipa Region mining/exposure proximity criteria
+- Spatial unit or mask: clip to Arequipa Region boundary + 5 km buffer after download
 - Temporal coverage: current OSM extract at time of download (2026-06-30)
 
 ## Source And Access
@@ -31,12 +31,12 @@ and license as the already-downloaded Geofabrik Zimbabwe extract.
 - SHA-256: `e34517e410d30f0abde0c06210ec77663c6d6218f35672f0b51d91ef2242e209`
 - Extraction: complete to `data/raw/geofabrik_osm_peru_pilot/extracted/` (20 shapefile layers)
 
-## Used Layers (PE1)
+## Used Layers (Arequipa Region)
 
 - `gis_osm_roads_free_1.shp` -> exposure_indicators proximity criterion (6210 features in
-  PE1 + 5km).
+  Arequipa Region + 5km).
 - `gis_osm_landuse_a_free_1.shp` -> mining_pressure proximity criterion (32 quarry/industrial
-  polygons in PE1 + 5km; stronger than Zimbabwe V1's 2 polygons).
+  polygons in Arequipa Region + 5km; stronger than Zimbabwe V1's 2 polygons).
 - `gis_osm_places_free_1.shp` -> context only (208 places; not a scored criterion).
 
 ## Notes And Limits
@@ -45,4 +45,4 @@ and license as the already-downloaded Geofabrik Zimbabwe extract.
   GEOCATMIN is the authoritative Peru mining cadastre (publicly accessible, identified but not
   yet processed) and is the upgrade path for the mining criterion.
 - Road proximity is an access/exposure proxy, not observed flood vulnerability.
-- Only PE1-relevant layers are used; the full country extract is kept under ignored `data/`.
+- Only Arequipa Region-relevant layers are used; the full country extract is kept under ignored `data/`.

@@ -7,12 +7,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULE_PATH = ROOT / "bin/scenarios/run_pe1_priority_scenarios.py"
+MODULE_PATH = ROOT / "bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py"
 PIPELINE_PATH = ROOT / "bin/pipeline.py"
 
 
 def load_module():
-    spec = importlib.util.spec_from_file_location("run_pe1_priority_scenarios", MODULE_PATH)
+    spec = importlib.util.spec_from_file_location("run_peru_hybas_l7_6070641200_priority_scenarios", MODULE_PATH)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot load module: {MODULE_PATH}")
     module = importlib.util.module_from_spec(spec)
@@ -20,7 +20,7 @@ def load_module():
     return module
 
 
-class Pe1SocioeconomicIntegrationTest(unittest.TestCase):
+class PeruHybasL76070641200SocioeconomicIntegrationTest(unittest.TestCase):
     def test_scenario_runner_uses_upgraded_exposure_indicators(self):
         module = load_module()
 
@@ -64,7 +64,7 @@ class Pe1SocioeconomicIntegrationTest(unittest.TestCase):
         scripts = pipeline.discover_scripts()
         dependencies = pipeline.build_dag(scripts)
 
-        self.assertIn("build_peru_exposure_indicators", dependencies["run_pe1_priority_scenarios"])
+        self.assertIn("build_peru_exposure_indicators", dependencies["run_peru_hybas_l7_6070641200_priority_scenarios"])
 
     def test_pipeline_dag_runs_scenarios_before_exposure_and_colocation_analysis(self):
         spec = importlib.util.spec_from_file_location("ifpm_pipeline_analysis", PIPELINE_PATH)
@@ -80,7 +80,7 @@ class Pe1SocioeconomicIntegrationTest(unittest.TestCase):
             "summarize_peru_population_by_pim_class",
             "compare_peru_pim_sinpad_colocation",
         ):
-            self.assertIn("run_pe1_priority_scenarios", dependencies[target])
+            self.assertIn("run_peru_hybas_l7_6070641200_priority_scenarios", dependencies[target])
 
     def test_default_pipeline_excludes_network_and_one_off_refresh_steps(self):
         spec = importlib.util.spec_from_file_location("ifpm_pipeline_default", PIPELINE_PATH)
@@ -102,7 +102,7 @@ class Pe1SocioeconomicIntegrationTest(unittest.TestCase):
         self.assertNotIn("query_peru_sinpad_flood_events", selected)
         self.assertNotIn("query_peru_sernanp_protected_areas", selected)
         self.assertNotIn("derive_peru_pilot_soilgrids_kfactor", selected)
-        self.assertNotIn("build_pe1_rainfall_criterion", selected)
+        self.assertNotIn("build_peru_hybas_l7_6070641200_rainfall_criterion", selected)
         self.assertNotIn("compare_peru_exposure_refresh", selected)
         self.assertNotIn("derive_peru_pilot_usle_soil_loss", selected)
         self.assertNotIn("export_peru_conditioning_factor_maps", selected)
@@ -116,10 +116,10 @@ class Pe1SocioeconomicIntegrationTest(unittest.TestCase):
         self.assertNotIn("run_v1_mining_decay_priority_sensitivity", selected)
         self.assertNotIn("write_zimbabwe_peru_source_tables", selected)
         self.assertIn("build_peru_exposure_indicators", selected)
-        self.assertIn("run_pe1_priority_scenarios", selected)
+        self.assertIn("run_peru_hybas_l7_6070641200_priority_scenarios", selected)
         self.assertIn("summarize_peru_criterion_data_strength", selected)
 
-        self.assertIn("build_pe1_rainfall_criterion", config["network_scripts"])
+        self.assertIn("build_peru_hybas_l7_6070641200_rainfall_criterion", config["network_scripts"])
         stale_tokens = (
             "srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif",
             "srtm_1arcsec_peru_pilot/priority_scenarios/top20_frequency.tif",
@@ -153,7 +153,7 @@ class Pe1SocioeconomicIntegrationTest(unittest.TestCase):
             )
         }
 
-        self.assertEqual(selected, {"run_pe1_priority_scenarios"})
+        self.assertEqual(selected, {"run_peru_hybas_l7_6070641200_priority_scenarios"})
 
 
 if __name__ == "__main__":

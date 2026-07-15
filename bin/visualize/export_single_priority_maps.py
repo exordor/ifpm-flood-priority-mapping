@@ -120,7 +120,7 @@ SITES = [
     Site(
         slug="peru",
         label="Southern Peru comparison catchment",
-        boundary_id="PE1",
+        boundary_id="Arequipa Region",
         experiment_id="priority_scenarios",
         claim_level="provisional / sensitivity_scenario",
         priority_mean=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif",

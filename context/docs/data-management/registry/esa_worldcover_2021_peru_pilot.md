@@ -1,6 +1,6 @@
-# Dataset Registry: ESA WorldCover 2021 Southern Peru PE1
+# Dataset Registry: ESA WorldCover 2021 Southern Peru Arequipa Region
 
-Status: active for PE1 land-cover and C-factor repair in the southern Peru
+Status: active for Arequipa Region land-cover and C-factor repair in the southern Peru
 comparison catchment.
 
 ## Dataset Identity
@@ -8,9 +8,9 @@ comparison catchment.
 - Dataset id: `esa_worldcover_2021_peru_pilot`
 - Short name: ESA WorldCover 2021 v200
 - Data class: `LOCAL_DATA`
-- Reusable download: yes, for PE1 prototype evidence and C-factor repair
-- Project role: land-cover class and RUSLE C-factor proxy for PE1 criteria stack
-- Study area: PE1 southern Peru comparison catchment in Arequipa Region, mainly
+- Reusable download: yes, for Arequipa Region prototype evidence and C-factor repair
+- Project role: land-cover class and RUSLE C-factor proxy for Arequipa Region criteria stack
+- Study area: Arequipa Region southern Peru comparison catchment in Arequipa Region, mainly
   the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city
 - Temporal coverage: 2021 land-cover map
 
@@ -32,7 +32,7 @@ comparison catchment.
 - Intended destination: `data/raw/esa_worldcover_2021_peru_pilot/`
 - Expected file types: GeoTIFF plus local `.sha256` sidecar
 - Expected file count: 2 tiles
-- Reason for two tiles: PE1 spans approximately `-72.315` to `-71.582` longitude, crossing the
+- Reason for two tiles: Arequipa Region spans approximately `-72.315` to `-71.582` longitude, crossing the
   `-72` tile boundary. `S18W072` alone leaves the western part uncovered; `S18W075` is required.
 - Temporary path, if any: `data/tmp/esa_worldcover_2021_peru_pilot/`
 
@@ -57,11 +57,11 @@ comparison catchment.
 
 - Raw data path: `data/raw/esa_worldcover_2021_peru_pilot/`
 - Derived output path: `outputs/esa_worldcover_2021_peru_pilot/c_factor/`
-- Actual use: mosaic needed WorldCover tiles, clip/reproject to PE1 reference grid, and derive
+- Actual use: mosaic needed WorldCover tiles, clip/reproject to Arequipa Region reference grid, and derive
   land-cover pressure / C-factor proxy.
 - Processed C-factor output:
-  `outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif`
-- PE1 C-factor grid check: passed, valid fraction inside PE1 = `1.0`.
+  `outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_peru_hybas_l7_6070641200_30m.tif`
+- Arequipa Region C-factor grid check: passed, valid fraction inside Arequipa Region = `1.0`.
 - Known limitations: static 2021 land cover is not active mining truth and does not capture
   seasonal cover-management variation.
 

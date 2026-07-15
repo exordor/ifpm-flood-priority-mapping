@@ -66,8 +66,8 @@ class PeruReportFigureGovernanceTest(unittest.TestCase):
 
         self.assertEqual(module.PIM.name, "priority_mentor_peru_direct_pim.tif")
         self.assertEqual(module.POPULATION_EXPOSURE.name, "population_exposure_0_1.tif")
-        self.assertEqual(module.MINING.name, "pe1_pequena_mineria.gpkg")
-        self.assertEqual(module.SINPAD.name, "pe1_sinpad_pim_colocation.gpkg")
+        self.assertEqual(module.MINING.name, "peru_hybas_l7_6070641200_pequena_mineria.gpkg")
+        self.assertEqual(module.SINPAD.name, "peru_hybas_l7_6070641200_sinpad_pim_colocation.gpkg")
         self.assertEqual(module.SINPAD_CLAIM_LEVEL, "diagnostic_only")
         self.assertIn("co-location diagnostic", module.SINPAD_NOTE)
         self.assertNotIn("validated", module.SINPAD_NOTE.lower())

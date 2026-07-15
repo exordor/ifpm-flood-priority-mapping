@@ -111,7 +111,7 @@ historical / generic sensitivity-scenario weight set.
 PIM prototype as the only active reporting sensitivity scenario.
 
 - **Related RQ:** RQ2
-- **Evidence:** `pe1_priority_scenarios` runs only
+- **Evidence:** `peru_hybas_l7_6070641200_priority_scenarios` runs only
   `mentor_peru_direct_pim` with main weights `FH=0.35`, `SE=0.25`, `LM=0.20`,
   `ES=0.12`, `SV=0.08`. The direct highest-priority quintile is
   **521.356 km²**. Scoreable coverage is **95.0998%**, restricted to the
@@ -175,24 +175,24 @@ survives any choice of R-factor.
   removed from the critical path.
 - **Claim level:** `sensitivity_scenario`
 
-## H-PE1-SYMMETRIC
+## H-AREQUIPA-REGION-SYMMETRIC
 
-**Statement:** PE1 and V1 are operationally comparable under the mentor
+**Statement:** Arequipa Region and V1 are operationally comparable under the mentor
 five-main-criterion AHP framework. Both prototype runs use the same five active
 PIM main criteria as top-level overlay terms, so the two prototypes can be
 structurally compared with the same scenario logic.
 
 - **Related RQ:** RQ10
-- **Evidence:** PE1 and V1 both use flood_hazard, sediment, landuse_asm,
+- **Evidence:** Arequipa Region and V1 both use flood_hazard, sediment, landuse_asm,
   environmental, and socioeconomic as top-level PIM criteria. Flood and Land
   Use / ASM have internal component rasters, and Environmental is implemented as
   a provisional water/wetland and protected-area sensitivity indicator. The
-  active PE1 direct highest-priority quintile is 521.356 km² on the strict
+  active Arequipa Region direct highest-priority quintile is 521.356 km² on the strict
   five-criterion common support;
-  PE1 mining upgraded to official INGEMMET point evidence (strictly stronger
+  Arequipa Region mining upgraded to official INGEMMET point evidence (strictly stronger
   than V1).
 - **Verdict:** **supported** at `provisional` level
-- **Caveat:** PE1 is not research-selected; physical regimes differ (arid
+- **Caveat:** Arequipa Region is not research-selected; physical regimes differ (arid
   Andean Pacific slope vs semi-humid savanna). Final harmonised comparison
   claim blocked (IFPM-D03). After D-PERU-FIRST, this hypothesis supports
   background comparison only; the active mainline is Peru-first completion.
@@ -205,8 +205,8 @@ structurally compared with the same scenario logic.
 not official ASM truth.
 
 - **Related RQ:** RQ8
-- **Evidence:** only 2 quarry/industrial polygons in V1+5km vs 32 in PE1+5km
-  and 11 official INGEMMET ASM points in PE1. Zimbabwe has no public ASM
+- **Evidence:** only 2 quarry/industrial polygons in V1+5km vs 32 in Arequipa Region+5km
+  and 11 official INGEMMET ASM points in Arequipa Region. Zimbabwe has no public ASM
   cadastre.
 - **Verdict:** **supported** as an indicator; weak as truth
 - **Status:** active. A-005 / A-013. Replacement waits on the mentor's
@@ -237,7 +237,7 @@ its effective resolution (~5 km) is documented and it is never claimed as
 native 30 m rainfall.
 
 - **Related RQ:** RQ1 (rainfall sub-question)
-- **Evidence:** built for both V1 (A-010) and PE1 (A-012); enters priority
+- **Evidence:** built for both V1 (A-010) and Arequipa Region (A-012); enters priority
   scenarios with explicit coarse-to-grid governance.
 - **Verdict:** **supported** as sensitivity scenario
 - **Caveat:** effective resolution ~5 km; never pixel-level 30 m rainfall

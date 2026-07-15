@@ -9,7 +9,7 @@ workspace** for semi-arid, mining-influenced catchments. The active main case
 is:
 
 - **Arequipa Region, Peru** — mainly the Vitor-La Joya-Santa Rita de Siguas
-  catchment west of Arequipa city (PE1, provisional Peru main case)
+  catchment west of Arequipa city (Arequipa Region, provisional Peru main case)
 
 **Upper Mzingwane Catchment, Zimbabwe** remains a secondary / background
 comparison case and a reusable method-development baseline, but it is no longer
@@ -88,7 +88,7 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
 
 - [x] Idea exploration and project framing
 - [x] Minimal AHP-overlay pipeline built and synthetic-tested
-- [x] Boundary discovery (Zimbabwe V1 + Peru PE1 southern comparison catchment)
+- [x] Boundary discovery (Zimbabwe V1 + Peru Arequipa Region southern comparison catchment)
 - [x] Terrain chain end-to-end on both sites (SRTM DEM, slope, hydrology, LS)
 - [x] USLE factor chain (K, LS, C) verified; R-factor quarantined out of critical path
 - [x] Five-main-criterion PIM prototype priority maps on both sites
@@ -96,7 +96,7 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
   historical figure-governance archive after the Peru-first switch
 - [x] Peru-first mainline switch recorded after mentor direction to work with
   Peru first until the end
-- [x] Current Peru direct mentor weights implemented in `pe1_priority_scenarios`;
+- [x] Current Peru direct mentor weights implemented in `peru_hybas_l7_6070641200_priority_scenarios`;
   obsolete equal-weight rasters removed from the active output directory
 - [x] Peru socioeconomic criterion upgraded from road-only to the supplied
   0.45 road/access + 0.55 infrastructure split using WorldPop and OSM mapped
@@ -110,7 +110,7 @@ The deliverable pipeline must not depend on `../context`, `../data`, or
   with local weights 0.30 / 0.45 / 0.25; the previously mislocated Peru K
   extraction was corrected and aligned with an explicit 250 m effective-resolution warning
 - [x] Land Use pressure separated from the RUSLE C value function
-- [x] Peru rainfall normalized within the PE1 boundary; SERNANP national
+- [x] Peru rainfall normalized within the Arequipa Region boundary; SERNANP national
   definitive protected-area layer 0 checked and recorded
 - [x] Five-row criterion data-strength table generated from current outputs
 - [x] Criterion-dependence diagnostics generated for shared WorldCover use,
@@ -165,11 +165,11 @@ does not maintain a queue of "questions to ask the mentor".
    marginal weighted SD share. These are covariance-blind diagnostics, not
    ranking attribution or replacement weights;
    they do not by themselves justify forcing component means to match.
-4. **Peru boundary** — PE1 is HydroBASINS L7 `6070641200`, the active
-   Peru-first main case, but still a provisional
-   southern Peru comparison catchment in Arequipa Region, mainly the
+4. **Peru boundary** — the active working boundary displayed externally as
+   **Arequipa Region** is HydroBASINS L7 `6070641200`. It remains a provisional
+   southern Peru comparison catchment, mainly covering the
    Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It is chosen
-   by a selection rule, not a final research-selected site. Default: keep PE1
+   by a selection rule, not a final research-selected site. Default: keep Arequipa Region
    and complete the Peru workflow first; replace only if the mentor names a
    different Peru site.
 5. **Validation data** — Peru has 25 in-boundary SINPAD flood-relevant emergency
@@ -182,7 +182,7 @@ does not maintain a queue of "questions to ask the mentor".
 6. **Sediment criterion** — Peru now uses an additive AHP combination of
    independently normalized SoilGrids K (0.30), SRTM LS (0.45), and WorldCover
    C (0.25). Sediment coverage is 95.1101%. The final PIM is scoreable over
-   95.0998% of PE1 on the five-criterion common-support domain. The remaining
+   95.0998% of Arequipa Region on the five-criterion common-support domain. The remaining
    4.9002% is unscored: 3.7573% lacks LS, 1.1326% lacks K, and 0.0103% lacks
    other required evidence. Support-class rasters and hatching expose those
    cells without imputation or weight renormalization. This is an erosion-source priority

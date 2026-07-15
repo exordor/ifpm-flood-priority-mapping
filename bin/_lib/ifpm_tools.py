@@ -26,7 +26,7 @@ from typing import Any
 # Project root: bin/_lib/ifpm_tools.py -> parents[2] = workspace root.
 ROOT: Path = Path(__file__).resolve().parents[2]
 
-# Canonical NoData value used across all V1/PE1 rasters.
+# Canonical NoData value used across all V1/Arequipa Region rasters.
 NODATA: float = -9999.0
 
 
@@ -78,7 +78,7 @@ def load_boundary(
 ) -> Any:
     """Load a single-feature boundary geometry from a GeoPackage.
 
-    Mirrors the `load_v1()` / `load_pe1()` / `load_boundary()` helpers that were
+    Mirrors the `load_v1()` / `load_peru_hybas_l7_6070641200()` / `load_boundary()` helpers that were
     duplicated across ~16 scripts. Asserts exactly one feature (a boundary should
     be a single dissolved polygon) and returns its geometry.
 

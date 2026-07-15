@@ -201,7 +201,8 @@ explicitly asks to pause.
 
 ## Active Prototype Scope
 
-The current practical prototype path is Peru-first controlled experimentation on PE1
+The current practical prototype path is Peru-first controlled experimentation within Arequipa
+Region, using the internal boundary id `peru_hybas_l7_6070641200`
 (`outputs/srtm_1arcsec_peru_pilot/`), not a full hydrodynamic flood model and not a final thesis
 claim. `boundary_v1` / Upper Mzingwane remains a secondary/background method-development case unless
 explicitly reopened.
@@ -318,10 +319,10 @@ R-factor / RUSLE:
 
 Peru:
 
-- Peru work is the active mainline after the 2026-07-06 Peru-first decision. Continue PE1 prototype
+- Peru work is the active mainline after the 2026-07-06 Peru-first decision. Continue Arequipa Region prototype
   outputs first: five PIM criteria maps, AHP-weighted prioritisation maps, top-priority classes, and
   mining overlay.
-- PE1 remains provisional and must not be described as a final research-selected Peru study area or
+- Arequipa Region remains provisional and must not be described as a final research-selected Peru study area or
   validated rescue-decision map.
 - Final Zimbabwe-Peru comparison remains blocked until both countries share harmonized criteria,
   normalization, thresholds, and claim rules.

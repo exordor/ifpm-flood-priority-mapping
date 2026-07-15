@@ -3,7 +3,7 @@
 
 This script queries the public INDECI SINPAD ArcGIS REST service, filters
 flood/rainfall/aluvion-related events in Arequipa, and writes raw validation
-points under data/validation. It also creates a PE1-study-area context subset
+points under data/validation. It also creates a Arequipa Region-study-area context subset
 and simple summary tables under outputs.
 """
 
@@ -25,7 +25,7 @@ SERVICE = (
     "https://geosinpad.indeci.gob.pe/indeci/rest/services/"
     "Emergencias/EMERGENCIAS_SINPAD/MapServer/0"
 )
-PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+PERU_HYBAS_L7_6070641200_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 RAW_DIR = ROOT / "data/validation/indeci_sinpad_peru_flood_events"
 OUT_DIR = ROOT / "outputs/indeci_sinpad_peru_flood_events"
 
@@ -70,12 +70,12 @@ INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
 OUTPUTS = [
     ROOT / "data/validation/indeci_sinpad_peru_flood_events/arequipa_sinpad_flood_relevant.gpkg",
     ROOT / "data/validation/indeci_sinpad_peru_flood_events/arequipa_sinpad_flood_relevant.csv",
-    ROOT / "data/validation/indeci_sinpad_peru_flood_events/pe1_sinpad_flood_relevant.gpkg",
-    ROOT / "data/validation/indeci_sinpad_peru_flood_events/pe1_sinpad_flood_relevant.csv",
-    ROOT / "data/validation/indeci_sinpad_peru_flood_events/pe1_plus20km_sinpad_flood_relevant.gpkg",
+    ROOT / "data/validation/indeci_sinpad_peru_flood_events/peru_hybas_l7_6070641200_sinpad_flood_relevant.gpkg",
+    ROOT / "data/validation/indeci_sinpad_peru_flood_events/peru_hybas_l7_6070641200_sinpad_flood_relevant.csv",
+    ROOT / "data/validation/indeci_sinpad_peru_flood_events/peru_hybas_l7_6070641200_plus20km_sinpad_flood_relevant.gpkg",
     ROOT / "outputs/indeci_sinpad_peru_flood_events/arequipa_sinpad_fenomeno_summary.csv",
-    ROOT / "outputs/indeci_sinpad_peru_flood_events/pe1_sinpad_fenomeno_summary.csv",
-    ROOT / "outputs/indeci_sinpad_peru_flood_events/pe1_plus20km_sinpad_fenomeno_summary.csv",
+    ROOT / "outputs/indeci_sinpad_peru_flood_events/peru_hybas_l7_6070641200_sinpad_fenomeno_summary.csv",
+    ROOT / "outputs/indeci_sinpad_peru_flood_events/peru_hybas_l7_6070641200_plus20km_sinpad_fenomeno_summary.csv",
     ROOT / "outputs/indeci_sinpad_peru_flood_events/sinpad_download_manifest.json",
 ]
 
@@ -184,7 +184,7 @@ def summarize(gdf: gpd.GeoDataFrame, out_csv: Path) -> None:
         writer.writerows(rows)
 
 
-def write_manifest(raw_gpkg: Path, pe1_gpkg: Path, raw_count: int, pe1_count: int) -> None:
+def write_manifest(raw_gpkg: Path, peru_hybas_l7_6070641200_gpkg: Path, raw_count: int, peru_hybas_l7_6070641200_count: int) -> None:
     manifest = {
         "dataset_id": "indeci_sinpad_peru_flood_events",
         "source": SERVICE,
@@ -193,7 +193,7 @@ def write_manifest(raw_gpkg: Path, pe1_gpkg: Path, raw_count: int, pe1_count: in
         "raw_sha256": sha256_file(raw_gpkg),
         "raw_size_bytes": raw_gpkg.stat().st_size,
         "arequipa_flood_relevant_records_with_valid_geometry": raw_count,
-        "pe1_boundary_records": pe1_count,
+        "peru_hybas_l7_6070641200_boundary_records": peru_hybas_l7_6070641200_count,
         "claim_level": "diagnostic_only",
         "evidence_role": "event_point_colocation_context",
         "note": (
@@ -223,33 +223,33 @@ def main() -> None:
     print(f"wrote: {rel(raw_gpkg)}")
     print(f"wrote: {rel(raw_csv)}")
 
-    boundary = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs(gdf.crs)
+    boundary = gpd.read_file(PERU_HYBAS_L7_6070641200_GPKG, layer="peru_pilot_boundary").to_crs(gdf.crs)
     # Write exact study-boundary events. If the count is low, downstream
     # validation can also use a buffered context, but this exact subset stays
     # unambiguous.
-    pe1 = gpd.sjoin(gdf, boundary[["geometry"]], predicate="within", how="inner")
-    pe1 = pe1.drop(columns=[c for c in ["index_right"] if c in pe1.columns])
-    pe1_gpkg = RAW_DIR / "pe1_sinpad_flood_relevant.gpkg"
-    pe1_csv = RAW_DIR / "pe1_sinpad_flood_relevant.csv"
-    pe1.to_file(pe1_gpkg, layer="sinpad_pe1_flood_relevant", driver="GPKG")
-    pe1.drop(columns="geometry").to_csv(pe1_csv, index=False)
-    print(f"PE1 boundary records: {len(pe1)}")
+    peru_hybas_l7_6070641200 = gpd.sjoin(gdf, boundary[["geometry"]], predicate="within", how="inner")
+    peru_hybas_l7_6070641200 = peru_hybas_l7_6070641200.drop(columns=[c for c in ["index_right"] if c in peru_hybas_l7_6070641200.columns])
+    peru_hybas_l7_6070641200_gpkg = RAW_DIR / "peru_hybas_l7_6070641200_sinpad_flood_relevant.gpkg"
+    peru_hybas_l7_6070641200_csv = RAW_DIR / "peru_hybas_l7_6070641200_sinpad_flood_relevant.csv"
+    peru_hybas_l7_6070641200.to_file(peru_hybas_l7_6070641200_gpkg, layer="sinpad_peru_hybas_l7_6070641200_flood_relevant", driver="GPKG")
+    peru_hybas_l7_6070641200.drop(columns="geometry").to_csv(peru_hybas_l7_6070641200_csv, index=False)
+    print(f"Arequipa Region boundary records: {len(peru_hybas_l7_6070641200)}")
 
     buffer_m = 20_000
     boundary_m = boundary.to_crs("EPSG:32718")
     buffered = boundary_m.copy()
     buffered["geometry"] = boundary_m.geometry.buffer(buffer_m)
     buffered = buffered.to_crs(gdf.crs)
-    pe1_buffer = gpd.sjoin(gdf, buffered[["geometry"]], predicate="within", how="inner")
-    pe1_buffer = pe1_buffer.drop(columns=[c for c in ["index_right"] if c in pe1_buffer.columns])
-    pe1_buffer_gpkg = RAW_DIR / "pe1_plus20km_sinpad_flood_relevant.gpkg"
-    pe1_buffer.to_file(pe1_buffer_gpkg, layer="sinpad_pe1_plus20km_flood_relevant", driver="GPKG")
-    print(f"PE1 + 20 km records: {len(pe1_buffer)}")
+    peru_hybas_l7_6070641200_buffer = gpd.sjoin(gdf, buffered[["geometry"]], predicate="within", how="inner")
+    peru_hybas_l7_6070641200_buffer = peru_hybas_l7_6070641200_buffer.drop(columns=[c for c in ["index_right"] if c in peru_hybas_l7_6070641200_buffer.columns])
+    peru_hybas_l7_6070641200_buffer_gpkg = RAW_DIR / "peru_hybas_l7_6070641200_plus20km_sinpad_flood_relevant.gpkg"
+    peru_hybas_l7_6070641200_buffer.to_file(peru_hybas_l7_6070641200_buffer_gpkg, layer="sinpad_peru_hybas_l7_6070641200_plus20km_flood_relevant", driver="GPKG")
+    print(f"Arequipa Region + 20 km records: {len(peru_hybas_l7_6070641200_buffer)}")
 
     summarize(gdf, OUT_DIR / "arequipa_sinpad_fenomeno_summary.csv")
-    summarize(pe1, OUT_DIR / "pe1_sinpad_fenomeno_summary.csv")
-    summarize(pe1_buffer, OUT_DIR / "pe1_plus20km_sinpad_fenomeno_summary.csv")
-    write_manifest(raw_gpkg, pe1_gpkg, len(gdf), len(pe1))
+    summarize(peru_hybas_l7_6070641200, OUT_DIR / "peru_hybas_l7_6070641200_sinpad_fenomeno_summary.csv")
+    summarize(peru_hybas_l7_6070641200_buffer, OUT_DIR / "peru_hybas_l7_6070641200_plus20km_sinpad_fenomeno_summary.csv")
+    write_manifest(raw_gpkg, peru_hybas_l7_6070641200_gpkg, len(gdf), len(peru_hybas_l7_6070641200))
     print(f"wrote summary/manifest under: {rel(OUT_DIR)}")
 
 

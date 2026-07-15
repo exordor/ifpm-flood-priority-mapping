@@ -25,7 +25,7 @@ Status: active. Backlog, in-progress, and next steps.
   the Peru mentor direct weights. Keep the language `prototype` /
   `provisional` / `sensitivity_scenario`, not final rescue decision.
 - **Evidence-strength closure** — expose the remaining limitations directly on
-  the board: provisional PE1 boundary, CHIRPS climatology rather than event-
+  the board: provisional Arequipa Region boundary, CHIRPS climatology rather than event-
   extreme rainfall, 250 m effective K evidence, 4.9002% unscored K/LS/other
   support gaps, shared WorldCover dependence, road-led Socioeconomic ordering,
   water-led Environmental context, point-only mining evidence, and no
@@ -42,7 +42,7 @@ the calls autonomously and showing results. The defaults now in effect:
 | id | topic | default taken | claim level |
 |---|---|---|---|
 | IFPM-D01 | Modelling unit | pixel-raster on the 30 m reference grid, with zonal summaries when needed | provisional |
-| IFPM-D02 | Peru boundary | PE1 southern Peru comparison catchment in Arequipa Region; replaced only if mentor names a site | provisional |
+| IFPM-D02 | Peru boundary | Arequipa Region southern Peru comparison catchment in Arequipa Region; replaced only if mentor names a site | provisional |
 | IFPM-D03 | Validation evidence | SINPAD point context is available for co-location diagnosis; independent flood-extent validation is unavailable | diagnostic_only |
 | IFPM-D04 | AHP weights | Peru direct mentor weights are the only active/reporting Peru scenario; Zimbabwe direct weights are secondary; old slide matrix stays historical/background | sensitivity_scenario |
 | IFPM-D05 | Mining + Rehabilitation | mining = OSM/INGEMMET indicator; Rehabilitation Potential = deferred (not built until a use is needed) | diagnostic_only |
@@ -80,7 +80,7 @@ then. The packages stay archived as the analysis behind each default.
 - Prepare a short mentor-facing explanation: final product is a prototype flood
   prioritisation map, not a flood-hazard-only map and not a validated rescue
   decision map.
-- Confirm or replace the provisional PE1 boundary before any final study-area
+- Confirm or replace the provisional Arequipa Region boundary before any final study-area
   claim.
 
 ### Completed Peru briefing inputs

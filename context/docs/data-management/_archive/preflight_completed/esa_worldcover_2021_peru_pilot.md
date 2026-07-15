@@ -1,11 +1,11 @@
 # Download Preflight: ESA WorldCover 2021 Peru Pilot
 
-Status: closed for PE1 repair download and processing.
+Status: closed for Arequipa Region repair download and processing.
 
 ## Scope
 
-- [x] The dataset has a clear project purpose: repair PE1 land-cover / C-factor coverage.
-- [x] The required study area is known: PE1 engineering pilot boundary.
+- [x] The dataset has a clear project purpose: repair Arequipa Region land-cover / C-factor coverage.
+- [x] The required study area is known: Arequipa Region engineering pilot boundary.
 - [x] The expected disk footprint is acceptable: one existing tile plus one missing tile, each
   about tens of MB compressed.
 - [x] The download is not a broad mirror.
@@ -30,7 +30,7 @@ Status: closed for PE1 repair download and processing.
 - [x] The target path is ignored by Git.
 - [x] The command will not overwrite unrelated local data.
 - [x] Partial downloads can be identified by `.part` suffix and retried.
-- [x] The output will be labelled as PE1 engineering-pilot evidence, not final flood-risk evidence.
+- [x] The output will be labelled as Arequipa Region engineering-pilot evidence, not final flood-risk evidence.
 
 ## Completion Evidence
 
@@ -44,8 +44,8 @@ Status: closed for PE1 repair download and processing.
   - `S18W072`: `4b4d2d8ca936965393ad5ae5b694b09a707005c64eb403823822e8c2343ba197`
   - `S18W075`: `22e40c1b313a518e56ce477f9399d6016a6bb375d1816b7a112f9f4a456e8aca`
 - Processed outputs:
-  - `outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif`
+  - `outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_peru_hybas_l7_6070641200_30m.tif`
   - `outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif`
 - Repair result:
-  - PE1 C-factor valid fraction inside PE1: `1.0`
-  - PE1 land-cover criterion valid fraction inside PE1: `1.0`
+  - Arequipa Region C-factor valid fraction inside Arequipa Region: `1.0`
+  - Arequipa Region land-cover criterion valid fraction inside Arequipa Region: `1.0`

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Derive PE1 slope in degrees from the buffered SRTM DEM.
+"""Derive Arequipa Region slope in degrees from the buffered SRTM DEM.
 
-Mirrors `derive_srtm_v1_slope.py`. Peru differences: PE1 boundary, EPSG:32718 (UTM 18S),
-PE1 DEM paths. Logic (central-difference slope, NoData fill before differencing, crop to
+Mirrors `derive_srtm_v1_slope.py`. Peru differences: Arequipa Region boundary, EPSG:32718 (UTM 18S),
+Arequipa Region DEM paths. Logic (central-difference slope, NoData fill before differencing, crop to
 boundary) is identical and grid-generic.
 """
 
@@ -19,17 +19,17 @@ from rasterio.windows import Window, transform as window_transform
 
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
-OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_slope_degrees_utm18s_30m.tif"]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_slope_degrees_utm18s_30m.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import load_boundary
 DATASET_ID = "srtm_1arcsec_peru_pilot"
 OUT_DIR = ROOT / f"outputs/{DATASET_ID}/terrain_preprocessing"
-PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
-BUFFERED_DEM = OUT_DIR / "pe1_dem_buffered_utm18s_30m.tif"
-PE1_DEM = OUT_DIR / "pe1_dem_utm18s_30m.tif"
-SLOPE = OUT_DIR / "pe1_slope_degrees_utm18s_30m.tif"
+PERU_HYBAS_L7_6070641200_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+BUFFERED_DEM = OUT_DIR / "peru_hybas_l7_6070641200_dem_buffered_utm18s_30m.tif"
+PERU_HYBAS_L7_6070641200_DEM = OUT_DIR / "peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
+SLOPE = OUT_DIR / "peru_hybas_l7_6070641200_slope_degrees_utm18s_30m.tif"
 DST_CRS = "EPSG:32718"
 NODATA = -9999.0
 def crop_to_geometry(data: np.ndarray, transform, geometry) -> tuple[np.ndarray, object]:
@@ -78,30 +78,30 @@ def write_slope(data: np.ndarray, transform, reference_profile: dict) -> None:
 
 
 def assert_matches_dem() -> None:
-    with rasterio.open(PE1_DEM) as dem, rasterio.open(SLOPE) as slope:
+    with rasterio.open(PERU_HYBAS_L7_6070641200_DEM) as dem, rasterio.open(SLOPE) as slope:
         if dem.crs != slope.crs or dem.transform != slope.transform or dem.shape != slope.shape:
-            raise ValueError("Slope raster does not match PE1 DEM grid")
+            raise ValueError("Slope raster does not match Arequipa Region DEM grid")
 
 
 def main() -> None:
-    geometry = load_boundary(PE1_GPKG, "peru_pilot_boundary", DST_CRS)
+    geometry = load_boundary(PERU_HYBAS_L7_6070641200_GPKG, "peru_pilot_boundary", DST_CRS)
     with rasterio.open(BUFFERED_DEM) as src:
         if str(src.crs) != DST_CRS:
             raise ValueError(f"Expected {DST_CRS}, got {src.crs}")
         dem = src.read(1).astype("float32")
         nodata_total = int((dem == NODATA).sum())
-        pe1_mask = geometry_mask([geometry], out_shape=dem.shape, transform=src.transform, invert=True)
-        nodata_in_pe1 = int(((dem == NODATA) & pe1_mask).sum())
+        peru_hybas_l7_6070641200_mask = geometry_mask([geometry], out_shape=dem.shape, transform=src.transform, invert=True)
+        nodata_in_peru_hybas_l7_6070641200 = int(((dem == NODATA) & peru_hybas_l7_6070641200_mask).sum())
         slope_buffered = derive_slope(dem, src.res[0], src.res[1])
-        slope_pe1, slope_transform = crop_to_geometry(slope_buffered, src.transform, geometry)
-        write_slope(slope_pe1, slope_transform, src.profile)
+        slope_peru_hybas_l7_6070641200, slope_transform = crop_to_geometry(slope_buffered, src.transform, geometry)
+        write_slope(slope_peru_hybas_l7_6070641200, slope_transform, src.profile)
     assert_matches_dem()
-    valid = slope_pe1[slope_pe1 != NODATA]
+    valid = slope_peru_hybas_l7_6070641200[slope_peru_hybas_l7_6070641200 != NODATA]
     print(f"wrote {SLOPE.relative_to(ROOT)}")
     print(f"buffered-DEM NoData filled before slope: {nodata_total} total "
-          f"(inside PE1 AOI: {nodata_in_pe1}; real SRTM voids in PE1 = {nodata_in_pe1}).")
+          f"(inside Arequipa Region AOI: {nodata_in_peru_hybas_l7_6070641200}; real SRTM voids in Arequipa Region = {nodata_in_peru_hybas_l7_6070641200}).")
     if valid.size:
-        print(f"PE1 slope: {float(valid.min()):.2f}-{float(valid.max()):.2f} deg, "
+        print(f"Arequipa Region slope: {float(valid.min()):.2f}-{float(valid.max()):.2f} deg, "
               f"mean {float(valid.mean()):.2f}, valid {valid.size}")
 
 

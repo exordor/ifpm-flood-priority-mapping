@@ -215,7 +215,7 @@ Translate in human-facing text:
    - resolved to `soil_erosion_factors`
 
 3. `road_accessibility_proxy` / `socioeconomic_exposure` vs "Exposure indicators"
-   - active Zimbabwe and PE1 comparison now use `exposure_indicators`
+   - active Zimbabwe and Arequipa Region comparison now use `exposure_indicators`
 
 4. `rainfall_climatology_proxy` vs `rainfall_climatology`
    - resolved to `rainfall_climatology`
@@ -294,12 +294,12 @@ proxy" is not a terminology error. After manual classification:
 ### Live-vs-dead verdict for the 15 real-hit files
 
 Each file was checked three ways: (1) DAG dependency — does any live script
-consume its outputs; (2) does the current live pipeline (V1 v0.4 / PE1 / 7-18
+consume its outputs; (2) does the current live pipeline (V1 v0.4 / Arequipa Region / 7-18
 board) reference it; (3) does the task board list it as current evidence.
 
 | File | Verdict | Why | Action |
 |---|---|---|---|
-| `bin/factors/derive_peru_pilot_usle_soil_loss.py` | **LIVE** | IFPM-077 current evidence; output feeds PE1 sediment criterion | **Rewrite**: 5× `R-invariant` → standard wording, rerun |
+| `bin/factors/derive_peru_pilot_usle_soil_loss.py` | **LIVE** | IFPM-077 current evidence; output feeds Arequipa Region sediment criterion | **Rewrite**: 5× `R-invariant` → standard wording, rerun |
 | `bin/factors/derive_v2_usle_soil_loss.py` | **dead** | V2 R-factor work paused (IFPM-074, awaits mentor); no consumer | Do not rewrite now; handle when V2 resumes |
 | `bin/visualize/plot_v2_rfactor_comparison_board.py` | **dead** | V2 R-factor comparison, V2 paused | Same as above |
 | `bin/criteria/build_era5_rfactor_raster.py` | **dead** | ERA5 R-factor exploration; R-factor route moved to Hurni/Arnoldus | Same |

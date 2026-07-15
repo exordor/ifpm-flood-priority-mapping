@@ -21,7 +21,7 @@ LOCAL_GOVERNANCE_OUTPUTS_READY = all(
     / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators/exposure_indicators_contribution_diagnostics.csv"
 ).read_text(encoding="utf-8")
 LOCAL_SOIL_K_SOURCE_READY = (
-    ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_pe1_0_5cm_250m.tif"
+    ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_peru_hybas_l7_6070641200_0_5cm_250m.tif"
 ).exists()
 
 
@@ -39,8 +39,8 @@ def load_module(relative_path: str, module_name: str):
 class PeruCriteriaGovernanceTest(unittest.TestCase):
     def test_run_manifest_does_not_capture_unrelated_worktree_paths(self):
         module = load_module(
-            "bin/scenarios/run_pe1_priority_scenarios.py",
-            "run_pe1_priority_scenarios_git_state_governance",
+            "bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py",
+            "run_peru_hybas_l7_6070641200_priority_scenarios_git_state_governance",
         )
 
         state = module.git_state()
@@ -50,8 +50,8 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
     def test_current_peru_summary_is_not_named_as_hotspot_stability(self):
         module = load_module(
-            "bin/scenarios/run_pe1_priority_scenarios.py",
-            "run_pe1_priority_scenarios_summary_name_governance",
+            "bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py",
+            "run_peru_hybas_l7_6070641200_priority_scenarios_summary_name_governance",
         )
 
         output_names = {path.name for path in module.OUTPUTS}
@@ -60,8 +60,8 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
     def test_current_criteria_stack_does_not_depend_on_legacy_klsc_composite(self):
         module = load_module(
-            "bin/criteria/build_pe1_criteria_stack.py",
-            "build_pe1_criteria_stack_no_legacy_composite",
+            "bin/criteria/build_peru_hybas_l7_6070641200_criteria_stack.py",
+            "build_peru_hybas_l7_6070641200_criteria_stack_no_legacy_composite",
         )
 
         self.assertNotIn("structure", module.INPUTS)
@@ -71,8 +71,8 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
     def test_road_access_component_is_not_named_as_the_combined_exposure_criterion(self):
         stack = load_module(
-            "bin/criteria/build_pe1_criteria_stack.py",
-            "build_pe1_criteria_stack_road_name_governance",
+            "bin/criteria/build_peru_hybas_l7_6070641200_criteria_stack.py",
+            "build_peru_hybas_l7_6070641200_criteria_stack_road_name_governance",
         )
         exposure = load_module(
             "bin/criteria/build_peru_exposure_indicators.py",
@@ -85,8 +85,8 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
         self.assertEqual(exposure.ROAD_ACCESS.name, "road_access_proximity_0_1.tif")
 
         scenarios = load_module(
-            "bin/scenarios/run_pe1_priority_scenarios.py",
-            "run_pe1_priority_scenarios_road_lineage_governance",
+            "bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py",
+            "run_peru_hybas_l7_6070641200_priority_scenarios_road_lineage_governance",
         )
         road_row = next(
             row
@@ -106,9 +106,9 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
         pipeline = load_module("bin/pipeline.py", "ifpm_pipeline_io_governance")
         scripts = {item.name: item for item in pipeline.discover_scripts()}
 
-        stack = scripts["build_pe1_criteria_stack"]
+        stack = scripts["build_peru_hybas_l7_6070641200_criteria_stack"]
         self.assertIn(
-            ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif",
+            ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif",
             stack.inputs,
         )
         self.assertIn(
@@ -126,8 +126,8 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
     def test_rainfall_normalization_uses_boundary_only_and_masks_outside(self):
         module = load_module(
-            "bin/criteria/build_pe1_rainfall_criterion.py",
-            "build_pe1_rainfall_criterion_governance",
+            "bin/criteria/build_peru_hybas_l7_6070641200_rainfall_criterion.py",
+            "build_peru_hybas_l7_6070641200_rainfall_criterion_governance",
         )
         values = np.array(
             [[1000.0, 10.0, 20.0], [1000.0, 30.0, 40.0]],
@@ -148,8 +148,8 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
     def test_rainfall_edge_fill_masks_outside_when_no_holes_exist(self):
         module = load_module(
-            "bin/criteria/build_pe1_rainfall_criterion.py",
-            "build_pe1_rainfall_criterion_mask",
+            "bin/criteria/build_peru_hybas_l7_6070641200_rainfall_criterion.py",
+            "build_peru_hybas_l7_6070641200_rainfall_criterion_mask",
         )
         values = np.arange(9, dtype="float32").reshape(3, 3)
         inside = np.array(
@@ -175,7 +175,7 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
             (
                 (
                     ROOT
-                    / "data/raw/sernanp_peru_protected_areas/pe1_sernanp_protected_areas.gpkg",
+                    / "data/raw/sernanp_peru_protected_areas/peru_hybas_l7_6070641200_sernanp_protected_areas.gpkg",
                     "sernanp_protected_areas",
                 ),
             ),
@@ -237,8 +237,8 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
     def test_sediment_uses_supplied_k_ls_c_subweights(self):
         module = load_module(
-            "bin/scenarios/run_pe1_priority_scenarios.py",
-            "run_pe1_priority_scenarios_sediment_governance",
+            "bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py",
+            "run_peru_hybas_l7_6070641200_priority_scenarios_sediment_governance",
         )
 
         self.assertEqual(
@@ -264,8 +264,8 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
     def test_sediment_requires_common_k_ls_c_support(self):
         module = load_module(
-            "bin/scenarios/run_pe1_priority_scenarios.py",
-            "run_pe1_priority_scenarios_sediment_nodata_governance",
+            "bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py",
+            "run_peru_hybas_l7_6070641200_priority_scenarios_sediment_nodata_governance",
         )
         layers = {
             "soil_k_factor": np.array([[1.0, np.nan]], dtype="float32"),
@@ -282,8 +282,8 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
     def test_pim_requires_common_five_criterion_support_and_records_evidence(self):
         module = load_module(
-            "bin/scenarios/run_pe1_priority_scenarios.py",
-            "run_pe1_priority_scenarios_main_nodata_governance",
+            "bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py",
+            "run_peru_hybas_l7_6070641200_priority_scenarios_main_nodata_governance",
         )
         criteria = {
             "flood_hazard": np.array([[0.8, np.nan]], dtype="float32"),
@@ -304,8 +304,8 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
     def test_support_class_distinguishes_ls_k_and_other_missing_evidence(self):
         module = load_module(
-            "bin/scenarios/run_pe1_priority_scenarios.py",
-            "run_pe1_priority_scenarios_support_class_governance",
+            "bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py",
+            "run_peru_hybas_l7_6070641200_priority_scenarios_support_class_governance",
         )
         components = {
             "soil_k_factor": np.array([[0.2, 0.2, np.nan, 0.2]], dtype="float32"),
@@ -455,8 +455,8 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
     def test_soil_k_normalization_preserves_boundary_and_spans_unit_interval(self):
         module = load_module(
-            "bin/criteria/build_pe1_soil_k_factor.py",
-            "build_pe1_soil_k_factor_governance",
+            "bin/criteria/build_peru_hybas_l7_6070641200_soil_k_factor.py",
+            "build_peru_hybas_l7_6070641200_soil_k_factor_governance",
         )
         values = np.array(
             [[100.0, 0.10, 0.20], [100.0, 0.30, 0.40]],
@@ -475,7 +475,7 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
         self.assertLess(low, high)
 
     @unittest.skipUnless(LOCAL_SOIL_K_SOURCE_READY, "requires ignored local SoilGrids source")
-    def test_soilgrids_window_uses_the_vrt_crs_for_pe1_location(self):
+    def test_soilgrids_window_uses_the_vrt_crs_for_peru_hybas_l7_6070641200_location(self):
         module = load_module(
             "bin/factors/derive_peru_pilot_soilgrids_kfactor.py",
             "derive_peru_pilot_soilgrids_location_governance",
@@ -483,9 +483,9 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
         import rasterio
         from pyproj import Transformer
 
-        source = ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_pe1_0_5cm_250m.tif"
+        source = ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_peru_hybas_l7_6070641200_0_5cm_250m.tif"
         with rasterio.open(source) as dataset:
-            bounds = module.pe1_bounds_in_source_crs(dataset.crs)
+            bounds = module.peru_hybas_l7_6070641200_bounds_in_source_crs(dataset.crs)
             transformer = Transformer.from_crs(dataset.crs, "EPSG:4326", always_xy=True)
 
         center_x = (bounds[0] + bounds[2]) / 2.0
@@ -495,21 +495,21 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
         self.assertAlmostEqual(longitude, -71.9479, delta=0.2)
         self.assertAlmostEqual(latitude, -16.4979, delta=0.2)
 
-    def test_soilgrids_source_window_is_not_prematurely_clipped_to_pe1(self):
+    def test_soilgrids_source_window_is_not_prematurely_clipped_to_peru_hybas_l7_6070641200(self):
         module = load_module(
             "bin/factors/derive_peru_pilot_soilgrids_kfactor.py",
             "derive_peru_pilot_soilgrids_support_governance",
         )
         k = np.array([[0.1, 0.2], [0.3, 0.4]], dtype="float32")
         source_invalid = np.array([[False, False], [True, False]])
-        pe1_mask = np.array([[False, True], [True, False]])
+        peru_hybas_l7_6070641200_mask = np.array([[False, True], [True, False]])
 
         result = module.preserve_source_window_support(k, source_invalid)
 
         self.assertAlmostEqual(float(result[0, 0]), 0.1)
         self.assertAlmostEqual(float(result[1, 1]), 0.4)
         self.assertTrue(np.isnan(result[1, 0]))
-        self.assertFalse(pe1_mask[0, 0])
+        self.assertFalse(peru_hybas_l7_6070641200_mask[0, 0])
 
 
 if __name__ == "__main__":

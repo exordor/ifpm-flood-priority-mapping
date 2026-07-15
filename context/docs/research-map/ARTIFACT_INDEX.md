@@ -124,7 +124,7 @@ but not centrally indexed.
 | Peru mining/population and SINPAD overlays | `outputs/slide_ready_figures/peru_evidence_overlays/` | current chain sources with evidence hatching; mining/population are model-input context and SINPAD is diagnostic only |
 | Peru criterion data-strength table | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/criterion_data_strength.csv` | live five-row audit of implementation, source evidence, coverage, limitations, validation state, and next upgrade |
 | Peru criterion-dependence diagnostics | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/criterion_dependency_diagnostics.csv` | Spearman and component-removal diagnostics for shared WorldCover use, road-led socioeconomic ordering, and water-led Environmental context; diagnostic only, not validation or weight calibration |
-| Superseded report surfaces and legacy slide figures | `outputs/_archive/2026-07-11_peru_figure_governance/` | archived with `ARCHIVE_MANIFEST.csv`; excluded from the current reporting chain |
+| Superseded report surfaces and legacy slide figures | deleted from `outputs/_archive/2026-07-11_peru_figure_governance/` during the 2026-07-15 output cleanup | reproducible legacy outputs removed to save space; excluded from the current reporting chain |
 | R-factor send packet | `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/mentor_rfactor_exploration_board.png`, `outputs/v1_usle_soil_loss/rfactor_empirical_era5/mentor_era5_empirical_rfactor_board.png` | conditional send (Fig 1, Fig 2 only) |
 
 ## Terminology dead/alive verdict (from 2026-07-02 audit)

@@ -96,7 +96,7 @@ def protected_evidence_state() -> str:
 
 def mining_feature_count() -> int:
     rows = read_csv_rows(MINING_MANIFEST)
-    return int(rows[0]["features_in_pe1_envelope"])
+    return int(rows[0]["features_in_peru_hybas_l7_6070641200_envelope"])
 
 
 def socioeconomic_influence_note() -> str:
@@ -209,7 +209,7 @@ def build_rows() -> list[dict[str, object]]:
             "display_name": "Land use / mining",
             "main_weight": 0.20,
             "implementation": "0.35 WorldCover land-use pressure (distinct from RUSLE C) + 0.65 INGEMMET small-mining point proximity",
-            "source_evidence": f"ESA WorldCover and {mining_count} official INGEMMET small-mining points in the PE1 envelope",
+            "source_evidence": f"ESA WorldCover and {mining_count} official INGEMMET small-mining points in the Arequipa Region envelope",
             "evidence_state": "implemented_provisional",
             "known_limit": "Mining points indicate registered/reference locations, not verified active disturbance footprints or intensity",
             "validation_state": "not validated",
@@ -222,7 +222,7 @@ def build_rows() -> list[dict[str, object]]:
             "implementation": "0.60 water/wetland context + 0.40 SERNANP national definitive protected-area proximity (MapServer layer 0)",
             "source_evidence": "ESA WorldCover water/wetland, OSM water vectors and SERNANP national definitive protected areas (MapServer layer 0)",
             "evidence_state": local_protected_state,
-            "known_limit": "No layer-0 SERNANP national definitive protected-area geometry occurs within the PE1 + 5 km context zone; regional, private and transitional protected-area layers were not queried, so the current score is driven by water/wetland evidence",
+            "known_limit": "No layer-0 SERNANP national definitive protected-area geometry occurs within the Arequipa Region + 5 km context zone; regional, private and transitional protected-area layers were not queried, so the current score is driven by water/wetland evidence",
             "validation_state": "not validated",
             "next_upgrade": "local wetlands, riparian/ecological condition or other accepted sensitivity evidence",
         },

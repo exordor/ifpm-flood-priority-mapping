@@ -66,7 +66,7 @@ def criteria_rows() -> list[dict[str, str]]:
             "provisional environmental-sensitivity indicator; not ecological valuation",
             "WorldCover water/wetland classes, Geofabrik OSM water, and SERNANP national definitive protected-area proximity (layer 0)",
             "10-30 m grid plus vector proximity",
-            "provisional environmental-sensitivity indicator; no layer-0 SERNANP geometry occurs in the PE1 + 5 km context zone; other protected-area layers were not queried",
+            "provisional environmental-sensitivity indicator; no layer-0 SERNANP geometry occurs in the Arequipa Region + 5 km context zone; other protected-area layers were not queried",
             "ESA WorldCover + JRC GSW / WDPCA / Geofabrik OSM / SERNANP layer 0",
             "provisional",
         ),

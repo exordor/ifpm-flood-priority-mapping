@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Derive PE1 USLE/RUSLE soil-loss structure and provisional sediment scenarios.
+"""Derive Arequipa Region USLE/RUSLE soil-loss structure and provisional sediment scenarios.
 
 Mirrors `derive_v1_usle_soil_loss.py` but uses the verified-safe structure layer only
 (K_SI x LS x C x P, independent of the rainfall-erosivity factor R) and applies
 provisional R scalars. The old Zimbabwe workflow's R-dependent absolute A values are
-deprecated; this PE1 script follows the 2026-06-19 audit's corrected approach: the
+deprecated; this Arequipa Region script follows the 2026-06-19 audit's corrected approach: the
 erosion structure is trustworthy, R is a labelled scalar.
 
-PE1 structure = K_SI_scalar x LS(hillslope, capped-50) x C(30m) x P(=1.0).
+Arequipa Region structure = K_SI_scalar x LS(hillslope, capped-50) x C(30m) x P(=1.0).
 Provisional sediment scenarios = structure x R_mean for a LOW and HIGH R family.
 The cell ranking does not depend on the chosen R value; R only scales magnitude.
 """
@@ -22,22 +22,22 @@ import numpy as np
 import rasterio
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/pe1_ls_factor_capped50_hillslope_30m.tif", ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif"]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/peru_hybas_l7_6070641200_ls_factor_capped50_hillslope_30m.tif", ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_peru_hybas_l7_6070641200_30m.tif"]
 OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/a_structure_K_LS_C_30m.tif"]
 
-LS = ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/pe1_ls_factor_capped50_hillslope_30m.tif"
-C = ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif"
-PE1_REFERENCE_DEM = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
+LS = ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/peru_hybas_l7_6070641200_ls_factor_capped50_hillslope_30m.tif"
+C = ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_peru_hybas_l7_6070641200_30m.tif"
+PERU_HYBAS_L7_6070641200_REFERENCE_DEM = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
 OUTPUT_DIR = ROOT / "outputs/srtm_1arcsec_peru_pilot/usle_soil_loss"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# K_SI scalar: PE1 zonal mean K_US (0-5cm) x 0.1317 -> SI units. From k_factor_diagnostics.json.
+# K_SI scalar: Arequipa Region zonal mean K_US (0-5cm) x 0.1317 -> SI units. From k_factor_diagnostics.json.
 K_US_MEAN_0_5CM = 0.1815
 K_SI_MEAN = K_US_MEAN_0_5CM * 0.1317  # = 0.0239
 
 # Provisional R scalars (LOW family default, HIGH family sensitivity).
 # LOW: same provisional value used for Zimbabwe (Arnoldus 1980 LOW family, applied as a
-# labelled provisional default until a PE1-specific CHIRPS/ERA5 R is derived). Peru PE1 is
+# labelled provisional default until a Arequipa Region-specific CHIRPS/ERA5 R is derived). Peru Arequipa Region is
 # a drier Pacific-slope basin; the true R is likely lower, but the LOW-family provisional
 # is a defensible conservative screening value, and the cell ranking does not depend on R.
 R_LOW_DEFAULT = 238.6
@@ -61,7 +61,7 @@ def main() -> None:
     ls, profile = read_band(LS)
     c, _ = read_band(C)
 
-    with rasterio.open(PE1_REFERENCE_DEM) as ref:
+    with rasterio.open(PERU_HYBAS_L7_6070641200_REFERENCE_DEM) as ref:
         ref_crs = ref.crs
         ref_shape = (ref.height, ref.width)
 
@@ -112,7 +112,7 @@ def main() -> None:
         "boundary_status": "provisional_comparison_catchment_not_final_study_area",
         "r_invariance_note": ("The cell ranking does not depend on the chosen R value; R only "
                               "scales the absolute magnitude. The LOW R is a provisional screening "
-                              "default; a PE1-specific CHIRPS/ERA5 R should be derived for any "
+                              "default; a Arequipa Region-specific CHIRPS/ERA5 R should be derived for any "
                               "magnitude claim."),
         "zimbabwe_v1_reference": {
             "K_SI_mean": 0.022319,

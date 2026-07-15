@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 CHECK_PATHS = [
     ROOT / "bin/scenarios/run_boundary_v1_rainfall_exposure.py",
-    ROOT / "bin/scenarios/run_pe1_priority_scenarios.py",
+    ROOT / "bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py",
     ROOT / "bin/scenarios/run_boundary_v1_priority_scenarios.py",
     ROOT / "bin/scenarios/run_boundary_v1_rainfall_sensitivity.py",
     ROOT / "bin/criteria/diagnose_boundary_v1_hotspot_exposure.py",

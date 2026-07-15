@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Query SERNANP national definitive protected areas (layer 0) near PE1."""
+"""Query SERNANP national definitive protected areas (layer 0) near Arequipa Region."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ import certifi
 ROOT = Path(__file__).resolve().parents[2]
 BOUNDARY = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 OUT_DIR = ROOT / "data/raw/sernanp_peru_protected_areas"
-OUT_GPKG = OUT_DIR / "pe1_sernanp_protected_areas.gpkg"
+OUT_GPKG = OUT_DIR / "peru_hybas_l7_6070641200_sernanp_protected_areas.gpkg"
 MANIFEST = OUT_DIR / "query_manifest.json"
 SERVICE = (
     "https://geoservicios.sernanp.gob.pe/arcgis/rest/services/"
@@ -79,7 +79,7 @@ def main() -> None:
 
     features = payload.get("features", [])
     if not features:
-        raise RuntimeError("SERNANP returned no features for the buffered PE1 envelope")
+        raise RuntimeError("SERNANP returned no features for the buffered Arequipa Region envelope")
     protected = gpd.GeoDataFrame.from_features(features, crs="EPSG:4326")
     protected = protected[protected.geometry.notna() & ~protected.geometry.is_empty].copy()
     if protected.empty:

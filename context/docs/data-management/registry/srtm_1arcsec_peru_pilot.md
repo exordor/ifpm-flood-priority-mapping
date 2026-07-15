@@ -1,6 +1,6 @@
-# Dataset Registry: SRTM 1 Arc-Second Southern Peru PE1
+# Dataset Registry: SRTM 1 Arc-Second Southern Peru Arequipa Region
 
-Status: downloaded and processed for PE1 terrain diagnostics in the southern
+Status: downloaded and processed for Arequipa Region terrain diagnostics in the southern
 Peru comparison catchment.
 
 ## Dataset Identity
@@ -9,12 +9,12 @@ Peru comparison catchment.
 - Short name: SRTM 1 Arc-Second Global
 - Data class: `LOCAL_DATA`
 - Reusable download: yes, if the Peru side proceeds
-- Project role: terrain baseline for PE1 elevation, slope, and hydrological derivatives
-- Study area: PE1 (`HYBAS_ID=6070641200`, 2745.4 km2), a Pacific-slope
+- Project role: terrain baseline for Arequipa Region elevation, slope, and hydrological derivatives
+- Study area: Arequipa Region (`HYBAS_ID=6070641200`, 2745.4 km2), a Pacific-slope
   catchment in Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas
   area west of Arequipa city
-- Spatial unit or mask: PE1 boundary, the Peru analogue of the Zimbabwe V1 working boundary;
-  PE1 is NOT a research-selected boundary and will be replaced if the mentor names a Peru site
+- Spatial unit or mask: Arequipa Region boundary, the Peru analogue of the Zimbabwe V1 working boundary;
+  Arequipa Region is NOT a research-selected boundary and will be replaced if the mentor names a Peru site
 - Temporal coverage: SRTM mission acquisition period in February 2000
 
 ## Source And Access
@@ -38,7 +38,7 @@ Peru comparison catchment.
 - Intended destination: `data/raw/srtm_1arcsec_peru_pilot/`
 - Expected file types: zipped SRTMGL1 `.hgt` tiles
 - Source artifact names: `S17W072.SRTMGL1.hgt.zip`, `S17W073.SRTMGL1.hgt.zip`
-- PE1 preflight bbox EPSG:4326 with buffer: covers the PE1 pacific-slope catchment
+- Arequipa Region preflight bbox EPSG:4326 with buffer: covers the Arequipa Region pacific-slope catchment
 - Expected file count: 2 SRTM 1x1 degree tiles
 - Download command or manual steps:
   `.venv/bin/python bin/acquire/plan_srtm_tiles_for_peru_pilot.py` then
@@ -51,7 +51,7 @@ Peru comparison catchment.
 - Attempt status: completed
 - Attempt date: 2026-06-30
 - Archive state: two ZIP source archives stored under `data/raw/srtm_1arcsec_peru_pilot/`
-- Extraction state: extracted and mosaicked into the PE1 DEM
+- Extraction state: extracted and mosaicked into the Arequipa Region DEM
 - Cleanup/disposition: source archives and checksums retained
 
 ## Verification
@@ -67,7 +67,7 @@ Peru comparison catchment.
 | `S17W073` | 9,807,568 | `1ea7c09bf7d22feabee3cbed1b678201b135e48510f4e7bcb3a3dc7c69e8b375` | `S17W073.SRTMGL1.hgt.zip` |
 
 - File-count evidence: 2 planned tiles downloaded
-- CRS or georeferencing checked: yes; PE1 DEM reprojected to EPSG:32718 (UTM 18S), 30 m
+- CRS or georeferencing checked: yes; Arequipa Region DEM reprojected to EPSG:32718 (UTM 18S), 30 m
 - Geometry/raster integrity checked: yes; elevation 144.9-3188.3 m, valid fraction 0.4506
 - Licence/terms accepted: no credentialed terms accepted; public-release redistribution not
   approved
@@ -83,7 +83,7 @@ Peru comparison catchment.
   `bin/factors/derive_peru_pilot_hydrology.py`,
   `bin/factors/derive_peru_pilot_ls_factor.py`
 - Reference-grid rule: `context/docs/data-management/peru_pilot_terrain_reference_grid_rule.md`
-  (PE1 DEM is the Peru reference grid, separate from Zimbabwe's EPSG:32735 reference)
+  (Arequipa Region DEM is the Peru reference grid, separate from Zimbabwe's EPSG:32735 reference)
 - Known limitations: some SRTM tiles may contain voids; hydrological conditioning not guaranteed
 - Replacement or update rule: replace if mentor names a specific Peru site or
   if a higher-resolution DEM is explicitly requested

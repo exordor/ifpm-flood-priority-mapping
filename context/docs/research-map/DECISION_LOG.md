@@ -46,14 +46,15 @@ decision, reason, alternatives, consequences.
   interpretation, intervention-priority interpretation, or treating CHIRPS as
   native 30 m rainfall evidence.
 
-## D-PE1-CATCHMENT — PE1 selected as southern Peru comparison catchment
+## D-AREQUIPA-REGION-CATCHMENT — working catchment selected within Arequipa Region
 
 - **Date:** 2026-06-30.
 - **Context:** Peru side was entirely blank. The mentor had not named a final
   Peru study site. A boundary was needed to run the terrain chain end-to-end and
   prove comparability.
-- **Decision:** PE1 = HydroBASINS L7 `HYBAS_ID=6070641200`, 2745.4 km²,
-  Pacific-slope catchment in Arequipa Region, mainly the
+- **Decision:** the working boundary displayed externally as **Arequipa Region** is
+  HydroBASINS L7 `HYBAS_ID=6070641200`, a 2745.4 km² Pacific-slope catchment
+  within Arequipa Region, mainly the
   Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It was chosen
   by explicit selection rule (pacific-slope, fully inside the
   Arequipa-Moquegua-Tacna discovery envelope, area comparable to V1,
@@ -62,11 +63,11 @@ decision, reason, alternatives, consequences.
   choice auditable rather than arbitrary.
 - **Alternatives:** wait for mentor to name a site (blocked progress); pick
   arbitrary largest basin (not defensible).
-- **Consequences:** PE1 — the Pacific-slope Vitor-La Joya-Santa Rita de Siguas
-  catchment in Arequipa Region (~2745 km², arid) — is a provisional comparison
+- **Consequences:** this Pacific-slope Vitor-La Joya-Santa Rita de Siguas
+  catchment (~2745 km², arid), displayed as **Arequipa Region**, is a provisional comparison
   catchment, NOT a final research-selected Peru study area. It will be replaced
   if the mentor names a specific Peru site. No flood-risk/comparison claim from
-  PE1. Superseded for the current working mainline by D-PERU-FIRST: PE1 remains
+  Arequipa Region. Superseded for the current working mainline by D-PERU-FIRST: Arequipa Region remains
   provisional, but it is now the active Peru-first case to complete.
 
 ## D-PERU-FIRST — Peru becomes the current mainline case
@@ -80,7 +81,7 @@ decision, reason, alternatives, consequences.
   Peru also has stronger current mining evidence through INGEMMET small-mining
   points, while Zimbabwe mining remains OSM-only / weak.
 - **Decision:** Shift the active project mainline to a Peru-first case study.
-  Complete PE1 first: five-criterion input maps, AHP-weighted prototype
+  Complete Arequipa Region first: five-criterion input maps, AHP-weighted prototype
   prioritisation map, top-priority classes, mining overlay, and a data-strength
   table. Keep Zimbabwe as a secondary / background comparison and method
   development baseline, not the result to finish first.
@@ -98,7 +99,7 @@ decision, reason, alternatives, consequences.
   - New outputs and PPT structure should lead with Peru.
   - Zimbabwe outputs remain usable for background, contrast, or later
     comparison, but not as the active endpoint.
-  - PE1 is still provisional and not a final research-selected Peru boundary.
+  - Arequipa Region is still provisional and not a final research-selected Peru boundary.
   - The current Peru weight scenario is superseded by
     D-PERU-MENTOR-WEIGHTS; no equal-weight Peru result remains active.
   - The final map label should be "prototype flood prioritisation map", not
@@ -161,11 +162,11 @@ decision, reason, alternatives, consequences.
 
 - **Date:** 2026-07-13.
 - **Context:** Audit found a mislocated Peru SoilGrids K extraction, rainfall
-  normalization influenced by values outside PE1, reuse of the RUSLE C value
+  normalization influenced by values outside Arequipa Region, reuse of the RUSLE C value
   function for Land Use, an unqualified empty protected-area component, and
   obsolete equal-weight Peru outputs.
 - **Decision:** Correct the SoilGrids source window and align K with an explicit
-  250 m effective-resolution warning; normalize rainfall from PE1 boundary
+  250 m effective-resolution warning; normalize rainfall from Arequipa Region boundary
   cells only; implement Sediment as additive normalized K/LS/C with local
   weights 0.30/0.45/0.25; use a separate WorldCover land-use pressure function;
   use official SERNANP protected areas and record verified local absence; retain
@@ -179,7 +180,7 @@ decision, reason, alternatives, consequences.
   rasters distinguish LS, K, and other missing inputs. The direct
   highest-priority quintile is 521.356 km². Environmental is driven by
   water/wetland evidence because no SERNANP national definitive layer-0 geometry
-  occurs within PE1 + 5 km; other protected-area layers were not queried. All outputs remain
+  occurs within Arequipa Region + 5 km; other protected-area layers were not queried. All outputs remain
   provisional or `sensitivity_scenario`, not validated flood risk.
   Dependency diagnostics are kept separate from the AHP calculation: shared
   WorldCover use (`rho=0.498`), road-led Socioeconomic ordering (`rho=0.970`),
@@ -397,8 +398,9 @@ decision, reason, alternatives, consequences.
   mining/population overlays are model-input context; SINPAD is
   `diagnostic_only`, not independent model validation.
 - **Consequences:** superseded report surfaces and legacy slide-ready scenario
-  figures moved to `outputs/_archive/2026-07-11_peru_figure_governance/` with an
-  archive manifest. Current QA checks write to `outputs/project_checks/` so
+  figures were first moved to `outputs/_archive/2026-07-11_peru_figure_governance/`
+  and then deleted during the 2026-07-15 output cleanup because they are reproducible.
+  Current QA checks write to `outputs/project_checks/` so
   they do not recreate archived report directories. Historical generation
   scripts remain available for traceability but their outputs are not included
   in the authoritative chain.
@@ -430,4 +432,4 @@ Absorbs content from:
 - `assumptions_log.md` (decision-style assumptions)
 - `real_data_preprocessing_design.md` (boundary acceptance rules → D-V1-WAIVER)
 - `_archive/superseded_boundary_exploration_2026-06/v1_working_boundary_decision_2026-06-12.md` (D-V1-WAIVER)
-- `_archive/superseded_process_notes_2026-06/peru_pilot_boundary_decision_2026-06-30.md` (historical PE1 boundary-selection note)
+- `_archive/superseded_process_notes_2026-06/peru_pilot_boundary_decision_2026-06-30.md` (historical Arequipa Region boundary-selection note)

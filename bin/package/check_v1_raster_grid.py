@@ -80,7 +80,7 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=V1_GPKG,
         help="Boundary GeoPackage for valid-cell-fraction masking. Defaults to the V1 Zimbabwe "
-        "boundary. Pass a country-specific boundary (e.g. the Peru PE1 boundary) when checking "
+        "boundary. Pass a country-specific boundary (e.g. the Peru Arequipa Region boundary) when checking "
         "non-Zimbabwe rasters, so the gate masks against the correct AOI.",
     )
     parser.add_argument(

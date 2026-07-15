@@ -201,7 +201,7 @@ def write_readme(rows: list[dict[str, str]]) -> None:
             "overlays are model-input context. SINPAD is a co-location diagnostic, not",
             "independent model validation. Flood is a conditioning indicator, Environmental",
             "is water/wetland-led context, and Socioeconomic is an exposure indicator. The PIM",
-            "covers 95.0998% of PE1 on strict five-criterion common support; the remaining",
+            "covers 95.0998% of Arequipa Region on strict five-criterion common support; the remaining",
             "4.9002% is hatched and unscored. It is not a catchment-wide rescue map. See",
             "`../manifest.csv` for source paths and checksums.",
             "",

@@ -18,8 +18,8 @@ TOP20 = ROOT / (
 POPULATION_MANIFEST = ROOT / "outputs/peru_gap_closure_analysis/peru_population_by_pim_class_manifest.json"
 SINPAD_MANIFEST = ROOT / "outputs/peru_gap_closure_analysis/peru_sinpad_colocation_manifest.json"
 RUN_MANIFEST = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/run_manifest.json"
-WORLDPOP = ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_pe1_bbox.tif"
-SINPAD = ROOT / "data/validation/indeci_sinpad_peru_flood_events/pe1_sinpad_flood_relevant.gpkg"
+WORLDPOP = ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_peru_hybas_l7_6070641200_bbox.tif"
+SINPAD = ROOT / "data/validation/indeci_sinpad_peru_flood_events/peru_hybas_l7_6070641200_sinpad_flood_relevant.gpkg"
 LOCAL_OUTPUTS_READY = all(
     path.exists()
     for path in (PIM, TOP20, POPULATION_MANIFEST, SINPAD_MANIFEST, RUN_MANIFEST, WORLDPOP, SINPAD)

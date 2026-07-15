@@ -67,7 +67,7 @@ layer is produced or official ASM data arrives (mentor 7/18 ask).
 | OSM quarry/industrial (Geofabrik) | weak proxy, currently the only V1 mining layer | in use |
 | **USGS Africa GIS** | known mines/deposits/facilities reference | **this download** |
 | Zimbabwe Mining Cadastre Portal | official titles/concessions | blocked: portal data provisional + registration required, not obtainable |
-| INGEMMET (Peru PE1) | official ASM points (Peru side only) | in use for PE1 |
+| INGEMMET (Peru Arequipa Region) | official ASM points (Peru side only) | in use for Arequipa Region |
 | Sentinel-2 disturbance mapping | active footprint production | future; out of scope before 7/18 |
 
 ## Release Boundary

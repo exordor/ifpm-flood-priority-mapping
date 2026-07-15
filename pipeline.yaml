@@ -31,14 +31,14 @@ include:
   - derive_peru_pilot_hydrology
   - derive_peru_pilot_ls_factor
   - derive_peru_pilot_worldcover_cfactor
-  - extract_pe1_ingemmet_mining
+  - extract_peru_hybas_l7_6070641200_ingemmet_mining
   - extract_inei_arequipa_poverty
-  - build_pe1_osm_proximity_criteria
-  - build_pe1_soil_k_factor
-  - build_pe1_criteria_stack
+  - build_peru_hybas_l7_6070641200_osm_proximity_criteria
+  - build_peru_hybas_l7_6070641200_soil_k_factor
+  - build_peru_hybas_l7_6070641200_criteria_stack
   - build_peru_exposure_indicators
   - build_pim_environmental_sensitivity
-  - run_pe1_priority_scenarios
+  - run_peru_hybas_l7_6070641200_priority_scenarios
   - summarize_peru_criterion_dependency
   - summarize_peru_criterion_data_strength
   - summarize_peru_population_by_pim_class
@@ -70,7 +70,7 @@ exclude:
   - query_peru_sinpad_flood_events         # network ArcGIS query; run explicitly
   - query_peru_sernanp_protected_areas     # network ArcGIS query; run explicitly
   - derive_peru_pilot_soilgrids_kfactor   # network SoilGrids VRT window read; run explicitly
-  - build_pe1_rainfall_criterion          # remote CHIRPS COG reads; run explicitly
+  - build_peru_hybas_l7_6070641200_rainfall_criterion          # remote CHIRPS COG reads; run explicitly
   - compare_peru_exposure_refresh          # one-off before/after diagnostic needs archived raster
   - derive_peru_pilot_usle_soil_loss       # legacy diagnostic; active Peru Sediment uses independent K/LS/C
   - export_peru_conditioning_factor_maps   # superseded by raw-input and five-criterion current maps
@@ -100,4 +100,4 @@ network_scripts:
   - query_peru_sinpad_flood_events
   - query_peru_sernanp_protected_areas
   - derive_peru_pilot_soilgrids_kfactor    # remote SoilGrids VRT window reads
-  - build_pe1_rainfall_criterion           # remote CHIRPS COG reads
+  - build_peru_hybas_l7_6070641200_rainfall_criterion           # remote CHIRPS COG reads

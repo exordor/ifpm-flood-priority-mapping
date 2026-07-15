@@ -95,14 +95,14 @@ comparison. The data-readiness inventory shows the public global sources are rea
 without new institutional access, and Peru's mining cadastre (INGEMMET/GEOCATMIN) is publicly
 accessible — strictly better than Zimbabwe's OSM-only mining proxy.
 
-Also on 2026-06-30, the Peru terrain chain was started with an engineering-pilot boundary PE1
-(IFPM-092). Because the mentor has not named a specific Peru site, PE1 was selected by an explicit
+Also on 2026-06-30, the Peru terrain chain was started with an engineering-pilot boundary Arequipa Region
+(IFPM-092). Because the mentor has not named a specific Peru site, Arequipa Region was selected by an explicit
 rule (pacific-slope, fully inside the three-department envelope, area comparable to Zimbabwe V1,
 non-terminal) to run the terrain chain end-to-end and prove comparability — it is NOT a
-research-selected boundary. The chain completed: PE1 boundary exported (2745 km2, ratio 0.74 vs
-Zimbabwe V1), 2 SRTM tiles downloaded, PE1 DEM built (EPSG:32718, 30 m, elevation 145-3188 m),
+research-selected boundary. The chain completed: Arequipa Region boundary exported (2745 km2, ratio 0.74 vs
+Zimbabwe V1), 2 SRTM tiles downloaded, Arequipa Region DEM built (EPSG:32718, 30 m, elevation 145-3188 m),
 and a Peru reference-grid rule recorded. Peru now has a working terrain chain at a comparable
-scale. PE1 will be replaced if the mentor names a specific Peru site. No overlay, interpretation,
+scale. Arequipa Region will be replaced if the mentor names a specific Peru site. No overlay, interpretation,
 or Zimbabwe-Peru comparison is authorized.
 
 ## Done
@@ -527,9 +527,9 @@ or Zimbabwe-Peru comparison is authorized.
   hydrographic vs clipped boundary; is Peru a hard thesis requirement?); obtain an authoritative
   administrative polygon to replace the discovery envelope before any boundary acceptance.
 
-### IFPM-092 Peru Engineering-Pilot Terrain Chain (PE1)
+### IFPM-092 Peru Engineering-Pilot Terrain Chain (Arequipa Region)
 
-- Status: complete as `diagnostic_only` / `engineering_pilot` terrain chain. PE1 is NOT a
+- Status: complete as `diagnostic_only` / `engineering_pilot` terrain chain. Arequipa Region is NOT a
   research-selected boundary; it was chosen by an explicit selection rule (pacific-slope, fully
   inside the three-department envelope, area comparable to Zimbabwe V1, non-terminal) to run the
   Peru terrain chain end-to-end and prove comparability. It will be replaced if the mentor names a
@@ -542,131 +542,131 @@ or Zimbabwe-Peru comparison is authorized.
   `data/raw/srtm_1arcsec_peru_pilot/`, ignored outputs under
   `outputs/peru_pilot_boundary/` and `outputs/srtm_1arcsec_peru_pilot/`.
 - Key results:
-  - PE1 = HydroBASINS L7 `HYBAS_ID=6070641200`, `2745.4 km2` (ratio 0.74 vs Zimbabwe V1 ~3689.5
+  - Arequipa Region = HydroBASINS L7 `HYBAS_ID=6070641200`, `2745.4 km2` (ratio 0.74 vs Zimbabwe V1 ~3689.5
     km2), pacific-slope, ~17 km west of Arequipa city.
   - Downloaded 2 SRTMGL1 tiles (`S17W073`, `S17W072`, ~25 MB total, SHA-256 recorded) from the
     ESA STEP mirror (same source as Zimbabwe, no login).
-  - PE1 DEM: `EPSG:32718` (UTM 18S), 30 m, float32, NoData -9999.0, elevation 144.9-3188.3 m,
+  - Arequipa Region DEM: `EPSG:32718` (UTM 18S), 30 m, float32, NoData -9999.0, elevation 144.9-3188.3 m,
     valid fraction 0.4506. This DEM is the Peru reference grid (separate from Zimbabwe's
     EPSG:32735 reference).
   - A Peru reference-grid rule is recorded so future Peru terrain derivatives must match it.
 - Impact: the Peru side can now run the same terrain/hydrology/USLE workflow as Zimbabwe. Peru is
   no longer entirely blank; it has a working terrain chain at a comparable scale. This does NOT
-  make PE1 a research-meaningful site, does NOT authorize overlay or interpretation, and does NOT
+  make Arequipa Region a research-meaningful site, does NOT authorize overlay or interpretation, and does NOT
   make a Zimbabwe-Peru comparison.
-- Next action: derive PE1 slope + hydrology (the next terrain derivatives), mirroring the
-  Zimbabwe `derive_srtm_v1_slope.py` / `derive_v1_hydrology.py` against the PE1 reference grid.
+- Next action: derive Arequipa Region slope + hydrology (the next terrain derivatives), mirroring the
+  Zimbabwe `derive_srtm_v1_slope.py` / `derive_v1_hydrology.py` against the Arequipa Region reference grid.
 
-### IFPM-093 Peru PE1 Full Evidence Stack + Prototype Priority Map
+### IFPM-093 Peru Arequipa Region Full Evidence Stack + Prototype Priority Map
 
-- Status: complete as `diagnostic_only` / `engineering_pilot` prototype. PE1 now has a full
+- Status: complete as `diagnostic_only` / `engineering_pilot` prototype. Arequipa Region now has a full
   evidence stack and a priority map comparable to Zimbabwe V1 v0.2.
-- Evidence: `bin/factors/derive_peru_pilot_usle_soil_loss.py`, `bin/criteria/build_pe1_criteria_stack.py`,
-  `bin/scenarios/run_pe1_priority_scenarios.py`, ignored outputs under
+- Evidence: `bin/factors/derive_peru_pilot_usle_soil_loss.py`, `bin/criteria/build_peru_hybas_l7_6070641200_criteria_stack.py`,
+  `bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py`, ignored outputs under
   `outputs/srtm_1arcsec_peru_pilot/{ls_factor,usle_soil_loss,criteria_stack,priority_scenarios}/`
   and `outputs/esa_worldcover_2021_peru_pilot/`, `outputs/soilgrids_250m_peru_pilot/`.
 - Key results:
   - USLE factors complete: LS (hillslope mean 3.70), K (0.1815 US, native 250m), C (mean 0.6096,
-    bare/sparse dominant on arid Andean Pacific slope). PE1 USLE structure + provisional-R soil
+    bare/sparse dominant on arid Andean Pacific slope). Arequipa Region USLE structure + provisional-R soil
     loss (LOW R=238.6 mean 8.74 t/ha/yr vs Zimbabwe 0.50 — steeper + barer terrain, expected).
-  - Criteria stack: 3 criteria (flood_hazard, erosion_structure, land_cover_pressure) on the PE1
+  - Criteria stack: 3 criteria (flood_hazard, erosion_structure, land_cover_pressure) on the Arequipa Region
     30m grid. Mining + socioeconomic exposure DEFERRED (no Peru OSM/INGEMMET data processed yet) —
     recorded as gaps, NOT invented.
   - Priority scenarios (equal + flood/erosion heavy): top-20% stable hotspot across both
-    scenarios `379.183 km2` (Zimbabwe V1 v0.2 ref `431.907 km2` with 4-6 criteria). PE1 board
+    scenarios `379.183 km2` (Zimbabwe V1 v0.2 ref `431.907 km2` with 4-6 criteria). Arequipa Region board
     produced.
-- Physical-comparison signal: PE1 C-factor (0.61, bare) vs Zimbabwe (0.04, shrub/grass), and PE1
+- Physical-comparison signal: Arequipa Region C-factor (0.61, bare) vs Zimbabwe (0.04, shrub/grass), and Arequipa Region
   soil loss (8.74) vs Zimbabwe (0.50) — the two sites have fundamentally different erosion
   regimes (arid Andean Pacific slope vs semi-humid savanna). This is a real, defensible contrast,
   not noise.
 - Impact: Peru is no longer entirely blank — it has a working full terrain/hydrology/USLE chain
   AND a provisional priority map at a comparable scale to Zimbabwe. The two countries can now be
-  compared structurally. This does NOT make PE1 research-selected, does NOT authorize validated
+  compared structurally. This does NOT make Arequipa Region research-selected, does NOT authorize validated
   flood-risk claims, and does NOT by itself complete a Zimbabwe-Peru comparison (needs harmonized
   criteria + the missing mining/exposure criteria).
 - Next action: obtain Peru OSM (roads/places/mining proxy) and/or INGEMMET/GEOCATMIN to fill the
   mining + exposure criteria; or present the Zimbabwe-Peru structural comparison to the mentor
   with explicit claim-level limits.
 
-### IFPM-094 Peru PE1 Mining + Exposure Criteria (OSM) And Full 5-Criteria Priority Map
+### IFPM-094 Peru Arequipa Region Mining + Exposure Criteria (OSM) And Full 5-Criteria Priority Map
 
-- Status: complete. PE1 now has all 5 criteria comparable to Zimbabwe v0.2, including the mentor-
+- Status: complete. Arequipa Region now has all 5 criteria comparable to Zimbabwe v0.2, including the mentor-
   slide-mapped priority scenario.
 - Evidence:
   `context/docs/data-management/registry/geofabrik_osm_peru_pilot.md`,
-  `bin/criteria/build_pe1_osm_proximity_criteria.py`, `bin/criteria/build_pe1_criteria_stack.py`,
-  `bin/scenarios/run_pe1_priority_scenarios.py`, ignored raw under
+  `bin/criteria/build_peru_hybas_l7_6070641200_osm_proximity_criteria.py`, `bin/criteria/build_peru_hybas_l7_6070641200_criteria_stack.py`,
+  `bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py`, ignored raw under
   `data/raw/geofabrik_osm_peru_pilot/`, ignored outputs under
-  `outputs/geofabrik_osm_peru_pilot/pe1_proximity/` and
+  `outputs/geofabrik_osm_peru_pilot/peru_hybas_l7_6070641200_proximity/` and
   `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/`.
 - Key results:
   - Downloaded Geofabrik Peru OSM (597 MB, SHA-256 recorded) under the same ODbL license as the
     Zimbabwe extract.
-  - Built two proximity criteria: `mining_pressure` (32 quarry/industrial polygons in PE1+5km —
+  - Built two proximity criteria: `mining_pressure` (32 quarry/industrial polygons in Arequipa Region+5km —
     stronger than Zimbabwe V1's 2 polygons) and `socioeconomic_exposure` (6210 roads).
-  - PE1 criteria stack now has 5 criteria: flood_hazard, erosion_structure, land_cover,
+  - Arequipa Region criteria stack now has 5 criteria: flood_hazard, erosion_structure, land_cover,
     mining_pressure, socioeconomic_exposure.
   - Priority scenarios (equal + mentor_slide_mapped CR=0.022 + flood_erosion_heavy): top-20%
     stable hotspot across all 3 scenarios `368.411 km2` (Zimbabwe V1 v0.2 ref `431.907 km2`).
-    PE1 priority board produced.
-- Impact: Peru PE1 is now methodologically symmetric to Zimbabwe V1 v0.2 — same 5-criteria
+    Arequipa Region priority board produced.
+- Impact: Peru Arequipa Region is now methodologically symmetric to Zimbabwe V1 v0.2 — same 5-criteria
   structure, same slide-matrix scenario, comparable hotspot-stability output. The two countries
   can now be structurally compared with the same weighting. Still diagnostic_only /
-  engineering_pilot: not a validated flood-risk map, not an intervention plan, PE1 not a
+  engineering_pilot: not a validated flood-risk map, not an intervention plan, Arequipa Region not a
   research-selected boundary, no harmonized final comparison claim yet.
 - Next action: present the Zimbabwe-Peru structural comparison (5-criteria priority maps, slide-
   matrix scenarios, hotspot stability) to the mentor with explicit claim-level limits; or upgrade
   the mining criterion from OSM proxy to INGEMMET/GEOCATMIN official cadastre.
 
-### IFPM-095 Peru PE1 Mining Criterion Upgrade (INGEMMET Official ASM Points)
+### IFPM-095 Peru Arequipa Region Mining Criterion Upgrade (INGEMMET Official ASM Points)
 
-- Status: complete. Upgraded the PE1 mining criterion from the weak OSM quarry/industrial proxy
+- Status: complete. Upgraded the Arequipa Region mining criterion from the weak OSM quarry/industrial proxy
   to official INGEMMET Pequeña Minería (small-scale/ASM mining) point evidence.
 - Evidence:
   `context/docs/data-management/registry/ingemmet_catastro_minero_peru_pilot.md`,
-  `bin/acquire/extract_pe1_ingemmet_mining.py`, `bin/criteria/build_pe1_criteria_stack.py` (mining input switched
+  `bin/acquire/extract_peru_hybas_l7_6070641200_ingemmet_mining.py`, `bin/criteria/build_peru_hybas_l7_6070641200_criteria_stack.py` (mining input switched
   to INGEMMET), ignored raw under
   `data/raw/ingemmet_catastro_minero_peru_pilot/`, ignored outputs under
   `outputs/ingemmet_catastro_minero_peru_pilot/`.
 - Key results:
   - Verified INGEMMET GEOCATMIN is publicly queryable via ArcGIS REST
     (`/arcgis/rest/services/SERV_PEQUENA_MINERIA/MapServer/0`), no login.
-  - Queried 11 official ASM mining points inside the PE1 envelope (mineral codes, e.g. Au; mine
+  - Queried 11 official ASM mining points inside the Arequipa Region envelope (mineral codes, e.g. Au; mine
     codes; lab assays) — official-source evidence, strictly stronger than the OSM proxy.
-  - Rebuilt the PE1 mining_pressure criterion from INGEMMET point proximity; reran the 5-criteria
+  - Rebuilt the Arequipa Region mining_pressure criterion from INGEMMET point proximity; reran the 5-criteria
     priority scenarios. Stable top-20% hotspot shifted to `307.356 km2` (was 368 with the OSM
     proxy) — the official ASM locations produce a more precise, defensible pressure pattern.
-- Impact: PE1's mining criterion is now `provisional` official-source evidence, not a weak land-use
+- Impact: Arequipa Region's mining criterion is now `provisional` official-source evidence, not a weak land-use
   proxy. This is the one criterion where Peru is strictly better evidenced than Zimbabwe (Zimbabwe
   still has only the OSM proxy; its official mining data remains ungated/awaited via mentor).
   Still point-proximity, not active-disturbance polygons; not a validated mining truth.
-- Next action: present the full PE1 5-criteria prototype (now with official mining) alongside the
+- Next action: present the full Arequipa Region 5-criteria prototype (now with official mining) alongside the
   Zimbabwe V1 v0.2 prototype for the structural Zimbabwe-Peru comparison.
 
-### IFPM-096 Peru PE1 Rainfall Criterion (CHIRPS Coarse-To-Grid) And Full 6-Criteria Symmetry
+### IFPM-096 Peru Arequipa Region Rainfall Criterion (CHIRPS Coarse-To-Grid) And Full 6-Criteria Symmetry
 
-- Status: complete. PE1 now has a rainfall criterion, reaching full 6-criteria symmetry with the
+- Status: complete. Arequipa Region now has a rainfall criterion, reaching full 6-criteria symmetry with the
   merged Zimbabwe v0.3 (which added rainfall_sensitivity_v0_3).
-- Evidence: `bin/criteria/build_pe1_rainfall_criterion.py`, `bin/criteria/build_pe1_criteria_stack.py`,
-  `bin/scenarios/run_pe1_priority_scenarios.py`, ignored outputs under
+- Evidence: `bin/criteria/build_peru_hybas_l7_6070641200_rainfall_criterion.py`, `bin/criteria/build_peru_hybas_l7_6070641200_criteria_stack.py`,
+  `bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py`, ignored outputs under
   `outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/` and
   `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/`.
 - Key results:
-  - Built PE1 rainfall_climatology from CHIRPS v3 latam Dec-Mar rainy-season mean
-    (HTTP windowed read, 2014/15-2023/24), bilinear-resampled to the PE1 30m grid. Coarse-to-grid
-    governance identical to Zimbabwe A-010 (PE1 = A-012): IFPM_NOTE band tag,
+  - Built Arequipa Region rainfall_climatology from CHIRPS v3 latam Dec-Mar rainy-season mean
+    (HTTP windowed read, 2014/15-2023/24), bilinear-resampled to the Arequipa Region 30m grid. Coarse-to-grid
+    governance identical to Zimbabwe A-010 (Arequipa Region = A-012): IFPM_NOTE band tag,
     `sensitivity_scenario`, effective resolution ~5 km, not pixel-level 30 m rainfall.
-  - PE1 raw rainfall: 37.6-292.9 mm/season, mean ~78 (arid Andean Pacific slope; Zimbabwe V1 is
+  - Arequipa Region raw rainfall: 37.6-292.9 mm/season, mean ~78 (arid Andean Pacific slope; Zimbabwe V1 is
     wetter — another real physical-contrast signal).
-  - PE1 criteria stack now 6 criteria: flood conditioning, soil erosion factors, land cover, mining, exposure,
+  - Arequipa Region criteria stack now 6 criteria: flood conditioning, soil erosion factors, land cover, mining, exposure,
     rainfall. Priority scenarios (equal + mentor_slide CR=0.022 + flood_erosion_heavy):
     top-20% stable hotspot 299.57 km2.
-- Impact: PE1 is now methodologically symmetric to the merged Zimbabwe V1 v0.3 — same 6-criteria
+- Impact: Arequipa Region is now methodologically symmetric to the merged Zimbabwe V1 v0.3 — same 6-criteria
   structure including the coarse-to-grid rainfall criterion. The two prototypes can be compared
   with identical weighting and identical criterion families. Still diagnostic_only /
-  engineering_pilot / sensitivity_scenario: no validated risk, PE1 not research-selected, no
+  engineering_pilot / sensitivity_scenario: no validated risk, Arequipa Region not research-selected, no
   harmonized final comparison claim.
-- Next action: present the Zimbabwe (V1 v0.3) vs Peru (PE1) structural comparison to the mentor;
+- Next action: present the Zimbabwe (V1 v0.3) vs Peru (Arequipa Region) structural comparison to the mentor;
   both sides now share the full 6-criteria methodology.
 
 ### IFPM-075 V1 Hydrology Derivatives (whitebox)

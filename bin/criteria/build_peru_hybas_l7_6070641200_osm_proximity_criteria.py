@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Extract PE1 OSM layers and build mining/exposure proximity criteria rasters.
+"""Extract Arequipa Region OSM layers and build mining/exposure proximity criteria rasters.
 
-Reads Geofabrik Peru OSM (roads, places, landuse), clips to PE1, and builds two criteria
-rasters on the PE1 30m reference grid (EPSG:32718):
+Reads Geofabrik Peru OSM (roads, places, landuse), clips to Arequipa Region, and builds two criteria
+rasters on the Arequipa Region 30m reference grid (EPSG:32718):
 
 - mining_pressure: proximity to OSM landuse quarry/industrial polygons (inverted distance ->
   closer = higher mining pressure). Weak proxy, same logic as Zimbabwe.
 - exposure_indicators: proximity to OSM roads (inverted distance -> closer = more accessible/
   exposed). Same logic as Zimbabwe's exposure_indicators.
 
-Both standardized 0-1 via 2-98 percentile min-max (inverted), masked to PE1. These fill the two
-deferred PE1 criteria so the PE1 stack reaches 5 criteria, comparable to Zimbabwe v0.2.
+Both standardized 0-1 via 2-98 percentile min-max (inverted), masked to Arequipa Region. These fill the two
+deferred Arequipa Region criteria so the Arequipa Region stack reaches 5 criteria, comparable to Zimbabwe v0.2.
 """
 
 from __future__ import annotations
@@ -26,7 +26,7 @@ from scipy.ndimage import distance_transform_edt
 
 ROOT = Path(__file__).resolve().parents[2]
 INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
-OUTPUTS = [ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif"]
+OUTPUTS = [ROOT / "outputs/geofabrik_osm_peru_pilot/peru_hybas_l7_6070641200_proximity/closeness_to_roads_0_1.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster
@@ -34,9 +34,9 @@ from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 from _lib.ifpm_tools import raster_stats as stats
 OSM_DIR = ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted"
-OUT_DIR = ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity"
-REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
-PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+OUT_DIR = ROOT / "outputs/geofabrik_osm_peru_pilot/peru_hybas_l7_6070641200_proximity"
+REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
+PERU_HYBAS_L7_6070641200_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 
 ROADS_SHP = OSM_DIR / "gis_osm_roads_free_1.shp"
 PLACES_SHP = OSM_DIR / "gis_osm_places_free_1.shp"
@@ -65,16 +65,16 @@ def load_reference() -> tuple[dict, np.ndarray]:
         crs = ref.crs
         shape = (ref.height, ref.width)
         transform = ref.transform
-    boundary = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs(crs)
+    boundary = gpd.read_file(PERU_HYBAS_L7_6070641200_GPKG, layer="peru_pilot_boundary").to_crs(crs)
     mask = geometry_mask(boundary.geometry, out_shape=shape, transform=transform, invert=True)
     return profile, mask
 
 
-def clip_osm_to_pe1(shp_path: Path, crs) -> gpd.GeoDataFrame:
-    """Read an OSM layer and clip to the PE1 boundary (+ small buffer) in the target CRS."""
+def clip_osm_to_peru_hybas_l7_6070641200(shp_path: Path, crs) -> gpd.GeoDataFrame:
+    """Read an OSM layer and clip to the Arequipa Region boundary (+ small buffer) in the target CRS."""
     if not shp_path.exists():
         return gpd.GeoDataFrame(geometry=[], crs=crs)
-    boundary = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs(crs)
+    boundary = gpd.read_file(PERU_HYBAS_L7_6070641200_GPKG, layer="peru_pilot_boundary").to_crs(crs)
     buf = boundary.geometry.iloc[0].buffer(5000)  # 5km buffer so proximity is defined at the edge
     gdf = gpd.read_file(shp_path).to_crs(crs)
     if gdf.empty:
@@ -91,7 +91,7 @@ def proximity_raster(features: gpd.GeoDataFrame, profile: dict, mask: np.ndarray
     transform = profile["transform"]
     shape = (profile["height"], profile["width"])
     if features.empty:
-        # no features: return all-zero (no proximity pressure) inside PE1
+        # no features: return all-zero (no proximity pressure) inside Arequipa Region
         out = np.zeros(shape, dtype="float32")
         out[~mask] = np.nan
         return out
@@ -121,31 +121,31 @@ def main() -> None:
     crs = profile["crs"]
 
     # --- roads (exposure) ---
-    print("clipping roads to PE1 ...")
-    roads = clip_osm_to_pe1(ROADS_SHP, crs)
-    print(f"  roads features inside PE1+5km: {len(roads)}")
+    print("clipping roads to Arequipa Region ...")
+    roads = clip_osm_to_peru_hybas_l7_6070641200(ROADS_SHP, crs)
+    print(f"  roads features inside Arequipa Region+5km: {len(roads)}")
     roads_dist = proximity_raster(roads, profile, mask)
     roads_01, r_lo, r_hi = normalize_inverted(roads_dist, mask)
     write_raster(OUT_DIR / "closeness_to_roads_0_1.tif", roads_01, profile)
 
     # --- mining proxy (landuse quarry/industrial) ---
-    print("clipping landuse to PE1 ...")
-    landuse = clip_osm_to_pe1(LANDUSE_SHP, crs)
+    print("clipping landuse to Arequipa Region ...")
+    landuse = clip_osm_to_peru_hybas_l7_6070641200(LANDUSE_SHP, crs)
     if not landuse.empty and "fclass" in landuse.columns:
         fclass = landuse["fclass"].astype(str)
         name = landuse["name"].astype(str) if "name" in landuse.columns else fclass
         mining = landuse[fclass.isin(["quarry", "industrial"]) | name.str.contains("mine|mining|quarry", case=False, na=False)].copy()
     else:
         mining = gpd.GeoDataFrame(geometry=[], crs=crs)
-    print(f"  mining proxy features (quarry/industrial) inside PE1+5km: {len(mining)}")
+    print(f"  mining proxy features (quarry/industrial) inside Arequipa Region+5km: {len(mining)}")
     mining_dist = proximity_raster(mining, profile, mask)
     mining_01, m_lo, m_hi = normalize_inverted(mining_dist, mask)
     write_raster(OUT_DIR / "mining_activity_indicator_0_1.tif", mining_01, profile)
 
     # --- places (context, for diagnostics) ---
-    print("clipping places to PE1 ...")
-    places = clip_osm_to_pe1(PLACES_SHP, crs)
-    print(f"  places features inside PE1+5km: {len(places)}")
+    print("clipping places to Arequipa Region ...")
+    places = clip_osm_to_peru_hybas_l7_6070641200(PLACES_SHP, crs)
+    print(f"  places features inside Arequipa Region+5km: {len(places)}")
 
     manifest = [
         {"layer": "closeness_to_roads_0_1", "path": rel(OUT_DIR / "closeness_to_roads_0_1.tif"),
@@ -162,11 +162,11 @@ def main() -> None:
         {"component": "roads", "method": "euclidean_distance_inverted_percentile_2_98", "dist_clip_low_m": r_lo, "dist_clip_high_m": r_hi},
         {"component": "mining", "method": "euclidean_distance_inverted_percentile_2_98", "dist_clip_low_m": m_lo, "dist_clip_high_m": m_hi},
     ])
-    print(f"\nwrote PE1 OSM proximity criteria to {rel(OUT_DIR)}")
+    print(f"\nwrote Arequipa Region OSM proximity criteria to {rel(OUT_DIR)}")
     print(f"  roads: {len(roads)} features; closeness mean {manifest[0]['mean']}")
     print(f"  mining proxy: {len(mining)} features; closeness mean {manifest[1]['mean']}")
     if len(mining) == 0:
-        print("  WARNING: 0 mining proxy features in PE1 — mining_pressure will be all-zero (no OSM quarry/industrial).")
+        print("  WARNING: 0 mining proxy features in Arequipa Region — mining_pressure will be all-zero (no OSM quarry/industrial).")
         print("           This is expected for a remote Andean basin; INGEMMET/GEOCATMIN is the real source.")
 
 

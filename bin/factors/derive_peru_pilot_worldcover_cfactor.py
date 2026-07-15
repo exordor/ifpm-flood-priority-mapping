@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Derive USLE/RUSLE C-factor for PE1 from ESA WorldCover 2021.
+"""Derive USLE/RUSLE C-factor for Arequipa Region from ESA WorldCover 2021.
 
-Mirrors `derive_v1_worldcover_cfactor.py`. Peru differences: PE1 boundary, PE1 reference DEM
-(EPSG:32718), and multiple WorldCover tiles because PE1 crosses the -72 degree tile boundary.
+Mirrors `derive_v1_worldcover_cfactor.py`. Peru differences: Arequipa Region boundary, Arequipa Region reference DEM
+(EPSG:32718), and multiple WorldCover tiles because Arequipa Region crosses the -72 degree tile boundary.
 Same RUSLE C-factor lookup table (literature-derived, identical for both countries), same
 MODE-resample-then-lookup approach.
 
-Outputs: C-factor on the WorldCover native 10m grid clipped to PE1, and C-factor on the PE1 30m
+Outputs: C-factor on the WorldCover native 10m grid clipped to Arequipa Region, and C-factor on the Arequipa Region 30m
 reference grid (MODE resample 10m->30m, legitimate fine->coarse aggregation, then lookup).
 """
 
@@ -29,17 +29,17 @@ from rasterio.merge import merge
 from rasterio.warp import reproject
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"]
+INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"]
 OUTPUTS = [
-    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
-    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_pe1_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_peru_hybas_l7_6070641200_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_peru_hybas_l7_6070641200_30m.tif",
 ]
 
 WORLDCOVER_RAW_DIR = ROOT / "data/raw/esa_worldcover_2021_peru_pilot"
 WORLDCOVER_GLOB = "ESA_WorldCover_10m_2021_v200_*_Map.tif"
-PE1_BOUNDARY_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
-PE1_BOUNDARY_LAYER = "peru_pilot_boundary"
-PE1_REFERENCE_DEM = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
+PERU_HYBAS_L7_6070641200_BOUNDARY_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+PERU_HYBAS_L7_6070641200_BOUNDARY_LAYER = "peru_pilot_boundary"
+PERU_HYBAS_L7_6070641200_REFERENCE_DEM = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
 OUTPUT_DIR = ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor"
 GRID_CHECK_TOOL = ROOT / "bin/package/check_v1_raster_grid.py"
 
@@ -87,10 +87,10 @@ def rel(path: Path) -> str:
         return str(path.resolve())
 
 
-def load_pe1_boundary() -> gpd.GeoDataFrame:
-    gdf = gpd.read_file(PE1_BOUNDARY_GPKG, layer=PE1_BOUNDARY_LAYER)
+def load_peru_hybas_l7_6070641200_boundary() -> gpd.GeoDataFrame:
+    gdf = gpd.read_file(PERU_HYBAS_L7_6070641200_BOUNDARY_GPKG, layer=PERU_HYBAS_L7_6070641200_BOUNDARY_LAYER)
     if len(gdf) != 1:
-        raise ValueError(f"Expected exactly one PE1 boundary feature, got {len(gdf)}")
+        raise ValueError(f"Expected exactly one Arequipa Region boundary feature, got {len(gdf)}")
     return gdf
 
 
@@ -117,7 +117,7 @@ def worldcover_mosaic(bounds4326: tuple[float, float, float, float], pad_deg: fl
                 selected.append(path)
                 datasets.append(src)
         if not datasets:
-            raise ValueError(f"No WorldCover tile intersects PE1 source bbox {padded}")
+            raise ValueError(f"No WorldCover tile intersects Arequipa Region source bbox {padded}")
 
         union = (
             min(src.bounds.left for src in datasets),
@@ -130,7 +130,7 @@ def worldcover_mosaic(bounds4326: tuple[float, float, float, float], pad_deg: fl
             and union[2] >= padded[2] and union[3] >= padded[3]
         ):
             raise ValueError(
-                "WorldCover tile coverage does not cover PE1 padded bbox; "
+                "WorldCover tile coverage does not cover Arequipa Region padded bbox; "
                 f"need bbox={padded}, available union={union}"
             )
 
@@ -178,15 +178,15 @@ def mask_on_grid(geometry, transform, shape) -> np.ndarray:
 
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    bnd = load_pe1_boundary()
+    bnd = load_peru_hybas_l7_6070641200_boundary()
 
-    with rasterio.open(PE1_REFERENCE_DEM) as ref:
+    with rasterio.open(PERU_HYBAS_L7_6070641200_REFERENCE_DEM) as ref:
         ref_transform = ref.transform
         ref_crs = ref.crs
         ref_width, ref_height = ref.width, ref.height
         ref_bounds = ref.bounds
         ref_profile = ref.profile.copy()
-    print(f"PE1 reference grid: {ref_width} x {ref_height} @ 30 m, {ref_crs}")
+    print(f"Arequipa Region reference grid: {ref_width} x {ref_height} @ 30 m, {ref_crs}")
 
     tr = Transformer.from_crs(ref_crs, "EPSG:4326", always_xy=True)
     xs = [ref_bounds.left, ref_bounds.right, ref_bounds.right, ref_bounds.left]
@@ -194,27 +194,27 @@ def main() -> None:
     lons, lats = tr.transform(xs, ys)
     source_bbox = (min(lons), min(lats), max(lons), max(lats))
 
-    # 1. native 10m C-factor clipped to PE1; source is a mosaic when PE1 crosses a tile boundary.
+    # 1. native 10m C-factor clipped to Arequipa Region; source is a mosaic when Arequipa Region crosses a tile boundary.
     class_arr, wc_transform, wc_profile, source_tiles = worldcover_mosaic(source_bbox, pad_deg=0.01)
     print("WorldCover source tiles:")
     for path in source_tiles:
         print(f"  - {rel(path)}")
 
     geom4326 = bnd.to_crs("EPSG:4326").geometry.iloc[0]
-    pe1_mask_native = mask_on_grid(geom4326, wc_transform, class_arr.shape)
+    peru_hybas_l7_6070641200_mask_native = mask_on_grid(geom4326, wc_transform, class_arr.shape)
     c_native = class_to_c(class_arr)
-    c_native_masked = np.where(pe1_mask_native, c_native, np.nan)
+    c_native_masked = np.where(peru_hybas_l7_6070641200_mask_native, c_native, np.nan)
 
     native_profile = wc_profile.copy()
     native_profile.update(dtype="float32", nodata=NODATA, compress="deflate", tiled=True)
     c_native_out = np.where(np.isfinite(c_native_masked), c_native_masked, NODATA).astype("float32")
-    with rasterio.open(OUTPUT_DIR / "c_factor_pe1_10m.tif", "w", **native_profile) as ds:
+    with rasterio.open(OUTPUT_DIR / "c_factor_peru_hybas_l7_6070641200_10m.tif", "w", **native_profile) as ds:
         ds.write(c_native_out, 1)
-    print(f"wrote {OUTPUT_DIR / 'c_factor_pe1_10m.tif'}")
+    print(f"wrote {OUTPUT_DIR / 'c_factor_peru_hybas_l7_6070641200_10m.tif'}")
 
-    # 2. PE1 30m grid: MODE resample 10m->30m (fine->coarse aggregation), then lookup
+    # 2. Arequipa Region 30m grid: MODE resample 10m->30m (fine->coarse aggregation), then lookup
     bnd_ref = bnd.to_crs(ref_crs)
-    pe1_mask_ref = mask_on_grid(bnd_ref.geometry.iloc[0], ref_transform, (ref_height, ref_width))
+    peru_hybas_l7_6070641200_mask_ref = mask_on_grid(bnd_ref.geometry.iloc[0], ref_transform, (ref_height, ref_width))
 
     class_30m = np.full((ref_height, ref_width), 0, dtype="uint8")
     reproject(
@@ -224,28 +224,28 @@ def main() -> None:
         resampling=Resampling.mode,
     )
     c_30m = class_to_c(class_30m.astype("int32"))
-    c_30m_masked = np.where(pe1_mask_ref, c_30m, np.nan)
+    c_30m_masked = np.where(peru_hybas_l7_6070641200_mask_ref, c_30m, np.nan)
     land_use_30m = class_to_land_use_pressure(class_30m.astype("int32"))
-    land_use_30m_masked = np.where(pe1_mask_ref, land_use_30m, np.nan)
+    land_use_30m_masked = np.where(peru_hybas_l7_6070641200_mask_ref, land_use_30m, np.nan)
 
     out_profile = ref_profile.copy()
     out_profile.update(dtype="float32", nodata=NODATA, count=1, compress="deflate", tiled=True)
     c_30m_out = np.where(np.isfinite(c_30m_masked), c_30m_masked, NODATA).astype("float32")
-    with rasterio.open(OUTPUT_DIR / "c_factor_pe1_30m.tif", "w", **out_profile) as ds:
+    with rasterio.open(OUTPUT_DIR / "c_factor_peru_hybas_l7_6070641200_30m.tif", "w", **out_profile) as ds:
         ds.write(c_30m_out, 1)
-    print(f"wrote {OUTPUT_DIR / 'c_factor_pe1_30m.tif'}")
+    print(f"wrote {OUTPUT_DIR / 'c_factor_peru_hybas_l7_6070641200_30m.tif'}")
     land_use_out = np.where(np.isfinite(land_use_30m_masked), land_use_30m_masked, NODATA).astype("float32")
-    with rasterio.open(OUTPUT_DIR / "land_use_pressure_pe1_30m.tif", "w", **out_profile) as ds:
+    with rasterio.open(OUTPUT_DIR / "land_use_pressure_peru_hybas_l7_6070641200_30m.tif", "w", **out_profile) as ds:
         ds.write(land_use_out, 1)
-    print(f"wrote {OUTPUT_DIR / 'land_use_pressure_pe1_30m.tif'}")
+    print(f"wrote {OUTPUT_DIR / 'land_use_pressure_peru_hybas_l7_6070641200_30m.tif'}")
 
-    # 3. stats + class-area on PE1 (30m)
-    valid = np.isfinite(c_30m_masked) & pe1_mask_ref
+    # 3. stats + class-area on Arequipa Region (30m)
+    valid = np.isfinite(c_30m_masked) & peru_hybas_l7_6070641200_mask_ref
     c_vals = c_30m_masked[valid]
     cell_area = 30.0 * 30.0 / 1e6  # km2
     class_area_km2 = {}
     for code, (label, cval) in C_FACTOR_LUT.items():
-        n = int(((class_30m == code) & pe1_mask_ref).sum())
+        n = int(((class_30m == code) & peru_hybas_l7_6070641200_mask_ref).sum())
         if n:
             class_area_km2[f"{code}_{label}"] = round(n * cell_area, 2)
 
@@ -262,37 +262,37 @@ def main() -> None:
         "boundary_status": "provisional_comparison_catchment_not_final_study_area",
         "c_factor_30m_stats": {
             "valid_cells": int(valid.sum()),
-            "valid_fraction_inside_pe1": round(float(valid.sum() / pe1_mask_ref.sum()), 6) if pe1_mask_ref.sum() else 0.0,
+            "valid_fraction_inside_peru_hybas_l7_6070641200": round(float(valid.sum() / peru_hybas_l7_6070641200_mask_ref.sum()), 6) if peru_hybas_l7_6070641200_mask_ref.sum() else 0.0,
             "mean": round(float(np.mean(c_vals)), 4) if c_vals.size else None,
             "min": round(float(np.min(c_vals)), 4) if c_vals.size else None,
             "max": round(float(np.max(c_vals)), 4) if c_vals.size else None,
         },
-        "class_area_km2_on_pe1_30m": class_area_km2,
+        "class_area_km2_on_peru_hybas_l7_6070641200_30m": class_area_km2,
         "zimbabwe_v1_reference_mean_c": 0.0429,
     }
     (OUTPUT_DIR / "c_factor_diagnostics.json").write_text(json.dumps(diag, indent=2), encoding="utf-8")
-    print(f"\nPE1 C-factor (30m): mean {diag['c_factor_30m_stats']['mean']} "
+    print(f"\nArequipa Region C-factor (30m): mean {diag['c_factor_30m_stats']['mean']} "
           f"[{diag['c_factor_30m_stats']['min']} - {diag['c_factor_30m_stats']['max']}] "
           f"(ZW V1 ref mean 0.0429)")
     print("class area (km2):", class_area_km2)
 
-    # 4. grid gate (with PE1 boundary)
+    # 4. grid gate (with Arequipa Region boundary)
     print("[gate] running check_v1_raster_grid.py ...")
     cmd = [sys.executable, str(GRID_CHECK_TOOL),
-           "--reference", str(PE1_REFERENCE_DEM),
-           "--boundary", str(PE1_BOUNDARY_GPKG), "--boundary-layer", PE1_BOUNDARY_LAYER,
+           "--reference", str(PERU_HYBAS_L7_6070641200_REFERENCE_DEM),
+           "--boundary", str(PERU_HYBAS_L7_6070641200_BOUNDARY_GPKG), "--boundary-layer", PERU_HYBAS_L7_6070641200_BOUNDARY_LAYER,
            "--output", str(OUTPUT_DIR / "c_factor_grid_check.csv"),
-           "--rasters", str(OUTPUT_DIR / "c_factor_pe1_30m.tif"),
-           str(OUTPUT_DIR / "land_use_pressure_pe1_30m.tif")]
+           "--rasters", str(OUTPUT_DIR / "c_factor_peru_hybas_l7_6070641200_30m.tif"),
+           str(OUTPUT_DIR / "land_use_pressure_peru_hybas_l7_6070641200_30m.tif")]
     proc = subprocess.run(cmd, capture_output=True, text=True)
     print(proc.stdout.strip())
     if proc.stderr.strip():
         print("stderr:", proc.stderr.strip())
     if proc.returncode != 0:
         raise SystemExit(proc.returncode)
-    if valid.sum() / pe1_mask_ref.sum() < MIN_VALID_FRACTION:
+    if valid.sum() / peru_hybas_l7_6070641200_mask_ref.sum() < MIN_VALID_FRACTION:
         raise RuntimeError(
-            f"C-factor PE1 valid coverage below threshold: {valid.sum() / pe1_mask_ref.sum():.6f}"
+            f"C-factor Arequipa Region valid coverage below threshold: {valid.sum() / peru_hybas_l7_6070641200_mask_ref.sum():.6f}"
         )
 
 

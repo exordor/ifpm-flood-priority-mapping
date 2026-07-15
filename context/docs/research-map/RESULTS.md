@@ -14,7 +14,7 @@ ladder is stricter.
 > (ton/ha/yr) are no longer required for the prototype. See
 > `DECISION_LOG.md` D-RFACTOR-QUARANTINE.
 
-> **Peru-first notice (updated 2026-07-13):** after D-PERU-FIRST, PE1 is the active
+> **Peru-first notice (updated 2026-07-13):** after D-PERU-FIRST, Arequipa Region is the active
 > mainline working case. Existing Zimbabwe results remain useful as background
 > and method-development evidence. Peru input-factor maps, five criterion maps,
 > the direct-weight prototype PIM, mining/population overlay, contribution map,
@@ -148,20 +148,20 @@ does not revive deprecated R/A products.
 
 ### Claim level: `provisional` (criteria stack) / `sensitivity_scenario` (priority).
 
-## PE1 (Peru) prototype
+## Arequipa Region (Peru) prototype
 
 ### Observation
 
-PE1 is now the active Peru-first prototype case. It is operationally comparable
+Arequipa Region is now the active Peru-first prototype case. It is operationally comparable
 with V1 under the mentor five-main-criterion framework, but after D-PERU-FIRST
 the immediate interpretation focus is Peru completion rather than bilateral
 symmetry.
 
 ### Evidence
 
-- PE1 boundary: HYBAS 6070641200, 2745.4 km² (ratio 0.74 vs V1), pacific-slope,
+- Arequipa Region boundary: HYBAS 6070641200, 2745.4 km² (ratio 0.74 vs V1), pacific-slope,
   ~17 km west of Arequipa city.
-- PE1 DEM: EPSG:32718, 30 m, elevation 144.9-3188.3 m, valid fraction 0.4506.
+- Arequipa Region DEM: EPSG:32718, 30 m, elevation 144.9-3188.3 m, valid fraction 0.4506.
 - LS hillslope mean 3.70 (vs V1 1.563).
 - K (0-5 cm US, native/effective 250 m) mean 0.2084, range 0.100-0.266;
   C mean 0.6096 (bare/sparse dominant).
@@ -187,7 +187,7 @@ symmetry.
   mining pressure 0.65.
 - Environmental is provisional: water/wetland context 0.60 plus SERNANP national
   definitive protected-area layer 0 context 0.40, not ecological valuation.
-  Layer 0 was checked; no geometry occurs within PE1 + 5 km, and regional,
+  Layer 0 was checked; no geometry occurs within Arequipa Region + 5 km, and regional,
   private, or transitional protected-area layers were not queried. The current
   criterion is therefore driven by water/wetland evidence.
 - Sediment applies normalized SoilGrids K 0.30, SRTM LS 0.45, and WorldCover C
@@ -225,7 +225,7 @@ symmetry.
 
 ### Interpretation
 
-PE1 is the best current mainline case because it has the stronger mining
+Arequipa Region is the best current mainline case because it has the stronger mining
 evidence (INGEMMET points) and a coherent five-criterion PIM stack. Physical
 regimes differ fundamentally from Zimbabwe: arid Andean Pacific slopes and
 bare-ground cover versus semi-humid savanna and shrub/grass cover. That contrast
@@ -236,7 +236,7 @@ direct Peru weights. Flood is a conditioning proxy based partly on rainy-season
 climatology, not an event-extreme rainfall product. The map is not validated flood risk
 and not a rescue-decision product.
 
-### Claim level: `provisional` / `sensitivity_scenario`. PE1 remains a
+### Claim level: `provisional` / `sensitivity_scenario`. Arequipa Region remains a
 provisional working boundary; no validated flood-risk or rescue-decision claim.
 
 ## Mining evidence
@@ -249,9 +249,9 @@ official INGEMMET point evidence.
 ### Evidence
 
 - V1: 2 quarry/industrial polygons in V1+5km (OSM indicator only).
-- PE1: 32 quarry/industrial polygons (OSM) upgraded to 11 official INGEMMET
+- Arequipa Region: 32 quarry/industrial polygons (OSM) upgraded to 11 official INGEMMET
   Pequeña Minería ASM points (ArcGIS REST, no login).
-- PE1 mining upgrade shifted the area selected in the top 20% under all scenarios from 368 km² (OSM) to
+- Arequipa Region mining upgrade shifted the area selected in the top 20% under all scenarios from 368 km² (OSM) to
   **307.356 km²** in the earlier three-scenario run; the current Peru direct
   weights select **521.356 km²** in the highest-priority quintile on the strict
   five-criterion common support. Official
@@ -260,15 +260,15 @@ official INGEMMET point evidence.
 
 ### Interpretation
 
-PE1's mining criterion is `provisional` official-source evidence; V1's is
+Arequipa Region's mining criterion is `provisional` official-source evidence; V1's is
 `diagnostic_only` indicator only. This is the one criterion where Peru is
 strictly better evidenced than Zimbabwe, and it is the main reason Peru is now
 the active mainline case. The governed Peru overlay now shows the INGEMMET
 reference locations with the priority classes and distinguishes 2 unique
-locations inside the PE1 boundary from 4 nearby locations. These are point
+locations inside the Arequipa Region boundary from 4 nearby locations. These are point
 references and model-input context, not mining footprints or validation.
 
-### Claim level: V1 `diagnostic_only` / PE1 `provisional`.
+### Claim level: V1 `diagnostic_only` / Arequipa Region `provisional`.
 
 ## Exposure diagnostic
 

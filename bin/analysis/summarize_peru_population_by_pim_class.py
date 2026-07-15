@@ -15,7 +15,7 @@ from rasterio.features import geometry_mask
 from rasterio.warp import Resampling, reproject
 
 ROOT = Path(__file__).resolve().parents[2]
-POP = ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_pe1_bbox.tif"
+POP = ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_peru_hybas_l7_6070641200_bbox.tif"
 PIM = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_mentor_peru_direct_pim.tif"
 TOP20_MASK = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/top20_mentor_peru_direct_pim.tif"
 SCENARIO_SUMMARY = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_priority_summary.csv"
@@ -23,7 +23,7 @@ BOUNDARY = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 OUT_DIR = ROOT / "outputs/peru_gap_closure_analysis"
 
 INPUTS = [
-    ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_pe1_bbox.tif",
+    ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_peru_hybas_l7_6070641200_bbox.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_mentor_peru_direct_pim.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/top20_mentor_peru_direct_pim.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_priority_summary.csv",

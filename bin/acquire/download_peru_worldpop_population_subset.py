@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create a PE1-bbox WorldPop Peru population subset.
+"""Create a Arequipa Region-bbox WorldPop Peru population subset.
 
 The full WorldPop Peru 2020 raster is ~625 MB. The script keeps that verified
 source locally and deterministically writes the current study-area subset under
@@ -20,7 +20,7 @@ import rasterio
 from rasterio.windows import from_bounds, transform as window_transform
 
 ROOT = Path(__file__).resolve().parents[2]
-PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+PERU_HYBAS_L7_6070641200_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 RAW_DIR = ROOT / "data/raw/worldpop_peru_population"
 OUT_DIR = ROOT / "outputs/worldpop_peru_population"
 
@@ -28,13 +28,13 @@ WORLDPOP_URL = (
     "https://data.worldpop.org/GIS/Population/Global_2000_2020/"
     "2020/PER/per_ppp_2020_UNadj.tif"
 )
-OUT_TIF = RAW_DIR / "per_ppp_2020_UNadj_pe1_bbox.tif"
+OUT_TIF = RAW_DIR / "per_ppp_2020_UNadj_peru_hybas_l7_6070641200_bbox.tif"
 FULL_TIF = RAW_DIR / "per_ppp_2020_UNadj.tif"
 
 INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
 OUTPUTS = [
     ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj.tif",
-    ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_pe1_bbox.tif",
+    ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_peru_hybas_l7_6070641200_bbox.tif",
     ROOT / "outputs/worldpop_peru_population/worldpop_peru_population_subset_manifest.json",
 ]
 
@@ -113,7 +113,7 @@ def main() -> None:
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    boundary = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs("EPSG:4326")
+    boundary = gpd.read_file(PERU_HYBAS_L7_6070641200_GPKG, layer="peru_pilot_boundary").to_crs("EPSG:4326")
     minx, miny, maxx, maxy = boundary.total_bounds
     pad = 0.05
     bounds = (minx - pad, miny - pad, maxx + pad, maxy + pad)

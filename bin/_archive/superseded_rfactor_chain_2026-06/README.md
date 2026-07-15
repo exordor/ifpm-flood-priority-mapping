@@ -20,7 +20,7 @@ historical provenance only; they are not part of the active pipeline.
 consumed by 4 active scripts**:
 
 - `bin/criteria/build_boundary_v1_criteria_stack.py`
-- `bin/criteria/build_pe1_criteria_stack.py`
+- `bin/criteria/build_peru_hybas_l7_6070641200_criteria_stack.py`
 - `bin/factors/derive_peru_pilot_usle_soil_loss.py` (mirrors its logic)
 - `bin/criteria/build_era5_rfactor_raster.py`
 

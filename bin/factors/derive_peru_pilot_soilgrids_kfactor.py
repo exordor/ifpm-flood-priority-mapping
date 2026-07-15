@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Derive USLE/RUSLE soil-erodibility K-factor for PE1 from SoilGrids VRT (windowed HTTP read).
+"""Derive USLE/RUSLE soil-erodibility K-factor for Arequipa Region from SoilGrids VRT (windowed HTTP read).
 
 Mirrors `derive_v1_soilgrids_kfactor.py`. Reads clay/silt/sand/soc from the SoilGrids 250m VRT
-collection (files.isric.org, global coverage) via rasterio HTTP windowed reads for the PE1
-bounding box. No global raster is downloaded; only the PE1 window is read. Williams (1995)
+collection (files.isric.org, global coverage) via rasterio HTTP windowed reads for the Arequipa Region
+bounding box. No global raster is downloaded; only the Arequipa Region window is read. Williams (1995)
 EPIC/RUSLE pedotransfer function, 0-30 cm depth-weighted average.
 
 Outputs are 250m rasters in SoilGrids native Interrupted Goode Homolosine projection, explicitly
-NOT resampled to the PE1 30 m terrain grid (per the Peru reference-grid rule: SoilGrids must not
+NOT resampled to the Arequipa Region 30 m terrain grid (per the Peru reference-grid rule: SoilGrids must not
 become pixel-level 30 m truth).
 """
 
@@ -26,8 +26,8 @@ from rasterio.warp import transform_bounds
 ROOT = Path(__file__).resolve().parents[2]
 INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
 OUTPUTS = [
-    ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_pe1_0_5cm_250m.tif",
-    ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_pe1_0_30cm_avg_250m.tif",
+    ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_peru_hybas_l7_6070641200_0_5cm_250m.tif",
+    ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_peru_hybas_l7_6070641200_0_30cm_avg_250m.tif",
     ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_diagnostics.json",
 ]
 
@@ -37,9 +37,9 @@ except ImportError as exc:
     raise SystemExit(f"missing dependency: {exc}. Install geopandas in .venv.") from exc
 
 SOILGRIDS_BASE = "https://files.isric.org/soilgrids/latest/data"
-# PE1 bounding box in EPSG:4326 (from peru_pilot_boundary)
-PE1_LON_MIN, PE1_LAT_MIN, PE1_LON_MAX, PE1_LAT_MAX = -72.3083, -16.8547, -71.5875, -16.1411
-PE1_BOUNDARY_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+# Arequipa Region bounding box in EPSG:4326 (from peru_pilot_boundary)
+PERU_HYBAS_L7_6070641200_LON_MIN, PERU_HYBAS_L7_6070641200_LAT_MIN, PERU_HYBAS_L7_6070641200_LON_MAX, PERU_HYBAS_L7_6070641200_LAT_MAX = -72.3083, -16.8547, -71.5875, -16.1411
+PERU_HYBAS_L7_6070641200_BOUNDARY_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 
 DEPTH_SLICES = ["0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"]
 DEPTH_THICKNESS_CM = {"0-5cm": 5, "5-15cm": 10, "15-30cm": 15, "30-60cm": 30, "60-100cm": 40, "100-200cm": 100}
@@ -53,18 +53,18 @@ OUTPUT_DIR = ROOT / "outputs/soilgrids_250m_peru_pilot"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def pe1_bounds_in_source_crs(source_crs) -> tuple[float, float, float, float]:
-    """Project PE1 bounds with the exact CRS advertised by the SoilGrids VRT."""
+def peru_hybas_l7_6070641200_bounds_in_source_crs(source_crs) -> tuple[float, float, float, float]:
+    """Project Arequipa Region bounds with the exact CRS advertised by the SoilGrids VRT."""
 
     return tuple(
         float(value)
         for value in transform_bounds(
             "EPSG:4326",
             source_crs,
-            PE1_LON_MIN,
-            PE1_LAT_MIN,
-            PE1_LON_MAX,
-            PE1_LAT_MAX,
+            PERU_HYBAS_L7_6070641200_LON_MIN,
+            PERU_HYBAS_L7_6070641200_LAT_MIN,
+            PERU_HYBAS_L7_6070641200_LON_MAX,
+            PERU_HYBAS_L7_6070641200_LAT_MAX,
             densify_pts=21,
         )
     )
@@ -106,26 +106,26 @@ def preserve_source_window_support(k: np.ndarray, source_invalid: np.ndarray) ->
 def main() -> None:
     ref_url = f"{SOILGRIDS_BASE}/clay/clay_0-5cm_mean.vrt"
     with rasterio.open(ref_url) as ds:
-        gx_min, gy_min, gx_max, gy_max = pe1_bounds_in_source_crs(ds.crs)
+        gx_min, gy_min, gx_max, gy_max = peru_hybas_l7_6070641200_bounds_in_source_crs(ds.crs)
         win = window_from_bounds(gx_min, gy_min, gx_max, gy_max, ds.transform)
         win = win.round_offsets().round_lengths()
         win_transform = ds.window_transform(win)
         win_crs = ds.crs
         pix_w, pix_h = int(round(win.width)), int(round(win.height))
-    print(f"PE1 bbox in SoilGrids VRT CRS: x[{gx_min:.0f},{gx_max:.0f}] y[{gy_min:.0f},{gy_max:.0f}]")
-    print(f"PE1 window: {pix_w} x {pix_h} px @ 250 m (Goode Homolosine)")
+    print(f"Arequipa Region bbox in SoilGrids VRT CRS: x[{gx_min:.0f},{gx_max:.0f}] y[{gy_min:.0f},{gy_max:.0f}]")
+    print(f"Arequipa Region window: {pix_w} x {pix_h} px @ 250 m (Goode Homolosine)")
 
-    pe1_mask = np.ones((pix_h, pix_w), dtype="uint8")
-    if PE1_BOUNDARY_GPKG.exists():
-        gdf = gpd.read_file(PE1_BOUNDARY_GPKG, layer="peru_pilot_boundary").to_crs(win_crs)
+    peru_hybas_l7_6070641200_mask = np.ones((pix_h, pix_w), dtype="uint8")
+    if PERU_HYBAS_L7_6070641200_BOUNDARY_GPKG.exists():
+        gdf = gpd.read_file(PERU_HYBAS_L7_6070641200_BOUNDARY_GPKG, layer="peru_pilot_boundary").to_crs(win_crs)
         shapes = [(geom, 1) for geom in gdf.geometry if geom is not None]
         if shapes:
-            pe1_mask = rasterize(shapes, out_shape=(pix_h, pix_w), transform=win_transform,
+            peru_hybas_l7_6070641200_mask = rasterize(shapes, out_shape=(pix_h, pix_w), transform=win_transform,
                                   fill=0, dtype="uint8", all_touched=False)
-        print(f"PE1 boundary rasterized: {int(pe1_mask.sum())} cells inside PE1 "
-              f"({100*pe1_mask.sum()/(pix_w*pix_h):.1f}% of window)")
+        print(f"Arequipa Region boundary rasterized: {int(peru_hybas_l7_6070641200_mask.sum())} cells inside Arequipa Region "
+              f"({100*peru_hybas_l7_6070641200_mask.sum()/(pix_w*pix_h):.1f}% of window)")
     else:
-        print(f"[warn] {PE1_BOUNDARY_GPKG} not found; using whole window as PE1 proxy")
+        print(f"[warn] {PERU_HYBAS_L7_6070641200_BOUNDARY_GPKG} not found; using whole window as Arequipa Region proxy")
 
     k_by_depth: dict[str, np.ndarray] = {}
     raw_ranges: dict[str, dict] = {}
@@ -166,8 +166,8 @@ def main() -> None:
         "dtype": "float32", "crs": win_crs, "transform": win_transform,
         "nodata": -9999.0, "compress": "deflate", "tiled": True,
     }
-    for name, arr in [("k_factor_pe1_0_5cm_250m.tif", k_by_depth["0-5cm"]),
-                      ("k_factor_pe1_0_30cm_avg_250m.tif", k_0_30)]:
+    for name, arr in [("k_factor_peru_hybas_l7_6070641200_0_5cm_250m.tif", k_by_depth["0-5cm"]),
+                      ("k_factor_peru_hybas_l7_6070641200_0_30cm_avg_250m.tif", k_0_30)]:
         out = np.where(np.isfinite(arr), arr, -9999.0).astype("float32")
         path = OUTPUT_DIR / name
         with rasterio.open(path, "w", **profile) as ds:
@@ -175,7 +175,7 @@ def main() -> None:
         print(f"wrote {path}")
 
     def zonal(arr):
-        m = np.isfinite(arr) & (pe1_mask == 1)
+        m = np.isfinite(arr) & (peru_hybas_l7_6070641200_mask == 1)
         vals = arr[m]
         if vals.size == 0:
             return {}
@@ -199,24 +199,24 @@ def main() -> None:
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "tool": "bin/factors/derive_peru_pilot_soilgrids_kfactor.py",
         "source": "SoilGrids 250m VRT (files.isric.org), windowed HTTP read",
-        "pe1_window_px": {"width": pix_w, "height": pix_h, "crs": str(win_crs)},
-        "pe1_mask_cells": int(pe1_mask.sum()),
+        "peru_hybas_l7_6070641200_window_px": {"width": pix_w, "height": pix_h, "crs": str(win_crs)},
+        "peru_hybas_l7_6070641200_mask_cells": int(peru_hybas_l7_6070641200_mask.sum()),
         "formula": "Williams 1995 EPIC/RUSLE",
         "depth_note": "0-5cm = surface topsoil; 0-30cm = depth-weighted average of 0-5/5-15/15-30",
         "units_note": "K in US units; multiply by 0.1317 for SI (t ha h / ha MJ mm)",
         "boundary_status": "provisional_comparison_catchment_not_final_study_area",
         "not_resampled_note": (
-            "kept at SoilGrids native 250m over the PE1 source window; surrounding valid cells "
+            "kept at SoilGrids native 250m over the Arequipa Region source window; surrounding valid cells "
             "are retained for reprojection support, and the downstream 30m criterion is clipped "
-            "to the PE1 boundary"
+            "to the Arequipa Region boundary"
         ),
         "property_ranges_by_depth": raw_ranges,
-        "pe1_zonal_summary": zonal_summary,
+        "peru_hybas_l7_6070641200_zonal_summary": zonal_summary,
     }
     diag_path = OUTPUT_DIR / "k_factor_diagnostics.json"
     diag_path.write_text(json.dumps(diagnostics, indent=2), encoding="utf-8")
     print(f"\ndiagnostics: {diag_path}")
-    print("\n=== PE1 zonal K-factor ===")
+    print("\n=== Arequipa Region zonal K-factor ===")
     for key, vals in zonal_summary.items():
         if vals:
             print(f"  {key}: mean={vals['mean']:.4f} [{vals['min']:.3f} - {vals['max']:.3f}]  valid={vals['valid_cells']}")

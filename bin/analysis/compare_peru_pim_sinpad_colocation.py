@@ -13,7 +13,7 @@ import numpy as np
 import rasterio
 
 ROOT = Path(__file__).resolve().parents[2]
-SINPAD = ROOT / "data/validation/indeci_sinpad_peru_flood_events/pe1_sinpad_flood_relevant.gpkg"
+SINPAD = ROOT / "data/validation/indeci_sinpad_peru_flood_events/peru_hybas_l7_6070641200_sinpad_flood_relevant.gpkg"
 PIM = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_mentor_peru_direct_pim.tif"
 TOP20_MASK = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/top20_mentor_peru_direct_pim.tif"
 EVIDENCE_COUNT = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/criteria_evidence_count.tif"
@@ -23,7 +23,7 @@ SCENARIO_SUMMARY = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/sc
 OUT_DIR = ROOT / "outputs/peru_gap_closure_analysis"
 
 INPUTS = [
-    ROOT / "data/validation/indeci_sinpad_peru_flood_events/pe1_sinpad_flood_relevant.gpkg",
+    ROOT / "data/validation/indeci_sinpad_peru_flood_events/peru_hybas_l7_6070641200_sinpad_flood_relevant.gpkg",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_mentor_peru_direct_pim.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/top20_mentor_peru_direct_pim.tif",
     EVIDENCE_COUNT,
@@ -32,8 +32,8 @@ INPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_priority_summary.csv",
 ]
 OUTPUTS = [
-    ROOT / "outputs/peru_gap_closure_analysis/pe1_sinpad_pim_colocation.gpkg",
-    ROOT / "outputs/peru_gap_closure_analysis/pe1_sinpad_pim_colocation.csv",
+    ROOT / "outputs/peru_gap_closure_analysis/peru_hybas_l7_6070641200_sinpad_pim_colocation.gpkg",
+    ROOT / "outputs/peru_gap_closure_analysis/peru_hybas_l7_6070641200_sinpad_pim_colocation.csv",
     ROOT / "outputs/peru_gap_closure_analysis/peru_sinpad_colocation_cohorts.csv",
     ROOT / "outputs/peru_gap_closure_analysis/peru_sinpad_colocation_manifest.json",
 ]
@@ -176,8 +176,8 @@ def main() -> None:
     gdf["coordinate_key"] = gdf.geometry.to_wkb(hex=True)
     gdf["is_flood_specific"] = gdf["FENOMENO"].astype(str).str.contains("INUND", case=False, na=False)
 
-    out_gpkg = OUT_DIR / "pe1_sinpad_pim_colocation.gpkg"
-    out_csv = OUT_DIR / "pe1_sinpad_pim_colocation.csv"
+    out_gpkg = OUT_DIR / "peru_hybas_l7_6070641200_sinpad_pim_colocation.gpkg"
+    out_csv = OUT_DIR / "peru_hybas_l7_6070641200_sinpad_pim_colocation.csv"
     gdf.to_file(out_gpkg, layer="sinpad_pim_colocation", driver="GPKG")
     gdf.drop(columns="geometry").to_csv(out_csv, index=False)
 

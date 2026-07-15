@@ -9,7 +9,7 @@ Status: downloaded for study-area location visualization.
 - Project role: country and first-level administrative boundary basemap for
   Zimbabwe and Peru study-area locator maps.
 - Reusable download: yes, for presentation and context figures.
-- Study areas: Zimbabwe Upper Mzingwane catchment and southern Peru PE1
+- Study areas: Zimbabwe Upper Mzingwane catchment and southern Peru Arequipa Region
   comparison catchment.
 
 ## Source And Access

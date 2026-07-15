@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run Peru-first priority scenarios for the Arequipa mining-region catchment.
 
-PE1 follows the mentor 5-main-criterion AHP framework: Flood, Sediment,
+Arequipa Region follows the mentor 5-main-criterion AHP framework: Flood, Sediment,
 Land Use / ASM, Environmental, and Socioeconomic. Five criteria are actively
 scored in the current executable prototype:
 
@@ -56,12 +56,12 @@ INPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators/exposure_indicators_0_1.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif",
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
 ]
 OUTPUTS = [
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pe1_priority_scenarios_board.png",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pe1_priority_scenarios_board.pdf",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/peru_hybas_l7_6070641200_priority_scenarios_board.png",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/peru_hybas_l7_6070641200_priority_scenarios_board.pdf",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_mentor_peru_direct_pim.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/top20_mentor_peru_direct_pim.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/flood_hazard_0_1.tif",
@@ -86,16 +86,16 @@ sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
-BOUNDARY_ID = "pe1"
+BOUNDARY_ID = "peru_hybas_l7_6070641200"
 EXPERIMENT_ID = "priority_scenarios"
 OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
 SCENARIO_DIR = OUT_DIR / "scenarios"
 PIM_CRITERIA_DIR = OUT_DIR / "pim_criteria"
 CRITERIA_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria"
 EXPOSURE_INDICATORS_DIR = ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators"
-REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
-PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
-# Common-mask overlay must reject true data gaps. PE1 LS deliberately masks
+REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
+PERU_HYBAS_L7_6070641200_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+# Common-mask overlay must reject true data gaps. Arequipa Region LS deliberately masks
 # main-channel cells; K also preserves source-edge NoData. Keep those cells
 # unscored and require enough common coverage to catch missing active evidence.
 MIN_SCOREABLE_VALID_FRACTION = 0.95
@@ -218,7 +218,7 @@ def read_reference() -> dict:
 
 
 def read_boundary_mask(profile: dict) -> np.ndarray:
-    boundary = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs(profile["crs"])
+    boundary = gpd.read_file(PERU_HYBAS_L7_6070641200_GPKG, layer="peru_pilot_boundary").to_crs(profile["crs"])
     from rasterio.features import geometry_mask
 
     return geometry_mask(
@@ -474,7 +474,7 @@ def add_colorbar(fig, ax, image, label: str) -> None:
 
 
 def plot_board(direct_score, direct_top20, profile) -> None:
-    boundary = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs(profile["crs"])
+    boundary = gpd.read_file(PERU_HYBAS_L7_6070641200_GPKG, layer="peru_pilot_boundary").to_crs(profile["crs"])
     bounds = rasterio.transform.array_bounds(profile["height"], profile["width"], profile["transform"])
     extent = (bounds[0], bounds[2], bounds[1], bounds[3])
 
@@ -501,8 +501,8 @@ def plot_board(direct_score, direct_top20, profile) -> None:
         fontsize=12,
         fontweight="bold",
     )
-    fig.savefig(OUT_DIR / "pe1_priority_scenarios_board.png", dpi=220, bbox_inches="tight")
-    fig.savefig(OUT_DIR / "pe1_priority_scenarios_board.pdf", bbox_inches="tight")
+    fig.savefig(OUT_DIR / "peru_hybas_l7_6070641200_priority_scenarios_board.png", dpi=220, bbox_inches="tight")
+    fig.savefig(OUT_DIR / "peru_hybas_l7_6070641200_priority_scenarios_board.pdf", bbox_inches="tight")
     plt.close(fig)
 
 
@@ -531,7 +531,7 @@ def main() -> None:
             if frac < MIN_SCOREABLE_VALID_FRACTION:
                 missing.append(f"{name}={frac:.6f}")
         raise RuntimeError(
-            "PE1 five-criterion common support does not provide enough scoreable coverage; "
+            "Arequipa Region five-criterion common support does not provide enough scoreable coverage; "
             f"scoreable={scoreable_valid_fraction:.6f}, threshold={MIN_SCOREABLE_VALID_FRACTION}; "
             f"low layers: {', '.join(missing) if missing else 'none'}"
         )

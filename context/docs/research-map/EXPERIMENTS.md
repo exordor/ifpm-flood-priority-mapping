@@ -5,16 +5,16 @@ IDs, status, claim level, and result summary. Per-experiment detail lives in
 `RESULTS.md` and in each `outputs/<experiment_id>/handoff.md`.
 
 Naming convention: `boundary_id / experiment_id`. `boundary_v1` is the Zimbabwe
-prototype boundary; `pe1` is the Peru-first working catchment in Arequipa
+prototype boundary; `peru_hybas_l7_6070641200` is the Peru-first working catchment in Arequipa
 Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa
 city (treated as a parallel boundary_id for path purposes, even though it is
-not nested under `boundary_v1`). After D-PERU-FIRST (2026-07-06), `pe1` is the
+not nested under `boundary_v1`). After D-PERU-FIRST (2026-07-06), `peru_hybas_l7_6070641200` is the
 active mainline; `boundary_v1` is secondary/background unless explicitly
 reopened.
 
 ## Current mainline focus (2026-07-13)
 
-Peru-first work should build on `pe1_priority_scenarios` and its upstream
+Peru-first work should build on `peru_hybas_l7_6070641200_priority_scenarios` and its upstream
 criteria stack. The five PIM criterion maps, direct-weight prioritisation map,
 mining/population overlay, contribution map, and SINPAD diagnostic are complete
 and governed by `peru_report_figure_chain`. The next output is the Peru-only
@@ -38,18 +38,18 @@ should not drive the next modelling sequence.
 
 | experiment_id | IFPM-NNN | status | claim_level | result_summary | handoff |
 |---|---|---|---|---|---|
-| `pe1_criteria_stack` (3-criteria) | IFPM-093 | complete | provisional | First PE1 stack: flood, erosion, land cover | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_criteria_stack` (5-criteria) | IFPM-094 | complete | provisional | +mining (OSM indicator) +exposure (OSM roads) | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_criteria_stack` (component rasters, INGEMMET mining) | IFPM-095/096 | complete | provisional | component inputs for flood, sediment, land use/ASM, environmental, socioeconomic, rainfall; includes TWI/drainage and LS/C diagnostic sublayers | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
-| `pe1_environmental_sensitivity_v0_1` | IFPM-096 | complete | provisional | WorldCover/OSM water-wetland context 0.60 plus SERNANP national definitive protected-area layer 0 context 0.40; layer 0 checked, with no geometry in PE1 + 5 km; other protected-area layers not queried | `outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/` |
-| `pe1_exposure_indicators` | IFPM-096 gap closure | complete | provisional | 0.45 road/access + 0.55 infrastructure exposure; infrastructure is an explicit 0.50 WorldPop population + 0.50 OSM mapped-building placeholder. INEI poverty and OSM health remoteness remain diagnostic context outside the PIM. | `outputs/srtm_1arcsec_peru_pilot/exposure_indicators/` |
-| `pe1_soil_k_factor` | criteria governance | complete | provisional | Corrected SoilGrids source-window extraction; K aligns to PE1 and is bilinear-aligned to 30 m while retaining a 250 m effective-resolution warning; 98.8674% PE1 coverage | `outputs/srtm_1arcsec_peru_pilot/soil_k_factor/` |
-| `pe1_priority_scenarios` | IFPM-093/094/095/096 | complete | sensitivity_scenario | Peru direct weights only; Sediment uses K/LS/C 0.30/0.45/0.25 and Land Use uses a value function distinct from C; 521.356 km² in the highest-priority quintile; 95.0998% five-criterion common-support coverage; 4.9002% remains unscored with LS/K/other causes exposed by support rasters | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/` |
-| `pe1_gap_closure_analysis` | Peru evidence-gap work | complete | diagnostic_only | WorldPop accounting is checksum-bound in the output CSV and remains endogenous. Of 25 SINPAD records, 12 are scoreable and 2 are selected; 1 of 4 flood-specific records is scoreable and none is selected. This is not validation. | `outputs/peru_gap_closure_analysis/` |
-| `pe1_criterion_dependency_diagnostics` | criteria governance | complete | diagnostic_only | Quantifies shared WorldCover dependence, road-led Socioeconomic ordering, water-led Environmental context, and selected-quintile changes under component-removal alternatives; does not recalibrate supplied AHP weights | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/criterion_dependency_diagnostics.csv` |
-| `pe1_rainfall_criterion` | IFPM-096 | complete | sensitivity_scenario | CHIRPS latam Dec-Mar mean, bilinear to PE1 30 m grid and normalized from PE1 boundary values only (A-012); effective resolution remains ~5 km | `outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/` |
-| `pe1_ls_factor` | IFPM-093 | complete | diagnostic_only | PE1 LS hillslope mean 3.70 (vs V1 1.563) | `outputs/srtm_1arcsec_peru_pilot/ls_factor/` |
-| `pe1_usle_soil_loss` | IFPM-093 | complete | provisional | PE1 USLE A mean 8.74 t/ha/yr (LOW R=238.6); vs V1 0.50 | `outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/` |
+| `peru_hybas_l7_6070641200_criteria_stack` (3-criteria) | IFPM-093 | complete | provisional | First Arequipa Region stack: flood, erosion, land cover | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
+| `peru_hybas_l7_6070641200_criteria_stack` (5-criteria) | IFPM-094 | complete | provisional | +mining (OSM indicator) +exposure (OSM roads) | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
+| `peru_hybas_l7_6070641200_criteria_stack` (component rasters, INGEMMET mining) | IFPM-095/096 | complete | provisional | component inputs for flood, sediment, land use/ASM, environmental, socioeconomic, rainfall; includes TWI/drainage and LS/C diagnostic sublayers | `outputs/srtm_1arcsec_peru_pilot/criteria_stack/` |
+| `peru_hybas_l7_6070641200_environmental_sensitivity_v0_1` | IFPM-096 | complete | provisional | WorldCover/OSM water-wetland context 0.60 plus SERNANP national definitive protected-area layer 0 context 0.40; layer 0 checked, with no geometry in Arequipa Region + 5 km; other protected-area layers not queried | `outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/` |
+| `peru_hybas_l7_6070641200_exposure_indicators` | IFPM-096 gap closure | complete | provisional | 0.45 road/access + 0.55 infrastructure exposure; infrastructure is an explicit 0.50 WorldPop population + 0.50 OSM mapped-building placeholder. INEI poverty and OSM health remoteness remain diagnostic context outside the PIM. | `outputs/srtm_1arcsec_peru_pilot/exposure_indicators/` |
+| `peru_hybas_l7_6070641200_soil_k_factor` | criteria governance | complete | provisional | Corrected SoilGrids source-window extraction; K aligns to Arequipa Region and is bilinear-aligned to 30 m while retaining a 250 m effective-resolution warning; 98.8674% Arequipa Region coverage | `outputs/srtm_1arcsec_peru_pilot/soil_k_factor/` |
+| `peru_hybas_l7_6070641200_priority_scenarios` | IFPM-093/094/095/096 | complete | sensitivity_scenario | Peru direct weights only; Sediment uses K/LS/C 0.30/0.45/0.25 and Land Use uses a value function distinct from C; 521.356 km² in the highest-priority quintile; 95.0998% five-criterion common-support coverage; 4.9002% remains unscored with LS/K/other causes exposed by support rasters | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/` |
+| `peru_hybas_l7_6070641200_gap_closure_analysis` | Peru evidence-gap work | complete | diagnostic_only | WorldPop accounting is checksum-bound in the output CSV and remains endogenous. Of 25 SINPAD records, 12 are scoreable and 2 are selected; 1 of 4 flood-specific records is scoreable and none is selected. This is not validation. | `outputs/peru_gap_closure_analysis/` |
+| `peru_hybas_l7_6070641200_criterion_dependency_diagnostics` | criteria governance | complete | diagnostic_only | Quantifies shared WorldCover dependence, road-led Socioeconomic ordering, water-led Environmental context, and selected-quintile changes under component-removal alternatives; does not recalibrate supplied AHP weights | `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/criterion_dependency_diagnostics.csv` |
+| `peru_hybas_l7_6070641200_rainfall_criterion` | IFPM-096 | complete | sensitivity_scenario | CHIRPS latam Dec-Mar mean, bilinear to Arequipa Region 30 m grid and normalized from Arequipa Region boundary values only (A-012); effective resolution remains ~5 km | `outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/` |
+| `peru_hybas_l7_6070641200_ls_factor` | IFPM-093 | complete | diagnostic_only | Arequipa Region LS hillslope mean 3.70 (vs V1 1.563) | `outputs/srtm_1arcsec_peru_pilot/ls_factor/` |
+| `peru_hybas_l7_6070641200_usle_soil_loss` | IFPM-093 | complete | provisional | Arequipa Region USLE A mean 8.74 t/ha/yr (LOW R=238.6); vs V1 0.50 | `outputs/srtm_1arcsec_peru_pilot/usle_soil_loss/` |
 
 ## Zimbabwe terrain/factor chain (legacy flat names — `outputs/srtm_1arcsec_zimbabwe_prototype/`)
 
@@ -100,7 +100,7 @@ Outputs at: `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/` and
 | `upper_mzingwane_fact_check` | IFPM-042/043 | complete | ~2138 km² reference has external support but no reusable geometry |
 | `candidate_outlet_exploration` | IFPM-045/046 | complete (superseded) | C1 first-pass prior; demoted after mentor cue |
 | `professional_outlet_review` | IFPM-048 | complete | V1 = Upper Mzingwane (~3689 km²) accepted with waiver; C1 demoted to machine prior |
-| `peru_boundary_discovery` | IFPM-091 | complete | HydroBASINS SA candidates 2.8-14,300 km²; PE1 selected by rule |
+| `peru_boundary_discovery` | IFPM-091 | complete | HydroBASINS SA candidates 2.8-14,300 km²; Arequipa Region selected by rule |
 
 ## Reporting / comparison packages (not modelling experiments)
 
@@ -121,7 +121,7 @@ Outputs at: `outputs/chirps_v3_zimbabwe_prototype/r_factor_exploration/` and
 | `outputs/v1_autonomous_prototype_v0_2/` | `boundary_v1 / criteria_stack_v0_2` inventory |
 | `outputs/srtm_1arcsec_zimbabwe_prototype/*` | `boundary_v1 / <derivative>` (terrain chain) |
 | `outputs/chirps_v3_zimbabwe_prototype/*` | `boundary_v1 / rainfall_*` |
-| `outputs/srtm_1arcsec_peru_pilot/*` | `pe1 / <derivative>` (treated as a parallel boundary_id) |
+| `outputs/srtm_1arcsec_peru_pilot/*` | `peru_hybas_l7_6070641200 / <derivative>` (treated as a parallel boundary_id) |
 | `outputs/esa_worldcover_2021_v1_methodology/` | `boundary_v1 / c_factor` |
 | `outputs/soilgrids_250m_sediment_candidate/` | `boundary_v1 / k_factor` |
 

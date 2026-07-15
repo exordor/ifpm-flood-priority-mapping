@@ -22,13 +22,13 @@ OUT_PNG = OUT_DIR / "peru_integrated_briefing_board.png"
 OUT_MANIFEST = OUT_DIR / "manifest.csv"
 FIGURE_CHAIN_MANIFEST = ROOT / "outputs/peru_report_figure_chain/manifest.csv"
 RAW_INPUT_INDEX = ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/index.csv"
-SINPAD_RECORDS = ROOT / "outputs/peru_gap_closure_analysis/pe1_sinpad_pim_colocation.csv"
+SINPAD_RECORDS = ROOT / "outputs/peru_gap_closure_analysis/peru_hybas_l7_6070641200_sinpad_pim_colocation.csv"
 BOUNDARY_FIGURE = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary_diagnostic.png"
 BOUNDARY_MANIFEST = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary_manifest.csv"
 BOUNDARY_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 POPULATION_BY_CLASS = ROOT / "outputs/peru_gap_closure_analysis/peru_population_by_pim_class.csv"
 MINING_MANIFEST = ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/mining_pressure_manifest.csv"
-MINING_POINTS = ROOT / "data/raw/ingemmet_catastro_minero_peru_pilot/pe1_pequena_mineria.gpkg"
+MINING_POINTS = ROOT / "data/raw/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_pequena_mineria.gpkg"
 
 FIGURES = OrderedDict(
     [
@@ -151,7 +151,7 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 
 
 def compact_words(text: str, max_chars: int) -> str:
-    normalized = " ".join(text.replace("PE1", "the study boundary").split())
+    normalized = " ".join(text.replace("Arequipa Region", "the study boundary").split())
     if len(normalized) <= max_chars:
         return normalized
     shortened = normalized[: max_chars - 3].rsplit(" ", 1)[0]
@@ -384,7 +384,7 @@ def result_summary() -> dict[str, float | int]:
         "very_high_area_km2": very_high_cells * 0.0009,
         "high_population": float(by_class["4"]["population_sum"]),
         "mining_points_inside": int(unique_inside),
-        "mining_records_nearby": int(mining_rows[0]["features_in_pe1_envelope"]),
+        "mining_records_nearby": int(mining_rows[0]["features_in_peru_hybas_l7_6070641200_envelope"]),
     }
 
 

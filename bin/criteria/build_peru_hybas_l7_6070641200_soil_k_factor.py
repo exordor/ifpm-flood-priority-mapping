@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Align SoilGrids K to the PE1 overlay grid without claiming 30 m detail."""
+"""Align SoilGrids K to the Arequipa Region overlay grid without claiming 30 m detail."""
 
 from __future__ import annotations
 
@@ -14,8 +14,8 @@ from rasterio.warp import Resampling, reproject
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_pe1_0_5cm_250m.tif"
-REFERENCE = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
+SOURCE = ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_peru_hybas_l7_6070641200_0_5cm_250m.tif"
+REFERENCE = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
 BOUNDARY = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 OUT_DIR = ROOT / "outputs/srtm_1arcsec_peru_pilot/soil_k_factor"
 ALIGNED = OUT_DIR / "soil_k_factor_aligned_250m_effective_30m.tif"
@@ -23,8 +23,8 @@ SCORED = OUT_DIR / "soil_k_factor_0_1.tif"
 MANIFEST = OUT_DIR / "soil_k_factor_manifest.csv"
 
 INPUTS = [
-    ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_pe1_0_5cm_250m.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif",
+    ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_peru_hybas_l7_6070641200_0_5cm_250m.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif",
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
 ]
 OUTPUTS = [
@@ -45,7 +45,7 @@ def normalize_within_boundary(
     valid = inside & np.isfinite(data)
     values = data[valid]
     if values.size == 0:
-        raise ValueError("cannot normalize SoilGrids K without finite PE1 cells")
+        raise ValueError("cannot normalize SoilGrids K without finite Arequipa Region cells")
     low, high = np.percentile(values, [2.0, 98.0])
     if not np.isfinite(low) or not np.isfinite(high) or high <= low:
         raise ValueError(f"invalid SoilGrids K range: low={low}, high={high}")
@@ -62,7 +62,7 @@ def write_raster(path: Path, data: np.ndarray, profile: dict) -> None:
         dst.write(output, 1)
         dst.update_tags(
             IFPM_NOTE=(
-                "SoilGrids native 250 m K aligned to the PE1 30 m grid for overlay compatibility; "
+                "SoilGrids native 250 m K aligned to the Arequipa Region 30 m grid for overlay compatibility; "
                 "effective information resolution remains 250 m."
             )
         )
@@ -108,7 +108,7 @@ def main() -> None:
         "target_grid": "EPSG:32718 30 m",
         "resampling": "bilinear",
         "effective_resolution_warning": "aligned cells remain 250 m SoilGrids evidence",
-        "normalization": "PE1 boundary 2-98 percentile min-max",
+        "normalization": "Arequipa Region boundary 2-98 percentile min-max",
         "clip_low_k_us": round(low, 8),
         "clip_high_k_us": round(high, 8),
         "valid_fraction": round(float(valid.sum() / inside.sum()), 6),
@@ -119,7 +119,7 @@ def main() -> None:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
-    print(f"wrote PE1 SoilGrids K criterion to {rel(SCORED)}")
+    print(f"wrote Arequipa Region SoilGrids K criterion to {rel(SCORED)}")
 
 
 if __name__ == "__main__":

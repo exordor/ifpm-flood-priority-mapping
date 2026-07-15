@@ -43,13 +43,13 @@ sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster
 
 
-BOUNDARY_ID = "pe1"
+BOUNDARY_ID = "peru_hybas_l7_6070641200"
 EXPERIMENT_ID = "exposure_indicators"
 OUT_DIR = ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators"
 
-REFERENCE = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
+REFERENCE = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
 BOUNDARY = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
-WORLDPOP = ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_pe1_bbox.tif"
+WORLDPOP = ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_peru_hybas_l7_6070641200_bbox.tif"
 ROAD_ACCESS = ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/road_access_proximity_0_1.tif"
 OSM_DIR = ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted"
 OSM_BUILDINGS = OSM_DIR / "gis_osm_buildings_a_free_1.shp"
@@ -65,9 +65,9 @@ HEALTH_MAX_DISTANCE_M = 20000.0
 
 INPUTS = [
     ROOT / "bin/_lib/ifpm_tools.py",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif",
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
-    ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_pe1_bbox.tif",
+    ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_peru_hybas_l7_6070641200_bbox.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/road_access_proximity_0_1.tif",
     ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_buildings_a_free_1.shp",
     ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_pois_free_1.shp",

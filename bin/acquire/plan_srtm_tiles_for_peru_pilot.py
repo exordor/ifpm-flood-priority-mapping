@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Plan SRTM 1 Arc-Second tiles for the southern Peru comparison catchment (PE1).
+"""Plan SRTM 1 Arc-Second tiles for the southern Peru comparison catchment (Arequipa Region).
 
-Mirrors `plan_srtm_tiles_for_v1.py` but for the PE1 boundary. Pre-download planning only:
-computes tile names from PE1 + 5 km buffer without downloading any data.
+Mirrors `plan_srtm_tiles_for_v1.py` but for the Arequipa Region boundary. Pre-download planning only:
+computes tile names from Arequipa Region + 5 km buffer without downloading any data.
 
 Peru uses UTM 18S (EPSG:32718) for the metric buffer, NOT the Zimbabwe UTM 35S.
 """
@@ -24,11 +24,11 @@ import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import load_boundary_df
 OUT_DIR = ROOT / "outputs/peru_pilot_boundary"
-PE1_GPKG = OUT_DIR / "peru_pilot_boundary.gpkg"
+PERU_HYBAS_L7_6070641200_GPKG = OUT_DIR / "peru_pilot_boundary.gpkg"
 OUT_GPKG = OUT_DIR / "srtm_peru_pilot_tile_plan.gpkg"
 OUT_CSV = OUT_DIR / "srtm_peru_pilot_tile_plan.csv"
 SUMMARY = OUT_DIR / "srtm_peru_pilot_preflight_summary.md"
-METRIC_CRS = "EPSG:32718"  # UTM 18S covers southern Peru / the PE1 area
+METRIC_CRS = "EPSG:32718"  # UTM 18S covers southern Peru / the Arequipa Region area
 BUFFER_M = 5_000
 DATASET_ID = "srtm_1arcsec_peru_pilot"
 DESTINATION = f"data/raw/{DATASET_ID}/"
@@ -43,7 +43,7 @@ def buffered_bbox(boundary: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     minx, miny, maxx, maxy = buffered.total_bounds
     return gpd.GeoDataFrame(
         [{
-            "name": "pe1_bbox_5km_buffer",
+            "name": "peru_hybas_l7_6070641200_bbox_5km_buffer",
             "buffer_m": BUFFER_M,
             "min_lon": minx,
             "min_lat": miny,
@@ -79,7 +79,7 @@ def build_tile_plan(bbox_gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
                 "geometry": box(lon, lat, lon + 1, lat + 1),
             })
     if not rows:
-        raise ValueError("No SRTM tiles intersect the PE1 buffered bounding box")
+        raise ValueError("No SRTM tiles intersect the Arequipa Region buffered bounding box")
     return gpd.GeoDataFrame(rows, geometry="geometry", crs="EPSG:4326")
 
 
@@ -87,7 +87,7 @@ def write_outputs(bbox_gdf: gpd.GeoDataFrame, tiles: gpd.GeoDataFrame) -> None:
     if OUT_GPKG.exists():
         OUT_GPKG.unlink()
     tiles.drop(columns="geometry").to_csv(OUT_CSV, index=False)
-    bbox_gdf.to_file(OUT_GPKG, layer="pe1_bbox_5km_buffer", driver="GPKG")
+    bbox_gdf.to_file(OUT_GPKG, layer="peru_hybas_l7_6070641200_bbox_5km_buffer", driver="GPKG")
     tiles.to_file(OUT_GPKG, layer="srtm_tiles", driver="GPKG")
     bbox = bbox_gdf.iloc[0]
     SUMMARY.write_text(
@@ -101,7 +101,7 @@ def write_outputs(bbox_gdf: gpd.GeoDataFrame, tiles: gpd.GeoDataFrame) -> None:
             f"- Dataset id: `{DATASET_ID}`",
             f"- Destination: `{DESTINATION}`",
             f"- Boundary source: `outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg`",
-            f"- Buffer: `{BUFFER_M} m` around PE1 boundary (metric CRS {METRIC_CRS})",
+            f"- Buffer: `{BUFFER_M} m` around Arequipa Region boundary (metric CRS {METRIC_CRS})",
             f"- Bbox EPSG:4326: `{bbox['min_lon']:.6f}, {bbox['min_lat']:.6f}, {bbox['max_lon']:.6f}, {bbox['max_lat']:.6f}`",
             f"- Tile count: `{len(tiles)}`",
             f"- Tiles: `{', '.join(tiles['tile_name'])}`",
@@ -115,7 +115,7 @@ def write_outputs(bbox_gdf: gpd.GeoDataFrame, tiles: gpd.GeoDataFrame) -> None:
 
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    boundary = load_boundary_df(PE1_GPKG, "peru_pilot_boundary", None)
+    boundary = load_boundary_df(PERU_HYBAS_L7_6070641200_GPKG, "peru_pilot_boundary", None)
     bbox_gdf = buffered_bbox(boundary)
     tiles = build_tile_plan(bbox_gdf)
     write_outputs(bbox_gdf, tiles)

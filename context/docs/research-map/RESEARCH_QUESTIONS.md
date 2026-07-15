@@ -8,7 +8,7 @@ Status: active. Open scientific and methodological questions.
 > next-experiment-prompts, not as "questions for the mentor". If the mentor
 > wants a different choice after seeing an artifact, the project adapts then.
 
-> **Current mainline (2026-07-06):** per D-PERU-FIRST, finish Peru first. PE1 is
+> **Current mainline (2026-07-06):** per D-PERU-FIRST, finish Peru first. Arequipa Region is
 > the active Peru-first working case for maps and PPT structure, while Zimbabwe
 > is secondary/background until stronger Zimbabwe evidence or a later comparison
 > need reopens it.
@@ -79,7 +79,7 @@ later, revisit then. Meanwhile do not block on it.
 Controls normalization, aggregation, and Zimbabwe-Peru comparability.
 
 **Default taken:** pixel-raster on the 30 m reference grid (EPSG:32735 for V1,
-EPSG:32718 for PE1), with zonal summaries (catchment / sub-basin) reported
+EPSG:32718 for Arequipa Region), with zonal summaries (catchment / sub-basin) reported
 alongside when needed. The grid gate enforces compatibility before any overlay.
 This avoids blocking on a sub-basin-aggregation redesign.
 
@@ -104,24 +104,25 @@ boundary.
 - **Related:** `EXPERIMENTS.md` §boundary discovery; `DECISION_LOG.md` D-V1-WAIVER
 - **Claim level:** `provisional` (prototype)
 
-## RQ6: Peru boundary — default: PE1 southern Peru comparison catchment
+## RQ6: Peru boundary — working HydroBASINS catchment within Arequipa Region
 
-PE1 is HydroBASINS L7 `6070641200`, a provisional comparison catchment in
-Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of
+The current working boundary, displayed externally as **Arequipa Region**, is
+HydroBASINS L7 `6070641200`: a provisional comparison catchment mainly covering
+the Vitor-La Joya-Santa Rita de Siguas area west of
 Arequipa city. It was chosen by a selection rule (pacific-slope, inside the
 Arequipa-Moquegua-Tacna discovery envelope, area comparable to V1,
 non-terminal), not as a final research-selected site.
 
-**Default taken:** keep PE1 as the active Peru-first working case and complete
+**Default taken:** keep Arequipa Region as the active Peru-first working case and complete
 the Peru workflow first. The input-criteria maps, direct-weight prototype PIM,
 priority classes, mining/population overlay, contribution map, and SINPAD
 diagnostic are complete; the integrated briefing board and data-strength table
 remain. If the mentor names a different Peru site later, rebuild there. See
-`DECISION_LOG.md` D-PE1-CATCHMENT and D-PERU-FIRST.
+`DECISION_LOG.md` D-AREQUIPA-REGION-CATCHMENT and D-PERU-FIRST.
 
 - **Decision id:** IFPM-D02 (default taken)
-- **Related:** `EXPERIMENTS.md` §Peru PE1 chain; `DECISION_LOG.md`
-  D-PE1-CATCHMENT, D-PERU-FIRST
+- **Related:** `EXPERIMENTS.md` §Peru Arequipa Region chain; `DECISION_LOG.md`
+  D-AREQUIPA-REGION-CATCHMENT, D-PERU-FIRST
 - **Claim level:** `provisional`
 
 ## RQ7: Validation evidence — SINPAD point context available; independent validation remains unavailable
@@ -155,7 +156,7 @@ proximity as the Peru mining layer (stronger, `provisional`). If the mentor
 returns with official Zimbabwe ASM data, swap it in.
 
 - **Decision id:** IFPM-D05 (default taken; overlaps RQ3 role)
-- **Related:** `EXPERIMENTS.md` §PE1 mining upgrade; `RESULTS.md` §mining
+- **Related:** `EXPERIMENTS.md` §Arequipa Region mining upgrade; `RESULTS.md` §mining
 - **Claim level:** Zimbabwe mining = `diagnostic_only`; Peru mining = `provisional`
 
 ## RQ9: Are the V1 prototype top-20% priority areas robust to weighting assumptions?
@@ -169,13 +170,13 @@ they are not part of the active Peru reporting chain.
 
 ## RQ10: Are the Zimbabwe and Peru sites structurally comparable?
 
-PE1 is now operationally comparable to V1 under the mentor five-main-criterion
+Arequipa Region is now operationally comparable to V1 under the mentor five-main-criterion
 framework. Both runs use the same five active PIM main criteria as top-level
 overlay terms: Flood, Sediment, Land Use / ASM, Environmental, and
 Socioeconomic. Flood and Land Use / ASM have internal component rasters, while
 Environmental is a provisional water/wetland and protected-area sensitivity
 indicator rather than ecological valuation. Physical
-contrast is real: PE1 is arid Andean Pacific slope (C=0.61, bare; soil loss
+contrast is real: Arequipa Region is arid Andean Pacific slope (C=0.61, bare; soil loss
 8.74 t/ha/yr) vs V1 semi-humid savanna (C=0.04, shrub/grass; soil loss 0.50).
 Final comparison claim remains blocked until harmonized. After D-PERU-FIRST,
 this is a secondary/background question rather than the active mainline; the
@@ -211,13 +212,13 @@ decision id:
 | A-006 | Road proximity is an exposure/access indicator, not socioeconomic vulnerability. | diagnostic_only | exposure criterion |
 | A-007 | Peru can run data-readiness and terrain diagnostics in parallel. | diagnostic_only | Peru side |
 | A-008 | The Peru Arequipa-Moquegua-Tacna discovery envelope is a discovery aid, not an authoritative boundary. | diagnostic_only | Peru boundary discovery |
-| A-009 | PE1 is the southern Peru comparison catchment in Arequipa Region, mainly the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It is chosen by a selection rule, NOT a final research-selected site. | provisional | Peru terrain chain |
+| A-009 | The working boundary displayed externally as **Arequipa Region** is HydroBASINS L7 `6070641200`, mainly covering the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It is chosen by a selection rule, NOT a final research-selected site. | provisional | Peru terrain chain |
 | A-010 | The `rainfall_climatology` criterion (rainfall_sensitivity_v0_3) is a 0.05° CHIRPS rainy-season mean bilinear-resampled to the V1 30 m grid; resampling-edge NoData slivers inside V1 are nearest-EDT filled. Effective resolution ~5 km, NOT native 30 m. | sensitivity_scenario | rainfall criterion |
 | A-011 | The top-20% priority-area exposure diagnostic measures spatial co-location of v0.2 repeatedly selected top-20% priority areas with exposure indicators; weak co-location means selected priority areas reflect natural-pressure overlap, not observed exposure. | diagnostic_only | exposure diagnostic |
-| A-012 | The PE1 `rainfall_climatology` criterion uses CHIRPS latam Dec-Mar mean, bilinear-resampled to the 30 m reference grid and normalized from PE1 boundary values only. Effective resolution remains ~5 km. | sensitivity_scenario | PE1 rainfall criterion |
+| A-012 | The Arequipa Region `rainfall_climatology` criterion uses CHIRPS latam Dec-Mar mean, bilinear-resampled to the 30 m reference grid and normalized from Arequipa Region boundary values only. Effective resolution remains ~5 km. | sensitivity_scenario | Arequipa Region rainfall criterion |
 | A-013 | Zimbabwe ASM is structurally artisanal and scattered; no verified active footprint exists. The current mining layer uses USGS Africa GIS mineral facilities and deposits as a proximity-based reference, not an active ASM footprint. | diagnostic_only | Zimbabwe mining criterion |
 | A-014 | If Zimbabwe ASM data is not obtainable, the mentor may switch the Zimbabwe site to Voi (Kenya). Voi rainfall is already in managed storage. NOT a current action — strategic fallback only. | contingency | Zimbabwe site / boundary |
-| A-015 | Peru is the active mainline case after the 2026-07-06 mentor direction to work with Peru first until the end. PE1 remains provisional, but new maps and PPT structure should lead with Peru. | provisional | Peru-first workflow |
+| A-015 | Peru is the active mainline case after the 2026-07-06 mentor direction to work with Peru first until the end. Arequipa Region remains provisional, but new maps and PPT structure should lead with Peru. | provisional | Peru-first workflow |
 | A-016 | Current Peru PIM main weights are the mentor direct table: FH 0.35, SE 0.25, LM 0.20, ES 0.12, SV 0.08. This is the only active Peru scenario. No CR is reported because no pairwise matrix was supplied for this direct table. | sensitivity_scenario | Peru AHP weights |
 | A-017 | Peru Sediment independently applies normalized K 0.30 / LS 0.45 / C 0.25. SoilGrids K is aligned to the reference grid but remains 250 m effective evidence. The final PIM is scored only on 95.0998% five-criterion common support; 4.9002% remains unscored and is classified by missing LS, K, or other evidence. | provisional | Peru sediment criterion |
 | A-018 | Peru exposure indicators implement the supplied socioeconomic split: 0.45 road/access + 0.55 infrastructure. Infrastructure exposure is a provisional 0.50 WorldPop population + 0.50 OSM mapped-building implementation indicator. | provisional | Peru socioeconomic criterion |
@@ -225,7 +226,7 @@ decision id:
 | A-020 | Zimbabwe Sediment independently applies boundary-standardized spatial K 0.35 / LS 0.35 / C 0.30. SoilGrids K is aligned to the 30 m reference grid but remains 250 m effective evidence; NoData in any component remains unscored. | provisional | Zimbabwe sediment criterion |
 | A-021 | Zimbabwe socioeconomic exposure uses road/access proximity only; independent infrastructure exposure is not available in the current run. | diagnostic_only | Zimbabwe socioeconomic criterion |
 | A-022 | INEI district poverty and OSM health-service remoteness are response-capacity context layers and are excluded from the current Peru AHP overlay because no mentor subweights were supplied for them. | diagnostic_only | Peru response-capacity context |
-| A-023 | SERNANP national definitive protected-area MapServer layer 0 was checked for PE1 plus a 5 km context zone. No layer-0 geometry occurs in that zone; regional, private, and transitional layers were not queried. The current Environmental score is therefore driven by water/wetland evidence rather than a missing layer-0 download. | provisional | Peru environmental criterion |
+| A-023 | SERNANP national definitive protected-area MapServer layer 0 was checked for Arequipa Region plus a 5 km context zone. No layer-0 geometry occurs in that zone; regional, private, and transitional layers were not queried. The current Environmental score is therefore driven by water/wetland evidence rather than a missing layer-0 download. | provisional | Peru environmental criterion |
 | A-024 | Peru Land Use pressure uses a WorldCover human-intensity value function distinct from the RUSLE C-factor used inside Sediment. | provisional | Peru land-use criterion |
 
 ## Lineage

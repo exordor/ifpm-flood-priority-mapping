@@ -22,10 +22,10 @@ and orchestrated by `pipeline.py`.
 .venv/bin/python bin/pipeline.py run factors
 
 # Run one script and everything it depends on
-.venv/bin/python bin/pipeline.py run --target run_pe1_priority_scenarios
+.venv/bin/python bin/pipeline.py run --target run_peru_hybas_l7_6070641200_priority_scenarios
 
 # Run one script only (no upstream)
-.venv/bin/python bin/pipeline.py run --target run_pe1_priority_scenarios --no-deps
+.venv/bin/python bin/pipeline.py run --target run_peru_hybas_l7_6070641200_priority_scenarios --no-deps
 
 # Rebuild the Peru exposure indicators directly before a scenario rerun.
 .venv/bin/python bin/criteria/build_peru_exposure_indicators.py
@@ -69,12 +69,12 @@ stage's outputs.
 
 ## Two parallel country chains
 
-Most stages have a Zimbabwe (V1) and a Peru (PE1) variant that mirror each other:
+Most stages have a Zimbabwe (V1) and a Peru (Arequipa Region) variant that mirror each other:
 
 ```
                     acquire → factors → criteria → scenarios → visualize
 Zimbabwe V1:   ...   v1_dem  →  slope   →  criteria_stack_v0_2  →  rainfall_exposure_v0_4  →  comparison
-Peru PE1:      ...   pe1_dem →  slope   →  pe1_criteria_stack   →  pe1_priority_scenarios  →  comparison
+Peru Arequipa Region:      ...   peru_hybas_l7_6070641200_dem →  slope   →  peru_hybas_l7_6070641200_criteria_stack   →  peru_hybas_l7_6070641200_priority_scenarios  →  comparison
                                                               ↘                ↙
                                                     plot_zimbabwe_peru_prototype_comparison
                                                     plot_mentor_boss_priority_explanation_package

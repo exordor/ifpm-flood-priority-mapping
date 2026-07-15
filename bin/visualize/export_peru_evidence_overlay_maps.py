@@ -42,8 +42,8 @@ POPULATION_EXPOSURE = ROOT / (
     "outputs/srtm_1arcsec_peru_pilot/exposure_indicators/"
     "population_exposure_0_1.tif"
 )
-MINING = ROOT / "data/raw/ingemmet_catastro_minero_peru_pilot/pe1_pequena_mineria.gpkg"
-SINPAD = ROOT / "outputs/peru_gap_closure_analysis/pe1_sinpad_pim_colocation.gpkg"
+MINING = ROOT / "data/raw/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_pequena_mineria.gpkg"
+SINPAD = ROOT / "outputs/peru_gap_closure_analysis/peru_hybas_l7_6070641200_sinpad_pim_colocation.gpkg"
 BOUNDARY = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 OUT_DIR = ROOT / "outputs/slide_ready_figures/peru_evidence_overlays"
 
@@ -51,8 +51,8 @@ INPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenarios/priority_mentor_peru_direct_pim.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/evidence_support_class.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators/population_exposure_0_1.tif",
-    ROOT / "data/raw/ingemmet_catastro_minero_peru_pilot/pe1_pequena_mineria.gpkg",
-    ROOT / "outputs/peru_gap_closure_analysis/pe1_sinpad_pim_colocation.gpkg",
+    ROOT / "data/raw/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_pequena_mineria.gpkg",
+    ROOT / "outputs/peru_gap_closure_analysis/peru_hybas_l7_6070641200_sinpad_pim_colocation.gpkg",
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
 ]
 OUTPUTS = [

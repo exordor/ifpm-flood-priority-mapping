@@ -95,7 +95,7 @@ SITES = [
     Site(
         label="Southern Peru comparison catchment",
         short_label="Peru",
-        boundary_id="PE1",
+        boundary_id="Arequipa Region",
         experiment_id="priority_scenarios",
         weights_csv=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/scenario_weights.csv",
         boundary_gpkg=ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",

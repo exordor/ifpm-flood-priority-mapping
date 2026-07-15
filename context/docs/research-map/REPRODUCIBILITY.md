@@ -105,9 +105,9 @@ range, uncertainty, and lineage.
 
 ### Peru rule
 
-After D-PERU-FIRST (2026-07-06), Peru work is the active mainline. PE1 may be
+After D-PERU-FIRST (2026-07-06), Peru work is the active mainline. Arequipa Region may be
 used for Peru-first prototype outputs: five PIM criteria maps, AHP-weighted
-priority maps, top-priority classes, and mining overlay. PE1 remains
+priority maps, top-priority classes, and mining overlay. Arequipa Region remains
 `provisional`; final flood-risk, final rescue-priority, and final study-area
 claims remain blocked until validation and mentor approval. Final
 Zimbabwe-Peru comparison remains secondary and blocked until both countries
@@ -147,7 +147,7 @@ by this gate unless a dataset-specific preflight is incomplete):
 - producing R-factor family diagnostics and provisional/sensitivity sediment-
   risk products from fresh documented lineage while keeping known-invalid R/A
   products deprecated;
-- producing Peru-first prototype maps and diagnostics from the current PE1 data
+- producing Peru-first prototype maps and diagnostics from the current Arequipa Region data
   stack before any final cross-country comparison;
 - generating diagnostics, figures, and handoff tables.
 
@@ -184,7 +184,7 @@ not be described as native 30 m rainfall evidence.
 
 The project has completed one narrow terrain chain (six SRTMGL1 raw tiles
 downloaded, inventoried, mosaicked, reprojected, clipped to V1, converted into
-DEM/slope diagnostics), one Peru terrain chain (PE1), and prototype priority
+DEM/slope diagnostics), one Peru terrain chain (Arequipa Region), and prototype priority
 stacks on both sites that follow the mentor five-main-criterion framework with
 five active PIM main criteria in the current executable overlay.
 
@@ -193,7 +193,7 @@ Boundary-only exceptions executed:
 - Zimbabwe Geoportal Sub-Catchments comparison (authorized + executed).
 - SRTM V1 raw-tile download + terrain diagnostics (executed).
 - Scoped CHIRPS rainfall comparison (executed).
-- HydroBASINS SA + PE1 boundary + terrain chain (executed).
+- HydroBASINS SA + Arequipa Region boundary + terrain chain (executed).
 
 None of these authorizes final flood-risk interpretation or intervention-map
 interpretation.
@@ -566,11 +566,11 @@ bash bin/validate-boundary.sh
 
 - V1/V2 R-factor and USLE A products are deprecated; do not regenerate the old
   workflow. See `RESULTS.md` §R-factor.
-- PE1 — a Pacific-slope catchment in Arequipa Region, ~2745 km², arid, mainly
+- Arequipa Region — a Pacific-slope catchment in Arequipa Region, ~2745 km², arid, mainly
   the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city — is the
   active Peru-first working case, but remains provisional and not a final
   research-selected Peru study area; replace if the mentor names a Peru site.
-- PE1 and V1 reference grids are separate (EPSG:32718 vs EPSG:32735); do not
+- Arequipa Region and V1 reference grids are separate (EPSG:32718 vs EPSG:32735); do not
   cross-overlay without reprojecting to a shared grid.
 - 16 hits of the deprecated `R-invariant` shorthand remain in the dead V2
   R-factor set; deferred until V2 resumes.

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Query INGEMMET Pequeña Minería (small-scale/ASM mining points) for PE1 and build the
+"""Query INGEMMET Pequeña Minería (small-scale/ASM mining points) for Arequipa Region and build the
 mining-pressure proximity criterion.
 
 Reads the public INGEMMET ArcGIS REST service SERV_PEQUENA_MINERIA (layer 0) for features
-intersecting the PE1 envelope, saves them as a GeoPackage, then builds an inverted-distance
-proximity raster on the PE1 30m grid. This is the official-source upgrade over the OSM
+intersecting the Arequipa Region envelope, saves them as a GeoPackage, then builds an inverted-distance
+proximity raster on the Arequipa Region 30m grid. This is the official-source upgrade over the OSM
 quarry/industrial proxy used previously.
 
 Outputs (gitignored):
-- data/raw/ingemmet_catastro_minero_peru_pilot/pe1_pequena_mineria.gpkg (raw points)
-- outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif (criterion)
+- data/raw/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_pequena_mineria.gpkg (raw points)
+- outputs/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_mining_pressure_ingemmet_0_1.tif (criterion)
 
-The criterion replaces the OSM-based closeness_to_mining_indicator in the PE1 criteria stack.
+The criterion replaces the OSM-based closeness_to_mining_indicator in the Arequipa Region criteria stack.
 """
 
 from __future__ import annotations
@@ -30,22 +30,22 @@ from scipy.ndimage import distance_transform_edt
 from shapely.geometry import Point
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"]
-OUTPUTS = [ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif"]
+INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"]
+OUTPUTS = [ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_mining_pressure_ingemmet_0_1.tif"]
 SERVICE = "https://geocatminnube.ingemmet.gob.pe/arcgis/rest/services/SERV_PEQUENA_MINERIA/MapServer/0"
 RAW_DIR = ROOT / "data/raw/ingemmet_catastro_minero_peru_pilot"
-RAW_GPKG = RAW_DIR / "pe1_pequena_mineria.gpkg"
+RAW_GPKG = RAW_DIR / "peru_hybas_l7_6070641200_pequena_mineria.gpkg"
 OUT_DIR = ROOT / "outputs/ingemmet_catastro_minero_peru_pilot"
-REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
-PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
+PERU_HYBAS_L7_6070641200_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 
 
 def rel(path: Path) -> str:
     return str(path.resolve().relative_to(ROOT))
 
 
-def pe1_envelope_lonlat() -> tuple[float, float, float, float]:
-    b = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs("EPSG:4326")
+def peru_hybas_l7_6070641200_envelope_lonlat() -> tuple[float, float, float, float]:
+    b = gpd.read_file(PERU_HYBAS_L7_6070641200_GPKG, layer="peru_pilot_boundary").to_crs("EPSG:4326")
     minx, miny, maxx, maxy = b.total_bounds
     pad = 0.02  # ~2km pad so proximity is defined at the edge
     return minx - pad, miny - pad, maxx + pad, maxy + pad
@@ -97,25 +97,25 @@ def main() -> None:
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    xmin, ymin, xmax, ymax = pe1_envelope_lonlat()
+    xmin, ymin, xmax, ymax = peru_hybas_l7_6070641200_envelope_lonlat()
     print(f"querying INGEMMET PEQUENA_MINERIA in bbox {xmin:.3f},{ymin:.3f},{xmax:.3f},{ymax:.3f} ...")
     feats = query_features(xmin, ymin, xmax, ymax)
     print(f"  features returned: {len(feats)}")
     if not feats:
-        print("  no ASM points in PE1; mining criterion will be all-zero (documented gap).")
+        print("  no ASM points in Arequipa Region; mining criterion will be all-zero (documented gap).")
 
     gdf = features_to_gdf(feats) if feats else gpd.GeoDataFrame(
         {"objectid": []}, geometry=[], crs="EPSG:4326")
     gdf.to_file(RAW_GPKG, layer="pequena_mineria", driver="GPKG")
     print(f"  wrote raw points: {rel(RAW_GPKG)}")
 
-    # Build proximity raster on the PE1 grid.
+    # Build proximity raster on the Arequipa Region grid.
     with rasterio.open(REF) as ref:
         profile = ref.profile.copy()
         crs = ref.crs
         transform = ref.transform
         shape = (ref.height, ref.width)
-    boundary = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs(crs)
+    boundary = gpd.read_file(PERU_HYBAS_L7_6070641200_GPKG, layer="peru_pilot_boundary").to_crs(crs)
     mask = geometry_mask(boundary.geometry, out_shape=shape, transform=transform, invert=True)
 
     res = abs(transform.a)
@@ -129,7 +129,7 @@ def main() -> None:
     else:
         dist = np.full(shape, 1e9, dtype="float32")  # very far -> closeness 0
 
-    # 2-98 percentile inverted (closer -> higher pressure), masked to PE1.
+    # 2-98 percentile inverted (closer -> higher pressure), masked to Arequipa Region.
     values = dist[mask & np.isfinite(dist)]
     low, high = (0.0, 1.0) if values.size == 0 else (float(np.percentile(values, 2)), float(np.percentile(values, 98)))
     if high <= low:
@@ -139,7 +139,7 @@ def main() -> None:
 
     out_profile = profile.copy()
     out_profile.update(driver="GTiff", count=1, dtype="float32", nodata=-9999.0, compress="deflate", tiled=True)
-    out_raster = OUT_DIR / "pe1_mining_pressure_ingemmet_0_1.tif"
+    out_raster = OUT_DIR / "peru_hybas_l7_6070641200_mining_pressure_ingemmet_0_1.tif"
     encoded = np.where(np.isfinite(closeness), closeness, -9999.0).astype("float32")
     with rasterio.open(out_raster, "w", **out_profile) as dst:
         dst.write(encoded, 1)
@@ -148,10 +148,10 @@ def main() -> None:
     valid = mask & np.isfinite(closeness)
     vals = closeness[valid]
     manifest = [{
-        "layer": "pe1_mining_pressure_ingemmet_0_1",
+        "layer": "peru_hybas_l7_6070641200_mining_pressure_ingemmet_0_1",
         "path": rel(out_raster),
         "source": "INGEMMET SERV_PEQUENA_MINERIA (official ASM points)",
-        "features_in_pe1_envelope": len(gdf),
+        "features_in_peru_hybas_l7_6070641200_envelope": len(gdf),
         "method": "euclidean_distance_inverted_percentile_2_98",
         "dist_clip_low_m": round(low, 1), "dist_clip_high_m": round(high, 1),
         "valid_fraction": round(float(vals.size / mask.sum()), 6),

@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Build grid-compatible PE1 component rasters for the PIM criteria.
+"""Build grid-compatible Arequipa Region component rasters for the PIM criteria.
 
 Mirrors `build_boundary_v1_criteria_stack.py` plus the rainfall criterion
-sensitivity layer. PE1 follows the mentor 5-main-criterion AHP framework. This
+sensitivity layer. Arequipa Region follows the mentor 5-main-criterion AHP framework. This
 script prepares the component rasters that are combined later into PIM main
 criteria:
 flood_conditioning, SoilGrids K, LS, RUSLE C, land_cover_pressure,
 mining_pressure (INGEMMET), road_access_proximity (OSM roads), and
 rainfall_climatology (CHIRPS coarse-to-grid, sensitivity).
 
-Outputs standardized 0-1 rasters on the PE1 30m reference grid (EPSG:32718).
+Outputs standardized 0-1 rasters on the Arequipa Region 30m reference grid (EPSG:32718).
 """
 
 from __future__ import annotations
@@ -26,28 +26,28 @@ from rasterio.features import geometry_mask
 
 ROOT = Path(__file__).resolve().parents[2]
 RASTER_INPUTS = {
-    "twi": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_twi.tif",
-    "drainage": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_distance_to_drainage_t500.tif",
-    "ls_factor": ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/pe1_ls_factor_capped50_hillslope_30m.tif",
-    "c_factor": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
+    "twi": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/peru_hybas_l7_6070641200_twi.tif",
+    "drainage": ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/peru_hybas_l7_6070641200_distance_to_drainage_t500.tif",
+    "ls_factor": ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/peru_hybas_l7_6070641200_ls_factor_capped50_hillslope_30m.tif",
+    "c_factor": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_peru_hybas_l7_6070641200_30m.tif",
     "soil_k_factor": ROOT / "outputs/srtm_1arcsec_peru_pilot/soil_k_factor/soil_k_factor_0_1.tif",
-    "land_use_pressure": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_pe1_30m.tif",
-    "road_access_proximity": ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
-    "mining": ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif",
+    "land_use_pressure": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_peru_hybas_l7_6070641200_30m.tif",
+    "road_access_proximity": ROOT / "outputs/geofabrik_osm_peru_pilot/peru_hybas_l7_6070641200_proximity/closeness_to_roads_0_1.tif",
+    "mining": ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_mining_pressure_ingemmet_0_1.tif",
     "rainfall": ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif",
 }
 
 INPUTS = [
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_twi.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_distance_to_drainage_t500.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/pe1_ls_factor_capped50_hillslope_30m.tif",
-    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_pe1_30m.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/peru_hybas_l7_6070641200_twi.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/peru_hybas_l7_6070641200_distance_to_drainage_t500.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/peru_hybas_l7_6070641200_ls_factor_capped50_hillslope_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_peru_hybas_l7_6070641200_30m.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/soil_k_factor/soil_k_factor_0_1.tif",
-    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_pe1_30m.tif",
-    ROOT / "outputs/geofabrik_osm_peru_pilot/pe1_proximity/closeness_to_roads_0_1.tif",
-    ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/pe1_mining_pressure_ingemmet_0_1.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_peru_hybas_l7_6070641200_30m.tif",
+    ROOT / "outputs/geofabrik_osm_peru_pilot/peru_hybas_l7_6070641200_proximity/closeness_to_roads_0_1.tif",
+    ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_mining_pressure_ingemmet_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif",
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
 ]
 
@@ -70,12 +70,12 @@ from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 from _lib.ifpm_tools import raster_stats as stats
-BOUNDARY_ID = "pe1"
+BOUNDARY_ID = "peru_hybas_l7_6070641200"
 EXPERIMENT_ID = "criteria_stack"
 OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
 CRITERIA_DIR = OUT_DIR / "criteria"
-REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
-PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
+PERU_HYBAS_L7_6070641200_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 # A 0.95 component gate catches tile/data gaps while allowing the documented
 # hillslope LS channel mask and limited SoilGrids K support to remain NoData.
 MIN_VALID_FRACTION = 0.95
@@ -102,7 +102,7 @@ def read_reference() -> tuple[dict, np.ndarray]:
         crs = ref.crs
         shape = (ref.height, ref.width)
         transform = ref.transform
-    boundary = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs(crs)
+    boundary = gpd.read_file(PERU_HYBAS_L7_6070641200_GPKG, layer="peru_pilot_boundary").to_crs(crs)
     mask = geometry_mask(boundary.geometry, out_shape=shape, transform=transform, invert=True)
     return profile, mask
 
@@ -236,7 +236,7 @@ def main() -> None:
         })
 
     # Readiness table: these are component rasters mapped into the mentor
-    # 5-main-criterion framework by run_pe1_priority_scenarios.py.
+    # 5-main-criterion framework by run_peru_hybas_l7_6070641200_priority_scenarios.py.
     readiness = manifest_rows
 
     write_csv(OUT_DIR / "criteria_stack_manifest.csv", manifest_rows)
@@ -253,9 +253,9 @@ def main() -> None:
     ]
     if low_coverage:
         details = ", ".join(f"{row['criterion']}={row['valid_fraction']}" for row in low_coverage)
-        raise RuntimeError(f"PE1 active criterion coverage below {MIN_VALID_FRACTION}: {details}")
-    print(f"wrote {len(manifest_rows)} PE1 scored layers to {rel(CRITERIA_DIR)}")
-    print("(component rasters for the 5 PIM main criteria; overlay happens in run_pe1_priority_scenarios.py)")
+        raise RuntimeError(f"Arequipa Region active criterion coverage below {MIN_VALID_FRACTION}: {details}")
+    print(f"wrote {len(manifest_rows)} Arequipa Region scored layers to {rel(CRITERIA_DIR)}")
+    print("(component rasters for the 5 PIM main criteria; overlay happens in run_peru_hybas_l7_6070641200_priority_scenarios.py)")
 
 
 if __name__ == "__main__":

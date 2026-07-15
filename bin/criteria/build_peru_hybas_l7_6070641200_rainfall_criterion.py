@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Build a CHIRPS-derived rainfall criterion on the PE1 reference grid.
+"""Build a CHIRPS-derived rainfall criterion on the Arequipa Region reference grid.
 
-Mirrors `build_boundary_v1_rainfall_criterion.py` but for Peru PE1. Differences:
+Mirrors `build_boundary_v1_rainfall_criterion.py` but for Peru Arequipa Region. Differences:
 - source: CHIRPS v3 latam (Latin America) monthly GeoTIFFs, not Africa;
 - rainy season: Dec-Mar (southern Peru austral summer), same months as Zimbabwe's Nov-Mar
   choice (Zimbabwe also uses Nov-Mar); 
-- reference grid: PE1 EPSG:32718 30m, not Zimbabwe EPSG:32735.
+- reference grid: Arequipa Region EPSG:32718 30m, not Zimbabwe EPSG:32735.
 
 GOVERNANCE: CHIRPS is ~5 km native. This is an explicitly labelled coarse-to-reference-grid
 resample, allowed ONLY as a `sensitivity_scenario` input, never as native 30 m rainfall evidence
@@ -27,19 +27,19 @@ from rasterio.warp import reproject, Resampling
 from scipy.ndimage import distance_transform_edt, label as ndimage_label
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif", ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"]
 OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif"]
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
-BOUNDARY_ID = "pe1"
+BOUNDARY_ID = "peru_hybas_l7_6070641200"
 EXPERIMENT_ID = "rainfall_criterion"
 OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
 
-REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif"
-PE1_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
+PERU_HYBAS_L7_6070641200_GPKG = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 
 CHIRPS_BASE = "https://data.chc.ucsb.edu/products/CHIRPS/v3.0/monthly/latam/tifs"
 # Climatological rainy-season mean over Dec-Mar for a recent window. Use 2014/15-2023/24
@@ -60,15 +60,15 @@ def rel(path: Path) -> str:
     return str(path.resolve().relative_to(ROOT))
 
 
-def pe1_window_lonlat() -> tuple[float, float, float, float]:
-    b = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs("EPSG:4326")
+def peru_hybas_l7_6070641200_window_lonlat() -> tuple[float, float, float, float]:
+    b = gpd.read_file(PERU_HYBAS_L7_6070641200_GPKG, layer="peru_pilot_boundary").to_crs("EPSG:4326")
     minx, miny, maxx, maxy = b.total_bounds
     pad = 0.2  # ~20km pad for the resample edge
     return minx - pad, miny - pad, maxx + pad, maxy + pad
 
 
 def read_chirps_month_window(year: int, month: int, win_bounds) -> tuple[np.ndarray, dict]:
-    """HTTP-windowed read of one CHIRPS latam monthly file for the PE1 bbox."""
+    """HTTP-windowed read of one CHIRPS latam monthly file for the Arequipa Region bbox."""
     url = f"{CHIRPS_BASE}/chirps-v3.0.{year}.{month:02d}.tif"
     minx, miny, maxx, maxy = win_bounds
     with rasterio.open(url) as src:
@@ -125,8 +125,8 @@ def resample_to_reference(native_arr: np.ndarray, native_meta: dict, ref_profile
     return dst
 
 
-def pe1_inside_mask(ref_profile: dict) -> np.ndarray:
-    boundary = gpd.read_file(PE1_GPKG, layer="peru_pilot_boundary").to_crs(ref_profile["crs"])
+def peru_hybas_l7_6070641200_inside_mask(ref_profile: dict) -> np.ndarray:
+    boundary = gpd.read_file(PERU_HYBAS_L7_6070641200_GPKG, layer="peru_pilot_boundary").to_crs(ref_profile["crs"])
     return geometry_mask(
         [boundary.geometry.iloc[0].__geo_interface__],
         out_shape=(ref_profile["height"], ref_profile["width"]),
@@ -186,10 +186,10 @@ def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     with rasterio.open(REF) as ref:
         ref_profile = ref.profile.copy()
-    inside = pe1_inside_mask(ref_profile)
+    inside = peru_hybas_l7_6070641200_inside_mask(ref_profile)
     inside_total = int(inside.sum())
 
-    win_bounds = pe1_window_lonlat()
+    win_bounds = peru_hybas_l7_6070641200_window_lonlat()
     print(f"fetching CHIRPS latam Dec-Mar rainy-season mean over {len(SEASON_YEARS)} seasons ...")
     native_mean, native_meta = fetch_rainy_season_mean(win_bounds)
     print(f"  native 0.05 deg mean range: {np.nanmin(native_mean):.1f}-{np.nanmax(native_mean):.1f} mm/season")
@@ -219,9 +219,9 @@ def main() -> None:
         {"field": "source", "value": "CHIRPS v3.0 latam monthly GeoTIFFs (HTTP windowed read)"},
         {"field": "season_definition", "value": "Dec-Mar rainy season (austral summer), mean over 2014/15-2023/24"},
         {"field": "native_resolution", "value": "0.05 deg (~5 km) CHIRPS v3.0 latam"},
-        {"field": "target_grid", "value": "PE1 reference: EPSG:32718, 30 m"},
+        {"field": "target_grid", "value": "Arequipa Region reference: EPSG:32718, 30 m"},
         {"field": "resampling_method", "value": "bilinear"},
-        {"field": "normalization_method", "value": "PE1 boundary 2-98 percentile min-max"},
+        {"field": "normalization_method", "value": "Arequipa Region boundary 2-98 percentile min-max"},
         {"field": "normalization_clip_low_mm_per_season", "value": round(score_low, 3)},
         {"field": "normalization_clip_high_mm_per_season", "value": round(score_high, 3)},
         {"field": "effective_resolution_warning", "value": "Effective resolution ~5 km despite 30 m cells; smooth climatology, NOT pixel-level rainfall"},
@@ -240,7 +240,7 @@ def main() -> None:
 
     print(f"resampled Dec-Mar mean: {raw_min:.1f}-{raw_max:.1f} mm/season -> 0-1 score")
     print(f"edge slivers: {fill_stats['edge_sliver_holes']}, interior: {fill_stats['interior_holes']}")
-    print(f"valid inside PE1: {raw_valid_after/inside_total:.4f}")
+    print(f"valid inside Arequipa Region: {raw_valid_after/inside_total:.4f}")
     print(f"wrote {rel(score_path)}")
 
 

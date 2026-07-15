@@ -38,9 +38,9 @@ standard-library `unittest`, existing IFPM raster helpers.
 - Create: `bin/criteria/build_peru_exposure_indicators.py`
 
 **Consumes:**
-- Reference grid: `outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_dem_utm18s_30m.tif`
+- Reference grid: `outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif`
 - Boundary: `outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg`
-- Population: `data/raw/worldpop_peru_population/per_ppp_2020_UNadj_pe1_bbox.tif`
+- Population: `data/raw/worldpop_peru_population/per_ppp_2020_UNadj_peru_hybas_l7_6070641200_bbox.tif`
 - Roads: `outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/road_access_proximity_0_1.tif`
 - Buildings and health POIs: `data/raw/geofabrik_osm_peru_pilot/extracted/`
 - Poverty table: `data/raw/inei_peru_poverty_2018/arequipa_district_poverty_2018.csv`
@@ -88,8 +88,8 @@ context layers are not included in `exposure_indicators` in this run.
 ### Task 2: Connect the new criterion to the five-criterion PIM
 
 **Files:**
-- Create: `tests/test_pe1_socioeconomic_integration.py`
-- Modify: `bin/scenarios/run_pe1_priority_scenarios.py`
+- Create: `tests/test_peru_hybas_l7_6070641200_socioeconomic_integration.py`
+- Modify: `bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py`
 - Modify: `bin/README.md`
 
 **Consumes:**
@@ -111,14 +111,14 @@ context layers are not included in `exposure_indicators` in this run.
 ### Task 3: Rerun the scenario outputs and quantify the change
 
 **Files:**
-- Modify: `bin/scenarios/run_pe1_priority_scenarios.py` only if a comparison export
+- Modify: `bin/scenarios/run_peru_hybas_l7_6070641200_priority_scenarios.py` only if a comparison export
   cannot be produced from existing summaries.
 - Output: `outputs/srtm_1arcsec_peru_pilot/priority_scenarios/`
 
 - [x] Record the pre-refresh mentor PIM checksum and current scenario summary in a
   temporary run comparison record under `outputs/`.
 - [x] Run
-  `.venv/bin/python bin/pipeline.py run --target run_pe1_priority_scenarios`.
+  `.venv/bin/python bin/pipeline.py run --target run_peru_hybas_l7_6070641200_priority_scenarios`.
 - [x] Require common valid coverage >= 0.95 and one direct scenario row only.
 - [x] Verify the mentor weights remain FH=0.35, SE=0.25, LM=0.20, ES=0.12,
   SV=0.08.
@@ -187,7 +187,7 @@ thumbnails but may not redraw or alter their map evidence.
 
 **Layout:**
 
-1. Header: public-facing action title, Arequipa/PE1 location, direct-weight
+1. Header: public-facing action title, Arequipa/Arequipa Region location, direct-weight
    equation, and `prototype / not validated flood risk` status.
 2. Main row: raw-input factor overview on the left, direct-weight PIM as the
    largest central panel, and mining/population, weighted-contribution, and

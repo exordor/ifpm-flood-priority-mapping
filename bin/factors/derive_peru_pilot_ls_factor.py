@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Derive USLE/RUSLE LS-factor for PE1 from flow accumulation + slope.
+"""Derive USLE/RUSLE LS-factor for Arequipa Region from flow accumulation + slope.
 
 Mirrors `derive_v1_ls_factor.py`. Uses the Moore & Nieber (1989) raster LS-factor:
 
     LS = (As / 22.13)^0.4 * (sin(theta) / 0.0896)^1.2
 
-Inputs are on the PE1 30 m grid (EPSG:32718). Outputs stay at 30 m. Three variants: uncapped,
+Inputs are on the Arequipa Region 30 m grid (EPSG:32718). Outputs stay at 30 m. Three variants: uncapped,
 hillslope (channel-masked), and capped-50 for the USLE A combination.
 """
 
@@ -19,12 +19,12 @@ import numpy as np
 import rasterio
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_slope_degrees_utm18s_30m.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_flow_accumulation_sca.tif"]
-OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/pe1_ls_factor_capped50_hillslope_30m.tif"]
+INPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_slope_degrees_utm18s_30m.tif", ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/peru_hybas_l7_6070641200_flow_accumulation_sca.tif"]
+OUTPUTS = [ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/peru_hybas_l7_6070641200_ls_factor_capped50_hillslope_30m.tif"]
 
-SLOPE_DEG = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/pe1_slope_degrees_utm18s_30m.tif"
-SCA = ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_flow_accumulation_sca.tif"
-FLOW_ACCUM = ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/pe1_flow_accumulation.tif"
+SLOPE_DEG = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_slope_degrees_utm18s_30m.tif"
+SCA = ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/peru_hybas_l7_6070641200_flow_accumulation_sca.tif"
+FLOW_ACCUM = ROOT / "outputs/srtm_1arcsec_peru_pilot/hydrology_derivatives/peru_hybas_l7_6070641200_flow_accumulation.tif"
 CHANNEL_THRESHOLD_CELLS = 500  # t500 chosen in the hydrology step
 LS_CAP = 50.0
 
@@ -67,9 +67,9 @@ def main() -> None:
     out_profile = profile.copy()
     out_profile.update(dtype="float32", nodata=-9999.0, compress="deflate", tiled=True)
 
-    for name, arr in [("pe1_ls_factor_uncapped_30m.tif", ls),
-                      ("pe1_ls_factor_hillslope_30m.tif", ls_hillslope),
-                      ("pe1_ls_factor_capped50_hillslope_30m.tif", ls_capped)]:
+    for name, arr in [("peru_hybas_l7_6070641200_ls_factor_uncapped_30m.tif", ls),
+                      ("peru_hybas_l7_6070641200_ls_factor_hillslope_30m.tif", ls_hillslope),
+                      ("peru_hybas_l7_6070641200_ls_factor_capped50_hillslope_30m.tif", ls_capped)]:
         out = np.where(np.isfinite(arr), arr, -9999.0).astype("float32")
         path = OUTPUT_DIR / name
         with rasterio.open(path, "w", **out_profile) as ds:

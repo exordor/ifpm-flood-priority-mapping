@@ -32,7 +32,7 @@ HYDRO_L7 = ROOT / "data/raw/hydrosheds_peru_prototype/extracted/hybas_sa_lev07_v
 
 # Southern Peru comparison catchment. Selection rule documented in DECISION_LOG.md.
 PILOT_HYBAS_ID = 6070641200
-PILOT_LABEL = "PE1_HYBAS_L7_6070641200_arequipa_vitor_lajoya_siguas"
+PILOT_LABEL = "PERU_HYBAS_L7_6070641200_HYBAS_L7_6070641200_arequipa_vitor_lajoya_siguas"
 
 GEOD = Geod(ellps="WGS84")
 
@@ -89,7 +89,7 @@ def main() -> None:
     manifest.append({"field": "bounds_wsen", "value": bounds})
     manifest.append({"field": "export_date", "value": str(date.today())})
     manifest.append({"field": "zimbabwe_v1_area_reference_km2", "value": 3689.484})
-    manifest.append({"field": "area_ratio_pe1_to_zw_v1", "value": round(geo_area / 3689.484, 4)})
+    manifest.append({"field": "area_ratio_peru_hybas_l7_6070641200_to_zw_v1", "value": round(geo_area / 3689.484, 4)})
 
     with (OUT_DIR / "peru_pilot_boundary_manifest.csv").open("w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=["field", "value"])
@@ -146,7 +146,7 @@ def main() -> None:
     fig.savefig(OUT_DIR / "peru_pilot_boundary_diagnostic.png", dpi=180)
     plt.close(fig)
 
-    print(f"wrote southern Peru comparison catchment PE1 to {rel(OUT_DIR)}")
+    print(f"wrote southern Peru comparison catchment Arequipa Region to {rel(OUT_DIR)}")
     print(f"  HYBAS_ID={PILOT_HYBAS_ID}, geo_area={geo_area:.1f} km2 "
           f"(ZW V1 ref 3689.5, ratio {geo_area/3689.484:.2f})")
     print(f"  bounds WSEN: {bounds}")
