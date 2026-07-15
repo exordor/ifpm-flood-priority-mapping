@@ -37,6 +37,11 @@ engineering gate names, and unsupported AHP-consistency claims do not appear. Ea
 states its evidence boundary once in a short footer. The design leaves space for the mentor to add
 context or conclusions.
 
+The visual system follows the supplied conference-poster example: white background, dark-navy
+section bars, green accents, thin grey borders, and map-led compositions. The poster modules are
+distributed across individual slides rather than reproduced as a dense single page. The deck does
+not reuse unsupported example numbers, study areas, criteria, or conclusions from the reference.
+
 ## Evidence boundaries
 
 The Peru result uses the current five-criterion direct-weight scenario. It is described as a
