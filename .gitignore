@@ -29,6 +29,7 @@ tmp/
 /data/
 /outputs/
 /exports/
+/pre/
 
 # Office lock files
 ~$*
