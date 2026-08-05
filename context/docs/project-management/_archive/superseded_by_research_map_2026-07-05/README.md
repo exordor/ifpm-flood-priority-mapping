@@ -8,7 +8,7 @@ preserved here verbatim as the lineage source of record.
 
 | archived file | primary new home | secondary |
 |---|---|---|
-| `task_progress_board.md` | `research-map/EXPERIMENTS.md`, `RESULTS.md`, `DECISION_LOG.md`, `TODO.md` | per-IFPM-NNN entries summarized, not verbatim |
+| `task_progress_board.md` | `research-map/EXPERIMENTS.md`, `RESULTS.md`, `DECISION_LOG.md` | per-IFPM-NNN entries summarized, not verbatim (backlog items were later tracked in `TODO.md`, now removed) |
 | `assumptions_log.md` | `research-map/RESEARCH_QUESTIONS.md` (A-001..A-014 register) | `DECISION_LOG.md` D-EXECUTION-POLICY |
 | `rfactor_investigation_consolidated.md` | `research-map/RESULTS.md` §R-factor, `HYPOTHESES.md` (H-RF-*) | `DECISION_LOG.md` D-RFACTOR-DEPRECATE |
 | `real_data_execution_preflight_gate.md` | `research-map/REPRODUCIBILITY.md` §3 (preflight gate) | `DECISION_LOG.md` D-EXECUTION-POLICY |
@@ -16,8 +16,8 @@ preserved here verbatim as the lineage source of record.
 | `execution_status_policy.md` | `research-map/REPRODUCIBILITY.md` §2 (claim-level ladder) | — |
 | `mentor_methodology_slide_interpretation_2026-06-16.md` | `research-map/RESEARCH_QUESTIONS.md` (RQ2, RQ3, IFPM-D04/D05), `HYPOTHESES.md` H-AHP-SLIDE-TRANSFERS | `DECISION_LOG.md` D-VERSION-B |
 | `project_objective_calibration_2026-07-02.md` | `research-map/RESEARCH_OVERVIEW.md`, `DECISION_LOG.md` D-VERSION-B | — |
-| `july18_deliverable_scope_2026-07-02.md` | `research-map/DECISION_LOG.md` D-JULY18-SCOPE, `TODO.md` | — |
-| `boundary_v1_criteria_stack_v0_2_2026-06-29.md` | `research-map/EXPERIMENTS.md` (criteria_stack_v0_2), `DECISION_LOG.md` D-CRITERIA-V0-2, `TODO.md` (verification plan) | — |
+| `july18_deliverable_scope_2026-07-02.md` | `research-map/DECISION_LOG.md` D-JULY18-SCOPE | backlog items were later tracked in `TODO.md`, now removed |
+| `boundary_v1_criteria_stack_v0_2_2026-06-29.md` | `research-map/EXPERIMENTS.md` (criteria_stack_v0_2), `DECISION_LOG.md` D-CRITERIA-V0-2 | verification plan was later tracked in `TODO.md`, now removed |
 | `terminology_audit_2026-07-02.md` | `research-map/ARTIFACT_INDEX.md` (dead/alive verdict), `DECISION_LOG.md` D-TERMINOLOGY | — |
 | `old_README.md` (was `project-management/README.md`) | `research-map/README.md` | — |
 

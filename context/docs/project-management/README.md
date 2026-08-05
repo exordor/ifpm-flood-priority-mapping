@@ -10,7 +10,6 @@ This folder is now **archive-only**. The live research-governance layer moved to
 - **Results:** `../research-map/RESULTS.md`
 - **Decisions:** `../research-map/DECISION_LOG.md`
 - **Reproducibility / preflight gate / claim levels:** `../research-map/REPRODUCIBILITY.md`
-- **TODO / backlog:** `../research-map/TODO.md`
 
 ## What lives in this folder now
 

@@ -59,7 +59,6 @@ ifpm-flood-pipeline/
 - `context/docs/research-map/DECISION_LOG.md` — why each major choice was made
 - `context/docs/research-map/HYPOTHESES.md` — testable claims with verdicts
 - `context/docs/research-map/ARTIFACT_INDEX.md` — code / dataset / figure / config index
-- `context/docs/research-map/TODO.md` — backlog, in-progress, awaiting-mentor
 - `context/docs/project-management/_archive/superseded_process_notes_2026-06/outlet_based_catchment_research_plan_2026-06-11.md`
 - `context/docs/project-management/_archive/superseded_process_notes_2026-06/multi_level_progress_review_2026-06-10.md`
 - `context/docs/project-management/_archive/superseded_boundary_exploration_2026-06/hydrosheds_boundary_discovery_result_2026-06-10.md`

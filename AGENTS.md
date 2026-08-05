@@ -132,9 +132,9 @@ Active control files should remain few:
 - a current experiment manifest or output-local manifest for the active run
 - a current mentor packet only when a mentor message or artifact is being prepared
 
-These are the binding **control** tier. The other seven files in
+These are the binding **control** tier. The other six files in
 `context/docs/research-map/` (`RESEARCH_QUESTIONS`, `HYPOTHESES`, `RESULTS`,
-`ARTIFACT_INDEX`, `DECISION_LOG`, `TODO`, and the folder `README`) are active
+`ARTIFACT_INDEX`, `DECISION_LOG`, and the folder `README`) are active
 working docs but derived — see `context/docs/research-map/README.md` for the
 control-vs-derived distinction. Control files must stay consistent with each
 other and with the codebase; derived files may lag but must not contradict the

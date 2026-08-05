@@ -3,16 +3,16 @@
 This folder is the canonical research-navigation layer for the IFPM flood-risk
 modelling workspace. It replaces the older `project-management/` planning notes
 with the standard research-governance structure: research questions, hypotheses,
-experiments, results, artifacts, decisions, reproducibility, and todo.
+experiments, results, artifacts, decisions, and reproducibility.
 
 The `project-management/` folder is now archive-only. Its superseded files live
 under `context/docs/project-management/_archive/superseded_by_research_map_2026-07-05/`.
 
 ## File index
 
-All ten files are **active** (none are drafts). The first three are the small
+All nine files are **active** (none are drafts). The first three are the small
 set of binding **control files** that AGENTS.md names and that must stay
-internally consistent with the codebase and each other. The remaining seven are
+internally consistent with the codebase and each other. The remaining six are
 derived working docs — append-only registers and indexes fed by the experiments
 and decisions recorded in the control files.
 
@@ -27,12 +27,11 @@ and decisions recorded in the control files.
 | `RESULTS.md` | per-experiment observation / evidence / interpretation, claim level | active (derived) |
 | `ARTIFACT_INDEX.md` | index of code, datasets, figures, prompts, configs (keep / archive / delete) | active (derived) |
 | `DECISION_LOG.md` | why each major choice was made (context / decision / reason / alternatives) | active (derived) |
-| `TODO.md` | backlog, in-progress, awaiting-mentor, next steps | active (derived, edited most often) |
 
 The three control files (`RESEARCH_OVERVIEW`, `REPRODUCIBILITY`, `EXPERIMENTS`)
 plus the workspace `AGENTS.md` and root `README.md` are the small set that must
 agree on scope, status, claim-level vocabulary, and the active experiment list.
-The seven derived files are updated as work happens; they may lag the control
+The six derived files are updated as work happens; they may lag the control
 files but must not contradict them.
 
 ## How to read this folder
@@ -42,7 +41,6 @@ files but must not contradict them.
   `RESULTS.md`, `HYPOTHESES.md`, or `DECISION_LOG.md` is defined there.
 - `REPRODUCIBILITY.md` holds the binding execution rules (preflight gate,
   claim-level ladder, grid compatibility, preprocessing design).
-- `TODO.md` is the live working list.
 - All claim language follows the `claim_level` ladder defined in
   `REPRODUCIBILITY.md` (diagnostic_only → provisional → sensitivity_scenario →
   mentor_review_ready → final_claim).
