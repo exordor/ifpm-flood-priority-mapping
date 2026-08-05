@@ -52,6 +52,48 @@ and orchestrated by `pipeline.py`.
 .venv/bin/python bin/pipeline.py run --target <name> --force
 ```
 
+## Presentation support tools
+
+These scripts rebuild the editable-map assets and the result-slide evidence
+tables used by the current process PPT. They read governed local GIS inputs and
+write ignored presentation outputs under `outputs/`; they do not modify the
+PowerPoint file itself.
+
+```bash
+# Label-free locator map; latitude, longitude, and place labels stay editable in PowerPoint.
+.venv/bin/python bin/render_editable_study_area_basemap.py
+
+# Label-free Peru and Zimbabwe detail maps for the study-area slide.
+.venv/bin/python bin/render_editable_study_area_detail_maps.py
+
+# Rebuild the two legend-free prototype result maps used in the PPT.
+.venv/bin/python bin/visualize/export_ppt_result_context_maps.py
+
+# Recompute the descriptive overlap metrics used beside the result maps.
+.venv/bin/python bin/visualize/summarize_result_slide_overlap.py
+```
+
+Expected outputs:
+
+- `outputs/presentation_assets/study_areas_regional_basemap_no_text.png`
+- `outputs/presentation_assets/peru_pe1_detail_map_no_text.png`
+- `outputs/presentation_assets/zimbabwe_upper_mzingwane_detail_map_no_text.png`
+- `outputs/slide_ready_figures/ppt_result_context_maps/`
+- `outputs/slide_ready_figures/result_slide_metrics/overlap_summary.csv`
+
+The result maps and overlap table are prototype screening evidence, not model
+validation. Map titles, legends, and interpretation remain editable PowerPoint
+objects.
+
+Current editable deck assembly uses
+`pre/演示文稿1_结果页修改版.pptx` as the eight-slide source, inserts the
+Standardization page after Methodology Overview and the Validation & Data Gaps
+page at the end, and exports
+`exports/IFPM_process_presentation_draft_2026-07-16.pptx`. The assembly step is
+not a repository command because `@oai/artifact-tool` is supplied by the Codex
+presentation runtime rather than this repository; the governed scripts above
+rebuild every GIS-derived asset and metric used by the editable deck.
+
 ## The 7 pipeline stages
 
 Scripts are classified by filename prefix. Each stage consumes the previous
