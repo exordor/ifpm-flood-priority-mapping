@@ -1,26 +1,31 @@
 #!/usr/bin/env python3
-"""Run the current no-mining Peru PIM baseline for Arequipa Region.
+"""Run the Supervisor-spec no-mining Peru PIM baseline for Arequipa Region.
+
+WEIGHT BRANCH: weights/supervisor-full-spec. This branch applies Supervisor's
+complete weight specification (2026-08-06 message). The main branch carries the
+retained original test weights; switching branches switches the full scheme.
 
 Arequipa Region follows the mentor 5-main-criterion AHP framework: Flood, Sediment,
 General Land Use Pressure, Environmental, and Socioeconomic. Five criteria are actively
-scored in the current executable prototype:
+scored in the current executable prototype, all using Supervisor's sub-weights:
 
-- Flood hazard: rainfall climatology, TWI, and drainage proximity using the
-  original 0.40 / 0.30 / 0.30 local weights.
-- Sediment: independently scored SoilGrids K, LS, and C components using the
-  original 0.30 / 0.45 / 0.25 local weights.
+- Flood hazard: rainfall 0.35, TWI 0.25, drainage/flow 0.40.
+- Sediment: independently scored SoilGrids K 0.25, LS 0.50, C 0.25.
 - General Land Use Pressure: 0.40 LC + 0.35 BV + 0.25 BE. Mining is excluded
   from the PIM calculation and retained only as an external overlay.
-- Environmental: water/wetland and protected/ecological context.
-- Socioeconomic: road/access proximity plus population and mapped-building
-  infrastructure exposure. Poverty and health-service remoteness remain
+- Environmental: water/wetland 0.65 + protected/ecological 0.35, recombined
+  directly from components (not the upstream pre-blended 0.60/0.40 raster).
+- Socioeconomic: road/access 0.35 + settlement/population 0.35 + critical
+  infrastructure 0.30. CI is proxied by mapped-building density (no true CI
+  inventory exists). Poverty and health-service remoteness remain
   response-capacity context layers outside the current AHP overlay.
 
-Current scenario: the original provisional test weights are retained; only the
-Land Use subgroup is replaced. No pairwise matrix or AHP consistency ratio was supplied.
+Top-level weights: FH 0.34 / SE 0.25 / LU 0.17 / ES 0.10 / SV 0.14.
+No pairwise matrix or AHP consistency ratio was supplied (expert-informed
+provisional weights).
 
 Sediment note: K, LS, and C are independently normalized and combined by the
-supplied local AHP subweights. The resulting 0-1 score is a relative
+supplied local subweights. The resulting 0-1 score is a relative
 erosion/sediment-source priority indicator, not an absolute soil-loss rate.
 
 Outputs (gitignored under outputs/srtm_1arcsec_peru_pilot/priority_scenarios/):
@@ -114,15 +119,22 @@ COMPONENT_PATHS = {
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
     "bare_soil_vegetation_loss": CRITERIA_DIR / "bare_soil_vegetation_loss_0_1.tif",
     "built_agriculture_road_expansion": CRITERIA_DIR / "built_agriculture_road_expansion_0_1.tif",
-    "exposure_indicators": EXPOSURE_INDICATORS_DIR / "exposure_indicators_0_1.tif",
-    "environmental_sensitivity": ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif",
+    # Supervisor spec ES: components read directly, not the upstream pre-blended raster.
+    "water_wetland_context": ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/water_wetland_context_0_1.tif",
+    "protected_ecological_context": ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/protected_area_context_0_1.tif",
+    # Supervisor spec SV: three-way split. CI is a mapped-building-density proxy.
+    "road_access_proximity": CRITERIA_DIR / "road_access_proximity_0_1.tif",
+    "settlement_population": EXPOSURE_INDICATORS_DIR / "population_exposure_0_1.tif",
+    "critical_infrastructure": EXPOSURE_INDICATORS_DIR / "built_infrastructure_exposure_0_1.tif",
 }
 
 PIM_CRITERIA_ORDER = ["flood_hazard", "sediment", "landuse_asm", "environmental", "socioeconomic"]
 ACTIVE_PIM_CRITERIA = PIM_CRITERIA_ORDER
 PIM_COMPONENTS = {
-    "flood_hazard": {"rainfall_climatology": 0.40, "twi_wetness": 0.30, "drainage_proximity": 0.30},
-    "sediment": {"soil_k_factor": 0.30, "ls_factor": 0.45, "c_factor": 0.25},
+    # Supervisor full spec (2026-08-06): FH sub rainfall 0.35 / TWI 0.25 / drainage 0.40
+    "flood_hazard": {"rainfall_climatology": 0.35, "twi_wetness": 0.25, "drainage_proximity": 0.40},
+    # Supervisor full spec: SE sub K 0.25 / LS 0.50 / C 0.25
+    "sediment": {"soil_k_factor": 0.25, "ls_factor": 0.50, "c_factor": 0.25},
     # Keep the historical internal slug for downstream path compatibility. Its
     # current semantic meaning is General Land Use Pressure, with no ASM/mining input.
     "landuse_asm": {
@@ -130,15 +142,24 @@ PIM_COMPONENTS = {
         "bare_soil_vegetation_loss": 0.35,
         "built_agriculture_road_expansion": 0.25,
     },
-    "environmental": {"environmental_sensitivity": 1.0},
-    "socioeconomic": {"exposure_indicators": 1.0},
+    # Supervisor full spec: ES sub WW 0.65 / PA 0.35 (rebuilt from components here,
+    # not the upstream pre-blended 0.60/0.40 raster).
+    "environmental": {"water_wetland_context": 0.65, "protected_ecological_context": 0.35},
+    # Supervisor full spec: SV sub road 0.35 / settlement+population 0.35 /
+    # critical infrastructure 0.30 (CI proxied by mapped-building density; no
+    # true CI inventory exists).
+    "socioeconomic": {
+        "road_access_proximity": 0.35,
+        "settlement_population": 0.35,
+        "critical_infrastructure": 0.30,
+    },
 }
 MENTOR_PERU_MAIN_WEIGHTS = {
-    "flood_hazard": 0.35,
+    "flood_hazard": 0.34,
     "sediment": 0.25,
-    "landuse_asm": 0.20,
-    "environmental": 0.12,
-    "socioeconomic": 0.08,
+    "landuse_asm": 0.17,
+    "environmental": 0.10,
+    "socioeconomic": 0.14,
 }
 
 
@@ -358,8 +379,8 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
         {
             "pim_criterion": "flood_hazard",
             "component": "rainfall_climatology",
-            "suggested_local_weight": 0.40,
-            "applied_weight_in_current_run": 0.40,
+            "suggested_local_weight": 0.35,
+            "applied_weight_in_current_run": 0.35,
             "implementation_status": "implemented",
             "source_layer": rel(COMPONENT_PATHS["rainfall_climatology"]),
             "note": "CHIRPS rainy-season climatology, coarse-to-reference-grid sensitivity layer",
@@ -367,8 +388,8 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
         {
             "pim_criterion": "flood_hazard",
             "component": "twi_wetness",
-            "suggested_local_weight": 0.30,
-            "applied_weight_in_current_run": 0.30,
+            "suggested_local_weight": 0.25,
+            "applied_weight_in_current_run": 0.25,
             "implementation_status": "implemented",
             "source_layer": rel(COMPONENT_PATHS["twi_wetness"]),
             "note": "DEM-derived TWI, high wetness -> high flood-conditioning score",
@@ -376,8 +397,8 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
         {
             "pim_criterion": "flood_hazard",
             "component": "drainage_proximity",
-            "suggested_local_weight": 0.30,
-            "applied_weight_in_current_run": 0.30,
+            "suggested_local_weight": 0.40,
+            "applied_weight_in_current_run": 0.40,
             "implementation_status": "implemented",
             "source_layer": rel(COMPONENT_PATHS["drainage_proximity"]),
             "note": "distance to drainage, closer -> higher flood-conditioning score",
@@ -385,8 +406,8 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
         {
             "pim_criterion": "sediment",
             "component": "soil_k_factor",
-            "suggested_local_weight": 0.30,
-            "applied_weight_in_current_run": 0.30,
+            "suggested_local_weight": 0.25,
+            "applied_weight_in_current_run": 0.25,
             "implementation_status": "implemented",
             "source_layer": rel(COMPONENT_PATHS["soil_k_factor"]),
             "note": "SoilGrids 250 m K aligned to the reference grid; effective resolution remains 250 m",
@@ -394,8 +415,8 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
         {
             "pim_criterion": "sediment",
             "component": "ls_factor",
-            "suggested_local_weight": 0.45,
-            "applied_weight_in_current_run": 0.45,
+            "suggested_local_weight": 0.50,
+            "applied_weight_in_current_run": 0.50,
             "implementation_status": "implemented",
             "source_layer": rel(COMPONENT_PATHS["ls_factor"]),
             "note": (
@@ -444,38 +465,47 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
         {
             "pim_criterion": "environmental",
             "component": "water_wetland_context",
-            "suggested_local_weight": 0.60,
-            "applied_weight_in_current_run": 0.60,
-            "implementation_status": "implemented_upstream_in_environmental_sensitivity",
-            "source_layer": rel(ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/water_wetland_context_0_1.tif"),
-            "note": "combined before the PIM overlay into environmental_sensitivity",
+            "suggested_local_weight": 0.65,
+            "applied_weight_in_current_run": 0.65,
+            "implementation_status": "implemented",
+            "source_layer": rel(COMPONENT_PATHS["water_wetland_context"]),
+            "note": "Supervisor spec: WW recombined directly in the runner, not the upstream pre-blended raster",
         },
         {
             "pim_criterion": "environmental",
             "component": "protected_ecological_context",
-            "suggested_local_weight": 0.40,
-            "applied_weight_in_current_run": 0.40,
-            "implementation_status": "implemented_upstream_in_environmental_sensitivity",
-            "source_layer": rel(ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/protected_area_context_0_1.tif"),
-            "note": "combined before the PIM overlay into environmental_sensitivity",
+            "suggested_local_weight": 0.35,
+            "applied_weight_in_current_run": 0.35,
+            "implementation_status": "implemented",
+            "source_layer": rel(COMPONENT_PATHS["protected_ecological_context"]),
+            "note": "Supervisor spec: PA recombined directly in the runner",
         },
         {
             "pim_criterion": "socioeconomic",
             "component": "road_access_proximity",
-            "suggested_local_weight": 0.45,
-            "applied_weight_in_current_run": 0.45,
-            "implementation_status": "implemented_upstream_in_exposure_indicators",
-            "source_layer": rel(CRITERIA_DIR / "road_access_proximity_0_1.tif"),
-            "note": "combined upstream with infrastructure evidence in exposure_indicators",
+            "suggested_local_weight": 0.35,
+            "applied_weight_in_current_run": 0.35,
+            "implementation_status": "implemented",
+            "source_layer": rel(COMPONENT_PATHS["road_access_proximity"]),
+            "note": "Supervisor spec: road/access as its own SV component",
         },
         {
             "pim_criterion": "socioeconomic",
-            "component": "infrastructure_exposure",
-            "suggested_local_weight": 0.55,
-            "applied_weight_in_current_run": 0.55,
-            "implementation_status": "implemented_upstream_in_exposure_indicators",
-            "source_layer": rel(EXPOSURE_INDICATORS_DIR / "infrastructure_exposure_0_1.tif"),
-            "note": "equal placeholder blend of WorldPop population and OSM mapped-building exposure",
+            "component": "settlement_population",
+            "suggested_local_weight": 0.35,
+            "applied_weight_in_current_run": 0.35,
+            "implementation_status": "implemented",
+            "source_layer": rel(COMPONENT_PATHS["settlement_population"]),
+            "note": "Supervisor spec: settlement+population (WorldPop) as its own SV component",
+        },
+        {
+            "pim_criterion": "socioeconomic",
+            "component": "critical_infrastructure",
+            "suggested_local_weight": 0.30,
+            "applied_weight_in_current_run": 0.30,
+            "implementation_status": "implemented_as_built_density_proxy",
+            "source_layer": rel(COMPONENT_PATHS["critical_infrastructure"]),
+            "note": "Supervisor spec: CI proxied by OSM mapped-building density; no true CI inventory exists",
         },
     ]
     return rows
@@ -632,9 +662,10 @@ def main() -> None:
     cell_km2 = 30.0 * 30.0 / 1e6
     screening_summary_rows = [
         {"metric": "scenario_count", "value": len(all_scenarios)},
-        {"metric": "mentor_peru_direct_weights", "value": "flood_hazard=0.35, sediment=0.25, landuse_asm=0.20, environmental=0.12, socioeconomic=0.08"},
+        {"metric": "mentor_peru_direct_weights", "value": "flood_hazard=0.34, sediment=0.25, landuse_asm=0.17, environmental=0.10, socioeconomic=0.14"},
+        {"metric": "weight_branch", "value": "weights/supervisor-full-spec (Supervisor complete spec, 2026-08-06)"},
         {"metric": "mining_role", "value": "external overlay only; excluded from all current PIM scores"},
-        {"metric": "mentor_peru_weight_type", "value": "direct recommended weights; no pairwise matrix consistency ratio supplied in the current note"},
+        {"metric": "mentor_peru_weight_type", "value": "Supervisor expert-informed provisional weights; no pairwise matrix consistency ratio supplied"},
         {"metric": "scoreable_valid_fraction", "value": round(scoreable_valid_fraction, 6)},
         {"metric": "full_five_criterion_fraction", "value": round(full_five_fraction, 6)},
         {"metric": "incomplete_evidence_fraction", "value": round(incomplete_evidence_fraction, 6)},
@@ -650,8 +681,8 @@ def main() -> None:
         {"metric": "component_layer_count", "value": len(COMPONENT_PATHS)},
         {"metric": "active_scored_pim_criteria", "value": ", ".join(ACTIVE_PIM_CRITERIA)},
         {"metric": "component_layers", "value": ", ".join(COMPONENT_PATHS)},
-        {"metric": "environmental_sensitivity_status", "value": "provisional"},
-        {"metric": "exposure_indicators_status", "value": "implemented_provisional; 0.45 road/access + 0.55 infrastructure; infrastructure is 0.50 WorldPop population + 0.50 OSM mapped-building evidence"},
+        {"metric": "environmental_sensitivity_status", "value": "provisional; WW/PA recombined in-runner at 0.65/0.35 (Supervisor spec)"},
+        {"metric": "socioeconomic_status", "value": "Supervisor three-way split: 0.35 road + 0.35 settlement/population + 0.30 CI (built-density proxy); recombined in-runner"},
         {"metric": "socioeconomic_response_capacity_context_status", "value": "INEI district poverty and OSM health-service remoteness exported outside the AHP overlay"},
     ]
     write_csv(OUT_DIR / "scenario_weights.csv", weight_rows)
@@ -706,9 +737,10 @@ def main() -> None:
     print(f"  scoreable coverage: {scoreable_valid_fraction:.6f}")
     print(f"  full five-criterion coverage: {full_five_fraction:.6f}")
     print(f"  highest-priority quintile area: {direct_area} km2")
-    print("  retained Peru test weights: 0.35 FH, 0.25 SE, 0.20 LU, 0.12 ES, 0.08 SV")
+    print("  Supervisor-spec weights: 0.34 FH, 0.25 SE, 0.17 LU, 0.10 ES, 0.14 SV")
+    print("  weight branch: weights/supervisor-full-spec")
     print("  mining: external overlay only; excluded from the PIM calculation")
-    print("  socioeconomic criterion unchanged: 0.45 road/access + 0.55 infrastructure exposure")
+    print("  socioeconomic: Supervisor three-way split (road 0.35 + pop 0.35 + CI-proxy 0.30)")
 
 
 if __name__ == "__main__":

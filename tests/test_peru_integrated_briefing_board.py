@@ -121,9 +121,10 @@ class PeruIntegratedBriefingBoardTest(unittest.TestCase):
 
         self.assertEqual(summary["mining_points_inside"], 2)
         self.assertEqual(summary["mining_records_nearby"], 11)
-        self.assertAlmostEqual(summary["high_area_km2"], 275.7177, places=4)
+        # Supervisor-spec weights shrink the High class versus the retained v02 weights.
+        self.assertAlmostEqual(summary["high_area_km2"], 164.8008, places=4)
         self.assertEqual(summary["very_high_area_km2"], 0.0)
-        self.assertEqual(events["all_high"], 1)
+        self.assertEqual(events["all_high"], 0)
         self.assertEqual(events["all_comparable"], 12)
         self.assertEqual(events["flood_high"], 0)
         self.assertEqual(events["flood_comparable"], 1)

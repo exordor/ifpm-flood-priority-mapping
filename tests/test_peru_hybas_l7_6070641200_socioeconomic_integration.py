@@ -21,26 +21,33 @@ def load_module():
 
 
 class PeruHybasL76070641200SocioeconomicIntegrationTest(unittest.TestCase):
-    def test_scenario_runner_uses_upgraded_exposure_indicators(self):
+    def test_scenario_runner_uses_supervisor_three_way_socioeconomic_split(self):
+        """On this branch the runner reads road/population/CI components directly
+        instead of the upstream pre-blended exposure_indicators raster."""
+
         module = load_module()
 
+        # The pre-blended key is gone; three components replace it.
+        self.assertNotIn("exposure_indicators", module.COMPONENT_PATHS)
         self.assertEqual(
-            module.COMPONENT_PATHS["exposure_indicators"],
-            ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators/exposure_indicators_0_1.tif",
+            module.PIM_COMPONENTS["socioeconomic"],
+            {"road_access_proximity": 0.35, "settlement_population": 0.35, "critical_infrastructure": 0.30},
         )
-        self.assertEqual(module.PIM_COMPONENTS["socioeconomic"], {"exposure_indicators": 1.0})
+        self.assertIn("road_access_proximity", module.COMPONENT_PATHS)
+        self.assertIn("settlement_population", module.COMPONENT_PATHS)
+        self.assertIn("critical_infrastructure", module.COMPONENT_PATHS)
 
     def test_only_mentor_peru_direct_scenario_is_active(self):
         module = load_module()
 
         self.assertEqual(set(module.SCENARIOS), {"mentor_peru_direct_pim"})
-        self.assertEqual(module.MENTOR_PERU_MAIN_WEIGHTS["socioeconomic"], 0.08)
+        self.assertEqual(module.MENTOR_PERU_MAIN_WEIGHTS["socioeconomic"], 0.14)
         output_names = {path.name for path in module.OUTPUTS}
         self.assertNotIn("priority_equal_active_pim.tif", output_names)
         self.assertNotIn("top20_equal_active_pim.tif", output_names)
         self.assertNotIn("priority_std.tif", output_names)
 
-    def test_subcriteria_manifest_records_supplied_socioeconomic_split(self):
+    def test_subcriteria_manifest_records_supervisor_socioeconomic_split(self):
         module = load_module()
         rows = [
             row
@@ -49,9 +56,12 @@ class PeruHybasL76070641200SocioeconomicIntegrationTest(unittest.TestCase):
         ]
         weights = {row["component"]: row["applied_weight_in_current_run"] for row in rows}
 
-        self.assertEqual(weights["road_access_proximity"], 0.45)
-        self.assertEqual(weights["infrastructure_exposure"], 0.55)
-        self.assertFalse(any("only available component" in str(row.get("note", "")) for row in rows))
+        self.assertEqual(weights["road_access_proximity"], 0.35)
+        self.assertEqual(weights["settlement_population"], 0.35)
+        self.assertEqual(weights["critical_infrastructure"], 0.30)
+        # CI is honestly labelled as a built-density proxy.
+        ci_row = next(row for row in rows if row["component"] == "critical_infrastructure")
+        self.assertEqual(ci_row["implementation_status"], "implemented_as_built_density_proxy")
 
     def test_pipeline_dag_runs_exposure_builder_before_scenarios(self):
         spec = importlib.util.spec_from_file_location("ifpm_pipeline", PIPELINE_PATH)

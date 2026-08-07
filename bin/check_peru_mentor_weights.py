@@ -16,22 +16,22 @@ SCENARIO_WEIGHTS_CSV = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenario
 SUBCRITERIA_CSV = ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_subcriteria_weights.csv"
 
 EXPECTED_MAIN_WEIGHTS = {
-    "flood_hazard": 0.35,
+    "flood_hazard": 0.34,
     "sediment": 0.25,
-    "landuse_asm": 0.20,
-    "environmental": 0.12,
-    "socioeconomic": 0.08,
+    "landuse_asm": 0.17,
+    "environmental": 0.10,
+    "socioeconomic": 0.14,
 }
 
 EXPECTED_COMPONENT_WEIGHTS = {
     "flood_hazard": {
-        "rainfall_climatology": 0.40,
-        "twi_wetness": 0.30,
-        "drainage_proximity": 0.30,
+        "rainfall_climatology": 0.35,
+        "twi_wetness": 0.25,
+        "drainage_proximity": 0.40,
     },
     "sediment": {
-        "soil_k_factor": 0.30,
-        "ls_factor": 0.45,
+        "soil_k_factor": 0.25,
+        "ls_factor": 0.50,
         "c_factor": 0.25,
     },
     "landuse_asm": {
@@ -40,10 +40,13 @@ EXPECTED_COMPONENT_WEIGHTS = {
         "built_agriculture_road_expansion": 0.25,
     },
     "environmental": {
-        "environmental_sensitivity": 1.0,
+        "water_wetland_context": 0.65,
+        "protected_ecological_context": 0.35,
     },
     "socioeconomic": {
-        "exposure_indicators": 1.0,
+        "road_access_proximity": 0.35,
+        "settlement_population": 0.35,
+        "critical_infrastructure": 0.30,
     },
 }
 
@@ -85,11 +88,15 @@ def check_script_constants() -> None:
     )
     for criterion, expected in EXPECTED_COMPONENT_WEIGHTS.items():
         assert_weights(scenarios.PIM_COMPONENTS[criterion], expected, f"{criterion} components")
-    assert_weights(
-        es.ENVIRONMENTAL_CONTEXT_WEIGHTS["Peru"],
-        {"water_wetland_context": 0.60, "protected_ecological_context": 0.40},
-        "environmental context weights",
-    )
+    # On this branch the runner recombines WW/PA directly with Supervisor's
+    # 0.65/0.35 weights, so the upstream pre-blended 0.60/0.40 no longer feeds
+    # the PIM. It is recorded for reference only and not enforced here.
+    upstream_es = es.ENVIRONMENTAL_CONTEXT_WEIGHTS["Peru"]
+    if upstream_es != {"water_wetland_context": 0.60, "protected_ecological_context": 0.40}:
+        print(
+            "note: upstream environmental_sensitivity builder uses "
+            f"{upstream_es}, but the PIM recombines WW/PA directly at 0.65/0.35"
+        )
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -129,25 +136,24 @@ def check_outputs() -> None:
         ("environmental", "water_wetland_context"),
         ("environmental", "protected_ecological_context"),
         ("socioeconomic", "road_access_proximity"),
-        ("socioeconomic", "infrastructure_exposure"),
+        ("socioeconomic", "settlement_population"),
+        ("socioeconomic", "critical_infrastructure"),
     ]
     missing = [item for item in required if item not in implemented]
     if missing:
         raise AssertionError(f"missing subcriteria rows: {missing}")
-    expected_socioeconomic_status = "implemented_upstream_in_exposure_indicators"
-    for component in ("road_access_proximity", "infrastructure_exposure"):
-        if implemented[("socioeconomic", component)] != expected_socioeconomic_status:
-            raise AssertionError(f"{component} must be marked as implemented upstream")
-    applied = {
+    socioeconomic_applied = {
         row["component"]: float(row["applied_weight_in_current_run"])
         for row in sub_rows
         if row["pim_criterion"] == "socioeconomic"
     }
     assert_weights(
-        applied,
-        {"road_access_proximity": 0.45, "infrastructure_exposure": 0.55},
+        socioeconomic_applied,
+        {"road_access_proximity": 0.35, "settlement_population": 0.35, "critical_infrastructure": 0.30},
         "socioeconomic subcriteria weights",
     )
+    if implemented[("socioeconomic", "critical_infrastructure")] != "implemented_as_built_density_proxy":
+        raise AssertionError("critical_infrastructure must be marked as built-density proxy")
     sediment_applied = {
         row["component"]: float(row["applied_weight_in_current_run"])
         for row in sub_rows
@@ -155,7 +161,7 @@ def check_outputs() -> None:
     }
     assert_weights(
         sediment_applied,
-        {"soil_k_factor": 0.30, "ls_factor": 0.45, "c_factor": 0.25},
+        {"soil_k_factor": 0.25, "ls_factor": 0.50, "c_factor": 0.25},
         "sediment subcriteria weights",
     )
     for component in ("soil_k_factor", "ls_factor", "c_factor"):

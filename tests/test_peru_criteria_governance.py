@@ -243,7 +243,7 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
         self.assertEqual(
             module.PIM_COMPONENTS["sediment"],
-            {"soil_k_factor": 0.30, "ls_factor": 0.45, "c_factor": 0.25},
+            {"soil_k_factor": 0.25, "ls_factor": 0.50, "c_factor": 0.25},
         )
 
         rows = [
@@ -256,7 +256,7 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
                 row["component"]: row["applied_weight_in_current_run"]
                 for row in rows
             },
-            {"soil_k_factor": 0.30, "ls_factor": 0.45, "c_factor": 0.25},
+            {"soil_k_factor": 0.25, "ls_factor": 0.50, "c_factor": 0.25},
         )
         self.assertTrue(
             all(row["implementation_status"] == "implemented" for row in rows)
