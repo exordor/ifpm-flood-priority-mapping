@@ -94,12 +94,12 @@ CRITERIA = [
     ),
     Criterion(
         slug="landuse_asm",
-        label="Land use / ASM score",
+        label="General land-use pressure score",
         source_raster=CRITERIA_DIR / "landuse_asm_0_1.tif",
         colors=["#f7fcf5", "#c7e9c0", "#74c476", "#238b45", "#00441b"],
         claim_level="provisional",
-        data_basis="WorldCover human land-use pressure distinct from RUSLE C-factor plus INGEMMET small-mining point proximity",
-        limitation="mining is point proximity, not active footprint",
+        data_basis="0.40 LC runoff pressure + 0.35 BV bare/sparse-cover proxy + 0.25 BE built/agriculture/road proxy; mining excluded",
+        limitation="single-date WorldCover does not measure temporal vegetation loss or expansion; mining is external overlay only",
     ),
     Criterion(
         slug="environmental",

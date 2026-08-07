@@ -6,8 +6,9 @@ sensitivity layer. Arequipa Region follows the mentor 5-main-criterion AHP frame
 script prepares the component rasters that are combined later into PIM main
 criteria:
 flood_conditioning, SoilGrids K, LS, RUSLE C, land_cover_pressure,
-mining_pressure (INGEMMET), road_access_proximity (OSM roads), and
-rainfall_climatology (CHIRPS coarse-to-grid, sensitivity).
+road_access_proximity (OSM roads), and rainfall_climatology (CHIRPS
+coarse-to-grid, sensitivity). Mining is maintained outside this active
+criteria stack for post-PIM overlay and spatial interpretation only.
 
 Outputs standardized 0-1 rasters on the Arequipa Region 30m reference grid (EPSG:32718).
 """
@@ -31,9 +32,11 @@ RASTER_INPUTS = {
     "ls_factor": ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/peru_hybas_l7_6070641200_ls_factor_capped50_hillslope_30m.tif",
     "c_factor": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_peru_hybas_l7_6070641200_30m.tif",
     "soil_k_factor": ROOT / "outputs/srtm_1arcsec_peru_pilot/soil_k_factor/soil_k_factor_0_1.tif",
-    "land_use_pressure": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_peru_hybas_l7_6070641200_30m.tif",
+    "land_cover_runoff_pressure": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_cover_runoff_pressure_peru_hybas_l7_6070641200_30m.tif",
+    "bare_soil_vegetation_loss": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/bare_soil_vegetation_loss_proxy_peru_hybas_l7_6070641200_30m.tif",
+    "built_up_pressure": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/built_up_pressure_peru_hybas_l7_6070641200_30m.tif",
+    "agricultural_pressure": ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/agricultural_pressure_peru_hybas_l7_6070641200_30m.tif",
     "road_access_proximity": ROOT / "outputs/geofabrik_osm_peru_pilot/peru_hybas_l7_6070641200_proximity/closeness_to_roads_0_1.tif",
-    "mining": ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_mining_pressure_ingemmet_0_1.tif",
     "rainfall": ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif",
 }
 
@@ -43,9 +46,11 @@ INPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/ls_factor/peru_hybas_l7_6070641200_ls_factor_capped50_hillslope_30m.tif",
     ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_peru_hybas_l7_6070641200_30m.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/soil_k_factor/soil_k_factor_0_1.tif",
-    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_peru_hybas_l7_6070641200_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_cover_runoff_pressure_peru_hybas_l7_6070641200_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/bare_soil_vegetation_loss_proxy_peru_hybas_l7_6070641200_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/built_up_pressure_peru_hybas_l7_6070641200_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/agricultural_pressure_peru_hybas_l7_6070641200_30m.tif",
     ROOT / "outputs/geofabrik_osm_peru_pilot/peru_hybas_l7_6070641200_proximity/closeness_to_roads_0_1.tif",
-    ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_mining_pressure_ingemmet_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif",
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
@@ -60,7 +65,8 @@ OUTPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/c_factor_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/soil_k_factor_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/bare_soil_vegetation_loss_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/built_agriculture_road_expansion_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/road_access_proximity_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif",
 ]
@@ -149,6 +155,21 @@ def weighted_average(parts: list[tuple[np.ndarray, float]], mask: np.ndarray) ->
     return out.astype("float32")
 
 
+def build_be_proxy(
+    built_up: np.ndarray,
+    agriculture: np.ndarray,
+    road_access: np.ndarray,
+    mask: np.ndarray,
+) -> np.ndarray:
+    """Build BE without penalizing mutually exclusive built/agriculture classes."""
+
+    developed_or_agricultural = np.maximum(built_up, agriculture)
+    return weighted_average(
+        [(developed_or_agricultural, 0.50), (road_access, 0.50)],
+        mask,
+    )
+
+
 def valid_fraction(data: np.ndarray, mask: np.ndarray) -> float:
     inside = int(mask.sum())
     if inside == 0:
@@ -171,11 +192,17 @@ def main() -> None:
     drain_std, drain_lo, drain_hi = normalize_2_98(rasters["drainage"], mask, invert=True)
     ls_std, ls_lo, ls_hi = normalize_2_98(rasters["ls_factor"], mask, invert=False)
     c_std, c_lo, c_hi = normalize_2_98(rasters["c_factor"], mask, invert=False)
-    # K, land use, roads, and mining are already 0-1 scored rasters.
+    # K, land use, and roads are already 0-1 scored rasters.
     soil_k_std = rasters["soil_k_factor"]
-    land_use_std = rasters["land_use_pressure"]
+    land_use_std = rasters["land_cover_runoff_pressure"]
+    bare_soil_vegetation_loss = rasters["bare_soil_vegetation_loss"]
     road_access_std = rasters["road_access_proximity"]
-    mining_std = rasters["mining"]
+    built_agriculture_road_expansion = build_be_proxy(
+        rasters["built_up_pressure"],
+        rasters["agricultural_pressure"],
+        road_access_std,
+        mask,
+    )
 
     criteria = {
         "flood_conditioning_factors": weighted_average([(twi_std, 0.5), (drain_std, 0.5)], mask),
@@ -185,7 +212,8 @@ def main() -> None:
         "c_factor": c_std,
         "soil_k_factor": soil_k_std,
         "land_cover_pressure": land_use_std,
-        "mining_pressure": mining_std,
+        "bare_soil_vegetation_loss": bare_soil_vegetation_loss,
+        "built_agriculture_road_expansion": built_agriculture_road_expansion,
         "road_access_proximity": road_access_std,
         "rainfall_climatology": rasters["rainfall"],
     }
@@ -198,8 +226,9 @@ def main() -> None:
         "ls_factor": "SRTM-derived LS-factor, capped at 50, hillslope/channel mask preserved",
         "c_factor": "ESA WorldCover RUSLE C-factor used only in the Sediment criterion",
         "soil_k_factor": "SoilGrids 250 m K aligned to the 30 m reference grid; effective resolution remains 250 m",
-        "land_cover_pressure": "WorldCover human land-use intensity value function; distinct from RUSLE C-factor",
-        "mining_pressure": "INGEMMET Pequeña Minería ASM-point proximity (inverted); official source",
+        "land_cover_pressure": "LC: provisional WorldCover land-cover runoff-pressure value function",
+        "bare_soil_vegetation_loss": "BV: WorldCover bare/sparse-cover proxy; single-date data cannot measure vegetation loss",
+        "built_agriculture_road_expansion": "BE: 0.50 max(current built-up, current agriculture) + 0.50 road proximity; test proxy, not temporal expansion",
         "road_access_proximity": "OSM roads proximity (inverted); access indicator used upstream of the combined socioeconomic criterion",
         "rainfall_climatology": "CHIRPS latam Dec-Mar mean coarse-to-grid (sensitivity_scenario)",
     }
@@ -211,7 +240,8 @@ def main() -> None:
         "c_factor": "provisional",
         "soil_k_factor": "provisional",
         "land_cover_pressure": "provisional",
-        "mining_pressure": "provisional",
+        "bare_soil_vegetation_loss": "sensitivity_scenario",
+        "built_agriculture_road_expansion": "sensitivity_scenario",
         "road_access_proximity": "provisional",
         "rainfall_climatology": "sensitivity_scenario",
     }

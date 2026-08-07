@@ -6,10 +6,9 @@ The PIM-ready criterion follows the supplied Peru sub-criteria structure:
     exposure indicators = 0.45 * road/access proximity
                         + 0.55 * infrastructure exposure
 
-Infrastructure exposure is an explicit provisional indicator composed equally of
-WorldPop population exposure and OSM building-density exposure. INEI district
-poverty and OSM health-service remoteness are exported as response-capacity
-context only; they are not hidden inputs to the current AHP overlay.
+Infrastructure exposure is an explicit provisional indicator composed equally
+of WorldPop population exposure and OSM building-density exposure. INEI district
+poverty and OSM health-service remoteness are response-capacity context only.
 
 All outputs are provisional and use the Peru 30 m reference grid. WorldPop is
 reprojected with sum resampling because the source values are population counts.
@@ -623,8 +622,8 @@ def main() -> None:
             "infrastructure_exposure": INFRASTRUCTURE_WEIGHTS,
         },
         "weight_note": (
-            "The 0.45/0.55 split follows the supplied Peru sub-criteria table; the 0.50/0.50 "
-            "population/building split is an implementation placeholder. Nominal weights do "
+            "The retained 0.45 road / 0.55 infrastructure split follows the original Peru "
+            "test table; infrastructure remains a 0.50/0.50 population/building blend. Nominal weights do "
             "not imply equal realized mean contributions; see the contribution diagnostics."
         ),
         "calibration_decision": (

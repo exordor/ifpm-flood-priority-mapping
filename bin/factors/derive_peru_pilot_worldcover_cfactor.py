@@ -33,6 +33,10 @@ INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg", ROOT / 
 OUTPUTS = [
     ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/c_factor_peru_hybas_l7_6070641200_30m.tif",
     ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_use_pressure_peru_hybas_l7_6070641200_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/land_cover_runoff_pressure_peru_hybas_l7_6070641200_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/bare_soil_vegetation_loss_proxy_peru_hybas_l7_6070641200_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/built_up_pressure_peru_hybas_l7_6070641200_30m.tif",
+    ROOT / "outputs/esa_worldcover_2021_peru_pilot/c_factor/agricultural_pressure_peru_hybas_l7_6070641200_30m.tif",
 ]
 
 WORLDCOVER_RAW_DIR = ROOT / "data/raw/esa_worldcover_2021_peru_pilot"
@@ -77,6 +81,27 @@ LAND_USE_PRESSURE_LUT: dict[int, float] = {
     90: 0.00,   # herbaceous wetland
     95: 0.00,   # mangroves
     100: 0.10,  # moss / lichen
+}
+
+# Provisional test value functions for the revised LC/BV/BE Land Use subgroup.
+# They are explicit heuristics, not calibrated runoff coefficients or temporal
+# change detection. BV can only represent current bare/sparse cover because the
+# available WorldCover product is a single 2021 snapshot.
+LAND_COVER_RUNOFF_PRESSURE_LUT: dict[int, float] = {
+    10: 0.15, 20: 0.25, 30: 0.35, 40: 0.70, 50: 1.00, 60: 0.90,
+    70: 0.40, 80: 0.00, 90: 0.10, 95: 0.10, 100: 0.20,
+}
+BARE_SOIL_VEGETATION_LOSS_PROXY_LUT: dict[int, float] = {
+    10: 0.0, 20: 0.0, 30: 0.0, 40: 0.0, 50: 0.0, 60: 1.0,
+    70: 0.0, 80: 0.0, 90: 0.0, 95: 0.0, 100: 0.0,
+}
+BUILT_UP_PRESSURE_LUT: dict[int, float] = {
+    10: 0.0, 20: 0.0, 30: 0.0, 40: 0.0, 50: 1.0, 60: 0.0,
+    70: 0.0, 80: 0.0, 90: 0.0, 95: 0.0, 100: 0.0,
+}
+AGRICULTURAL_PRESSURE_LUT: dict[int, float] = {
+    10: 0.0, 20: 0.0, 30: 0.0, 40: 1.0, 50: 0.0, 60: 0.0,
+    70: 0.0, 80: 0.0, 90: 0.0, 95: 0.0, 100: 0.0,
 }
 
 
@@ -170,6 +195,29 @@ def class_to_land_use_pressure(class_arr: np.ndarray) -> np.ndarray:
     return out
 
 
+def apply_value_function(class_arr: np.ndarray, lookup: dict[int, float]) -> np.ndarray:
+    out = np.full(class_arr.shape, np.nan, dtype="float32")
+    for code, value in lookup.items():
+        out[class_arr == code] = value
+    return out
+
+
+def class_to_land_cover_runoff_pressure(class_arr: np.ndarray) -> np.ndarray:
+    return apply_value_function(class_arr, LAND_COVER_RUNOFF_PRESSURE_LUT)
+
+
+def class_to_bare_soil_vegetation_loss_proxy(class_arr: np.ndarray) -> np.ndarray:
+    return apply_value_function(class_arr, BARE_SOIL_VEGETATION_LOSS_PROXY_LUT)
+
+
+def class_to_built_up_pressure(class_arr: np.ndarray) -> np.ndarray:
+    return apply_value_function(class_arr, BUILT_UP_PRESSURE_LUT)
+
+
+def class_to_agricultural_pressure(class_arr: np.ndarray) -> np.ndarray:
+    return apply_value_function(class_arr, AGRICULTURAL_PRESSURE_LUT)
+
+
 def mask_on_grid(geometry, transform, shape) -> np.ndarray:
     return rasterize(
         [(geometry, 1)], out_shape=shape, transform=transform, fill=0, dtype="uint8", all_touched=False
@@ -227,6 +275,10 @@ def main() -> None:
     c_30m_masked = np.where(peru_hybas_l7_6070641200_mask_ref, c_30m, np.nan)
     land_use_30m = class_to_land_use_pressure(class_30m.astype("int32"))
     land_use_30m_masked = np.where(peru_hybas_l7_6070641200_mask_ref, land_use_30m, np.nan)
+    lc_30m = class_to_land_cover_runoff_pressure(class_30m.astype("int32"))
+    bv_30m = class_to_bare_soil_vegetation_loss_proxy(class_30m.astype("int32"))
+    built_30m = class_to_built_up_pressure(class_30m.astype("int32"))
+    agriculture_30m = class_to_agricultural_pressure(class_30m.astype("int32"))
 
     out_profile = ref_profile.copy()
     out_profile.update(dtype="float32", nodata=NODATA, count=1, compress="deflate", tiled=True)
@@ -238,6 +290,19 @@ def main() -> None:
     with rasterio.open(OUTPUT_DIR / "land_use_pressure_peru_hybas_l7_6070641200_30m.tif", "w", **out_profile) as ds:
         ds.write(land_use_out, 1)
     print(f"wrote {OUTPUT_DIR / 'land_use_pressure_peru_hybas_l7_6070641200_30m.tif'}")
+
+    revised_layers = {
+        "land_cover_runoff_pressure_peru_hybas_l7_6070641200_30m.tif": lc_30m,
+        "bare_soil_vegetation_loss_proxy_peru_hybas_l7_6070641200_30m.tif": bv_30m,
+        "built_up_pressure_peru_hybas_l7_6070641200_30m.tif": built_30m,
+        "agricultural_pressure_peru_hybas_l7_6070641200_30m.tif": agriculture_30m,
+    }
+    for filename, layer in revised_layers.items():
+        masked = np.where(peru_hybas_l7_6070641200_mask_ref, layer, np.nan)
+        output = np.where(np.isfinite(masked), masked, NODATA).astype("float32")
+        with rasterio.open(OUTPUT_DIR / filename, "w", **out_profile) as ds:
+            ds.write(output, 1)
+        print(f"wrote {OUTPUT_DIR / filename}")
 
     # 3. stats + class-area on Arequipa Region (30m)
     valid = np.isfinite(c_30m_masked) & peru_hybas_l7_6070641200_mask_ref
@@ -258,6 +323,21 @@ def main() -> None:
         "land_use_pressure_note": (
             "Separate provisional human land-use intensity value function; not a copy of RUSLE C."
         ),
+        "revised_land_use_test_value_functions": {
+            "land_cover_runoff_pressure": LAND_COVER_RUNOFF_PRESSURE_LUT,
+            "bare_soil_vegetation_loss_proxy": BARE_SOIL_VEGETATION_LOSS_PROXY_LUT,
+            "built_up_pressure": BUILT_UP_PRESSURE_LUT,
+            "agricultural_pressure": AGRICULTURAL_PRESSURE_LUT,
+            "be_internal_formula": (
+                "0.50 * max(built_up_pressure, agricultural_pressure) + "
+                "0.50 * road_access_proximity"
+            ),
+            "claim_level": "sensitivity_scenario",
+            "limitation": (
+                "Single-date WorldCover cannot measure vegetation loss or expansion over time; "
+                "BV is a bare/sparse-cover proxy and built/agriculture layers show current class presence."
+            ),
+        },
         "resample_method": "MODE (10m->30m, legitimate fine->coarse aggregation); lookup applied AFTER resample",
         "boundary_status": "provisional_comparison_catchment_not_final_study_area",
         "c_factor_30m_stats": {

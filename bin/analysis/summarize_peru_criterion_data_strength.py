@@ -21,7 +21,6 @@ PIM_DIR = BASE / "priority_scenarios/pim_criteria"
 BOUNDARY = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
 ENV_COMPONENTS = BASE / "environmental_sensitivity_v0_1/environmental_sensitivity_components.csv"
 SOCIO_DIAGNOSTICS = BASE / "exposure_indicators/exposure_indicators_contribution_diagnostics.csv"
-MINING_MANIFEST = ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/mining_pressure_manifest.csv"
 PIM_SUPPORT = BASE / "priority_scenarios/priority_screening_summary.csv"
 SINPAD_COHORTS = ROOT / "outputs/peru_gap_closure_analysis/peru_sinpad_colocation_cohorts.csv"
 DEPENDENCY_DIAGNOSTICS = BASE / "priority_scenarios/criterion_dependency_diagnostics.csv"
@@ -45,7 +44,6 @@ INPUTS = [
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_components.csv",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators/exposure_indicators_contribution_diagnostics.csv",
-    ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/mining_pressure_manifest.csv",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_screening_summary.csv",
     ROOT / "outputs/peru_gap_closure_analysis/peru_sinpad_colocation_cohorts.csv",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/criterion_dependency_diagnostics.csv",
@@ -94,21 +92,18 @@ def protected_evidence_state() -> str:
     return row.get("evidence_state", "unrecorded")
 
 
-def mining_feature_count() -> int:
-    rows = read_csv_rows(MINING_MANIFEST)
-    return int(rows[0]["features_in_peru_hybas_l7_6070641200_envelope"])
-
-
 def socioeconomic_influence_note() -> str:
     rows = read_csv_rows(SOCIO_DIAGNOSTICS)
     by_component = {row["component"]: row for row in rows}
-    road = by_component["road_access_proximity"]
-    infrastructure = by_component["infrastructure_exposure"]
+    components = [by_component["road_access_proximity"], by_component["infrastructure_exposure"]]
     return (
-        f"Mean-contribution shares are {float(road['realized_mean_contribution_share']):.1%} road "
-        f"and {float(infrastructure['realized_mean_contribution_share']):.1%} infrastructure; "
-        f"marginal weighted SD shares are {float(road['marginal_weighted_sd_share']):.1%} and "
-        f"{float(infrastructure['marginal_weighted_sd_share']):.1%}. These ignore covariance "
+        "Realized mean-contribution shares for road and infrastructure are "
+        + ", ".join(
+            f"{float(row['realized_mean_contribution_share']):.1%}" for row in components
+        )
+        + "; marginal weighted SD shares are "
+        + ", ".join(f"{float(row['marginal_weighted_sd_share']):.1%}" for row in components)
+        + ". These ignore covariance "
         "and are not an effective weight, ranking attribution, or calibration target."
     )
 
@@ -156,8 +151,8 @@ def dependency_diagnostic_notes() -> dict[str, str]:
         "flood_hazard": "No component-removal dependency diagnostic is reported for Flood in this run.",
         "sediment": shared_worldcover,
         "landuse_asm": (
-            f"{shared_worldcover} Replacing Land Use / Mining with mining pressure only gives "
-            f"highest-priority-quintile Jaccard={jaccard('pim_landuse_without_worldcover_pressure'):.3f}."
+            f"{shared_worldcover} Mining is excluded from the current PIM and assessed only "
+            "as an external spatial overlay."
         ),
         "environmental": (
             f"Environmental versus water/wetland context Spearman rho="
@@ -176,7 +171,6 @@ def dependency_diagnostic_notes() -> dict[str, str]:
 
 def build_rows() -> list[dict[str, object]]:
     local_protected_state = protected_evidence_state()
-    mining_count = mining_feature_count()
     socio_note = socioeconomic_influence_note()
     support = pim_support_metrics()
     sinpad_note = sinpad_model_diagnostic_note()
@@ -197,7 +191,7 @@ def build_rows() -> list[dict[str, object]]:
             "criterion_id": "sediment",
             "display_name": "Sediment / erosion",
             "main_weight": 0.25,
-            "implementation": "0.30 SoilGrids K + 0.45 SRTM LS + 0.25 WorldCover C; additive normalized AHP subcriteria",
+            "implementation": "0.30 SoilGrids K + 0.45 SRTM LS + 0.25 WorldCover C; additive normalized provisional subcriteria",
             "source_evidence": "SoilGrids K (250 m effective), SRTM LS, ESA WorldCover C",
             "evidence_state": "implemented_provisional",
             "known_limit": "K is coarse; any K, LS or C NoData leaves Sediment and the final PIM unscored; no measured erosion or sediment transport observations",
@@ -206,14 +200,14 @@ def build_rows() -> list[dict[str, object]]:
         },
         {
             "criterion_id": "landuse_asm",
-            "display_name": "Land use / mining",
+            "display_name": "General land-use pressure",
             "main_weight": 0.20,
-            "implementation": "0.35 WorldCover land-use pressure (distinct from RUSLE C) + 0.65 INGEMMET small-mining point proximity",
-            "source_evidence": f"ESA WorldCover and {mining_count} official INGEMMET small-mining points in the Arequipa Region envelope",
+            "implementation": "0.40 LC runoff pressure + 0.35 BV bare/sparse-cover proxy + 0.25 BE built/agriculture/road proxy; dedicated mining evidence excluded",
+            "source_evidence": "ESA WorldCover LC/BV/built/agriculture value functions plus OSM road proximity; INGEMMET is external overlay only",
             "evidence_state": "implemented_provisional",
-            "known_limit": "Mining points indicate registered/reference locations, not verified active disturbance footprints or intensity",
+            "known_limit": "Single-date WorldCover cannot observe vegetation loss or expansion through time; BV and BE remain explicit test proxies",
             "validation_state": "not validated",
-            "next_upgrade": "date-matched active mine footprints, concessions or imagery-based disturbance evidence",
+            "next_upgrade": "add multi-date land-cover change and accepted internal BE component weights",
         },
         {
             "criterion_id": "environmental",
@@ -235,7 +229,7 @@ def build_rows() -> list[dict[str, object]]:
             "evidence_state": "implemented_provisional",
             "known_limit": socio_note + " No observed affected-population or infrastructure-damage data are used.",
             "validation_state": "not validated",
-            "next_upgrade": "settlement/infrastructure inventory and observed flood impacts; revisit the internal 0.50/0.50 split",
+            "next_upgrade": "settlement/critical-infrastructure inventory and observed flood impacts; revisit the internal 0.50/0.50 split",
         },
     ]
     for row in definitions:

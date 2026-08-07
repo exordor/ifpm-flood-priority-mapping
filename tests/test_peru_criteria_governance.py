@@ -344,7 +344,7 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
         )
         self.assertIn("0.30 SoilGrids K", by_criterion["sediment"]["implementation"])
         self.assertNotIn("K x LS x C composite", by_criterion["sediment"]["implementation"])
-        self.assertIn("distinct from RUSLE C", by_criterion["landuse_asm"]["implementation"])
+        self.assertIn("dedicated mining evidence excluded", by_criterion["landuse_asm"]["implementation"])
         self.assertEqual(
             by_criterion["environmental"]["evidence_state"],
             "sernanp_national_definitive_layer_checked_no_feature_within_context_zone",

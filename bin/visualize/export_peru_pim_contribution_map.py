@@ -45,7 +45,7 @@ WEIGHTS = {
 LABELS = {
     "flood_hazard": "Flood-conditioning indicator (FH)",
     "sediment": "Sediment / erosion",
-    "landuse_asm": "Land use / ASM",
+    "landuse_asm": "General land-use pressure",
     "environmental": "Environmental context indicator (ES)",
     "socioeconomic": "Socioeconomic exposure indicator",
 }

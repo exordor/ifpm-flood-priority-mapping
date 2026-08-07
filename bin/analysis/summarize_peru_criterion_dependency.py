@@ -21,7 +21,6 @@ SOCIOECONOMIC_CRITERION = BASE / "priority_scenarios/pim_criteria/socioeconomic_
 ENVIRONMENTAL_CRITERION = BASE / "priority_scenarios/pim_criteria/environmental_0_1.tif"
 C_FACTOR = BASE / "criteria_stack/criteria/c_factor_0_1.tif"
 LAND_USE_PRESSURE = BASE / "criteria_stack/criteria/land_cover_pressure_0_1.tif"
-MINING_PRESSURE = BASE / "criteria_stack/criteria/mining_pressure_0_1.tif"
 ROAD_ACCESS = BASE / "criteria_stack/criteria/road_access_proximity_0_1.tif"
 INFRASTRUCTURE = BASE / "exposure_indicators/infrastructure_exposure_0_1.tif"
 WATER_CONTEXT = BASE / "environmental_sensitivity_v0_1/water_wetland_context_0_1.tif"
@@ -36,7 +35,6 @@ INPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/pim_criteria/environmental_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/c_factor_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/road_access_proximity_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators/infrastructure_exposure_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/water_wetland_context_0_1.tif",
@@ -198,7 +196,7 @@ def main() -> None:
             "combined socioeconomic criterion",
             "population/building infrastructure component only",
             pair_metrics(socioeconomic, arrays[INFRASTRUCTURE]),
-            "Comparison diagnoses spatial ordering; it does not replace the supplied 0.45/0.55 coefficients.",
+            "Comparison diagnoses spatial ordering; the current score uses separate 0.35 population and 0.30 mapped-infrastructure components.",
         ),
         diagnostic_row(
             "environmental_vs_water_context",
@@ -212,19 +210,6 @@ def main() -> None:
                 ),
             },
             "SERNANP national definitive layer 0 contributes no local nonzero cells; current ordering is water/wetland-led.",
-        ),
-        diagnostic_row(
-            "pim_landuse_without_worldcover_pressure",
-            "component_removal_sensitivity",
-            "current direct-weight PIM",
-            "replace Land Use / Mining criterion with mining pressure only",
-            pim_alternative_metrics(
-                pim,
-                current_component=landuse,
-                alternative_component=arrays[MINING_PRESSURE],
-                main_weight=0.20,
-            ),
-            "Tests sensitivity to removing the second use of WorldCover from the Land Use / Mining criterion.",
         ),
         diagnostic_row(
             "pim_socioeconomic_road_only",

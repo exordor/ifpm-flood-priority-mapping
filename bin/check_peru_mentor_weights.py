@@ -35,8 +35,9 @@ EXPECTED_COMPONENT_WEIGHTS = {
         "c_factor": 0.25,
     },
     "landuse_asm": {
-        "land_cover_pressure": 0.35,
-        "mining_pressure": 0.65,
+        "land_cover_pressure": 0.40,
+        "bare_soil_vegetation_loss": 0.35,
+        "built_agriculture_road_expansion": 0.25,
     },
     "environmental": {
         "environmental_sensitivity": 1.0,
@@ -123,7 +124,8 @@ def check_outputs() -> None:
         ("sediment", "ls_factor"),
         ("sediment", "c_factor"),
         ("landuse_asm", "land_cover_pressure"),
-        ("landuse_asm", "mining_pressure"),
+        ("landuse_asm", "bare_soil_vegetation_loss"),
+        ("landuse_asm", "built_agriculture_road_expansion"),
         ("environmental", "water_wetland_context"),
         ("environmental", "protected_ecological_context"),
         ("socioeconomic", "road_access_proximity"),

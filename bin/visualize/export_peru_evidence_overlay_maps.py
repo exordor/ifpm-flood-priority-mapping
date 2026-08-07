@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Export Peru evidence overlays for the governed reporting figure chain.
 
-The mining and population layers are model-input context. SINPAD reference
-points are shown only as a co-location diagnostic and are not independent
-model validation.
+Mining is an external post-PIM overlay and does not affect the current score.
+Population remains part of socioeconomic exposure. SINPAD reference points are
+shown only as a co-location diagnostic and are not independent model validation.
 """
 
 from __future__ import annotations
@@ -286,7 +286,7 @@ def export_mining_population_overlay() -> list[dict[str, str]]:
     )
     legend = ax.legend(
         handles=handles,
-        title="Priority score and model-input context",
+        title="Priority score and external context",
         loc="lower left",
         bbox_to_anchor=(0.055, 0.025),
         frameon=True,
@@ -299,7 +299,8 @@ def export_mining_population_overlay() -> list[dict[str, str]]:
     legend._legend_box.align = "left"
     png, pdf = save(fig, "peru_priority_mining_population_overlay")
     source_note = (
-        "Population exposure contours and official INGEMMET point references are model-input context; "
+        "Population exposure contours are model context; official INGEMMET points are an external "
+        "post-PIM overlay and do not affect the priority score; "
         f"{len(mining_records)} source records collapse to {len(mining_locations)} unique locations "
         f"({len(inside_mining)} inside and {len(nearby_mining)} near the boundary)."
     )
@@ -309,7 +310,7 @@ def export_mining_population_overlay() -> list[dict[str, str]]:
             "format": fmt,
             "path": rel(path),
             "claim_level": "diagnostic_only",
-            "evidence_role": "model_input_context",
+            "evidence_role": "external_mining_overlay_and_population_context",
             "pim_source": rel(PIM),
             "pim_sha256": sha256(PIM),
             "evidence_support_source": rel(EVIDENCE_SUPPORT),

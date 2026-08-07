@@ -70,11 +70,11 @@ class PeruSlideMapSourceTest(unittest.TestCase):
         )
         criteria = {item.slug: item for item in module.CRITERIA}
 
-        self.assertIn("0.30", criteria["sediment"].data_basis)
         self.assertIn("0.45", criteria["sediment"].data_basis)
         self.assertIn("0.25", criteria["sediment"].data_basis)
         self.assertNotIn("K x LS x C structure", criteria["sediment"].limitation)
-        self.assertIn("distinct from RUSLE C-factor", criteria["landuse_asm"].data_basis)
+        self.assertIn("0.40 LC", criteria["landuse_asm"].data_basis)
+        self.assertIn("external overlay only", criteria["landuse_asm"].limitation)
 
     def test_context_exporter_covers_all_new_socioeconomic_layers(self):
         module = load_module(

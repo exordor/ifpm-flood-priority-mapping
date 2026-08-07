@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
-"""Run Peru-first priority scenarios for the Arequipa mining-region catchment.
+"""Run the current no-mining Peru PIM baseline for Arequipa Region.
 
 Arequipa Region follows the mentor 5-main-criterion AHP framework: Flood, Sediment,
-Land Use / ASM, Environmental, and Socioeconomic. Five criteria are actively
+General Land Use Pressure, Environmental, and Socioeconomic. Five criteria are actively
 scored in the current executable prototype:
 
-- Flood hazard: rainfall climatology, TWI, and drainage proximity.
+- Flood hazard: rainfall climatology, TWI, and drainage proximity using the
+  original 0.40 / 0.30 / 0.30 local weights.
 - Sediment: independently scored SoilGrids K, LS, and C components using the
-  supplied 0.30 / 0.45 / 0.25 local weights.
-- Land Use / ASM: land-cover pressure + mining pressure.
+  original 0.30 / 0.45 / 0.25 local weights.
+- General Land Use Pressure: 0.40 LC + 0.35 BV + 0.25 BE. Mining is excluded
+  from the PIM calculation and retained only as an external overlay.
 - Environmental: water/wetland and protected/ecological context.
 - Socioeconomic: road/access proximity plus population and mapped-building
   infrastructure exposure. Poverty and health-service remoteness remain
   response-capacity context layers outside the current AHP overlay.
 
-Current scenario: mentor-recommended Peru direct weights only.
+Current scenario: the original provisional test weights are retained; only the
+Land Use subgroup is replaced. No pairwise matrix or AHP consistency ratio was supplied.
 
 Sediment note: K, LS, and C are independently normalized and combined by the
 supplied local AHP subweights. The resulting 0-1 score is a relative
@@ -52,7 +55,8 @@ INPUTS = [
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/ls_factor_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/c_factor_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/land_cover_pressure_0_1.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/mining_pressure_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/bare_soil_vegetation_loss_0_1.tif",
+    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/built_agriculture_road_expansion_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/rainfall_climatology_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/exposure_indicators/exposure_indicators_0_1.tif",
@@ -108,7 +112,8 @@ COMPONENT_PATHS = {
     "ls_factor": CRITERIA_DIR / "ls_factor_0_1.tif",
     "c_factor": CRITERIA_DIR / "c_factor_0_1.tif",
     "land_cover_pressure": CRITERIA_DIR / "land_cover_pressure_0_1.tif",
-    "mining_pressure": CRITERIA_DIR / "mining_pressure_0_1.tif",
+    "bare_soil_vegetation_loss": CRITERIA_DIR / "bare_soil_vegetation_loss_0_1.tif",
+    "built_agriculture_road_expansion": CRITERIA_DIR / "built_agriculture_road_expansion_0_1.tif",
     "exposure_indicators": EXPOSURE_INDICATORS_DIR / "exposure_indicators_0_1.tif",
     "environmental_sensitivity": ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif",
 }
@@ -118,7 +123,13 @@ ACTIVE_PIM_CRITERIA = PIM_CRITERIA_ORDER
 PIM_COMPONENTS = {
     "flood_hazard": {"rainfall_climatology": 0.40, "twi_wetness": 0.30, "drainage_proximity": 0.30},
     "sediment": {"soil_k_factor": 0.30, "ls_factor": 0.45, "c_factor": 0.25},
-    "landuse_asm": {"land_cover_pressure": 0.35, "mining_pressure": 0.65},
+    # Keep the historical internal slug for downstream path compatibility. Its
+    # current semantic meaning is General Land Use Pressure, with no ASM/mining input.
+    "landuse_asm": {
+        "land_cover_pressure": 0.40,
+        "bare_soil_vegetation_loss": 0.35,
+        "built_agriculture_road_expansion": 0.25,
+    },
     "environmental": {"environmental_sensitivity": 1.0},
     "socioeconomic": {"exposure_indicators": 1.0},
 }
@@ -306,12 +317,18 @@ def classify_evidence_support(
     return support
 
 
-def build_pim_criteria(components: dict[str, np.ndarray], profile: dict) -> dict[str, np.ndarray]:
-    PIM_CRITERIA_DIR.mkdir(parents=True, exist_ok=True)
-    criteria = {
+def calculate_pim_criteria(components: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
+    """Calculate the five current criteria without reading or writing files."""
+
+    return {
         name: combine_weighted_layers(components, weights)
         for name, weights in PIM_COMPONENTS.items()
     }
+
+
+def build_pim_criteria(components: dict[str, np.ndarray], profile: dict) -> dict[str, np.ndarray]:
+    PIM_CRITERIA_DIR.mkdir(parents=True, exist_ok=True)
+    criteria = calculate_pim_criteria(components)
     for name, data in criteria.items():
         write_raster(PIM_CRITERIA_DIR / f"{name}_0_1.tif", data, profile)
     return criteria
@@ -398,20 +415,31 @@ def build_subcriteria_weight_rows() -> list[dict[str, object]]:
         {
             "pim_criterion": "landuse_asm",
             "component": "land_cover_pressure",
-            "suggested_local_weight": 0.35,
-            "applied_weight_in_current_run": 0.35,
+            "suggested_local_weight": 0.40,
+            "applied_weight_in_current_run": 0.40,
             "implementation_status": "implemented",
             "source_layer": rel(COMPONENT_PATHS["land_cover_pressure"]),
-            "note": "ESA WorldCover land-cover pressure",
+            "note": (
+                "LC land-cover runoff-pressure test value function; no dedicated mining input"
+            ),
         },
         {
             "pim_criterion": "landuse_asm",
-            "component": "mining_pressure",
-            "suggested_local_weight": 0.65,
-            "applied_weight_in_current_run": 0.65,
-            "implementation_status": "implemented",
-            "source_layer": rel(COMPONENT_PATHS["mining_pressure"]),
-            "note": "INGEMMET small-mining point proximity",
+            "component": "bare_soil_vegetation_loss",
+            "suggested_local_weight": 0.35,
+            "applied_weight_in_current_run": 0.35,
+            "implementation_status": "implemented_as_single_date_proxy",
+            "source_layer": rel(COMPONENT_PATHS["bare_soil_vegetation_loss"]),
+            "note": "BV uses current WorldCover bare/sparse cover; it does not measure temporal vegetation loss",
+        },
+        {
+            "pim_criterion": "landuse_asm",
+            "component": "built_agriculture_road_expansion",
+            "suggested_local_weight": 0.25,
+            "applied_weight_in_current_run": 0.25,
+            "implementation_status": "implemented_as_equal_component_test_proxy",
+            "source_layer": rel(COMPONENT_PATHS["built_agriculture_road_expansion"]),
+            "note": "BE = 0.50 max(built-up, agriculture) + 0.50 road proximity; explicit test proxy, not temporal expansion",
         },
         {
             "pim_criterion": "environmental",
@@ -605,6 +633,7 @@ def main() -> None:
     screening_summary_rows = [
         {"metric": "scenario_count", "value": len(all_scenarios)},
         {"metric": "mentor_peru_direct_weights", "value": "flood_hazard=0.35, sediment=0.25, landuse_asm=0.20, environmental=0.12, socioeconomic=0.08"},
+        {"metric": "mining_role", "value": "external overlay only; excluded from all current PIM scores"},
         {"metric": "mentor_peru_weight_type", "value": "direct recommended weights; no pairwise matrix consistency ratio supplied in the current note"},
         {"metric": "scoreable_valid_fraction", "value": round(scoreable_valid_fraction, 6)},
         {"metric": "full_five_criterion_fraction", "value": round(full_five_fraction, 6)},
@@ -641,6 +670,7 @@ def main() -> None:
         "mentor_weight_type": (
             "direct recommended weights; no pairwise matrix or consistency ratio supplied"
         ),
+        "mining_role": "external overlay only; excluded from PIM calculation",
         "scoreable_valid_fraction": scoreable_valid_fraction,
         "full_five_criterion_fraction": full_five_fraction,
         "incomplete_evidence_fraction": incomplete_evidence_fraction,
@@ -676,8 +706,9 @@ def main() -> None:
     print(f"  scoreable coverage: {scoreable_valid_fraction:.6f}")
     print(f"  full five-criterion coverage: {full_five_fraction:.6f}")
     print(f"  highest-priority quintile area: {direct_area} km2")
-    print("  mentor Peru direct weights: 0.35 FH, 0.25 SE, 0.20 LM, 0.12 ES, 0.08 SV")
-    print("  socioeconomic criterion: 0.45 road/access + 0.55 population/building exposure indicators")
+    print("  retained Peru test weights: 0.35 FH, 0.25 SE, 0.20 LU, 0.12 ES, 0.08 SV")
+    print("  mining: external overlay only; excluded from the PIM calculation")
+    print("  socioeconomic criterion unchanged: 0.45 road/access + 0.55 infrastructure exposure")
 
 
 if __name__ == "__main__":

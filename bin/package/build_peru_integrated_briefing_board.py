@@ -96,14 +96,14 @@ CRITERION_ORDER = [
 CRITERION_SHORT = {
     "flood_hazard": "Flood conditioning",
     "sediment": "Sediment / erosion",
-    "landuse_asm": "Land use / mining",
+    "landuse_asm": "General land use",
     "environmental": "Environmental context",
     "socioeconomic": "Socioeconomic exposure",
 }
 CRITERION_ABBREVIATION = {
     "flood_hazard": "FH",
     "sediment": "SE",
-    "landuse_asm": "LM",
+    "landuse_asm": "LU",
     "environmental": "ES",
     "socioeconomic": "SV",
 }
@@ -115,7 +115,7 @@ PUBLIC_LIMITATION_SUMMARY = {
         "Soil K is coarse (250 m); no measured erosion or sediment-transport observations."
     ),
     "landuse_asm": (
-        "Mining locations are reference points, not verified active footprints or intensity."
+        "BV and BE use single-date test proxies; they do not measure change through time."
     ),
     "environmental": (
         "No national protected-area geometry occurs nearby; the pattern is mainly shaped by water and wetland data."
@@ -127,7 +127,7 @@ PUBLIC_LIMITATION_SUMMARY = {
 PUBLIC_DATA_SUMMARY = {
     "flood_hazard": "CHIRPS seasonal rainfall; SRTM terrain and drainage",
     "sediment": "SoilGrids K; SRTM LS; ESA WorldCover C",
-    "landuse_asm": "ESA WorldCover; 11 nearby INGEMMET mining records",
+    "landuse_asm": "WorldCover LC/BV/built/agriculture; OSM roads; mining external only",
     "environmental": "WorldCover and OSM water; SERNANP protected areas",
     "socioeconomic": "OSM roads and buildings; WorldPop 2020",
 }
