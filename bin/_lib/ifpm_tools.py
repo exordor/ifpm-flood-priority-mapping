@@ -1,8 +1,10 @@
 """Shared helpers for the IFPM bin/ pipeline scripts.
 
 This module absorbs logic that was duplicated across dozens of standalone scripts:
-project-root location, boundary loading, raster I/O, statistics, percentile-clip
-standardization, and the V1 grid-gate invocation. Heavy GIS dependencies (rasterio,
+project-root location, boundary loading, raster I/O, statistics, and the V1
+grid-gate invocation. Numeric standardization lives in the sibling
+``_lib.standardization`` abstraction and is re-exported here for backwards
+compatibility. Heavy GIS dependencies (rasterio,
 numpy, geopandas) are loaded lazily so that `import ifpm_tools` works even in a
 stripped environment, and the error message names the missing package.
 
@@ -22,6 +24,11 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Any
+
+try:  # package import (normal ``_lib.ifpm_tools`` path)
+    from .standardization import standardize
+except ImportError:  # pragma: no cover - legacy direct-module import
+    from standardization import standardize
 
 # Project root: bin/_lib/ifpm_tools.py -> parents[2] = workspace root.
 ROOT: Path = Path(__file__).resolve().parents[2]
@@ -237,43 +244,6 @@ def raster_stats(data, mask=None) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Percentile-clip standardization
-# ---------------------------------------------------------------------------
-
-def standardize(
-    data,
-    nodata: float = NODATA,
-    invert: bool = False,
-    p_low: float = 2.0,
-    p_high: float = 98.0,
-) -> tuple:
-    """Percentile-clip min-max standardization to [0, 1].
-
-    This is the convention used by standardize_v1_terrain.py and the criteria-stack
-    builders: clip to the p_low/p_high percentiles of valid values, then scale to
-    [0,1]. NoData cells stay NoData. If ``invert``, the direction is flipped
-    (higher raw value -> lower score).
-
-    Returns (output_array, low, high) where low/high are the clip bounds actually
-    used (needed by callers that record them in diagnostics).
-    """
-    np = _np()
-    valid = np.isfinite(data) & (data != nodata)
-    values = data[valid]
-    low = float(np.nanpercentile(values, p_low))
-    high = float(np.nanpercentile(values, p_high))
-    if not high > low:
-        raise ValueError(f"Invalid percentile bounds: low={low}, high={high}")
-
-    output = np.full(data.shape, nodata, dtype="float32")
-    scaled = (np.clip(data[valid], low, high) - low) / (high - low)
-    if invert:
-        scaled = 1.0 - scaled
-    output[valid] = scaled.astype("float32")
-    return output, low, high
-
-
-# ---------------------------------------------------------------------------
 # Grid-gate invocation
 # ---------------------------------------------------------------------------
 
@@ -385,4 +355,3 @@ def parse_script_args(
         if val is not None:
             result[key] = val
     return result
-

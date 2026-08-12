@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import csv
+import sys
 from pathlib import Path
 
 import geopandas as gpd
@@ -14,6 +15,9 @@ from rasterio.warp import Resampling, reproject
 
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.standardization import percentile_minmax
+
 SOURCE = ROOT / "outputs/soilgrids_250m_peru_pilot/k_factor_peru_hybas_l7_6070641200_0_5cm_250m.tif"
 REFERENCE = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
 BOUNDARY = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
@@ -38,20 +42,9 @@ def rel(path: Path) -> str:
     return str(path.resolve().relative_to(ROOT))
 
 
-def normalize_within_boundary(
-    data: np.ndarray,
-    inside: np.ndarray,
-) -> tuple[np.ndarray, float, float]:
-    valid = inside & np.isfinite(data)
-    values = data[valid]
-    if values.size == 0:
-        raise ValueError("cannot normalize SoilGrids K without finite Arequipa Region cells")
-    low, high = np.percentile(values, [2.0, 98.0])
-    if not np.isfinite(low) or not np.isfinite(high) or high <= low:
-        raise ValueError(f"invalid SoilGrids K range: low={low}, high={high}")
-    score = np.full(data.shape, np.nan, dtype="float32")
-    score[valid] = np.clip((data[valid] - low) / (high - low), 0.0, 1.0).astype("float32")
-    return score, float(low), float(high)
+# Backwards-compatible name used by the existing Peru chain.  The numeric
+# implementation is centralized in ``bin/_lib/standardization.py``.
+normalize_within_boundary = percentile_minmax
 
 
 def write_raster(path: Path, data: np.ndarray, profile: dict) -> None:

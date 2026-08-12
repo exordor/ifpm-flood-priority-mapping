@@ -26,8 +26,10 @@ OUTPUTS = [ROOT / "outputs/mentor_boss_priority_explanation/dominant_priority_cr
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster
+from _lib.standardization import ensure_unit_interval
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
+normalize_if_needed = ensure_unit_interval
 OUT_DIR = ROOT / "outputs/mentor_boss_priority_explanation"
 NODATA = -9999.0
 
@@ -150,16 +152,6 @@ def read_raster(path: Path, profile: dict | None = None) -> tuple[np.ndarray, di
     return data, out_profile
 
 
-def normalize_if_needed(data: np.ndarray) -> np.ndarray:
-    values = data[np.isfinite(data)]
-    if values.size == 0:
-        raise ValueError("empty raster")
-    if float(values.min()) >= -0.000001 and float(values.max()) <= 1.000001:
-        return np.clip(data, 0.0, 1.0).astype("float32")
-    high = float(values.max())
-    if high <= 0:
-        raise ValueError("non-positive criterion")
-    return np.clip(data / high, 0.0, 1.0).astype("float32")
 def build_site_products(site: Site) -> tuple[dict[str, object], list[dict[str, object]]]:
     weights = read_weights(site.weights_csv, site.experiment_id)
     arrays: list[np.ndarray] = []

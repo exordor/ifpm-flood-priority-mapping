@@ -33,6 +33,15 @@ from _lib.ifpm_tools import write_raster as _write_raster
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 from _lib.ifpm_tools import raster_stats as stats
+from _lib.standardization import percentile_minmax
+
+# Preserve the historical proximity name and constant-layer behaviour while
+# keeping the implementation in the shared standardization abstraction.
+normalize_inverted = partial(
+    percentile_minmax,
+    invert=True,
+    constant_policy="expand",
+)
 OSM_DIR = ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted"
 OUT_DIR = ROOT / "outputs/geofabrik_osm_peru_pilot/peru_hybas_l7_6070641200_proximity"
 REF = ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"
@@ -104,17 +113,6 @@ def proximity_raster(features: gpd.GeoDataFrame, profile: dict, mask: np.ndarray
     return dist.astype("float32")
 
 
-def normalize_inverted(data: np.ndarray, mask: np.ndarray, clip_low: float | None = None) -> tuple[np.ndarray, float, float]:
-    """2-98 percentile min-max inverted: closer (lower distance) -> higher 0-1 value."""
-    values = data[mask & np.isfinite(data)]
-    if values.size == 0:
-        raise ValueError("cannot normalize empty proximity raster")
-    low, high = np.nanpercentile(values, [2, 98])
-    if high <= low:
-        high = low + 1.0
-    out = np.clip(1.0 - (data - low) / (high - low), 0.0, 1.0).astype("float32")
-    out[~mask] = np.nan
-    return out, float(low), float(high)
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     profile, mask = load_reference()

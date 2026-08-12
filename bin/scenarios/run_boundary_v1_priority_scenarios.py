@@ -33,6 +33,7 @@ sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
+from _lib.standardization import ensure_unit_interval
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "priority_scenarios_v0_2"
 CRITERIA_ID = "criteria_stack_v0_2"
@@ -100,18 +101,7 @@ def read_band(path: Path, profile: dict) -> np.ndarray:
     return data
 
 
-def normalize_if_needed(name: str, data: np.ndarray) -> np.ndarray:
-    """Keep 0-1 criteria as-is; max-normalize only if a layer is outside that range."""
-    values = data[np.isfinite(data)]
-    if values.size == 0:
-        raise ValueError(f"empty criterion: {name}")
-    if float(values.max()) <= 1.000001 and float(values.min()) >= -0.000001:
-        return np.clip(data, 0.0, 1.0).astype("float32")
-    max_value = float(values.max())
-    if max_value <= 0:
-        raise ValueError(f"non-positive criterion range: {name}")
-    out = data / max_value
-    return np.clip(out, 0.0, 1.0).astype("float32")
+normalize_if_needed = ensure_unit_interval
 def ahp_slide_weights() -> tuple[dict[str, float], float]:
     vals, vecs = np.linalg.eig(SLIDE_MATRIX)
     idx = int(np.argmax(vals.real))
@@ -224,7 +214,7 @@ def main() -> None:
     SCENARIO_DIR.mkdir(parents=True, exist_ok=True)
     profile = read_reference()
     criteria = {
-        name: normalize_if_needed(name, read_band(path, profile))
+        name: ensure_unit_interval(read_band(path, profile), name=name)
         for name, path in CRITERIA_PATHS.items()
     }
     scenarios, ahp_cr = scenario_weights()

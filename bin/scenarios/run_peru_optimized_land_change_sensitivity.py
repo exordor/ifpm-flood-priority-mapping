@@ -20,6 +20,11 @@ from scipy.signal import fftconvolve
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from bin.scenarios import run_peru_mapbiomas_change_sensitivity as change_runner
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.standardization import positive_density_scale
+
+# Compatibility name retained for the scenario manifest and tests.
+normalize_positive_density = positive_density_scale
 
 
 VERSION_ID = "06_no_mining_optimized_land_change_sensitivity"
@@ -78,27 +83,6 @@ def circular_focal_density(
     usable = valid_mask & (denominator > 0)
     result[usable] = np.clip(numerator[usable] / denominator[usable], 0.0, 1.0)
     return result
-
-
-def normalize_positive_density(
-    density: np.ndarray,
-    percentile: float = NORMALIZATION_PERCENTILE,
-) -> tuple[np.ndarray, float]:
-    """Scale positive density by a robust upper percentile while keeping true zero at zero."""
-    if not 0 < percentile <= 100:
-        raise ValueError("percentile must be in (0, 100]")
-    finite = np.isfinite(density)
-    signal = finite & (density > DENSITY_EPSILON)
-    positive = density[signal]
-    result = np.full(density.shape, np.nan, dtype="float32")
-    result[finite] = 0.0
-    if positive.size == 0:
-        return result, 0.0
-    scale = float(np.percentile(positive, percentile))
-    if scale <= 0:
-        return result, scale
-    result[signal] = np.clip(density[signal] / scale, 0.0, 1.0)
-    return result, scale
 
 
 def read_raster_on_profile(path: Path, profile: dict) -> np.ndarray:

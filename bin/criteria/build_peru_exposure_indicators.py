@@ -40,6 +40,10 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "bin"))
 
 from _lib.ifpm_tools import write_raster as _write_raster
+from _lib.standardization import robust_upper_scale
+
+# Compatibility name retained for the exposure manifest and tests.
+robust_normalize = robust_upper_scale
 
 
 BOUNDARY_ID = "peru_hybas_l7_6070641200"
@@ -64,6 +68,7 @@ HEALTH_MAX_DISTANCE_M = 20000.0
 
 INPUTS = [
     ROOT / "bin/_lib/ifpm_tools.py",
+    ROOT / "bin/_lib/standardization.py",
     ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif",
     ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
     ROOT / "data/raw/worldpop_peru_population/per_ppp_2020_UNadj_peru_hybas_l7_6070641200_bbox.tif",
@@ -104,32 +109,6 @@ def normalize_name(value: object) -> str:
     text = unicodedata.normalize("NFKD", str(value))
     text = "".join(char for char in text if not unicodedata.combining(char))
     return re.sub(r"[^A-Z0-9]+", " ", text.upper()).strip()
-
-
-def robust_normalize(
-    values: np.ndarray,
-    *,
-    upper_percentile: float = 99.0,
-    log1p: bool = False,
-) -> tuple[np.ndarray, float]:
-    """Scale finite non-negative values to 0-1 using a robust upper bound."""
-
-    source = np.asarray(values, dtype="float32")
-    finite = np.isfinite(source)
-    result = np.full(source.shape, np.nan, dtype="float32")
-    if not finite.any():
-        raise ValueError("cannot normalize a raster with no finite values")
-
-    transformed = np.maximum(source[finite], 0.0).astype("float64")
-    if log1p:
-        transformed = np.log1p(transformed)
-    upper = float(np.percentile(transformed, upper_percentile))
-    if not np.isfinite(upper) or upper <= 0.0:
-        result[finite] = 0.0
-        return result, 0.0
-
-    result[finite] = np.clip(transformed / upper, 0.0, 1.0).astype("float32")
-    return result, upper
 
 
 def combine_weighted_complete_case(

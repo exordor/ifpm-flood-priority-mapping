@@ -20,6 +20,7 @@ import csv
 import json
 import urllib.parse
 import urllib.request
+import sys
 from pathlib import Path
 
 import geopandas as gpd
@@ -30,6 +31,9 @@ from scipy.ndimage import distance_transform_edt
 from shapely.geometry import Point
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.standardization import percentile_minmax
+
 INPUTS = [ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg", ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif"]
 OUTPUTS = [ROOT / "outputs/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_mining_pressure_ingemmet_0_1.tif"]
 SERVICE = "https://geocatminnube.ingemmet.gob.pe/arcgis/rest/services/SERV_PEQUENA_MINERIA/MapServer/0"
@@ -129,13 +133,14 @@ def main() -> None:
     else:
         dist = np.full(shape, 1e9, dtype="float32")  # very far -> closeness 0
 
-    # 2-98 percentile inverted (closer -> higher pressure), masked to Arequipa Region.
-    values = dist[mask & np.isfinite(dist)]
-    low, high = (0.0, 1.0) if values.size == 0 else (float(np.percentile(values, 2)), float(np.percentile(values, 98)))
-    if high <= low:
-        high = low + 1.0
-    closeness = np.clip(1.0 - (dist - low) / (high - low), 0.0, 1.0).astype("float32")
-    closeness[~mask] = np.nan
+    # 2-98 percentile inverted (closer -> higher pressure), masked to Arequipa
+    # Region.  The numeric implementation is shared with all other criteria.
+    closeness, low, high = percentile_minmax(
+        dist,
+        mask,
+        invert=True,
+        constant_policy="expand",
+    )
 
     out_profile = profile.copy()
     out_profile.update(driver="GTiff", count=1, dtype="float32", nodata=-9999.0, compress="deflate", tiled=True)

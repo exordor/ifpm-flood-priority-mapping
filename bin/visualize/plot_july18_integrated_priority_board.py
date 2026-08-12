@@ -40,6 +40,12 @@ from matplotlib.ticker import FuncFormatter
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.standardization import ensure_unit_interval
+
+normalize_if_needed = ensure_unit_interval
+
 INPUTS = [
     ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/scenario_weights.csv",
     ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/top20_frequency.tif",
@@ -171,18 +177,6 @@ def read_raster(path: Path, profile: dict | None = None) -> tuple[np.ndarray, di
         data[~np.isfinite(data)] = np.nan
         out_profile = src.profile.copy()
     return data, out_profile
-
-
-def normalize_if_needed(data: np.ndarray) -> np.ndarray:
-    values = data[np.isfinite(data)]
-    if values.size == 0:
-        raise ValueError("empty raster")
-    if float(values.min()) >= -0.000001 and float(values.max()) <= 1.000001:
-        return np.clip(data, 0.0, 1.0).astype("float32")
-    high = float(values.max())
-    if high <= 0:
-        raise ValueError("non-positive criterion")
-    return np.clip(data / high, 0.0, 1.0).astype("float32")
 
 
 def build_site_products(site: Site) -> dict[str, object]:

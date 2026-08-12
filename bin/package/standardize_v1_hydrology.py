@@ -49,6 +49,7 @@ OUTPUTS = [ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_standardiza
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster
+from _lib.standardization import percentile_minmax
 TWI = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_twi.tif"
 DIST = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/hydrology_derivatives/v1_distance_to_drainage_t500.tif"
 V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
@@ -62,20 +63,6 @@ CLIP_HIGH = 98.0
 NODATA = -9999.0
 
 
-def standardize(data: np.ndarray, nodata: float, invert: bool, inside: np.ndarray):
-    """2-98 percentile clip + min-max to 0-1. `inside` is the V1 boundary boolean mask."""
-    valid = inside & np.isfinite(data) & (data != nodata)
-    values = data[valid]
-    low = float(np.nanpercentile(values, CLIP_LOW))
-    high = float(np.nanpercentile(values, CLIP_HIGH))
-    if not (high > low):
-        raise ValueError(f"Invalid percentile bounds: low={low}, high={high}")
-    out = np.full(data.shape, nodata, dtype="float32")
-    scaled = (np.clip(data[valid], low, high) - low) / (high - low)
-    if invert:
-        scaled = 1.0 - scaled
-    out[valid] = scaled.astype("float32")
-    return out, low, high, float(np.nanmean(out[valid])), valid.sum()
 def main() -> None:
     boundary = gpd.read_file(V1_GPKG, layer=V1_LAYER)
     rows = []
@@ -96,7 +83,18 @@ def main() -> None:
             geom = [g for g in bnd.geometry if g is not None and not g.is_empty][0]
             inside = geometry_mask([geom], out_shape=data.shape, transform=ds.transform, invert=True)
 
-        out, low, high, mean_out, n_valid = standardize(data, nodata, invert, inside)
+        out, low, high = percentile_minmax(
+            data,
+            inside,
+            nodata=nodata,
+            invert=invert,
+            p_low=CLIP_LOW,
+            p_high=CLIP_HIGH,
+            output_nodata=nodata,
+        )
+        valid = inside & np.isfinite(data) & (data != nodata)
+        mean_out = float(np.nanmean(out[valid]))
+        n_valid = int(valid.sum())
         out_path = OUT_DIR / outname
         write_raster(out_path, out, profile)
 

@@ -133,6 +133,7 @@ import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import raster_stats as stats
 from _lib.ifpm_tools import write_raster as _write_raster
+from _lib.standardization import percentile_minmax
 from functools import partial
 
 write_raster = partial(_write_raster, sanitize=True)
@@ -200,12 +201,12 @@ def binary_proximity_score(binary: np.ndarray, profile: dict, mask: np.ndarray) 
         return out
     res = abs(float(profile["transform"].a))
     dist = distance_transform_edt(~binary) * res
-    values = dist[mask & np.isfinite(dist)]
-    low, high = np.nanpercentile(values, [2, 98])
-    if not np.isfinite(high) or high <= low:
-        high = low + 1.0
-    out = np.clip(1.0 - (dist - low) / (high - low), 0.0, 1.0).astype("float32")
-    out[~mask] = np.nan
+    out, _, _ = percentile_minmax(
+        dist,
+        mask,
+        invert=True,
+        constant_policy="expand",
+    )
     return out
 
 

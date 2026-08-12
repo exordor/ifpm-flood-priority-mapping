@@ -34,6 +34,10 @@ sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
+from _lib.standardization import percentile_minmax
+
+# Compatibility name retained for the Peru chain; implementation is shared.
+normalize_within_boundary = percentile_minmax
 BOUNDARY_ID = "peru_hybas_l7_6070641200"
 EXPERIMENT_ID = "rainfall_criterion"
 OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
@@ -159,24 +163,6 @@ def fill_edge_nodata(data: np.ndarray, inside: np.ndarray) -> tuple[np.ndarray, 
     filled = work[row_idx, col_idx]
     filled[~inside] = np.nan
     return filled, {"hole_cells": int(holes.sum()), "interior_holes": interior, "edge_sliver_holes": edge_sliver}
-
-
-def normalize_within_boundary(
-    data: np.ndarray,
-    inside: np.ndarray,
-) -> tuple[np.ndarray, float, float]:
-    """Normalize rainfall on the study-area support using a 2-98% value function."""
-
-    valid = inside & np.isfinite(data)
-    values = data[valid]
-    if values.size == 0:
-        raise ValueError("cannot normalize rainfall without finite boundary cells")
-    low, high = np.percentile(values, [2.0, 98.0])
-    if not np.isfinite(low) or not np.isfinite(high) or high <= low:
-        raise ValueError(f"invalid boundary rainfall range: low={low}, high={high}")
-    score = np.full(data.shape, np.nan, dtype="float32")
-    score[valid] = np.clip((data[valid] - low) / (high - low), 0.0, 1.0).astype("float32")
-    return score, float(low), float(high)
 
 
 def main() -> None:
