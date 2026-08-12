@@ -76,6 +76,11 @@ from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 from _lib.ifpm_tools import raster_stats as stats
+from _lib.standardization import percentile_minmax
+
+# Compatibility name retained for callers and run manifests.  Numeric logic is
+# centralized in the shared standardization layer.
+normalize_2_98 = percentile_minmax
 BOUNDARY_ID = "peru_hybas_l7_6070641200"
 EXPERIMENT_ID = "criteria_stack"
 OUT_DIR = ROOT / f"outputs/srtm_1arcsec_peru_pilot/{EXPERIMENT_ID}"
@@ -126,21 +131,6 @@ def read_band(path: Path, profile: dict) -> np.ndarray:
             data[data == src.nodata] = np.nan
     data[~np.isfinite(data)] = np.nan
     return data
-
-
-def normalize_2_98(data: np.ndarray, mask: np.ndarray, invert: bool = False) -> tuple[np.ndarray, float, float]:
-    """2-98 percentile min-max. invert=True for distance (closer=higher value)."""
-    values = data[mask & np.isfinite(data)]
-    if values.size == 0:
-        raise ValueError("cannot normalize empty raster")
-    low, high = np.nanpercentile(values, [2, 98])
-    if not np.isfinite(low) or not np.isfinite(high) or high <= low:
-        raise ValueError(f"bad percentile range: {low}, {high}")
-    out = np.clip((data - low) / (high - low), 0.0, 1.0).astype("float32")
-    if invert:
-        out = 1.0 - out
-    out[~mask] = np.nan
-    return out.astype("float32"), float(low), float(high)
 
 
 def weighted_average(parts: list[tuple[np.ndarray, float]], mask: np.ndarray) -> np.ndarray:

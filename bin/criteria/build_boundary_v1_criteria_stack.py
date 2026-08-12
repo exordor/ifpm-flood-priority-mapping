@@ -33,6 +33,10 @@ from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 from _lib.ifpm_tools import raster_stats as stats
+from _lib.standardization import percentile_minmax
+
+# Compatibility name retained for the v0.2 stack; implementation is shared.
+normalize_2_98 = percentile_minmax
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "criteria_stack_v0_2"
 OUT_DIR = ROOT / f"outputs/{BOUNDARY_ID}/{EXPERIMENT_ID}"
@@ -113,18 +117,6 @@ def read_band(path: Path, profile: dict) -> np.ndarray:
             data[data == src.nodata] = np.nan
     data[~np.isfinite(data)] = np.nan
     return data
-
-
-def normalize_2_98(data: np.ndarray, mask: np.ndarray) -> tuple[np.ndarray, float, float]:
-    values = data[mask & np.isfinite(data)]
-    if values.size == 0:
-        raise ValueError("cannot normalize empty raster")
-    low, high = np.nanpercentile(values, [2, 98])
-    if not np.isfinite(low) or not np.isfinite(high) or high <= low:
-        raise ValueError(f"bad percentile range: {low}, {high}")
-    out = np.clip((data - low) / (high - low), 0.0, 1.0).astype("float32")
-    out[~mask] = np.nan
-    return out, float(low), float(high)
 
 
 def weighted_average(parts: list[tuple[np.ndarray, float]], mask: np.ndarray) -> np.ndarray:

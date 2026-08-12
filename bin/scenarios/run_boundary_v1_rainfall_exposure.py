@@ -49,6 +49,7 @@ sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
+from _lib.standardization import ensure_unit_interval, percentile_minmax_array
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "rainfall_exposure_v0_4"
 OUT_DIR = ROOT / f"outputs/{BOUNDARY_ID}/{EXPERIMENT_ID}"
@@ -167,29 +168,9 @@ def read_band(path: Path, profile: dict) -> np.ndarray:
     return data
 
 
-def normalize_if_needed(data: np.ndarray) -> np.ndarray:
-    values = data[np.isfinite(data)]
-    if values.size == 0:
-        raise ValueError("empty criterion")
-    if float(values.max()) <= 1.000001 and float(values.min()) >= -0.000001:
-        return np.clip(data, 0.0, 1.0).astype("float32")
-    max_value = float(values.max())
-    if max_value <= 0:
-        raise ValueError("non-positive criterion range")
-    return np.clip(data / max_value, 0.0, 1.0).astype("float32")
-
-
-def normalize_2_98(data: np.ndarray, mask: np.ndarray) -> np.ndarray:
-    valid = mask & np.isfinite(data)
-    values = data[valid]
-    if values.size == 0:
-        raise ValueError("cannot normalize an empty boundary layer")
-    low, high = np.percentile(values, [2.0, 98.0])
-    if not np.isfinite(low) or not np.isfinite(high) or high <= low:
-        raise ValueError(f"invalid 2-98 percentile range: low={low}, high={high}")
-    score = np.full(data.shape, np.nan, dtype="float32")
-    score[valid] = np.clip((data[valid] - low) / (high - low), 0.0, 1.0)
-    return score
+# Compatibility names retained for callers; implementations are centralized.
+normalize_if_needed = ensure_unit_interval
+normalize_2_98 = percentile_minmax_array
 
 
 def combine_weighted_layers(

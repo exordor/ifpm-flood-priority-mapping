@@ -38,6 +38,7 @@ sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
+from _lib.standardization import ensure_unit_interval
 BOUNDARY_ID = "boundary_v1"
 EXPERIMENT_ID = "rainfall_sensitivity_v0_3"
 OUT_DIR = ROOT / f"outputs/{BOUNDARY_ID}/{EXPERIMENT_ID}"
@@ -106,17 +107,7 @@ def read_band(path: Path, profile: dict) -> np.ndarray:
     return data
 
 
-def normalize_if_needed(name: str, data: np.ndarray) -> np.ndarray:
-    """Keep 0-1 criteria as-is; max-normalize absolute-range criteria to [0,1]."""
-    values = data[np.isfinite(data)]
-    if values.size == 0:
-        raise ValueError(f"empty criterion: {name}")
-    if float(values.max()) <= 1.000001 and float(values.min()) >= -0.000001:
-        return np.clip(data, 0.0, 1.0).astype("float32")
-    max_value = float(values.max())
-    if max_value <= 0:
-        raise ValueError(f"non-positive criterion range: {name}")
-    return np.clip(data / max_value, 0.0, 1.0).astype("float32")
+normalize_if_needed = ensure_unit_interval
 CLAIM_NOTE = (
     "SENSITIVITY SCENARIO: provisional MCDA overlay testing whether a rainfall "
     "criterion shifts the v0.2 top-20% priority-area pattern. Not a validated flood-risk or "
@@ -234,7 +225,7 @@ def main() -> None:
     profile = read_reference()
 
     criteria = {
-        name: normalize_if_needed(name, read_band(path, profile))
+        name: ensure_unit_interval(read_band(path, profile), name=name)
         for name, path in CRITERIA_PATHS.items()
     }
     scenarios = scenario_weights()

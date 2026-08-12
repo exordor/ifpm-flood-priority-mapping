@@ -25,6 +25,12 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "bin"))
+from _lib.standardization import ensure_unit_interval
+
+normalize_if_needed = ensure_unit_interval
+
 OUT_DIR = ROOT / "outputs/sensitivity_figures/single_priority_maps"
 
 INPUTS = [
@@ -181,15 +187,6 @@ def read_mean_weights(site: Site) -> dict[str, float]:
     if not grouped:
         raise ValueError(f"No weights for {site.experiment_id}: {site.weights_csv}")
     return {criterion: float(np.mean(values)) for criterion, values in grouped.items()}
-
-
-def normalize_if_needed(data: np.ndarray) -> np.ndarray:
-    values = data[np.isfinite(data)]
-    if values.size == 0:
-        raise ValueError("empty raster")
-    if float(values.min()) >= -1e-6 and float(values.max()) <= 1.000001:
-        return np.clip(data, 0.0, 1.0).astype("float32")
-    return np.clip(data / float(values.max()), 0.0, 1.0).astype("float32")
 
 
 def dominant_driver(site: Site) -> tuple[np.ndarray, dict]:

@@ -46,6 +46,7 @@ OUTPUTS = [ROOT / "outputs/boundary_v1/rainfall_sensitivity_v0_3/criteria/rainfa
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 from _lib.ifpm_tools import write_raster as _write_raster, parse_script_args
+from _lib.standardization import ensure_unit_interval
 from functools import partial
 write_raster = partial(_write_raster, sanitize=True)
 BOUNDARY_ID = "boundary_v1"
@@ -225,8 +226,7 @@ def main() -> None:
     # and ranking is preserved.
     if raw_max <= 0:
         raise ValueError(f"non-positive rainfall range, max={raw_max}")
-    score = (raw / raw_max).astype("float32")
-    score = np.clip(score, 0.0, 1.0)
+    score = ensure_unit_interval(raw, name="rainfall_climatology")
     score[~valid] = np.nan
 
     raw_path = OUT_DIR / f"{CRITERION_NAME}_raw_mm_per_season_PROVISIONAL_30m.tif"
