@@ -15,7 +15,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "bin/package/build_ifpm_qgis_project_package.py"
 PACKAGE = ROOT / "outputs/qgis_project_package"
-PORTABLE = ROOT / "exports/IFPM_QGIS_Project_Package"
+PORTABLE = (
+    ROOT
+    / "exports/qgis_packages/_archive/legacy_peru_zimbabwe_combined/IFPM_QGIS_Project_Package"
+)
 GENERATED_PACKAGE_AVAILABLE = (PACKAGE / "validation.json").exists() and PORTABLE.exists()
 
 
@@ -90,6 +93,7 @@ class IfpmQgisProjectPackageTest(unittest.TestCase):
         validator = ROOT / "bin/validate/validate_ifpm_qgis_layer_rendering.py"
         subprocess.run([sys.executable, str(SCRIPT)], cwd=ROOT, check=True)
         subprocess.run([sys.executable, str(validator)], cwd=ROOT, check=True)
+        self.assertFalse((ROOT / "exports/IFPM_QGIS_Project_Package").exists())
         report = json.loads(
             (PACKAGE / "layer_qa/layer_qa.json").read_text(encoding="utf-8")
         )

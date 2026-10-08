@@ -1,0 +1,33 @@
+{
+  "radii_m": [
+    0,
+    30,
+    50,
+    100,
+    200
+  ],
+  "local_background_radius_m": 1000,
+  "reach_groups": {
+    "market_square": [
+      "GS17-01"
+    ],
+    "neue_strasse": [
+      "GS17-04"
+    ],
+    "lower_abzucht_trollmoench": [
+      "GS17-02",
+      "GS17-03",
+      "GS17-05",
+      "GS17-06",
+      "GS17-07",
+      "GS17-09"
+    ],
+    "theresienhof": [
+      "GS17-08"
+    ]
+  },
+  "grouping_basis": "Provisional named locality/reach grouping, not surveyed river segmentation or statistically independent units. Preserve all records; first average records sharing a PIM cell within each group, then average unique cells per group, then give each of four groups equal weight. No best-hit representative selection.",
+  "radius_method": "0 m: containing pixel. Positive radii: presence of a High cell centre within Euclidean radius. Not calibrated location error bounds. NoData excluded from background denominator, never counted low.",
+  "background_method": "Uniform valid pixel centres, full PIM domain and union of 1000 m around reference locations. Local background is conditioned on reported sites, not unaffected controls. Nearest High search uses all valid PIM cells, including outside each background mask; no support beyond raster extent.",
+  "interpretation": "Descriptive sensitivity only, not accuracy or statistical significance. Evidence types remain separate; evacuation and response do not prove inundation. Coordinate precision estimates in source catalog are unverified. Sources span multiple event/response days; nominal event_date is not a per-location observation date."
+}

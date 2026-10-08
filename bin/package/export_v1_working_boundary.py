@@ -32,11 +32,9 @@ INPUTS = [ROOT / "outputs/_archive/superseded_outlet_exploration_2026-06/candida
 OUTPUTS = [ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"]
 OUT_DIR = ROOT / "outputs/v1_working_boundary"
 OUT_GPKG = OUT_DIR / "v1_working_boundary.gpkg"
-# Input outlet-exploration products were archived 2026-07-02 to
-# outputs/_archive/superseded_outlet_exploration_2026-06/ (the V1 boundary they
-# produced is already in OUT_GPKG and is the active boundary). These paths point
-# at the archive so the script stays re-runnable if the boundary ever needs
-# regenerating; the directory must be restored from _archive first.
+# Historical reconstruction inputs were removed during the 2026-08-18 output
+# cleanup. OUT_GPKG remains the active frozen boundary. Re-running this legacy
+# exporter requires re-deriving the outlet-review inputs from registered raw data.
 SOURCE_CATCHMENTS = ROOT / "outputs/_archive/superseded_outlet_exploration_2026-06/candidate_outlet_discovery/candidate_catchments.gpkg"
 VISUAL_GPKG = ROOT / "outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/visual_outlet_candidates.gpkg"
 REVIEW_GPKG = ROOT / "outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/professional_outlet_review_layers.gpkg"

@@ -3,6 +3,40 @@
 Status: active. Why each major choice was made. Each entry: id, date, context,
 decision, reason, alternatives, consequences.
 
+## D-PERU-SECOCHA-ACTIVE — Secocha replaces the former Peru area as active case
+
+- **Date:** 2026-08-09.
+- **Context:** The Secocha 2023 official INGEMMET/INDECI evidence package is
+  available, but the Secocha anchor lies about 117.7 km outside the former
+  `peru_hybas_l7_6070641200` model footprint. The user directed that the Peru
+  research area switch to Secocha and that the former area be frozen.
+- **Decision:** Activate `peru_secocha_a7367_reference_extent_v1`, a provisional
+  30 km² EPSG:32718 working window read from the coordinate frame of INGEMMET
+  A7367 Map 7. Freeze `peru_hybas_l7_6070641200` and all existing outputs under
+  `outputs/srtm_1arcsec_peru_pilot/` as a read-only historical baseline.
+- **Reason:** A like-for-like model rerun must spatially cover the historical
+  event. Keeping the old area active would make Secocha validation impossible;
+  overwriting it would destroy the existing baseline and provenance.
+- **Alternatives:** continue the former area and keep Secocha external only
+  (rejected by the scope change); overwrite the former outputs (rejected because
+  it destroys reproducibility); call the A7367 reference box a catchment or
+  event footprint (rejected because the evidence does not support that claim).
+- **Consequences:**
+  - The active boundary is a `diagnostic_only` reference extent, not a final
+    catchment or digitized debris-flow footprint.
+  - The old priority raster, run manifest and boundary are checksum-bound in
+    `outputs/srtm_1arcsec_peru_pilot/FROZEN_BASELINE.json`.
+  - New model outputs must use
+    `outputs/peru_secocha_a7367_reference_extent_v1/`.
+  - The area switch does not change PIM weights. Mining remains excluded from
+    the no-mining PIM score and is added only as an external overlay.
+  - Secocha-specific acquisition and the full five-criterion rerun were
+    completed on 2026-08-09 with unchanged Supervisor v07 weights. On 2026-08-11,
+    an original INGEMMET A7367 layer-6 query and a separate Map 7 event-class
+    digitization candidate were added. The 2023 event still cannot be called
+    completed validation until the candidate geometry is independently reviewed
+    and the strict NoData coverage limitation is resolved or explicitly accepted.
+
 ## D-VERSION-B — 2026-06-16 slide is the authoritative methodology
 
 - **Date:** 2026-07-02 (recorded), 2026-06-16 (slide received).

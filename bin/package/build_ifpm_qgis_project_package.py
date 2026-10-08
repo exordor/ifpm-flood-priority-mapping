@@ -32,7 +32,10 @@ STYLE_DIR = OUT_DIR / "styles"
 MANIFEST = OUT_DIR / "manifest.csv"
 VALIDATION = OUT_DIR / "validation.json"
 README = OUT_DIR / "README.txt"
-PORTABLE_DIR = ROOT / "exports/IFPM_QGIS_Project_Package"
+PORTABLE_DIR = (
+    ROOT
+    / "exports/qgis_packages/_archive/legacy_peru_zimbabwe_combined/IFPM_QGIS_Project_Package"
+)
 
 def discover_qgis_app() -> Path:
     configured = os.environ.get("QGIS_APP_PATH")

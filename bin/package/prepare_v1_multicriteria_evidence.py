@@ -12,7 +12,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT_DIR = ROOT / "outputs/v1_multicriteria_evidence_package"
-# Archived 2026-07-02: see outputs/_archive/superseded_outlet_exploration_2026-06/.
+# Historical review inputs were removed during the 2026-08-18 output cleanup.
 REVIEW_GPKG = ROOT / "outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/professional_outlet_review_layers.gpkg"
 V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
 TERRAIN_DIR = ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_standardization"

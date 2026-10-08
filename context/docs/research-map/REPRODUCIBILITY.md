@@ -105,13 +105,18 @@ range, uncertainty, and lineage.
 
 ### Peru rule
 
-After D-PERU-FIRST (2026-07-06), Peru work is the active mainline. Arequipa Region may be
-used for Peru-first prototype outputs: five PIM criteria maps, AHP-weighted
-priority maps, top-priority classes, and mining overlay. Arequipa Region remains
-`provisional`; final flood-risk, final rescue-priority, and final study-area
-claims remain blocked until validation and mentor approval. Final
-Zimbabwe-Peru comparison remains secondary and blocked until both countries
-share harmonized criteria, normalization, thresholds, and claim rules.
+After D-PERU-SECOCHA-ACTIVE (2026-08-09), Peru work remains the active
+mainline but the active boundary is `peru_secocha_a7367_reference_extent_v1`.
+The former `peru_hybas_l7_6070641200` output root is a frozen baseline and may
+be read for provenance/comparison only; new model writes there are prohibited.
+Secocha may be used for like-for-like prototype outputs: five PIM criteria
+maps, AHP-weighted priority maps, top-priority classes, and a separate mining
+overlay. The A7367 Map 7 reference extent remains `diagnostic_only`: it is not
+an event footprint or hydrologic catchment. Final flood-risk, rescue-priority,
+study-area and validation claims remain blocked until stronger boundary/event
+geometry evidence and validation are complete. Final Zimbabwe-Peru comparison
+remains secondary and blocked until both countries share harmonized criteria,
+normalization, thresholds, and claim rules.
 
 ### Global scope statement
 
@@ -566,11 +571,10 @@ bash bin/validate-boundary.sh
 
 - V1/V2 R-factor and USLE A products are deprecated; do not regenerate the old
   workflow. See `RESULTS.md` §R-factor.
-- Arequipa Region — a Pacific-slope catchment in Arequipa Region, ~2745 km², arid, mainly
-  the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city — is the
-  active Peru-first working case, but remains provisional and not a final
-  research-selected Peru study area; replace if the mentor names a Peru site.
-- Arequipa Region and V1 reference grids are separate (EPSG:32718 vs EPSG:32735); do not
+- Secocha's active A7367 Map 7 reference extent is provisional and not a final
+  catchment, event footprint, or research-selected Peru study area. The former
+  Vitor-La Joya-Santa Rita de Siguas / HydroBASINS area is frozen.
+- Secocha and V1 reference grids are separate (EPSG:32718 vs EPSG:32735); do not
   cross-overlay without reprojecting to a shared grid.
 - 16 hits of the deprecated `R-invariant` shorthand remain in the dead V2
   R-factor set; deferred until V2 resumes.

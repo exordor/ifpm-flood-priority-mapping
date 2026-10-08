@@ -316,7 +316,10 @@ PIM = 0.35 × Flood        (FH)
 成图不只是渲染颜色，还有一套样式与可移植规则：
 
 ### 栅格样式（`.qml`）
-每个栅格层配一个 `.qml` 样式文件（`exports/IFPM_QGIS_Project_Package/styles/`），
+每个栅格层配一个 `.qml` 样式文件。当前独立包位于
+`exports/qgis_packages/<site>/<FullAudit|ReviewMap>/styles/`；旧 Peru/Zimbabwe
+合并包只读归档在
+`exports/qgis_packages/_archive/legacy_peru_zimbabwe_combined/`。
 关键统一规则：
 - **NoData → 透明**：所有 PIM 相关栅格的 NoData 设为透明，避免把"无数据"
   误显示成"低风险绿色"。

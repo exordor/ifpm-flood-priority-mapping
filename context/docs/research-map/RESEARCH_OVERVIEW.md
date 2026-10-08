@@ -8,8 +8,16 @@ IFPM is now an exploratory **Peru-first flood-prioritisation modelling
 workspace** for semi-arid, mining-influenced catchments. The active main case
 is:
 
-- **Arequipa Region, Peru** — mainly the Vitor-La Joya-Santa Rita de Siguas
-  catchment west of Arequipa city (Arequipa Region, provisional Peru main case)
+- **Secocha, Peru** — the current working boundary is
+  `peru_secocha_a7367_reference_extent_v1`, a provisional 30 km² reference
+  extent read from the coordinate frame of INGEMMET A7367 Map 7. It supports a
+  like-for-like PIM rerun and the separate Secocha 2023 historical-event
+  validation package, but it is not itself an event footprint or catchment.
+
+The former Arequipa Region / Vitor-La Joya-Santa Rita de Siguas boundary
+`peru_hybas_l7_6070641200` is frozen as the previous-area baseline from
+2026-08-09. Existing outputs remain available for provenance and comparison;
+they no longer define the active research area and must not be overwritten.
 
 **Upper Mzingwane Catchment, Zimbabwe** remains a secondary / background
 comparison case and a reusable method-development baseline, but it is no longer
@@ -40,6 +48,10 @@ story needs them. The end product is a prototype screening map indicating where
 further flood-impact assessment and intervention planning should focus,
 followed by a mining overlay to test whether mapped mining evidence coincides
 with higher-priority screening zones.
+
+After the 2026-08-09 area switch, this completion sequence applies to Secocha.
+The area switch does not change the no-mining PIM formula or promote mining
+into the score; mining remains a later external overlay.
 
 ## Research scope
 
@@ -165,28 +177,33 @@ does not maintain a queue of "questions to ask the mentor".
    marginal weighted SD share. These are covariance-blind diagnostics, not
    ranking attribution or replacement weights;
    they do not by themselves justify forcing component means to match.
-4. **Peru boundary** — the active working boundary displayed externally as
-   **Arequipa Region** is HydroBASINS L7 `6070641200`. It remains a provisional
-   southern Peru comparison catchment, mainly covering the
-   Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It is chosen
-   by a selection rule, not a final research-selected site. Default: keep Arequipa Region
-   and complete the Peru workflow first; replace only if the mentor names a
-   different Peru site.
-5. **Validation data** — Peru has 25 in-boundary SINPAD flood-relevant emergency
-   records for point comparison. Twelve fall on the complete five-criterion
-   support domain and two of those twelve are in the selected quintile. Only one
-   of four flood-specific records is scoreable and none is selected. The other
-   records mainly coincide with K-factor gaps. This is sparse point co-location
-   evidence, not observed flood extent or independent validation. Default:
-   outputs stay at priority/susceptibility level, never labelled as validated risk.
-6. **Sediment criterion** — Peru now uses an additive AHP combination of
+4. **Peru boundary** — the active working boundary is
+   `peru_secocha_a7367_reference_extent_v1`, a provisional 30 km² Secocha
+   reference window from A7367 Map 7. It is not a catchment or event footprint.
+   The former HydroBASINS L7 `6070641200` boundary is frozen. Default: build the
+   Secocha workflow into its new output root and do not write into the frozen
+   former-area tree.
+5. **Validation data** — Secocha has an official INGEMMET/INDECI historical
+   event package with field anchors, mapped hazard classes and report-dated
+   impacts. The like-for-like Secocha PIM rerun is complete, and the two
+   explicit 5 February classes from A7367 Map 7 now have a reproducible
+   semi-automatic digitization candidate. PIM coverage of the candidate event
+   cells is only 66.2%, so the current 19.1% High overlap must be reported with
+   that coverage denominator. Analyst polygon review and an independent event
+   footprint are still required before completed validation. The 25
+   SINPAD records and their prior co-location statistics belong to the frozen
+   former-area baseline, not the active Secocha case. Default: outputs remain
+   at priority/susceptibility level until the observed event-footprint
+   comparison is complete.
+6. **Sediment criterion** — the frozen former-area Peru model used an additive AHP combination of
    independently normalized SoilGrids K (0.30), SRTM LS (0.45), and WorldCover
    C (0.25). Sediment coverage is 95.1101%. The final PIM is scoreable over
-   95.0998% of Arequipa Region on the five-criterion common-support domain. The remaining
+   95.0998% of its boundary on the five-criterion common-support domain. The remaining
    4.9002% is unscored: 3.7573% lacks LS, 1.1326% lacks K, and 0.0103% lacks
    other required evidence. Support-class rasters and hatching expose those
    cells without imputation or weight renormalization. This is an erosion-source priority
    indicator, not measured sediment transport.
+   These values are frozen-baseline diagnostics and must be recomputed for Secocha.
 7. **Criterion proxies and source dependence** — Flood uses rainy-season CHIRPS
    climatology rather than an event-extreme rainfall metric. Sediment C and Land
    Use pressure have different value functions but share WorldCover

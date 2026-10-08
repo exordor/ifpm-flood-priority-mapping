@@ -201,11 +201,15 @@ explicitly asks to pause.
 
 ## Active Prototype Scope
 
-The current practical prototype path is Peru-first controlled experimentation within Arequipa
-Region, using the internal boundary id `peru_hybas_l7_6070641200`
-(`outputs/srtm_1arcsec_peru_pilot/`), not a full hydrodynamic flood model and not a final thesis
-claim. `boundary_v1` / Upper Mzingwane remains a secondary/background method-development case unless
-explicitly reopened.
+The current practical prototype path is Peru-first controlled experimentation
+within Secocha, using the active boundary id
+`peru_secocha_a7367_reference_extent_v1`. This is a provisional 30 km² A7367
+Map 7 reference window, not a hydrologic catchment, event footprint, full
+hydrodynamic flood model, or final thesis claim. The former Peru boundary
+`peru_hybas_l7_6070641200` and `outputs/srtm_1arcsec_peru_pilot/` are a frozen
+baseline: read-only for provenance/comparison and blocked from new model
+writes. `boundary_v1` / Upper Mzingwane remains a secondary/background
+method-development case unless explicitly reopened.
 
 Prefer scoped experiments with:
 
@@ -319,11 +323,15 @@ R-factor / RUSLE:
 
 Peru:
 
-- Peru work is the active mainline after the 2026-07-06 Peru-first decision. Continue Arequipa Region prototype
-  outputs first: five PIM criteria maps, AHP-weighted prioritisation maps, top-priority classes, and
-  mining overlay.
-- Arequipa Region remains provisional and must not be described as a final research-selected Peru study area or
-  validated rescue-decision map.
+- Peru work remains the active mainline after the 2026-08-09 switch to Secocha.
+  Continue Secocha prototype outputs first: five PIM criteria maps,
+  AHP-weighted prioritisation maps, top-priority classes, historical-event
+  comparison, and a separate mining overlay.
+- Secocha's A7367 reference extent remains provisional and must not be described
+  as a catchment, observed event footprint, final research-selected Peru study
+  area, or validated rescue-decision map.
+- Do not write new model outputs into the frozen
+  `outputs/srtm_1arcsec_peru_pilot/` tree.
 - Final Zimbabwe-Peru comparison remains blocked until both countries share harmonized criteria,
   normalization, thresholds, and claim rules.
 - Do not block Peru prioritisation work merely because the Zimbabwe final methodology is not locked.

@@ -10,15 +10,14 @@ under `context/docs/project-management/_archive/superseded_by_research_map_2026-
 
 ## File index
 
-All nine files are **active** (none are drafts). The first three are the small
-set of binding **control files** that AGENTS.md names and that must stay
-internally consistent with the codebase and each other. The remaining six are
-derived working docs — append-only registers and indexes fed by the experiments
-and decisions recorded in the control files.
+All nine files listed below are **active**. Three are binding **control files**
+named in AGENTS.md and must stay consistent with the codebase and each other.
+The remaining six, including this README, are derived working documents and
+indexes fed by the experiments and decisions recorded in the control files.
 
 | File | Role | Tier |
 |---|---|---|
-| `README.md` | this index | control |
+| `README.md` | this index | active (derived) |
 | `RESEARCH_OVERVIEW.md` | what the project is researching, scope, current status | **control** (named in AGENTS.md) |
 | `REPRODUCIBILITY.md` | environment, runbook, preflight gate, claim-level ladder, grid rules | **control** (named in AGENTS.md) |
 | `EXPERIMENTS.md` | master registry of every `experiment_id` joined to IFPM-NNN task IDs | **control** (named in AGENTS.md) |
@@ -69,3 +68,7 @@ Created 2026-07-05 by consolidating these now-archived source files (see
 `project_objective_calibration_2026-07-02.md`, `july18_deliverable_scope_2026-07-02.md`,
 `boundary_v1_criteria_stack_v0_2_2026-06-29.md`, `terminology_audit_2026-07-02.md`,
 and the old `project-management/README.md` index.
+
+The completed old-area [Peru PIM refresh plan](../project-management/_archive/superseded_context_2026-09-07/PERU_PIM_REFRESH_PLAN.md)
+is archived. Its commands target the frozen former Peru baseline and must not
+be used as current execution instructions.

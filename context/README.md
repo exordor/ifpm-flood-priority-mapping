@@ -11,10 +11,11 @@ It is not a deliverable code repository.
 - `docs/research-review/`: reviewed dataset inventory and methodology notes.
 - `docs/deep-research/`: fact-checking and mentor-requirement review.
 - `docs/data-management/`: dataset download registry templates and preflight checks.
-- `docs/project-management/`: internal task progress boards and planning notes.
-- `docs/mentor-explanation/`: English and Chinese oral explanation guides.
-- `docs/project-analysis/`: IFPM HiWi project analysis and workflow retrospectives.
-- `assets/images/`: generated images used in internal documents.
+- [Research map](docs/research-map/README.md): current scope, experiments, results and execution rules.
+- [Project-management archive](docs/project-management/README.md): historical plans only, superseded by the research map.
+- `docs/mentor-explanation/`: dated mentor packets, source slide records and reusable templates; check the current research scope before reusing older wording.
+- `docs/project-analysis/`: workflow retrospectives; the initial project analysis is in the project-management archive.
+- `references/`: reference papers (PDFs ignored by Git).
 
 ## Rule
 

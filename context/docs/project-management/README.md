@@ -28,3 +28,7 @@ that are preserved verbatim as the lineage source of record:
   exploration notes.
 - `_archive/superseded_process_notes_2026-06/` — superseded process / experiment
   notes.
+
+- [_archive/superseded_context_2026-09-07/](./_archive/superseded_context_2026-09-07/README.md) —
+  initial workspace design, Version A project analysis and the completed former-area
+  Peru PIM refresh plan. Originals are preserved; use the research map for current scope.
