@@ -28,9 +28,8 @@ IFPM 是一个洪水优先级（flood prioritisation）多准则原型。它把�
 | `tests/` | 60 个测试文件 | 是 |
 | `context/docs/research-map/` | 项目主记录：`RESEARCH_OVERVIEW.md`（范围）、`EXPERIMENTS.md`（每个实验的命令和结论）、`DECISION_LOG.md`、`RESULTS.md` 等 | 是 |
 | `context/docs/data-management/registry/` | 每个数据集的来源、许可和下载记录 | 是 |
-| `context/docs/mentor-explanation/` | 给导师的消息和材料（含 Supervisor 移交草稿） | 是 |
-| `context/docs/*/_archive/` | 已归档的旧计划和记录，只作历史参考 | 是 |
-| `context/references/` | 参考论文 PDF | 否 |
+| `context/docs/glossary.md`、`context/docs/methodology/` | 术语表；PIM 方法说明（中文） | 是 |
+| `context/docs/mentor-explanation/` | 只剩给 Supervisor 的英文移交草稿和邮件草稿 | 是 |
 | `data/raw/`、`data/validation/` | 原始数据，约 17 GB | 否 |
 | `outputs/` | 所有结果，索引见 `outputs/README.md` | 否 |
 | `exports/` | 打包好的移交包和分享包（zip） | 否 |
@@ -100,3 +99,5 @@ QGIS 用来打开审阅项目。现有 `.venv` 是在 macOS 上建的，换机�
 - 删除 `bin/_archive/` 里 22 个废弃脚本和两张无用的生成图片（可从 Git 历史找回）。
 - 重写 `outputs/README.md`，删除过时的 `outputs/OUTPUTS_INDEX.csv`；更新 `README.md`、`bin/README.md`、`context/README.md`。
 - 参考论文移到 `context/references/`。
+
+2026-10-09 补充精简 `context/`：只保留研究记录、数据登记、术语表、方法说明和 Supervisor 移交草稿，另外留下 `context/configs/`，因为 `bin/` 里的脚本要读取它。导师沟通稿、早期核查报告、旧计划和归档、下载前检查、参考网格规则、导师方法框架截图和最初的数据清单都已删除（Git 历史里可以找回）。参考论文 PDF 也已删除，它不在 Git 里。保留下来的研究记录里还有少数路径指向已删除的文件，这些是历史出处，需要时去 Git 历史里查。

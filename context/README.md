@@ -7,15 +7,16 @@ It is not a deliverable code repository.
 
 ## Contents
 
-- `docs/original/`: original dataset inventory Markdown source and local binary references.
-- `docs/research-review/`: reviewed dataset inventory and methodology notes.
-- `docs/deep-research/`: fact-checking and mentor-requirement review.
-- `docs/data-management/`: dataset download registry templates and preflight checks.
-- [Research map](docs/research-map/README.md): current scope, experiments, results and execution rules.
-- [Project-management archive](docs/project-management/README.md): historical plans only, superseded by the research map.
-- `docs/mentor-explanation/`: dated mentor packets, source slide records and reusable templates; check the current research scope before reusing older wording.
-- `docs/project-analysis/`: workflow retrospectives; the initial project analysis is in the project-management archive.
-- `references/`: reference papers (PDFs ignored by Git).
+- [Research map](docs/research-map/README.md): current scope, experiments, results, decisions and execution rules.
+- `docs/data-management/registry/`: one note per dataset with source, version, access date and licence.
+- `docs/glossary.md`: terminology.
+- `docs/methodology/pim_transformation_flow.md`: PIM transformation flow (Chinese).
+- `docs/mentor-explanation/`: English handover draft and email draft for Supervisor (read by
+  `bin/package/build_supervisor_handover.py`).
+- `configs/`: Zimbabwe criteria-stack config read by `bin/` scripts.
+
+Mentor messages, early reviews, superseded plans and archives were removed in the
+2026-10-08 handover cleanup; retrieve them from Git history if needed.
 
 ## Rule
 

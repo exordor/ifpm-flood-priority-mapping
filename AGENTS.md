@@ -140,10 +140,9 @@ control-vs-derived distinction. Control files must stay consistent with each
 other and with the codebase; derived files may lag but must not contradict the
 control tier.
 
-The older `context/docs/project-management/` folder is archive-only since the
-2026-07-05 consolidation into `context/docs/research-map/`. Its former live files
-(assumptions_log, execution_status_policy, task_progress_board, etc.) are
-preserved under `_archive/superseded_by_research_map_2026-07-05/`.
+The older `context/docs/project-management/` folder was consolidated into
+`context/docs/research-map/` on 2026-07-05 and removed from the working tree on
+2026-10-08; its files remain in Git history.
 
 Older governance documents are archival. They may be referenced for evidence, but they must not
 drive new work unless the user explicitly points to them or the active experiment needs a recorded
@@ -361,16 +360,6 @@ A task is not complete unless:
 - assumptions are separated from results;
 - unsupported scientific claims are avoided.
 
-## Mentor-Facing Document Style
-
-Any file under `context/docs/mentor-explanation/`, and any short message or briefing written for
-the mentor, must follow the style rule in `context/docs/mentor-explanation/STYLE.md`: first person,
-lead with the conclusion, one question per message, and no AI-style scaffolding (TL;DR / "bottom
-line" headers, over-symmetric structure, filler hedges, decorative formatting). This keeps
-mentor-facing documents reading as the HiWi's own work. It does not apply to internal engineering
-notes under `research-map/` or `data-management/`, where full step-by-step evidence chains
-are wanted.
-
 ## Report-Friendly Figure And Briefing Rule
 
 Mentor-facing and boss-facing outputs must be understandable by a reader who did not follow the
@@ -404,9 +393,8 @@ Before calling a mentor/boss-facing figure done, preview the rendered image/PDF 
 
 ## V1 Terrain Reference Grid Rule
 
-For V1 controlled prototype terrain preprocessing, follow the internal rule file:
-
-`context/docs/data-management/v1_terrain_reference_grid_rule.md`
+For V1 controlled prototype terrain preprocessing, follow the rules below (the former
+rule file is in Git history only):
 
 - The active terrain reference raster is
   `outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif`.

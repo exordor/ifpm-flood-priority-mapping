@@ -5,8 +5,8 @@ modelling workspace. It replaces the older `project-management/` planning notes
 with the standard research-governance structure: research questions, hypotheses,
 experiments, results, artifacts, decisions, and reproducibility.
 
-The `project-management/` folder is now archive-only. Its superseded files live
-under `context/docs/project-management/_archive/superseded_by_research_map_2026-07-05/`.
+The old `project-management/` folder was removed in the 2026-10-08 handover
+cleanup; its files remain in Git history.
 
 ## File index
 
@@ -48,11 +48,6 @@ files but must not contradict them.
 
 - Dataset registries: `context/docs/data-management/registry/*.md` (one per
   dataset; the authoritative provenance record).
-- Active preflights: `context/docs/data-management/preflight/`.
-- Reference-grid rules: `context/docs/data-management/v1_terrain_reference_grid_rule.md`
-  and `peru_pilot_terrain_reference_grid_rule.md`.
-- Mentor-facing packets: `context/docs/mentor-explanation/` ( STYLE.md governs
-  their wording).
 - Per-output handoffs and manifest CSVs: `outputs/<experiment_id>/handoff.md`,
   `outputs/<experiment_id>/*_manifest.csv`.
 - Pipeline code and DAG runner: `bin/` and `bin/README.md`.
@@ -60,8 +55,8 @@ files but must not contradict them.
 
 ## Lineage
 
-Created 2026-07-05 by consolidating these now-archived source files (see
-`context/docs/project-management/_archive/superseded_by_research_map_2026-07-05/`):
+Created 2026-07-05 by consolidating these source files (removed from the working
+tree on 2026-10-08; still in Git history):
 `task_progress_board.md`, `assumptions_log.md`, `rfactor_investigation_consolidated.md`,
 `real_data_execution_preflight_gate.md`, `real_data_preprocessing_design.md`,
 `execution_status_policy.md`, `mentor_methodology_slide_interpretation_2026-06-16.md`,
@@ -69,6 +64,5 @@ Created 2026-07-05 by consolidating these now-archived source files (see
 `boundary_v1_criteria_stack_v0_2_2026-06-29.md`, `terminology_audit_2026-07-02.md`,
 and the old `project-management/README.md` index.
 
-The completed old-area [Peru PIM refresh plan](../project-management/_archive/superseded_context_2026-09-07/PERU_PIM_REFRESH_PLAN.md)
-is archived. Its commands target the frozen former Peru baseline and must not
+The completed old-area Peru PIM refresh plan is in Git history only. Its commands target the frozen former Peru baseline and must not
 be used as current execution instructions.

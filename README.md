@@ -35,15 +35,12 @@ lead with Peru.
 ```text
 context/
   docs/
-    original/             Original dataset inventory files.
-    research-review/      Reviewed dataset inventory with dataset links and method notes.
-    deep-research/        Deep research fact-check report on mentor requirements and review quality.
-    data-management/      Internal dataset download registry templates and preflight checks.
-    project-management/   Archive-only since 2026-07-05. Live research-governance is in research-map/.
     research-map/         Research map: experiments, results, decisions, reproducibility, hypotheses.
-    project-analysis/     IFPM HiWi project analysis notes and workflow retrospectives.
-    mentor-explanation/   Chinese and English oral explanation guides for mentor discussion.
-  references/             Reference papers (PDFs are ignored by Git).
+    data-management/      Dataset registry: source, version, access date and licence per dataset.
+    methodology/          PIM transformation flow (Chinese).
+    mentor-explanation/   English handover draft and email draft for Supervisor.
+    glossary.md           Terminology.
+  configs/                Zimbabwe criteria-stack config read by bin/ scripts.
 
 ifpm-flood-pipeline/
   src/                     Minimal deliverable pipeline code.
@@ -58,10 +55,9 @@ ifpm-flood-pipeline/
 - [Research overview](context/docs/research-map/RESEARCH_OVERVIEW.md): current scope and study area.
 - [Research map](context/docs/research-map/README.md): experiments, results, decisions and reproducibility.
 - [Data management](context/docs/data-management/README.md): dataset provenance, download checks and reference grids.
-- [Terminology](context/docs/glossary.md) and [mentor writing style](context/docs/mentor-explanation/STYLE.md).
-- [Internal context](context/README.md): source inventories, reviews and mentor materials.
+- [Terminology](context/docs/glossary.md).
+- [Internal context](context/README.md): what is kept under `context/`.
 - [Local tooling](bin/README.md): processing and verification entry points.
-- [Historical archive](context/docs/project-management/README.md): superseded plans and earlier project framing; not current execution instructions.
 
 ## Boundary Rules
 
