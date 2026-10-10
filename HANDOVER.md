@@ -32,7 +32,7 @@ IFPM 是一个洪水优先级（flood prioritisation）多准则原型。它把�
 | `context/docs/mentor-explanation/` | 只剩给 Supervisor 的英文移交草稿和邮件草稿 | 是 |
 | `data/raw/`、`data/validation/` | 原始数据，约 17 GB | 否 |
 | `outputs/` | 所有结果，索引见 `outputs/README.md` | 否 |
-| `exports/` | 8 月分享包、6 月导师汇报包和 QGIS 便携包（zip） | 否 |
+| `exports/` | QGIS 便携包 | 否 |
 | `ifpm-flood-pipeline/` | 独立的交付代码仓库（自己的 `.git`），只有合成数据测试 | 单独仓库 |
 
 注意：`data/`、`outputs/`、`exports/` 都被 `.gitignore` 忽略。只 clone 仓库拿不到数据和结果，需要整体拷贝文件夹。
@@ -103,4 +103,4 @@ uv sync --extra hydrology    # 按 uv.lock 装 Python 3.11+ 和全部依赖，�
 
 2026-10-10 精简文档和代码里过时与防御性的内容：研究记录从 9 份合并成 `EXPERIMENTS.md` 和 `DECISION_LOG.md` 两份，只写当前实验和仍然有效的决定；`AGENTS.md` 从 467 行的 AI 管理规则改成一页纸的工作约定；术语表只保留当前准则和字段含义；删除 4 个只检查措辞的脚本（`check_*terminology*`、`check_glossary_sources`、`check_top20_priority_wording`）及对应测试；旧秘鲁区的图表配置移到 `bin/package/`。
 
-2026-10-10 删除 `exports/IFPM_Supervisor_Handover_2026-10-08.zip`（14 GB，精简前的完整快照）及其校验文件。
+2026-10-10 删除 `exports/IFPM_Supervisor_Handover_2026-10-08.zip`（14 GB，精简前的完整快照）及其校验文件，以及 8 月分享包和 6 月导师汇报包两个 zip。
