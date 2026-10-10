@@ -104,4 +104,4 @@ uv sync --extra hydrology    # 按 uv.lock 装 Python 3.11+ 和全部依赖，�
 
 2026-10-10 删除 `exports/IFPM_Supervisor_Handover_2026-10-08.zip`（14 GB，精简前的完整快照）及其校验文件，以及 8 月分享包和 6 月导师汇报包两个 zip；删除根目录的 PPT 模板 `pre/summary01.potx` 和未使用的 QGIS 样式库 `symbology-style.db`。另外删除打包脚本 `bin/package/build_supervisor_handover.py`、两份给 Supervisor 的英文移交信草稿，以及津巴布韦旧配置 `context/configs/boundary_v1_criteria_stack_v0_2.csv` 和读取它的 `bin/criteria/build_boundary_v1_criteria_stack.py`。
 
-2026-10-10 删除 25 个只用于汇报、幻灯片和导师展示的出图和打包脚本（旧秘鲁区和津巴布韦的报告图、简报板、PPT 用图、旧版 QGIS 项目打包等）和 6 个只测它们的测试，同步清理 `pipeline.yaml`、`bin/README.md` 和其余测试里的引用。`export_peru_raw_input_factor_maps`、`export_peru_pim_criteria_maps`、`export_paper_style_single_maps`、`build_ifpm_qgis_project_package` 暂时保留，因为津巴布韦出图脚本或测试还在调用它们。
+2026-10-10 删除 24 个只用于汇报、幻灯片和导师展示的出图和打包脚本及其配置表（旧秘鲁区和津巴布韦的报告图、简报板、PPT 用图、旧版 QGIS 项目打包等）和 6 个只测它们的测试，同步清理 `pipeline.yaml`、`bin/README.md` 和其余测试里的引用。`export_peru_raw_input_factor_maps`、`export_peru_pim_criteria_maps`、`export_paper_style_single_maps`、`build_ifpm_qgis_project_package` 暂时保留，因为津巴布韦出图脚本或测试还在调用它们。
