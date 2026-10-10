@@ -25,7 +25,6 @@ stages:
 # Historical Zimbabwe, equal-weight, superseded figure, and network acquisition
 # scripts remain callable explicitly with --target when needed.
 include:
-  - export_peru_pilot_boundary
   - preprocess_srtm_peru_pilot_dem
   - derive_peru_pilot_slope
   - derive_peru_pilot_hydrology
@@ -45,10 +44,6 @@ include:
   - compare_peru_pim_sinpad_colocation
   - export_peru_raw_input_factor_maps
   - export_peru_pim_criteria_maps
-  - export_peru_direct_weight_priority_maps
-  - export_peru_pim_contribution_map
-  - export_peru_evidence_overlay_maps
-  - build_peru_report_figure_chain
 
 # Scripts to exclude (by name, without .py). These are skipped even if their
 # stage is listed above. Use this to skip DEPRECATED or one-off scripts.
@@ -66,18 +61,12 @@ exclude:
   - build_peru_hybas_l7_6070641200_rainfall_criterion          # remote CHIRPS COG reads; run explicitly
   - compare_peru_exposure_refresh          # one-off before/after diagnostic needs archived raster
   - derive_peru_pilot_usle_soil_loss       # legacy diagnostic; active Peru Sediment uses independent K/LS/C
-  - export_peru_conditioning_factor_maps   # superseded by raw-input and five-criterion current maps
   - export_paper_style_single_maps         # scenario-mean sensitivity appendix; run explicitly
-  - export_single_priority_maps            # legacy cross-site sensitivity appendix; run explicitly
-  - plot_zimbabwe_peru_prototype_comparison # legacy Peru multi-scenario mean/frequency consumer
-  - plot_july18_integrated_priority_board   # legacy Peru top20-frequency consumer
-  - plot_mentor_boss_priority_explanation_package # superseded pre-governance result package
   - run_boundary_v1_priority_scenarios      # archived Zimbabwe multi-scenario/equal-weight experiment
   - run_boundary_v1_rainfall_exposure       # archived Zimbabwe equal/direct comparison
   - run_boundary_v1_rainfall_sensitivity    # depends on archived Zimbabwe scenario comparison
   - diagnose_boundary_v1_hotspot_exposure   # depends on archived Zimbabwe scenario comparison
   - run_v1_mining_decay_priority_sensitivity # archived Zimbabwe equal/multi-scenario sensitivity
-  - write_zimbabwe_peru_source_tables       # archived cross-site comparison writer
 
 # When true, re-run scripts even if their outputs are newer than inputs.
 force: false

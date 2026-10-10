@@ -125,10 +125,6 @@ class ZimbabweReportingMapsTest(unittest.TestCase):
             ROOT / "bin/visualize/export_peru_pim_criteria_maps.py",
             "export_peru_pim_criteria_maps_for_palette_test",
         )
-        peru_contribution = load_named_module(
-            ROOT / "bin/visualize/export_peru_pim_contribution_map.py",
-            "export_peru_pim_contribution_map_for_palette_test",
-        )
 
         peru_colors = {criterion.slug: tuple(criterion.colors) for criterion in peru_criteria.CRITERIA}
         self.assertEqual(list(module.CRITERIA), [criterion.slug for criterion in peru_criteria.CRITERIA])
@@ -136,7 +132,6 @@ class ZimbabweReportingMapsTest(unittest.TestCase):
             {name: criterion.colors for name, criterion in module.CRITERIA.items()},
             peru_colors,
         )
-        self.assertEqual(module.CONTRIBUTION_COLORS, peru_contribution.COLORS)
         self.assertEqual(module.maps.PRIORITY_COLORS, ["#ffffcc", "#ffeda0", "#feb24c", "#f03b20", "#bd0026"])
 
     def test_direct_pim_matches_five_criterion_weighted_sum(self):

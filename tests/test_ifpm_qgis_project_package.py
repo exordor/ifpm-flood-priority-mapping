@@ -5,7 +5,6 @@ import hashlib
 import importlib.util
 import json
 import sqlite3
-import subprocess
 import sys
 import unittest
 import zipfile
@@ -83,22 +82,6 @@ class IfpmQgisProjectPackageTest(unittest.TestCase):
         }
         self.assertEqual(peru, zimbabwe)
         self.assertEqual(set(peru), set(module.CRITERION_PALETTES))
-
-    @unittest.skipUnless(
-        Path("/Applications/QGIS.app").exists()
-        or Path("/Applications/QGIS-LTR.app").exists(),
-        "QGIS is not installed",
-    )
-    def test_qgis_integration_build_and_render(self):
-        validator = ROOT / "bin/validate/validate_ifpm_qgis_layer_rendering.py"
-        subprocess.run([sys.executable, str(SCRIPT)], cwd=ROOT, check=True)
-        subprocess.run([sys.executable, str(validator)], cwd=ROOT, check=True)
-        self.assertFalse((ROOT / "exports/IFPM_QGIS_Project_Package").exists())
-        report = json.loads(
-            (PACKAGE / "layer_qa/layer_qa.json").read_text(encoding="utf-8")
-        )
-        self.assertEqual(report["status"], "pass")
-        self.assertEqual(report["pass_count"], 45)
 
     @unittest.skipUnless(GENERATED_PACKAGE_AVAILABLE, "run the QGIS package builder first")
     def test_generated_projects_are_portable_within_workspace(self):

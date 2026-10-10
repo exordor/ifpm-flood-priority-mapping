@@ -95,13 +95,6 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
         )
         self.assertTrue(str(road_row["source_layer"]).endswith("road_access_proximity_0_1.tif"))
 
-        conditioning = load_module(
-            "bin/visualize/export_peru_conditioning_factor_maps.py",
-            "export_peru_conditioning_factor_maps_road_name_governance",
-        )
-        road_factor = next(item for item in conditioning.FACTORS if item.slug == "road_access")
-        self.assertEqual(road_factor.source_raster.name, "road_access_proximity_0_1.tif")
-
     def test_active_pipeline_scripts_declare_complete_freshness_boundaries(self):
         pipeline = load_module("bin/pipeline.py", "ifpm_pipeline_io_governance")
         scripts = {item.name: item for item in pipeline.discover_scripts()}
@@ -119,10 +112,6 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
         environmental = scripts["build_pim_environmental_sensitivity"]
         self.assertGreaterEqual(len(environmental.inputs), 7)
         self.assertGreaterEqual(len(environmental.outputs), 6)
-
-        package = scripts["build_peru_report_figure_chain"]
-        self.assertGreaterEqual(len(package.inputs), 21)
-        self.assertGreaterEqual(len(package.outputs), 22)
 
     def test_rainfall_normalization_uses_boundary_only_and_masks_outside(self):
         module = load_module(
@@ -371,19 +360,11 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
             "bin/visualize/export_peru_pim_criteria_maps.py",
             "export_peru_pim_criteria_maps_semantic_governance",
         )
-        contribution = load_module(
-            "bin/visualize/export_peru_pim_contribution_map.py",
-            "export_peru_pim_contribution_map_semantic_governance",
-        )
         labels = {item.slug: item.label for item in criteria_maps.CRITERIA}
 
         self.assertIn("conditioning", labels["flood_hazard"].lower())
         self.assertIn("context", labels["environmental"].lower())
         self.assertIn("indicator", labels["socioeconomic"].lower())
-        self.assertEqual(
-            contribution.LABELS["environmental"],
-            "Environmental context indicator (ES)",
-        )
 
     def test_sinpad_diagnostic_separates_scored_and_unscored_support_causes(self):
         module = load_module(
@@ -407,28 +388,6 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
         self.assertEqual(row["unscored_k_missing_count"], 1)
         self.assertEqual(row["selected_area_fraction"], 0.2)
         self.assertNotIn("uniform_null", row)
-
-    def test_contribution_map_only_explains_cells_in_the_final_pim_support(self):
-        module = load_module(
-            "bin/visualize/export_peru_pim_contribution_map.py",
-            "export_peru_pim_contribution_map_governance",
-        )
-        layers = {
-            "flood_hazard": np.array([[0.8]], dtype="float32"),
-            "sediment": np.array([[np.nan]], dtype="float32"),
-            "landuse_asm": np.array([[0.4]], dtype="float32"),
-            "environmental": np.array([[0.2]], dtype="float32"),
-            "socioeconomic": np.array([[0.6]], dtype="float32"),
-        }
-        scoreable = np.array([[False]], dtype=bool)
-
-        contributions = module.weighted_contribution_stack(
-            layers,
-            module.WEIGHTS,
-            scoreable,
-        )
-
-        self.assertTrue(np.isnan(contributions[:, 0, 0]).all())
 
     def test_dependency_diagnostic_quantifies_rank_and_top_quintile_change(self):
         module = load_module(

@@ -62,12 +62,6 @@ Other Goslar/Abzucht commands are listed per experiment in
 # Without --allow-network, remote producers are omitted from dependency chains.
 # A downstream step fails clearly if its required local input is absent.
 
-# Refresh the direct-weight result maps and weighted-contribution map. Four-
-# criterion cells with unavailable Sediment evidence are hatched and bound to
-# criteria_evidence_count.tif in each figure index.
-.venv/bin/python bin/pipeline.py run --target export_peru_direct_weight_priority_maps
-.venv/bin/python bin/pipeline.py run --target export_peru_pim_contribution_map
-
 # Force re-run even if outputs are up-to-date
 .venv/bin/python bin/pipeline.py run --target <name> --force
 ```
@@ -83,43 +77,6 @@ merged and removed. The older test weights (0.35 / 0.25 / 0.20 / 0.12 / 0.08)
 survive only as frozen outputs under
 `outputs/srtm_1arcsec_peru_pilot/pim_versions/`; the side-by-side comparison
 is in `pim_versions/comparison_v02_v07/`.
-
-## Presentation support tools
-
-These scripts rebuild the editable-map assets and the result-slide evidence
-tables used by the current process PPT. They read governed local GIS inputs and
-write ignored presentation outputs under `outputs/`; they do not modify the
-PowerPoint file itself.
-
-```bash
-# Label-free locator map; latitude, longitude, and place labels stay editable in PowerPoint.
-.venv/bin/python bin/render_editable_study_area_basemap.py
-
-# Label-free Peru and Zimbabwe detail maps for the study-area slide.
-.venv/bin/python bin/render_editable_study_area_detail_maps.py
-
-# Rebuild the two legend-free prototype result maps used in the PPT.
-.venv/bin/python bin/visualize/export_ppt_result_context_maps.py
-
-# Recompute the descriptive overlap metrics used beside the result maps.
-.venv/bin/python bin/visualize/summarize_result_slide_overlap.py
-```
-
-Expected outputs:
-
-- `outputs/presentation_assets/study_areas_regional_basemap_no_text.png`
-- `outputs/presentation_assets/peru_pe1_detail_map_no_text.png`
-- `outputs/presentation_assets/zimbabwe_upper_mzingwane_detail_map_no_text.png`
-- `outputs/slide_ready_figures/ppt_result_context_maps/`
-- `outputs/slide_ready_figures/result_slide_metrics/overlap_summary.csv`
-
-The result maps and overlap table are prototype screening evidence, not model
-validation. Map titles, legends, and interpretation remain editable PowerPoint
-objects.
-
-The superseded July presentation draft was removed during the 2026-08-18 output
-cleanup. The retained current preview is
-`outputs/presentation_previews/IFPM_Goslar_Secocha_QGIS_Updated_Draft_2026-08-18.pptx`.
 
 ## The 7 pipeline stages
 
@@ -144,9 +101,6 @@ Most stages have a Zimbabwe (V1) and a Peru (Arequipa Region) variant that mirro
                     acquire → factors → criteria → scenarios → visualize
 Zimbabwe V1:   ...   v1_dem  →  slope   →  criteria_stack_v0_2  →  rainfall_exposure_v0_4  →  comparison
 Peru Arequipa Region:      ...   peru_hybas_l7_6070641200_dem →  slope   →  peru_hybas_l7_6070641200_criteria_stack   →  peru_hybas_l7_6070641200_priority_scenarios  →  comparison
-                                                              ↘                ↙
-                                                    plot_zimbabwe_peru_prototype_comparison
-                                                    plot_mentor_boss_priority_explanation_package
 ```
 
 The two chains now follow the mentor five-main-criterion framework (Flood,

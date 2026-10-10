@@ -100,6 +100,8 @@ uv sync --extra hydrology    # 按 uv.lock 装 Python 3.11+ 和全部依赖，�
 
 2026-10-09 补充精简 `context/`：只保留研究记录、数据登记、术语表、方法说明和 Supervisor 移交草稿，另外留下 `context/configs/`，因为 `bin/` 里的脚本要读取它。导师沟通稿、早期核查报告、旧计划和归档、下载前检查、参考网格规则、导师方法框架截图和最初的数据清单都已删除（Git 历史里可以找回）。参考论文 PDF 也已删除，它不在 Git 里。保留下来的研究记录里还有少数路径指向已删除的文件，这些是历史出处，需要时去 Git 历史里查。
 
-2026-10-10 精简文档和代码里过时与防御性的内容：研究记录从 9 份合并成 `EXPERIMENTS.md` 和 `DECISION_LOG.md` 两份，只写当前实验和仍然有效的决定；`AGENTS.md` 从 467 行的 AI 管理规则改成一页纸的工作约定；术语表只保留当前准则和字段含义；删除 4 个只检查措辞的脚本（`check_*terminology*`、`check_glossary_sources`、`check_top20_priority_wording`）及对应测试；旧秘鲁区的图表配置移到 `bin/package/`。
+2026-10-10 精简文档和代码里过时与防御性的内容：研究记录从 9 份合并成 `EXPERIMENTS.md` 和 `DECISION_LOG.md` 两份，只写当前实验和仍然有效的决定；`AGENTS.md` 从 467 行的 AI 管理规则改成一页纸的工作约定；术语表只保留当前准则和字段含义；删除 4 个只检查措辞的脚本（`check_*terminology*`、`check_glossary_sources`、`check_top20_priority_wording`）及对应测试；
 
 2026-10-10 删除 `exports/IFPM_Supervisor_Handover_2026-10-08.zip`（14 GB，精简前的完整快照）及其校验文件，以及 8 月分享包和 6 月导师汇报包两个 zip；删除根目录的 PPT 模板 `pre/summary01.potx` 和未使用的 QGIS 样式库 `symbology-style.db`。另外删除打包脚本 `bin/package/build_supervisor_handover.py`、两份给 Supervisor 的英文移交信草稿，以及津巴布韦旧配置 `context/configs/boundary_v1_criteria_stack_v0_2.csv` 和读取它的 `bin/criteria/build_boundary_v1_criteria_stack.py`。
+
+2026-10-10 删除 25 个只用于汇报、幻灯片和导师展示的出图和打包脚本（旧秘鲁区和津巴布韦的报告图、简报板、PPT 用图、旧版 QGIS 项目打包等）和 6 个只测它们的测试，同步清理 `pipeline.yaml`、`bin/README.md` 和其余测试里的引用。`export_peru_raw_input_factor_maps`、`export_peru_pim_criteria_maps`、`export_paper_style_single_maps`、`build_ifpm_qgis_project_package` 暂时保留，因为津巴布韦出图脚本或测试还在调用它们。
