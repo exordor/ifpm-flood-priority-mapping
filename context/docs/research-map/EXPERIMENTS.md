@@ -39,3 +39,75 @@ compared against official regulatory flood zones (HQ100 etc.), not observed even
 Goslar and Abzucht outputs are under `outputs/goslar_abzucht_display_rectangle_v1/<experiment>/`
 unless named otherwise; each has a `READING_NOTE.md`. Tests:
 `.venv/bin/python -m unittest discover -s tests`.
+
+## Goslar input chain notes (moved from registry)
+
+Condensed from the former registry notes `goslar_peru_style_chain` and
+`goslar_official_hydrology_flood_infrastructure`. Source facts stay in those registry notes.
+
+**Chain** (`bin/factors/run_goslar_peru_style_chain.py`; outputs under
+`outputs/srtm_1arcsec_goslar/priority_scenarios/`, manifest `run_manifest.json`):
+
+1. Boundary: raster mask from `goslar_wrrl_water_bodies_reference_v1` (153.779 km², union of the
+   seven official WRRL water-body polygons intersecting the ZLW focus extent; active since
+   2026-08-17). The original ZLW print-layout extent (`outputs/goslar_focus_boundary/`,
+   22.882 km²) is kept as a weight-0 minimum study-area anchor and is fully contained.
+2. Grid: EPSG:32632, 30 m, 635 × 611 cells.
+3. Terrain: Copernicus DEM GLO-30; slope (central difference); WhiteboxTools fill → D8 → flow
+   accumulation → streams (threshold 500) → distance to drainage → TWI, all on a +1 km buffered
+   DEM and aligned back to the grid; LS factor (Moore & Nieber, capped at 50, channel-masked).
+4. Land cover: WorldCover C-factor and land-use pressure LUTs (10 m → 30 m). Soil K: Williams
+   (1995), 0-30 cm depth-weighted, US units × 0.1317 to SI (250 m → 30 m).
+5. Rainfall: DWD REGNIE June-August mean 1991-2020 (1 km → 30 m).
+6. Roads: Overpass road proximity. Protected areas: Natura 2000 proximity. Population: Zensus 2022.
+7. Standardization: 2-98 percentile min-max. NoData is kept, not filled.
+
+**Weights** (identical to Secocha Supervisor v07; no Goslar-specific reweighting):
+FH 0.34 / SE 0.25 / LU 0.17 / ES 0.10 / SV 0.14. FH = rainfall 0.35 + TWI 0.25 + drainage 0.40;
+SE = K 0.25 / LS 0.50 / C 0.25; LU = LC 0.40 / BV 0.35 / BE 0.25; ES = water/wetland 0.65 +
+protected 0.35; SV = road 0.35 / settlement 0.35 / critical infrastructure 0.30.
+
+**Decisions and repairs**
+
+- 2026-08-07: inputs switched to Copernicus DEM (from SRTM), Natura 2000 (from OSM protected
+  areas), Zensus 2022 (from WorldPop DEU 2020), REGNIE 1991-2020 (from 2014-2023) and a pinned
+  SoilGrids snapshot (from a live `/latest/` read).
+- 2026-08-12 repair: OSM roads were rasterized in EPSG:4326 onto the EPSG:32632 grid (0 road
+  pixels in the focus box); after projecting first, 5,931 pixels. WorldCover and SoilGrids NoData
+  had been set to 0; now kept as NoData (soil K keeps 2,661 NaN cells). Hydrology had run on the
+  focus-clipped DEM, truncating upstream accumulation; now runs on the +1 km buffer.
+- 2026-08-14: a temporary Goslar-specific LU/SV reweighting was withdrawn to keep the Secocha
+  weights. A mining context overlay (LBEG/NIBIS mining rights + OSM mining features, 12 km) was
+  added as a separate layer, outside the score.
+- 2026-08-17: boundary changed from the ZLW box to the WRRL union; SoilGrids and roads refetched
+  for that window; critical infrastructure changed from the WorldCover built-up proxy to
+  proximity to 375 filtered OSM facilities (2 km linear decay); 2024 CLMS Bare Soil After replaced
+  the all-zero WorldCover bare-soil proxy.
+- 2026-08-18: the land-change component switched to CLMS tree-cover-density decline 2018-2024.
+- Packaging: QGIS FullAudit (36 layers) and ReviewMap (24 layers) under
+  `exports/qgis_packages/goslar/`, built by `bin/package/build_goslar_qgis_project_package.py`;
+  the priority result and five criteria use equal-interval classes 0.2/0.4/0.6/0.8/1.0.
+
+**HWRM and HQ100 coverage checks**
+
+- The ZLW focus extent had no HWRM overlap; the WRRL reference grid has 62 direct 30 m overlap
+  cells.
+- 2026-09-08 (`outputs/goslar_reference_exploration_2026_09_08/`): the Abzucht HQ100 polygon
+  (`uesg_id=917`) is 0.495468 km²; 0.297448 km² (60.03%) lies inside the WRRL boundary. Of 561
+  30 m cell centres inside the polygon and raster extent, 337 are valid and 224 NoData.
+
+**Known limits of the chain**: hydrology covers only a +1 km buffer, not a full upstream
+catchment; soil K covers about 94% of the boundary at 250 m effective resolution; REGNIE is 1 km
+evidence; Natura 2000 omits national designations; Zensus counts residents only.
+
+## Interpretation limits (Goslar)
+
+These apply to every Goslar/Abzucht result note and are stated here once.
+
+- The official extents (HQ100, the other HQ scenarios, regulatory zones) are model or regulatory zones, not observed 2017 flood footprints. HQ100 was used to tune the flood weight, so it is not independent validation.
+- High scores outside the official extents are not false positives, and overlap shares are not prediction accuracy.
+- Where soil K or hillslope LS is missing, the erosion term uses C only; a low erosion contribution there does not mean low erosion.
+- Census cells missing from the published population table may be true zeros or suppressed for confidentiality. They are not filled with zero.
+- The outer 1 km ring is a descriptive reference zone, not a matched control.
+- Scores are not re-stretched to improve agreement with the flood extents.
+- 0.6 is the existing priority class threshold, not a calibrated flood threshold.

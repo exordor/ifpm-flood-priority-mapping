@@ -1,14 +1,11 @@
 # Dataset Registry: JRC Global Surface Water V1 Methodology Evidence
 
-Status: downloaded and processed for controlled V1 methodology evidence review. This does not
-authorize AHP overlay, flood-risk interpretation, or final thesis boundary claims.
+Status: downloaded and processed for V1 methodology evidence review (Zimbabwe background).
 
 ## Dataset Identity
 
 - Dataset id: `jrc_global_surface_water_v1_methodology`
 - Short name: JRC Global Surface Water
-- Data class: `LOCAL_DATA`
-- Reusable download: yes, for V1 prototype evidence review
 - Project role: remote-sensing surface-water, wetland/water proximity, and flood-hazard context
   candidate evidence
 - Study area: V1 working catchment within `20E_20S` tile
@@ -28,47 +25,29 @@ authorize AHP overlay, flood-risk interpretation, or final thesis boundary claim
 - Product/version: Global Surface Water tile artifacts available from public download storage
 - Access date: 2026-06-13
 - Access method: direct public GeoTIFF URLs
-- Licence or terms: JRC GSW terms and citation requirements must be cited before public release
-- Account, registration, or approval needed: none identified for these direct tile URLs
+- Licence or terms: JRC GSW terms; cite JRC Global Surface Water
 
-## Download Plan
+## Acquisition
 
-- Intended destination: `data/raw/jrc_global_surface_water_v1_methodology/`
-- Expected file types: GeoTIFF
-- Expected file count: 5 tile layers
-- Expected byte size: about 80 MB total from checked tile sizes
 - Download command or manual steps:
   1. Run `.venv/bin/python bin/acquire/download_v1_methodology_inputs.py`.
-  2. Record file size and SHA-256 in the full methodology source manifest.
-- Temporary path, if any: `data/tmp/jrc_global_surface_water_v1_methodology/`
 
-## Verification
+## Files
 
-- Download completed: yes
-- Verification date: 2026-06-13
-- Checksum scope: downloaded GSW layers
-- Checksum algorithm: SHA-256
-- Expected and actual manifest:
-  `outputs/v1_full_methodology_evidence_sweep/source_manifest.csv`
-- Actual file count: 5 GeoTIFF layers
-- Actual total file size: 81,504,552 bytes
+- File count: 5 GeoTIFF layers, 81,504,552 bytes in total
+- Checksums (SHA-256, computed 2026-10-10 from the local files):
+  - `change_20E_20S.tif` (19,058,378 bytes): `6aa950cec88395c144a61576c62cf5da273c91f5624532aa6f9a05e64e4e34ce`
+  - `occurrence_20E_20S.tif` (18,192,530 bytes): `f6ef8941ac345315d647f61e1b9ccaa8d4e37c008e5c3b57e670ca52425ff522`
+  - `recurrence_20E_20S.tif` (17,283,404 bytes): `5ceed324fa0ecfea658c14b9c006cc593832f3f8bdafe03c968407b3e8e17dd0`
+  - `seasonality_20E_20S.tif` (13,239,208 bytes): `2b77a3975570f500a7bfaf79098b2fe87378e2a2f663396e435cf89b7c20d054`
+  - `transitions_20E_20S.tif` (13,731,032 bytes): `83fb3eb19fa84b063e9e26e237b39181cd8c7fac049ce35c2769d10e6b15a64c`
 - CRS or georeferencing checked: yes; `EPSG:4326`, tile bounds `20E,-30S,30E,-20S`,
   native resolution `0.00025` degrees
 
 ## Processing And Use
 
 - Raw data path: `data/raw/jrc_global_surface_water_v1_methodology/`
-- Derived output path: `outputs/v1_full_methodology_evidence_sweep/`
-- Scripts or commands used:
-  - `.venv/bin/python bin/acquire/download_v1_methodology_inputs.py`
-  - `.venv/bin/python bin/package/prepare_v1_full_methodology_evidence.py`
-- Planned/actual use: V1 water occurrence, seasonality, recurrence, change, and transition
+- Use: V1 water occurrence, seasonality, recurrence, change, and transition
   summaries
 - Known limitations: surface-water history is not event flood depth or hazard frequency; it is
   remote-sensing context for flood/wetland evidence review
-
-## Release Boundary
-
-- May be committed: no
-- May be used in public examples: no unless replaced by synthetic or approved sample data
-- Public-safe summary available: this registry note only

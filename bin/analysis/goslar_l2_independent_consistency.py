@@ -379,13 +379,11 @@ def write_markdown(path: Path, report: dict) -> None:
     lines = [
         "# Goslar L2 independent-context consistency check",
         "",
-        f"Overall reading: **{report['overall_status']}**. This is an L2 consistency check, not event-accuracy validation.",
+        f"Overall reading: **{report['overall_status']}**. L2 here means spatial consistency against independent flood-context evidence; it is not event-accuracy validation.",
         "",
         "1. HWRM regulatory context: " + str(checks["hwrm_regulatory_context"]["status"]),
         "2. Sentinel-2 new-water candidate: " + str(checks["sentinel2_new_water_candidate"]["status"]),
         "3. Flood-hazard terrain/hydrology diagnostic: " + str(checks["flood_hazard_terrain_hydrology"]["status"]),
-        "",
-        "The result does not change the PIM score or weights and does not provide precision, recall, AUC or IoU evidence.",
         "",
     ]
     path.write_text("\n".join(lines), encoding="utf-8")

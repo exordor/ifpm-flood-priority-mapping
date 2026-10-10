@@ -1,7 +1,7 @@
 # Dataset Registry: Goslar mining context overlay v1
 
 - Dataset id: `goslar_mining_context_overlay_v1`
-- Status: downloaded and packaged as `context_evidence`; excluded from PIM
+- Status: downloaded 2026-08-14; context overlay, not part of the PIM score
 - Access date: 2026-08-14
 - Study area: Goslar focus extent plus a 12 km context radius
 - Output CRS: EPSG:32632
@@ -27,8 +27,5 @@
    geometry rather than reduced to a centroid. Completeness, positional
    accuracy, and current operating status are not guaranteed.
 
-The raw-response and derived-output SHA-256 values, feature counts, type counts,
-focus intersections, and semantic limitations are recorded in the output-local
-manifest. The layer is an external overlay only. It is not an ASM layer, mining
-pressure criterion, mine-activity inventory, or authorization to alter the
-Supervisor-v07 PIM weights.
+Raw-response and derived-output SHA-256 values, feature counts and focus intersections are
+recorded in `mining_overlay_manifest.json`.

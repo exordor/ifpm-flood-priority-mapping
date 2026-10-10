@@ -1,26 +1,23 @@
 # Dataset Registry: Goslar Harz 2024 focus area
 
-Status: source registration and evidence packet complete; validation candidate.
+Status: source files registered 2026-08-07. Defines the original ZLW focus extent (minimum
+study-area anchor for Goslar).
 
 ## Dataset Identity
 
 - Dataset id: `goslar_harz_2024_focus_area`
-- Data class: `LOCAL_DATA` (provided by ZDIN/ZLW project material)
 - Focus area: Goslar 2017 flood catchment and intended sensor study area, Harz,
   Lower Saxony, Germany
 - Focus extent (layout): WGS84 10.3646-10.4194 E, 51.8544-51.9089 N
-- Project role: separate international focus-area context; not a PIM input and
-  not a validation layer for the Peru pilot
-- Claim level: `validation_candidate`
-- Enters PIM score: no
+- Project role: Goslar focus-area context; not a PIM input
 
 ## Source And Access
 
-Provided source files were located under workspace `tmp/` and registered under
+Project-supplied source files, stored under
 `data/validation/goslar_harz_2024_focus_area/source_materials/`:
 
 1. `ZDIN-2024.goslar_catchment.qgz` - QGIS project (QGIS 3.22.7, saved
-   2024-04-25 by Supervisor) with drainage-basin layer references, a
+   2024-04-25) with drainage-basin layer references, a
    sensor-station CSV reference and print layouts. External data sources live
    on a Windows project path and are not bundled with the QGZ.
 2. `ZLW2024.04.24_catchment_and_sensors.pdf` - QGIS print export (2023-06-12)
@@ -45,13 +42,8 @@ Provided source files were located under workspace `tmp/` and registered under
     51.85-51.91 N).
   - The ZDIN slide attributes the 2017 flood catchment to EWAZ Harz
     Hochwasserschutz Goslar (Massnahme 6).
-- The focus area is about 12,150 km from the current Peru experiment
-  boundary and is not inside it.
-  This distance is a historical 2026-08-07 snapshot against the former Peru
-  HydroBASINS pilot boundary; the active Peru mainline is now the Secocha
-  A7367 reference extent, so the old distance must not be read as current.
 
-## Known Limits And Release Boundary
+## Known Limits
 
 - The QGZ references external Windows-path data (DRAINAGE_BASIN_DE, sensor
   CSV) that is not bundled; sensor coordinates are not machine-readable in the
@@ -59,5 +51,3 @@ Provided source files were located under workspace `tmp/` and registered under
 - The focus extent is a project-layout reference box, not a mapped flood or
   hazard footprint.
 - The ZDIN slide is a project attribution, not an official flood report.
-- Raw materials stay local; public release requires explicit approval and a
-  redistribution/licence check.

@@ -1,16 +1,14 @@
 # Dataset Registry: ESA WorldCover 2021 Southern Peru Arequipa Region
 
-Status: active for Arequipa Region land-cover and C-factor repair in the southern Peru
-comparison catchment.
+Status: downloaded 2026-06-30; used for land cover and the C-factor in the former Peru study area
+(frozen, `peru_hybas_l7_6070641200`).
 
 ## Dataset Identity
 
 - Dataset id: `esa_worldcover_2021_peru_pilot`
 - Short name: ESA WorldCover 2021 v200
-- Data class: `LOCAL_DATA`
-- Reusable download: yes, for Arequipa Region prototype evidence and C-factor repair
 - Project role: land-cover class and RUSLE C-factor proxy for Arequipa Region criteria stack
-- Study area: Arequipa Region southern Peru comparison catchment in Arequipa Region, mainly
+- Study area: former Peru study area (frozen), Arequipa Region, mainly
   the Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city
 - Temporal coverage: 2021 land-cover map
 
@@ -24,24 +22,15 @@ comparison catchment.
 - Product/version: ESA WorldCover 10 m 2021 v200
 - Access date: 2026-06-30
 - Access method: direct public S3 GeoTIFF URL
-- Licence or terms: ESA WorldCover terms must be cited before public release
-- Account, registration, or approval needed: none identified for direct tile URLs
+- Licence or terms: ESA WorldCover terms must be cited
 
-## Download Plan
+## Acquisition
 
-- Intended destination: `data/raw/esa_worldcover_2021_peru_pilot/`
-- Expected file types: GeoTIFF plus local `.sha256` sidecar
-- Expected file count: 2 tiles
 - Reason for two tiles: Arequipa Region spans approximately `-72.315` to `-71.582` longitude, crossing the
   `-72` tile boundary. `S18W072` alone leaves the western part uncovered; `S18W075` is required.
-- Temporary path, if any: `data/tmp/esa_worldcover_2021_peru_pilot/`
 
-## Verification
+## Files
 
-- Download completed: yes
-- Verification date: 2026-06-30
-- Checksum scope: each downloaded GeoTIFF
-- Checksum algorithm: SHA-256
 - Files:
   - `ESA_WorldCover_10m_2021_v200_S18W072_Map.tif`
     - Size: 70,649,046 bytes
@@ -64,9 +53,3 @@ comparison catchment.
 - Arequipa Region C-factor grid check: passed, valid fraction inside Arequipa Region = `1.0`.
 - Known limitations: static 2021 land cover is not active mining truth and does not capture
   seasonal cover-management variation.
-
-## Release Boundary
-
-- May be committed: no
-- May be used in public examples: no unless replaced by synthetic or explicitly approved sample
-- Public-safe summary available: this registry note only

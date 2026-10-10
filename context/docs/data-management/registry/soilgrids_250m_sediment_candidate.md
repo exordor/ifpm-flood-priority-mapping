@@ -1,101 +1,39 @@
 # Dataset Registry: SoilGrids 250m Sediment Candidate
 
-Status: used for corrected V1 K-factor derivation via ISRIC online VRT windowed read (no local
-download). The current K-factor products in `outputs/soilgrids_250m_sediment_candidate/` were
-regenerated 2026-07-13 by reading the SoilGrids 250m VRT collection at
-`https://files.isric.org/soilgrids/latest/data/` over HTTP for the V1 bounding box only (clay /
-silt / sand / SOC at six depth slices). No global raster was bulk-downloaded to `data/raw/`; the
-VRT was read remotely. The original "draft, not authorized" framing below is superseded for V1
-K-factor use. The 2026-07-13 refresh reads the CRS advertised by the VRT before calculating the
-V1 window; it supersedes the earlier hard-coded-projection extraction. A local archive download
-remains unplanned. See
-`context/docs/project-management/soilgrids_v1_kfactor_processing_2026-06-15.md` for the method.
+Status: used 2026-07-13 for the Zimbabwe V1 K-factor (Zimbabwe background only). Read remotely by
+windowed HTTP from the ISRIC VRT collection; no local raw download.
 
 ## Dataset Identity
 
 - Dataset id: `soilgrids_250m_sediment_candidate`
 - Short name: SoilGrids 250m (ISRIC)
-- Data class: `LOCAL_DATA`
-- Reusable download: yes, for soil-erodibility (K-factor) and soil-property context
-- Project role: soil erodibility input for the USLE/RUSLE sediment-risk factor K; soil texture
-  and organic carbon context for infiltration-capacity and environmental-sensitivity evidence
-- Study area: V1 working catchment and Zimbabwe context
-- Spatial unit or mask: SoilGrids global 250 m grid, clipped to V1 and reported as 250 m
-  diagnostics or V1/sub-basin zonal summary; explicitly NOT resampled to the V1 30 m terrain
-  grid as pixel-level truth
-- Temporal coverage: SoilGrids contemporary soil properties (2017/2020 release as available)
+- Project role: soil erodibility K for the USLE/RUSLE sediment-risk factor
+- Study area: Zimbabwe V1 working catchment
+- Spatial unit or mask: SoilGrids global 250 m grid, clipped to the V1 bounding box
+- Temporal coverage: SoilGrids contemporary soil properties
 
 ## Source And Access
 
 - Source organization: ISRIC - World Soil Information
-- Source URL or portal:
-  - SoilGrids page: `https://www.isric.org/explore/soilgrids`
-  - SoilData access: `https://soilgrids.org/` (WCS / COG / download)
-- Product/version: SoilGrids 250m, latest public release at access date (soil properties:
-  clay, silt, sand, organic carbon, bulk density at standard depths)
+- Source URL: `https://files.isric.org/soilgrids/latest/data/` (VRT collection);
+  SoilGrids page `https://www.isric.org/explore/soilgrids`
+- Product/version: SoilGrids 250m, `latest` at the access date; clay, silt, sand and organic
+  carbon mean layers at six depth slices
 - Access date: 2026-07-13
-- Access method: windowed HTTP read from the official SoilGrids WebDAV VRT collection
+- Access method: windowed HTTP read of the VRTs for the V1 bounding box; the source CRS is read
+  from each VRT and every property/depth window is reprojected to the clay 0-5 cm window
 - Licence or terms: CC BY 4.0; attribution to ISRIC required
-- Citation requirement: cite ISRIC SoilGrids and the access date
-- Account, registration, or approval needed: none identified for public WCS/COG access
-- Redistribution allowed: yes under CC BY 4.0 with attribution
-
-## Download Plan
-
-- Intended destination: `data/raw/soilgrids_250m_sediment_candidate/`
-- Expected file types: GeoTIFF (COG) per soil property per depth
-- Source artifact name: SoilGrids layers for clay, silt, sand, organic carbon at mean-depth
-  slices, scoped to the V1 bounding box
-- Expected file count: order of 10-30 GeoTIFFs depending on properties and depths selected
-- Expected byte size: tens to low hundreds of MB for a scoped V1 subset
-- Download command or manual steps: WCS GetCoverage or COG windowed read for the V1 bounding box;
-  to be specified precisely at authorization
-- Rate limits or quotas: ISRIC may throttle heavy WCS use; scoped subset should be modest
-- Authentication handling: none for public access; no credentials to store
-- Temporary path, if any: `data/tmp/soilgrids_250m_sediment_candidate/`
-- Cleanup needed after extraction: keep only V1-scoped layers; remove any global layer if
-  accidentally downloaded
-
-## Download Attempt State
-
-- Attempt status: complete for the scoped V1 VRT window
-- Archive state: not downloaded
-- Retry or resume safe: yes (WCS/COG request can be re-submitted)
-
-## Verification
-
-- Download completed: no bulk download; scoped remote window read completed
-- Verification date: 2026-07-13
-- Checksum scope: downloaded GeoTIFF files
-- Checksum algorithm: SHA-256 (to be recorded post-download)
-- Expected files or manifest: to be confirmed at access
-- CRS or georeferencing checked: yes; source CRS is read from the VRT and the V1 bounds are
-  transformed with densified edges. Each property/depth VRT has its own source window because
-  global VRT origins and dimensions differ; every window is reprojected to the common clay
-  0-5 cm V1 reference window before the K calculation.
-- Geometry/raster integrity checked: yes; V1 0-5 cm K range is 0.134-0.248 US units with
-  59,006 valid native-grid cells inside the rasterized boundary after the grid-alignment refresh
 
 ## Processing And Use
 
-- Raw data path: `data/raw/soilgrids_250m_sediment_candidate/` (planned)
-- Derived output paths: `outputs/soilgrids_250m_sediment_candidate/` and
+- Scripts: `bin/factors/derive_v1_soilgrids_kfactor.py`, `bin/criteria/build_v1_soil_k_factor.py`
+- Derived outputs: `outputs/soilgrids_250m_sediment_candidate/` (`k_factor_0_5cm_250m.tif`,
+  `k_factor_0_30cm_avg_250m.tif`, `k_factor_diagnostics.json`) and
   `outputs/srtm_1arcsec_zimbabwe_prototype/soil_k_factor/`
-- Planned use: compute soil erodibility K-factor via a chosen pedotransfer function (e.g.
-  Williams 1995 / Sharply-Williams) from clay/silt/sand/organic-carbon layers; produce V1 250 m
-  K-factor diagnostics and V1/sub-basin zonal summary. Output is soil-erodibility context at
-  250 m, NOT a 30 m raster.
-- Known limitations: 250 m resolution is much coarser than the V1 30 m terrain grid; must not be
-  resampled to 30 m as pixel-level truth; pedotransfer function choice changes absolute K values;
-  SoilGrids uncertainty bands exist and should be reported. The official `/latest/` VRT endpoint
-  is mutable; the access date and current derived-output hashes are recorded, but exact upstream
-  reconstruction would require an immutable release identifier or retained source-window archive.
-- Validation role: sediment-risk factor K per `context/docs/project-management/_archive/p1_p2_decision_packages_2026-06-15/p2_sediment_risk_decision_package_2026-06-15.md`;
-  also supports infiltration-capacity and environmental-sensitivity context.
-
-## Release Boundary
-
-- May be committed: no raw data
-- May be used in public examples: no unless replaced by synthetic or approved sample data
-- May be included in release archives: no unless licence and mentor approval confirmed
-- Public-safe summary available: this registry note only
+- Method: Williams (1995) K from clay/silt/sand/organic carbon
+- Result: V1 0-5 cm K range 0.134-0.248 US units; 59,006 valid native-grid cells inside the
+  rasterized boundary
+- Checksum: not recorded
+- Known limitations: 250 m resolution is much coarser than the 30 m terrain grid; the
+  pedotransfer function choice changes absolute K values; the `/latest/` endpoint is mutable, so
+  exact upstream reconstruction is not guaranteed.

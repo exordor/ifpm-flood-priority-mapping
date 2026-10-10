@@ -71,7 +71,7 @@ def main():
         for p in primary:
             if not (raster_mask(p['geometry'],ref)&valid).any():continue
             make_map(OUT/f"{p['river'].lower()}_{pct}",f"{p['river']} | Flood weight {pct}%",[p],p['geometry'].intersection(boundary).buffer(500).bounds,criteria['flood_hazard'],scenarios[pct],ref)
-    note='# Multi-river comparison with flood weights of 50%, 60% and 70%\n\nStatus: weight sensitivity scenarios. Only the weights of the five-criterion combination are changed; the other four criteria are scaled down in their original proportions. The original population, soil, normalization, valid extent and 0.6 threshold are unchanged. The left panel shows the unchanged flood sub-indicator, and the right panel the PIM for the corresponding weight.\n\nReproduce: `.venv/bin/python bin/analysis/compare_multiriver_weights.py`.\n\n| River/source | Flood weight | Inside/outside mean | Mean difference | Inside/outside high-score share | High-score share difference (percentage points) |\n|---|---:|---|---:|---|---:|\n'
+    note='# Multi-river comparison with flood weights of 50%, 60% and 70%\n\nSuperseded by goslar_multiriver_full_extent_v1.\n\nStatus: weight sensitivity scenarios. Only the weights of the five-criterion combination are changed; the other four criteria are scaled down in their original proportions. The original population, soil, normalization, valid extent and 0.6 threshold are unchanged. The left panel shows the unchanged flood sub-indicator, and the right panel the PIM for the corresponding weight.\n\nReproduce: `.venv/bin/python bin/analysis/compare_multiriver_weights.py`.\n\n| River/source | Flood weight | Inside/outside mean | Mean difference | Inside/outside high-score share | High-score share difference (percentage points) |\n|---|---:|---|---:|---|---:|\n'
     for r in summary:
         if r['mean_gap'] is None:continue
         note+=f"| {r['river']} / {r['family']} / {r['scenario']} | {r['flood_weight']:.0%} | {r['inside_mean']:.3f}/{r['ring_mean']:.3f} | {r['mean_gap']:+.3f} | {r['inside_high_share']:.2%}/{r['ring_high_share']:.2%} | {r['high_share_gap']*100:+.2f} |\n"
@@ -83,7 +83,7 @@ def main():
             v=[r['high_share_gap']*100 for r in rows if r['product_id']==p.product_id and r['flood_weight']==pct/100 and r['high_share_gap'] is not None]
             parts.append(f'{pct}%: {min(v):+.2f} to {max(v):+.2f}')
         note+=f'- {p.river} / {p.family} / {p.scenario}: '+ '; '.join(parts)+'.\n'
-    note+='\nLimits of interpretation: raising the flood weight brings the composite PIM closer to the flood sub-indicator. If the flood indicator is already higher inside the extents, a mean difference that grows with the weight is the expected behavior of the weighted formula; the high-score share difference and the stability across rivers must be considered as well. A weight cannot be chosen just because the extents turn redder, nor can this be used to validate the other priority objectives. This round compares weights using the same set of flood data, so it is a sensitivity analysis guided by reference data, not an independent validation; no final weight is selected automatically.\n'
+    note+='\nLimits of interpretation: raising the flood weight brings the composite PIM closer to the flood sub-indicator.\n'
     (OUT/'READING_NOTE.md').write_text(note)
     pin(Path(__file__));pin(Path(__file__).with_name('tune_abzucht_weights.py'))
     for p,d in inputs.items():assert sha(ROOT/p)==d,p

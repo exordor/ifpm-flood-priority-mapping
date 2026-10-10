@@ -40,4 +40,4 @@ Field names that say more than the data show:
 
 `diagnostic_only` (pipeline or data check), `provisional` (working result, not validated),
 `sensitivity_scenario` (what-if under other weights or inputs), `validation_candidate`
-(evidence that could be used for validation once reviewed). No output is a final claim.
+(evidence that could be used for validation once reviewed).

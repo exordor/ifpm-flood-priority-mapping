@@ -6,12 +6,8 @@ Status: downloaded, verified, and used for V1 comparable road/water distance fac
 
 - Dataset id: `geofabrik_osm_zimbabwe_prototype`
 - Short name: Geofabrik Zimbabwe OSM extract
-- Data class: `LOCAL_DATA`
-- Reusable download: yes, if used for outlet exploration
-- Project role: roads, bridges, settlements, waterways, and possible mine/quarry tags for
-  candidate outlet evidence
-- Study area: Zimbabwe / Upper Mzingwane candidate outlet discovery
-- Spatial unit or mask: clip or filter to the candidate outlet search envelope after download
+- Project role: roads, waterways and mine/quarry tags for the Zimbabwe V1 chain
+- Study area: Zimbabwe / Upper Mzingwane prototype
 - Temporal coverage: current OSM extract at time of download
 
 ## Source And Access
@@ -23,77 +19,39 @@ Status: downloaded, verified, and used for V1 comparable road/water distance fac
 - Access method: direct download
 - Licence or terms: ODbL via OpenStreetMap / Geofabrik terms
 - Citation requirement: cite OpenStreetMap contributors and Geofabrik extract route
-- Account, registration, or approval needed: none expected for public extracts
-- Redistribution allowed: governed by ODbL; do not redistribute raw extract without review
 
-## Download Plan
+## Acquisition
 
-- Intended destination: `data/raw/geofabrik_osm_zimbabwe_prototype/`
-- Expected file types: `.gpkg.zip` plus local checksum
 - Source artifact name: `zimbabwe-latest-free.gpkg.zip`, redirected on 2026-06-12 to
   `zimbabwe-260610-free.gpkg.zip`
-- Expected file count: one archive plus local SHA-256 sidecar
-- Expected byte size: `528811477` bytes from HTTP header on 2026-06-12
-- Download command or manual steps: guarded `curl -L --fail --continue-at -` to a temporary
-  path, verify byte size/checksum, then extract or inspect
-- Rate limits or quotas: unknown
-- Authentication handling: no credentials expected
-- Temporary path, if any: `data/tmp/geofabrik_osm_zimbabwe_prototype/`
-- Cleanup needed after extraction: remove failed partials and record manifest
+- Download command: `curl -L --fail --continue-at -`, then checksum and extract
 
-## Download Attempt State
+## Download Record
 
-- Attempt status: complete
 - Attempt date: 2026-06-12
-- Failure reason, if any:
-- Partial path, if any:
 - Archive state: downloaded and verified
 - Extraction state: complete
-- Retry or resume safe: yes, with overwrite guards
-- Cleanup/disposition:
-- Cleanup date:
 
-## Verification
+## Files
 
-- Download completed: yes
-- Verification date: 2026-06-12
-- Checksum scope: source archive
-- Checksum algorithm: MD5 if using Geofabrik sidecar, otherwise SHA-256 local checksum
-- Checksum command: `shasum -a 256 data/raw/geofabrik_osm_zimbabwe_prototype/zimbabwe-latest-free.gpkg.zip`
-- Checksum value:
+- Checksum (SHA-256):
   `dcae916f091f6178ae6b182f4c2ff941777154a28f1aa740cb31765850fcacf2`
-- Expected files or manifest: `zimbabwe.gpkg` and `README`
 - Actual files or manifest: `data/raw/geofabrik_osm_zimbabwe_prototype/extraction_manifest.txt`
-- Expected byte size: `528811477`
-- Actual byte size: `528811477`
+- File size: 528,811,477 bytes
 - File-count evidence: 2 extracted files listed in manifest
-- File-size evidence: archive size matched HTTP header byte size
 - CRS or georeferencing checked: yes, OGC:CRS84 / WGS84 source layers loaded and clipped
 - Geometry/raster integrity checked: yes, 8657 OSM features intersect the review envelope after
   clipping
-- Licence/terms accepted: yes for internal review use; ODbL redistribution requirements remain
-  unreviewed
 
 ## Processing And Use
 
 - Raw data path: `data/raw/geofabrik_osm_zimbabwe_prototype/`
-- Derived output paths:
-  - `outputs/_archive/superseded_outlet_exploration_2026-06/professional_outlet_review/`
-  - `outputs/srtm_1arcsec_zimbabwe_prototype/comparable_distance_factors/`
-- Scripts or commands used: guarded `curl`, `shasum -a 256`, and
-  `bin/factors/build_v1_comparable_distance_factors.py`; the current script reads the GeoPackage
+- Derived output path: `outputs/srtm_1arcsec_zimbabwe_prototype/comparable_distance_factors/`
+- Script: `bin/factors/build_v1_comparable_distance_factors.py`; it reads the GeoPackage
   directly through GDAL `/vsizip/` without duplicating the 1.1 GB uncompressed file
 - Standardization/preprocessing notes: read OSM roads and water features over a 25 km padded
   EPSG:32735 reference-grid envelope, rasterize on that padded 30 m grid, calculate Euclidean
   distance in kilometres, crop back to the reference grid, and preserve the V1 mask. The padding
   prevents edge cells from ignoring nearer mapped features immediately outside the study area.
 - Known limitations: OSM completeness varies; tags do not prove active mining or flood impact
-- Replacement or update rule: replace with newer dated extract only if needed and documented
-- Validation role: supporting evidence only
-
-## Release Boundary
-
-- May be committed: no
-- May be used in public examples: no unless replaced by synthetic data
-- May be included in release archives: no unless explicitly approved
-- Public-safe summary available: yes
+- Use: road and water distance factors for the Zimbabwe V1 chain (Zimbabwe background only)

@@ -1,13 +1,13 @@
 # Dataset Registry: INGEMMET Catastro Minero (Southern Peru Arequipa Region)
 
-Status: queried via the public ArcGIS REST API for Arequipa Region features. This is the authoritative
-official Peru mining cadastre — a strict upgrade over the OSM quarry/industrial proxy.
+Status: queried 2026-06-30 via the public ArcGIS REST API for the former Peru study area
+(frozen, `peru_hybas_l7_6070641200`). Official Peru small-scale mining points; replaced the OSM
+quarry/industrial proxy there.
 
 ## Dataset Identity
 
 - Dataset id: `ingemmet_catastro_minero_peru_pilot`
 - Short name: INGEMMET Pequeña Minería (small-scale / ASM mining points)
-- Reusable download: yes — features are queryable by bounding box via the public REST API
 - Spatial unit or mask: query intersecting the Arequipa Region boundary envelope
 - Temporal coverage: INGEMMET "small-scale mining" module (Memorando N° 0738-2014-INGEMMET/DRME);
   records carry `f_mtra` dates.
@@ -21,9 +21,7 @@ official Peru mining cadastre — a strict upgrade over the OSM quarry/industria
 - Access method: public ArcGIS MapServer query API (`/query`), no login. The portal is an
   ArcGIS JS web GIS; the underlying MapServer is publicly queryable.
 - Licence or terms: INGEMMET states the catastro data are "referential, for consultation only"
-  (carácter referencial, solo de consulta). Mining rights update daily. Re-check INGEMMET terms
-  before any public release/redistribution. Cite INGEMMET/GEOCATMIN.
-- Account, registration, or approval needed: none for query/read.
+  (carácter referencial, solo de consulta). Mining rights update daily. Re-check INGEMMET terms. Cite INGEMMET/GEOCATMIN.
 
 ## Services Inspected
 
@@ -43,7 +41,8 @@ official Peru mining cadastre — a strict upgrade over the OSM quarry/industria
   quarry/industrial polygons over Arequipa Region+5km, which were a weaker land-use proxy).
 - Feature attributes include: `cd_mtra` (mine code), `mina` (mineral, e.g. Au), `este/norte/zona`
   (UTM), `longitud/latitud`, lab assays. The geometry is point.
-- Raw destination: `data/raw/ingemmet_catastro_minero_peru_pilot/`
+- Local path: `data/raw/ingemmet_catastro_minero_peru_pilot/peru_hybas_l7_6070641200_pequena_mineria.gpkg`
+  (106,496 bytes, SHA-256 `367083d9e3242f976ac45c31f03559f1f397cfe155887858a1274a74dfa6369a`, computed 2026-10-10 from the local file)
 
 ## Notes And Limits
 
@@ -54,5 +53,4 @@ official Peru mining cadastre — a strict upgrade over the OSM quarry/industria
 - The catastro is "referential"; concession-status is not always reflected in the
   PEQUENA_MINERIA point layer. The SERV_CATASTRO_MINERO cadastre polygons would add concession
   status if a public layer becomes available.
-- This upgrades the Arequipa Region mining criterion from `diagnostic_only` OSM proxy to `provisional`
-  official-source point evidence. It does not make the criterion a validated active-mining truth.
+- In the former Peru study area this replaced the OSM proxy as the mining-criterion source.

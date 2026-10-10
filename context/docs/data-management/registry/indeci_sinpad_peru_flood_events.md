@@ -1,17 +1,13 @@
 # Dataset Registry: INDECI SINPAD Peru event-point context
 
-Status: refreshed on 2026-07-10; public ArcGIS REST service query scripted for
-Arequipa flood/rainfall/aluvion-style emergency records.
+Status: queried 2026-07-10 for Arequipa flood/rainfall/aluvion-style emergency records; used for the former Peru study area (frozen, `peru_hybas_l7_6070641200`).
 
 ## Dataset Identity
 
 - Dataset id: `indeci_sinpad_peru_flood_events`
 - Short name: INDECI SINPAD flood-relevant emergency records, Arequipa
-- Data class: `LOCAL_DATA`
-- Reusable download: yes
-- Project role: event-point co-location context for Peru PIM priority classes;
-  not independent validation
-- Study area: Arequipa department, then current Peru study boundary and 20 km
+- Project role: event-point co-location context for Peru PIM priority classes
+- Study area: Arequipa department, then the former Peru study area (frozen, `peru_hybas_l7_6070641200`) and a 20 km
   context buffer
 - Spatial unit or mask: point records with department/province/district
   attributes
@@ -24,43 +20,34 @@ Arequipa flood/rainfall/aluvion-style emergency records.
   `https://geosinpad.indeci.gob.pe/indeci/rest/services/Emergencias/EMERGENCIAS_SINPAD/MapServer/0`
 - Access method: public ArcGIS REST `/query`, no login
 - Access date: 2026-07-10
-- Account, registration, or approval needed: none identified
-- Licence or terms: public government GIS service; confirm redistribution terms
-  before including raw records in any public release
+- Licence or terms: public government GIS service; redistribution terms not stated
 
-## Download Plan
+## Acquisition
 
 - Destination: `data/validation/indeci_sinpad_peru_flood_events/`
-- Expected file types: GeoPackage and CSV
 - Query filter:
   `DEPARTAMENTO='AREQUIPA'` and flood-relevant `FENOMENO` names containing
   `INUND`, `LLUVI`, `ALUVI`, `HUAY`, or `DESBORDE`
 - Script:
   `.venv/bin/python bin/acquire/query_peru_sinpad_flood_events.py`
-- Temporary path: none
 
-## Verification
+## Files
 
-- Download completed: yes
-- Download verification date: 2026-07-10
-- Checksum scope: downloaded GeoPackage
-- Checksum algorithm: SHA-256
-- Checksum value:
+- Checksum (SHA-256):
   `d34e1da366bc157104c62c9c446cce0a86d4b3845ae371eddec2aef8f88061f9`
-- Raw GeoPackage size: 638,976 bytes
+- Raw GeoPackage: `arequipa_sinpad_flood_relevant.gpkg`, 638,976 bytes
 - Arequipa flood-relevant records with valid geometry: 1,955
-- Records inside the current Peru study boundary: 25
-- Records inside the current Peru study boundary plus 20 km context buffer: 452
-- Expected output manifest:
+- Records inside the former Peru study area: 25
+- Records inside the former Peru study area plus 20 km context buffer: 452
+- Manifest:
   `outputs/indeci_sinpad_peru_flood_events/sinpad_download_manifest.json`
-- CRS or georeferencing check: input/output point geometry should be EPSG:4326;
-  boundary filtering uses the current Peru pilot boundary
+- CRS: EPSG:4326 points; boundary filtering uses `peru_hybas_l7_6070641200`
 
 ## Processing And Use
 
 - Raw data path: `data/validation/indeci_sinpad_peru_flood_events/`
 - Derived output path: `outputs/indeci_sinpad_peru_flood_events/`
-- Planned use:
+- Use:
   - overlay flood/rainfall/aluvion emergency records with PIM priority classes;
   - compare all records, unique coordinates, explicitly flood-labelled records,
     and unique flood coordinates with the highest-priority quintile;
@@ -75,13 +62,6 @@ Arequipa flood/rainfall/aluvion-style emergency records.
   - event points may be administrative or report-location points, not mapped
     flood extents;
   - repeated coordinates are not independent observations;
-  - records support co-location diagnostics, not hydraulic inundation depth or
-    model validation;
+  - records support co-location checks only, not inundation depth;
   - the filter intentionally includes intense rainfall and aluvion/debris-flow
     style hazards for semi-arid flood-prioritisation context.
-
-## Release Boundary
-
-- May be committed: no raw data
-- May be used in public examples: no raw records unless terms are checked
-- Public-safe summary available: this registry note and aggregate counts only

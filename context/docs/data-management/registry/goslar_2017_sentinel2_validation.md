@@ -1,7 +1,7 @@
 # Dataset Registry: Goslar July 2017 Sentinel-2 event-window validation candidate
 
 - Dataset id: `goslar_2017_sentinel2_event_window`
-- Status / claim level: `validation_candidate`; does not enter the PIM score
+- Status: downloaded and processed 2026-08-17/18; event-window context, not part of the PIM score
 - Event: July 2017 Goslar/Harz flood
 - Source: Copernicus Sentinel-2 L2A via Element 84 Earth Search COGs
 - Scenes: `S2B_32UNC_20170721_0_L2A` (pre-event) and
@@ -32,16 +32,12 @@ Current QA:
 - new surface-water candidates: 26,874 cells
 - lost water candidates: 52 cells
 
-These layers are diagnostic validation candidates, not an observed peak-flood
-footprint. The after scene is five days after the peak, optical imagery cannot
-see through canopy or clouds, and the NDWI rule has no shadow/terrain
-correction. They must not be used to claim AUC/IoU validation or final model
-performance.
+Not an observed peak-flood footprint: the after scene is five days after the peak, optical
+imagery cannot see through canopy or clouds, and the NDWI rule has no shadow/terrain correction.
 
 ## 2026-08-18 L2 independent-context consistency
 
-The user-selected target is now L2 consistency rather than event-accuracy
-validation. Reproducible command:
+Command:
 `.venv/bin/python bin/analysis/goslar_l2_independent_consistency.py`
 
 Outputs:
@@ -60,18 +56,12 @@ Result: **mixed_or_unclear**.
    `weakly_consistent`; Spearman rho is 0.074 for TWI and -0.646 for distance
    to drainage.
 
-This remains a spatial-context consistency result. It is not observed 2017
-peak-flood validation; no precision, recall, AUC or IoU metric is reported.
-The report records input SHA-256 hashes, a fixed random seed, resampling
-method, bootstrap limits, and the fact that none of the evidence enters the
-PIM score.
+No precision, recall, AUC or IoU metric is reported. The report records input SHA-256 hashes,
+a fixed random seed, resampling method and bootstrap limits.
 
-## Remaining access boundaries
+## Known gaps
 
-- CLMS HRL Bare Soil After and Tree Cover Density manifests are public, but
-  raster objects are under authenticated `s3://eodata`; the CLMS background
-  tasks remain `In_progress`.
 - Sentinel-1 GRD coverage exists for the event window, but calibrated SAR
-  processing has not yet been implemented.
-- NLWKN pages expose gauge summaries; a machine-readable 2017 time series is
-  still not publicly discoverable.
+  processing has not been done.
+- NLWKN pages expose gauge summaries; no machine-readable 2017 time series was
+  found.

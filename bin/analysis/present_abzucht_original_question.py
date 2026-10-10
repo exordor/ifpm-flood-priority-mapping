@@ -104,23 +104,27 @@ def main():
         a.set_title(f'{key}: priority {c["pim"]:.3f} | flood {c["flood_indicator"]:.3f}',fontsize=11,loc='left',pad=12)
     for fmt in ['png','svg','pdf']:fig.savefig(OUT/f'original_question_comparison.{fmt}',dpi=180)
     plt.close(fig)
+    support=previous['support']['Display rectangle'];complete_share=100*support['all_components_present']/support['pixels']
     note=f'''# Answer to the original question
 
-The existing results show some flood response, but the overlap between the high combined-priority areas and the official floodplain is limited. This result is sufficient for discussing the indicator's goal and the reasons for the discrepancy with the supervisor, but it does not justify adjusting the weights directly or reporting prediction accuracy.
+Question: do the cells with high PIM priority (0.6 or above) coincide with the official Abzucht HQ100 flood zone?
+
+The flood sub-indicator is higher inside HQ100 than in the surrounding ring, but the overlap between the high combined-priority areas and the HQ100 zone is limited.
 
 This package uses only the original population, the original soil inputs, the original weights and the fixed normalization scales; the GHSL replacement population is not used. The main figure is generated from existing rasters and the three verified example points; scoring was not rerun or modified.
 
-- {htotal} 30 m cells inside HQ100: {counts['C']} high-score cells ({share:.2f}%) and {counts['A']} cells below 0.6 ({100-share:.2f}%). The rectangle also contains {counts['B']} high-score cells outside HQ100. These three groups are not a complete confusion matrix; grey is the remaining area, and being outside the extent does not mean there is no flooding.
-- Mean flood sub-indicator: {fh_in:.3f} inside HQ100 and {fh_out:.3f} in the full outer 1 km ring; the combined PIM is {pim_in:.3f} and {pim_out:.3f}. The ring is a descriptive comparison, not a matched statistical control group.
+- {htotal} 30 m cells inside HQ100: {counts['C']} high-score cells ({share:.2f}%) and {counts['A']} cells below 0.6 ({100-share:.2f}%). The rectangle also contains {counts['B']} high-score cells outside HQ100. Grey in the figure is the remaining area.
+- Mean flood sub-indicator: {fh_in:.3f} inside HQ100 and {fh_out:.3f} in the full outer 1 km ring; the combined PIM is {pim_in:.3f} and {pim_out:.3f}.
+- Component completeness: cells with values for all {previous['component_count']} model components make up {complete_share:.2f}% of the display rectangle; the other cells lack at least one component, and the original workflow redistributes its weight to the available components.
 - Point C (agreement): PIM {by_case['C']['pim']:.3f}, flood {by_case['C']['flood_indicator']:.3f}. Flood, land cover and other factors together produce the high total score.
 - Point A (inside the floodplain, not high-scoring): PIM {by_case['A']['pim']:.3f}, flood {by_case['A']['flood_indicator']:.3f}. The flood contribution is still high, but the land-cover and erosion contributions are small, so the combined score does not reach 0.6.
-- Point B (high score outside the floodplain): PIM {by_case['B']['pim']:.3f}, flood {by_case['B']['flood_indicator']:.3f}. Land cover and other factors are also high; this can only be described as inconsistent with this HQ100 scenario and cannot be judged a false positive.
+- Point B (high score outside the floodplain): PIM {by_case['B']['pim']:.3f}, flood {by_case['B']['flood_indicator']:.3f}. Land cover and other factors are also high, so the cell scores high outside this HQ100 scenario.
 
-All three examples lack soil K, hillslope LS and population. The erosion term actually uses only the remaining C factor, and the exposure term is likewise computed from the remaining components. The very low erosion contribution at Point A therefore cannot be interpreted as low actual local erosion. Each case is the cell closest to its group's median PIM and does not represent every location in that group.
+All three examples lack soil K, hillslope LS and population. The erosion term uses only the remaining C factor, and the exposure term is computed from the remaining components. Each case is the cell closest to its group's median PIM.
 
-Recommendation: first clarify whether the PIM should express flood hazard or combined intervention priority. If it is the latter, the flood sub-indicator should be compared with HQ100 on its own, rather than expecting the whole floodplain to turn red. Weight adjustments need further evidence.
+Open point: whether the PIM should express flood hazard or combined intervention priority. If it is the latter, the flood sub-indicator on its own is the quantity to compare with HQ100.
 
-The legend classes come from a cell-center overlay, so fine boundary differences are affected by the 30 m grid. HQ100 is an official model scenario, not a complete observed label of actual flooding; 0.6 is the existing priority classification threshold, not a calibrated flood threshold.
+The legend classes come from a cell-center overlay, so fine boundary differences are affected by the 30 m grid.
 
 Reproduce: `.venv/bin/python bin/analysis/present_abzucht_original_question.py`. The run checks upstream source hashes, group counts, example-point groups and contribution values; the output manifest is manifest.json.
 '''

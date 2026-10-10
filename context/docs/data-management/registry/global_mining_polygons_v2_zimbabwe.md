@@ -5,8 +5,6 @@ Status: downloaded and intersected with the Upper Mzingwane prototype boundary.
 ## Dataset Identity
 
 - Dataset id: `global_mining_polygons_v2_zimbabwe`
-- Data class: `LOCAL_DATA`
-- Reusable download: yes
 - Project role: satellite-interpreted mining land-use footprint for a Zimbabwe
   priority-map context overlay
 - Study area: Zimbabwe / Upper Mzingwane prototype boundary
@@ -25,10 +23,9 @@ Status: downloaded and intersected with the Upper Mzingwane prototype boundary.
 - Account required: no
 - Reported validation: overall accuracy 88.3%; mine-class user accuracy 97.2%
 
-## Download Plan
+## Acquisition
 
 - Destination: `data/raw/global_mining_polygons_v2_zimbabwe/global_mining_polygons_v2.gpkg`
-- Expected size: 24,657,920 bytes
 - Command:
   `curl -L -o data/raw/global_mining_polygons_v2_zimbabwe/global_mining_polygons_v2.gpkg <direct-file-url>`
 - Derived outputs: `outputs/slide_ready_figures/zimbabwe_evidence_overlays/`
@@ -46,10 +43,8 @@ inside the working boundary therefore mean six mapped footprints in this dataset
 study area contains only six mining sites. The available attributes do not distinguish large-scale
 mining from ASM.
 
-## Verification
+## Files
 
-- Download completed: yes
-- Verification date: 2026-07-14
 - Actual size: 24,657,920 bytes
 - SHA-256: `6936e2743a21ba952b4de3e4b6f77099a0aa4479f7e2639d9d1b0787876a3ea1`
 - Global feature count: 44,929
@@ -62,9 +57,3 @@ The official Zimbabwe Mining Cadastre remains unsuitable for bulk use because it
 states that records are provisional and the map/download service is not openly available. The
 IPIS 2019 Runde Valley ASM dataset is a useful regional source, but its WFS endpoint was unavailable
 during the 2026-07-14 check and its coverage may not intersect Upper Mzingwane.
-
-## Release Boundary
-
-- Raw data committed: no
-- Derived local maps committed: no
-- Public citation required: Maus et al. (2022), DOI above

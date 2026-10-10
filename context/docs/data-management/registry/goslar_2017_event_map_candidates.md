@@ -6,7 +6,7 @@
 - Event window: 24-26 July 2017; Goslar peak/catastrophe-alarm date: 26 July 2017
 - Destination: `data/validation/goslar_2017_event_map_candidates_v1/`
 - Outputs: `outputs/goslar_2017_event_map_candidates_v1/`
-- Status: provisional context evidence; excluded from the PIM score
+- Status: downloaded 2026-08-20; HQ100 regulatory context for the Abzucht comparison; not part of the PIM score
 
 ## Result of the search
 
@@ -30,11 +30,9 @@ context layer.
    - Local file: `world_heritage_watch_goslar_2022.pdf`
    - SHA-256: `df2a946d5db831bbb0c93b59f3505ed9f660f5a9f8a3e6e309f935193c3b0053`
    - Relevant page: 16
-   - Licence: not established; keep internal and cite the source.
-   - Safe display title: `2022 report reproduction of provisional flood-zone context - not
-     observed 2017 extent`.
-   - Do not assume this 2022 screenshot is geometrically identical to the current 2026 ArcGIS
-     feature; no dated layer snapshot accompanies the figure.
+   - Licence: not established; cite the source.
+   - The 2022 figure may differ from the current 2026 ArcGIS feature; no dated layer snapshot
+     accompanies it.
 
 2. NLWKN / Lower Saxony ArcGIS layer 39, current provisional regulatory flood zones
    - Service: `https://www.umweltkarten-niedersachsen.de/arcgis/rest/services/HWSchutz_wms/MapServer/39`
@@ -64,15 +62,11 @@ context layer.
 curl -fsSL 'https://world-heritage-watch.org/LangberichtGoslar06-06-2022.pdf' \
   -o data/validation/goslar_2017_event_map_candidates_v1/world_heritage_watch_goslar_2022.pdf
 
-mkdir -p tmp/goslar_2017_event_map_candidates_v1/extracted
+# The map is the second image on page 16:
 pdfimages -f 16 -l 16 -j \
-  data/validation/goslar_2017_event_map_candidates_v1/world_heritage_watch_goslar_2022.pdf \
-  tmp/goslar_2017_event_map_candidates_v1/extracted/page16
-# The map is the second extracted image. Rename it with the semantic warning:
-mv tmp/goslar_2017_event_map_candidates_v1/extracted/page16-001.jpg \
+  data/validation/goslar_2017_event_map_candidates_v1/world_heritage_watch_goslar_2022.pdf page16
+mv page16-001.jpg \
   outputs/goslar_2017_event_map_candidates_v1/unverified_2017_caption_map_from_regulatory_service.jpg
-rm tmp/goslar_2017_event_map_candidates_v1/extracted/page16-000.jpg
-rmdir tmp/goslar_2017_event_map_candidates_v1/extracted
 
 curl -fsSL \
   'https://www.umweltkarten-niedersachsen.de/arcgis/rest/services/HWSchutz_wms/MapServer/39?f=pjson' \
@@ -92,20 +86,10 @@ curl -fsSLG \
   -o data/validation/goslar_2017_event_map_candidates_v1/nlwkn_current_regulatory_flood_zones_goslar.geojson
 ```
 
-## Use rule
+## Known limitations
 
-- Keep current PIM weights frozen for the first overlay.
-- Display the NLWKN polygons as `Current provisional HQ100 regulatory flood-zone context`.
-- Display official affected locations separately as event evidence.
-- A Sentinel-1 derived extent, if processed, remains a `validation_candidate` until checked
-  against local observations and urban radar limitations.
-- If the 2017 evidence is used to adjust weights, it becomes calibration evidence; it cannot also
-  be the sole validation event.
-
-## Remaining direct-data request
-
-Ask Stadt Goslar, Fachdienst Umwelt und Gewaesserschutz, or the hydraulic consultant for the
-modelled/reconstructed maximum inundation extent for 26 July 2017, preferably as SHP, GPKG or
-GeoTIFF, including model discharge/scenario, CRS, creation date and licence. The request should
-name the `Hydraulische Neuberechnung Abzucht (HGN 02/2021)` and distinguish the event run near
-40 cubic metres per second from HQ100/HQ200 regulatory products.
+- Neither source is an observed 2017 footprint. HQ100 polygons are used for scenario agreement
+  only; if they are used to tune weights they cannot also validate.
+- Not available: the modelled 2017 maximum inundation extent from the `Hydraulische
+  Neuberechnung Abzucht (HGN 02/2021)` event run (about 40 m³/s); it would have to be requested
+  from Stadt Goslar (Fachdienst Umwelt und Gewaesserschutz).

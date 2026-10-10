@@ -300,9 +300,8 @@ Generated: `{summary['generated_utc']}`
 | Sentinel quicklooks | {sentinel_summary['quicklook_count']} |
 | Sentinel raw quantitative assets | {sum(item['asset_count'] for item in sentinel_pixels)} files / {sum(item['downloaded_bytes'] for item in sentinel_pixels) / 1024**3:.2f} GiB |
 
-The new rainfall and Sentinel evidence remain validation/context layers and do not alter PIM weights.
-The high-PIM threshold is **0.6**. The event comparison uses strict common support with no NoData imputation: {total_cells - valid_cells}/{total_cells} event cells are excluded, so the enrichment is descriptive valid-support spatial agreement, not full-footprint accuracy/recall or causality validation.
-The Map 7 geometry remains a semi-automatic `validation_candidate`; the INGEMMET layer comparison is general hazard cartography context, not an official 5 February observed footprint.
+The high-PIM threshold is **0.6**; with strict common support and no NoData imputation, {total_cells - valid_cells}/{total_cells} event cells are excluded, so the enrichment describes spatial agreement on valid support only.
+Rainfall, Sentinel and INGEMMET layers are context that does not alter PIM weights, and the Map 7 geometry is a semi-automatic `validation_candidate`, not an official 5 February observed footprint.
 Lineage checks: **{len(checks)}/{len(checks)} passed** (PIM raster + QA, Map 7 source/PIM, rainfall local artifacts, and Sentinel response/quicklook/raw-pixel files).
 """
     OUT_MD.write_text(md, encoding="utf-8")

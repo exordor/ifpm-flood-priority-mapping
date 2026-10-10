@@ -5,12 +5,9 @@ Status: downloaded for study-area location visualization.
 ## Dataset Identity
 
 - Dataset id: `naturalearth_admin_boundaries`
-- Data class: `LOCAL_DATA`
 - Project role: country and first-level administrative boundary basemap for
   Zimbabwe and Peru study-area locator maps.
-- Reusable download: yes, for presentation and context figures.
-- Study areas: Zimbabwe Upper Mzingwane catchment and southern Peru Arequipa Region
-  comparison catchment.
+- Study areas: Zimbabwe Upper Mzingwane (background) and the former Peru study area (frozen).
 
 ## Source And Access
 
@@ -24,21 +21,17 @@ Status: downloaded for study-area location visualization.
 - Access method: direct HTTPS download with `curl --location`.
 - Licence or terms: public-domain Natural Earth terms; cite Natural Earth in
   public-facing figures.
-- Account, registration, or approval needed: none.
 
 ## Download Record
 
 - Raw destination: `data/raw/naturalearth_admin_boundaries/`
 - Files:
 
-| File | Size | SHA-256 |
+| File | Bytes | SHA-256 |
 |---|---:|---|
-| `ne_10m_admin_0_countries.zip` | 4.7 MB | `ce1ac7036499a0edd641fbc093cd209a98f96a49d2eca8480aaacad35138a7f6` |
-| `ne_10m_admin_1_states_provinces.zip` | 14 MB | `efc59726337323058f9446210adc96673179cd344e053666ee3d28cb58ba2b05` |
+| `ne_10m_admin_0_countries.zip` | 4,930,492 | `ce1ac7036499a0edd641fbc093cd209a98f96a49d2eca8480aaacad35138a7f6` |
+| `ne_10m_admin_1_states_provinces.zip` | 14,909,524 | `efc59726337323058f9446210adc96673179cd344e053666ee3d28cb58ba2b05` |
 
 ## Use And Limits
 
-- Used as cartographic context only; the research-area geometries come from the
-  project boundary GPKGs.
-- Not a validation source for flood risk, mining pressure, or intervention
-  priority.
+- Used as cartographic context only; study-area geometries come from the project boundary GPKGs.

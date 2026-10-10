@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Working conventions for this workspace (for people and coding assistants).
+Working conventions for this workspace.
 
 ## Where things go
 

@@ -1,14 +1,13 @@
 # Dataset Registry: Geofabrik OSM Southern Peru Arequipa Region
 
-Status: downloaded and processed for Arequipa Region proximity-criteria derivation. Same source family
-and license as the already-downloaded Geofabrik Zimbabwe extract.
+Status: downloaded 2026-06-30 and processed for proximity criteria in the former Peru study area
+(frozen, `peru_hybas_l7_6070641200`).
 
 ## Dataset Identity
 
 - Dataset id: `geofabrik_osm_peru_pilot`
 - Short name: Geofabrik Peru OSM extract
-- Reusable download: yes, for Arequipa Region mining/exposure proximity criteria
-- Spatial unit or mask: clip to Arequipa Region boundary + 5 km buffer after download
+- Spatial unit or mask: clipped to the former Peru study area + 5 km buffer
 - Temporal coverage: current OSM extract at time of download (2026-06-30)
 
 ## Source And Access
@@ -18,20 +17,18 @@ and license as the already-downloaded Geofabrik Zimbabwe extract.
 - Direct source artifact:
   `https://download.geofabrik.de/south-america/peru-latest-free.shp.zip`
 - Access method: direct public download (302 redirect to the actual file)
-- Licence or terms: OpenStreetMap data, ODbL; Geofabrik extract. Same license as the Zimbabwe
-  Geofabrik extract already in use.
-- Account, registration, or approval needed: none
+- Licence or terms: OpenStreetMap data, ODbL; Geofabrik extract.
 
 ## Download Record
 
 - Access date: 2026-06-30
 - Download command: `curl --fail --location --output peru-latest-free.shp.zip <url>`
 - Raw destination: `data/raw/geofabrik_osm_peru_pilot/peru-latest-free.shp.zip`
-- Actual size: `597543300` bytes (~597 MB, full Peru country extract)
+- File size: 597,543,300 bytes (full Peru country extract)
 - SHA-256: `e34517e410d30f0abde0c06210ec77663c6d6218f35672f0b51d91ef2242e209`
 - Extraction: complete to `data/raw/geofabrik_osm_peru_pilot/extracted/` (20 shapefile layers)
 
-## Used Layers (Arequipa Region)
+## Used Layers (former Peru study area)
 
 - `gis_osm_roads_free_1.shp` -> exposure_indicators proximity criterion (6210 features in
   Arequipa Region + 5km).
@@ -41,8 +38,7 @@ and license as the already-downloaded Geofabrik Zimbabwe extract.
 
 ## Notes And Limits
 
-- The mining proxy is OSM landuse quarry/industrial, NOT official mining truth. INGEMMET/
-  GEOCATMIN is the authoritative Peru mining cadastre (publicly accessible, identified but not
-  yet processed) and is the upgrade path for the mining criterion.
+- The mining proxy is OSM landuse quarry/industrial; it was later replaced by INGEMMET points
+  (`ingemmet_catastro_minero_peru_pilot`).
 - Road proximity is an access/exposure proxy, not observed flood vulnerability.
-- Only Arequipa Region-relevant layers are used; the full country extract is kept under ignored `data/`.
+- Only the layers above are used.

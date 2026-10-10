@@ -2,6 +2,8 @@
 
 Dataset id: `era5_hourly_precip_v1_rfactor`
 
+Status: downloaded 2026-06-19 for the Zimbabwe V1 R-factor experiment (Zimbabwe background only).
+
 ## Source
 - Provider: open-meteo archive API (ERA5 reanalysis, ECMWF/Copernicus), no account required
 - URL: `https://archive-api.open-meteo.com/v1/era5`
@@ -10,27 +12,24 @@ Dataset id: `era5_hourly_precip_v1_rfactor`
 - Access date: 2026-06-19
 
 ## Purpose
-Exploratory experiment to compute an empirical USLE/RUSLE R-factor (EI30) from hourly rainfall,
-in order to arbitrate the two incompatible literature R-families (HIGH ~1400-3700 vs LOW ~240-320)
-identified in `context/docs/research-map/RESULTS.md` (§R-factor). CHIRPS daily is not storm-resolved and
-cannot yield EI30; GPM IMERG (half-hourly) requires a NASA Earthdata account that is not available,
-so ERA5 hourly via open-meteo is the best no-authentication high-temporal-resolution option.
+Empirical USLE/RUSLE R-factor (EI30) from hourly rainfall, used to choose between the two
+literature R-factor ranges for Zimbabwe (HIGH ~1400-3700 vs LOW ~240-320). CHIRPS daily is not
+storm-resolved, and GPM IMERG (half-hourly) needs a NASA Earthdata account.
 
 ## Coverage
-- Spatial: V1 working catchment centroid + a small grid of points across V1 (lon 28.56-29.35,
-  lat -20.96 to -20.03)
-- Temporal: multiple years (e.g. 2018-2023) to get a multi-year mean R
-- Resolution: hourly (ERA5 native). CAVEAT: hourly != 30-min breakpoint, so the computed I30 and
-  R are a LOWER BOUND on the true EI30 R. This is acceptable for a family-arbitration experiment
-  (order-of-magnitude), not for a quantitative validated R.
+- Spatial: V1 working catchment centroid, 6 compass points and a regular point grid across V1
+  (lon 28.50-29.35, lat -20.96 to -20.03)
+- Temporal: 2018-2023
+- Resolution: hourly (ERA5 native). Hourly is coarser than 30-min breakpoint data, so the computed
+  I30 and R are a lower bound on the true EI30 R.
 
-## Destination
-`data/raw/era5_hourly_precip_v1_rfactor/` (LOCAL_DATA; gitignored)
+## Files
+- Local path: `data/raw/era5_hourly_precip_v1_rfactor/`
+- 52 JSON responses (`era5_hourly_<point>_2018-2023.json`, `grid_<lon>_<lat>_2018-2023.json`),
+  68,364,740 bytes in total
+- Checksum: not recorded
+- Derived raster: `bin/criteria/build_era5_rfactor_raster.py`
 
-## Reusability
-Reusable: open-meteo is stable and free; the query is documented in the download script.
-
-## Integrity caveat
+## Known limitations
 ERA5 reanalysis precipitation can under-estimate convective storm intensity in semi-arid tropical
-regions. The empirical R from ERA5 is therefore itself an estimate with its own uncertainty; it is
-one more data point in the family comparison, not ground truth.
+regions, so the empirical R is itself an estimate.

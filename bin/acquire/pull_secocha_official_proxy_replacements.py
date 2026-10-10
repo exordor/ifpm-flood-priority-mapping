@@ -555,9 +555,7 @@ def main() -> None:
         f"{int(rights['positive_area_overlap'].sum())} have positive-area overlap and "
         f"{int(rights['touches_active_boundary'].sum())} only touch the frame boundary.\n"
         f"- INGEMMET DGM administrative EXPLOTACION-status records after exact 5 km filtering: {len(dgm)}.\n\n"
-        "All layers are context evidence and remain outside the PIM score. Mining rights are "
-        "not verified extraction footprints. MINEDU locations are statistical references, and "
-        "MINAM health points may be populated-centre references.\n",
+        "All layers are context outside the PIM score; mining rights are concessions, not extraction footprints.\n",
         SUMMARY_PATH,
     )
     print(json.dumps({

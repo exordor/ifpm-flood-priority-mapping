@@ -251,13 +251,13 @@ This round replaces inputs that had gaps with the full-layer GHSL2020 population
 
 Recalculation confirms that all missing LS values come from the original channel exclusion (flow accumulation >500 cells), not from missing DEM data. soil2017_hillslope keeps these locations as not applicable and explicitly forms the erosion factor in channels from K and C at 50% each; a missing value in any other applicable input still blocks scoring of that indicator. soil2017_allterrain additionally extends the same LS formula into the channels as a method-sensitivity scenario; it must not be described as valid hillslope LS data restored in the channels.
 
-All replacement sources are predictions or model estimates. 100% finite values do not mean complete observation or accuracy. SoilGrids2017 is an older version and should not be considered more accurate than the current version just because it is more complete. Soil K keeps the old normalization anchors; clipping counts and version differences in the overlap area are in soil_version_comparison.csv.
+All replacement sources are predictions or model estimates (SoilGrids2017 is an older version than the current one); complete coverage does not imply accuracy. Soil K keeps the old normalization anchors; clipping counts and version differences in the overlap area are in soil_version_comparison.csv.
 
 '''
     for name in scenarios:
         r=next(r for r in summary if r['scenario']==name and r['zone']=='HQ100')
         report+=f"- {name}: all 14 components present in HQ100 {r['all_14']}/{r['total']}; all applicable components present {r['all_applicable']}/{r['total']}.\n"
-    report+='\nAll tried weights (the original main weights and 34–80%) were recalculated on the same common support domain; HQ100 is used for tuning comparison and cannot serve as independent validation.\n\n'
+    report+='\nAll tried weights (the original main weights and 34–80%) were recalculated on the same common support domain.\n\n'
     report+=f"The official German BK50 soil types cover {bk_evidence['soil_type_cells']}/{bk_evidence['hq100_cells']} cells inside HQ100. The public fields contain no numeric K, so they serve only as background on soil presence and type; K was not guessed from soil names.\n\n"
     for name,r in bests.items():report+=f"- {name}: at the fixed 0.6 threshold, the highest gap among this round's candidates is at a flood weight of {r['flood_weight']:.0%}, with an inside-outside high-score share difference of {100*r['high_share_gap']:.2f} percentage points.\n"
     report+=f'\nReproduce: `.venv/bin/python bin/acquire/pull_abzucht_soilgrids2017.py`, then `{COMMAND}`. The rationale for the original population replacement is in the existing gap_repair_v1.\n'

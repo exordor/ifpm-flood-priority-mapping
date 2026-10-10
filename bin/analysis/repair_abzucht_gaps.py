@@ -269,19 +269,19 @@ def main():
     for name, digest in inputs.items():
         if sha(ROOT/name) != digest: raise ValueError(f'Input mutated: {name}')
     make_figures(arrays, rows, coverage, rectangle & mask, bounds, hq, ref)
-    census_note = 'Rechecking the national population CSV found 937 additional records outside the old clipping extent; these records add no valid cells inside the current model domain. The original population gaps are retained and not filled with zero.'
+    census_note = 'Rechecking the national population CSV found 937 additional records outside the old clipping extent; these records add no valid cells inside the current model domain. The original population gaps are retained.'
     note = f'''# Abzucht gap handling results
 
 The added population estimate raises the share of the display rectangle with all 14 components complete from 5.78% to 59.77%. This is a sensitivity scenario based on replacement data and numerical treatment; the original results were not overwritten.
 
 - Population: the original Zensus2022 covered 26.05%; the GHSL2020 modeled population covers 100%. The whole layer was replaced; the two years were not mixed. The 100 m population counts were distributed to the 30 m grid by area, so the effective resolution is still 100 m.
-- Wetness TWI: the 67 originally missing cells all have zero slope; only these cells were computed with three small candidate slopes of 0.01°, 0.1° and 1°. The 0.1° variant is shown; all results are in comparison.csv. These are not new observations.
-- Soil K: coverage remains 61.44%. The existing SoilGrids data cover the geographic extent, but the source data have missing values; the LBEG interfaces checked returned no usable numeric values, and no gaps were filled from color classes or neighboring values.
+- Wetness TWI: the 67 originally missing cells all have zero slope; only these cells were computed with three small candidate slopes of 0.01°, 0.1° and 1°. The 0.1° variant is shown; all results are in comparison.csv.
+- Soil K: coverage remains 61.44%. The existing SoilGrids data cover the geographic extent, but the source data have missing values; the LBEG interfaces checked returned no usable numeric values.
 - Hillslope LS: coverage remains 96.57%; the original workflow deliberately excludes channels, which stay not applicable/missing.
 
 {census_note}
 
-Mean combined PIM: rectangle 0.425→0.397; inside HQ100 0.470→0.445; full outer 1 km ring 0.419→0.390. The population replacement did not change the flood sub-indicator, and the flat-terrain treatment has very little effect on the overall flood sub-indicator. The drop in scores comes from differences in population source and year and in how component weights were redistributed where components were originally missing; it is not evidence of reduced flood risk. The main weights, component weights, normalization anchors and classification thresholds are all unchanged.
+Mean combined PIM: rectangle 0.425→0.397; inside HQ100 0.470→0.445; full outer 1 km ring 0.419→0.390. The population replacement did not change the flood sub-indicator, and the flat-terrain treatment has very little effect on the overall flood sub-indicator. The drop in scores comes from differences in population source and year and in how component weights were redistributed where components were originally missing. The main weights, component weights, normalization anchors and classification thresholds are all unchanged.
 
 Relative error of the population-allocation conservation check: {mass_check['relative_error']*100:.5f}%; maximum baseline reconstruction error: {error:.3g}. Input and output hashes are in manifest.json.
 
@@ -297,9 +297,9 @@ Reproduce:
 
 Sources:
 - GHSL product: https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe
-- Census notes: Datensatzbeschreibung_Bevoelkerungszahl_Gitterzellen.xlsx in the original ZIP, Version2 (2024-09-30). Unpublished does not mean unpopulated; it involves CKM and unassigned addresses.
+- Census notes: Datensatzbeschreibung_Bevoelkerungszahl_Gitterzellen.xlsx in the original ZIP, Version2 (2024-09-30).
 - SoilGrids mask: https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html
-- LBEG test: BK50KFAKTOR, https://nibis.lbeg.de/net3/public/ikxcms/?pgid=2603 ; the WMS layer L2131 of PkgId24 returned only coverage metadata; WFS is not configured. This does not prove that no usable soil data exist in other services.
+- LBEG test: BK50KFAKTOR, https://nibis.lbeg.de/net3/public/ikxcms/?pgid=2603 ; the WMS layer L2131 of PkgId24 returned only coverage metadata; WFS is not configured.
 '''
     (OUT/'READING_NOTE.md').write_text(note)
     manifest['outputs'] = {str(p.relative_to(OUT)):dict(bytes=p.stat().st_size,sha256=sha(p)) for p in sorted(OUT.rglob('*')) if p.is_file() and p.name != 'manifest.json'}

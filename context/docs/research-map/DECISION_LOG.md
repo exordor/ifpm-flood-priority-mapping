@@ -1,8 +1,6 @@
 # Decision Log
 
-Decisions still in force, newest first. Superseded decisions (Zimbabwe boundary,
-former Peru area selection, July deliverables, terminology gate, earlier weight
-tables) are in Git history (this file before 2026-10-10).
+Decisions still in force, newest first. Superseded decisions are in Git history.
 
 ## 2026-08-14 — Goslar uses the same weights as Secocha
 
@@ -50,10 +48,3 @@ From the mentor's methodology slide: PIM = weighted sum of Flood, Sediment, Land
 Environmental and Socioeconomic criteria, each normalized to 0–1. This is a
 prioritisation index, not hydrodynamic flood modelling. Citizen science, stakeholder
 iteration and a post-mining module are out of scope.
-
-## Standing rules
-
-- NoData stays NoData; it is never scored as low risk.
-- Coarse inputs (CHIRPS ~5 km, SoilGrids 250 m) keep their native resolution as a
-  stated limitation even after resampling to 30 m.
-- Do not write new runs into the frozen former Peru output folder.

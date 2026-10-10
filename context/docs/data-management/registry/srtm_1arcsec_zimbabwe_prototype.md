@@ -1,17 +1,15 @@
 # Dataset Registry: SRTM 1 Arc-Second Zimbabwe Prototype
 
-Status: downloaded and inventoried for controlled V1 terrain diagnostics only.
+Status: downloaded and inventoried for V1 terrain diagnostics. Zimbabwe is background only.
 
 ## Dataset Identity
 
 - Dataset id: `srtm_1arcsec_zimbabwe_prototype`
 - Short name: SRTM 1 Arc-Second Global
-- Data class: `LOCAL_DATA`
-- Reusable download: yes, if the prototype proceeds
 - Project role: terrain baseline for elevation, slope, and hydrological derivatives
 - Study area: Zimbabwe / Upper Mzingwane Catchment prototype slice
 - Spatial unit or mask: V1 working boundary /
-  `HB_L8_1081528840_full_l7_chain`, accepted with waiver for controlled prototype use
+  `HB_L8_1081528840_full_l7_chain` (Zimbabwe prototype boundary)
 - Temporal coverage: SRTM mission acquisition period in February 2000
 
 ## Source And Access
@@ -26,68 +24,34 @@ Status: downloaded and inventoried for controlled V1 terrain diagnostics only.
 - DOI: `10.5066/F7PR7TFT`
 - Access date: 2026-06-12
 - Access method: direct HTTPS download from ESA STEP auxdata mirror; no login was required
-- Licence or terms: cite the SRTM 1 Arc-Second Global DOI and the mirror source used; do not
-  redistribute raw files in public releases without a separate public-release clearance
+- Licence or terms: cite the SRTM 1 Arc-Second Global DOI and the mirror source used
 - Citation requirement: cite SRTM 1 Arc-Second Global DOI, USGS/EROS original source, and ESA
   STEP mirror access if reporting the local download path
-- Account, registration, or approval needed: none encountered for the ESA STEP mirror; stop and
-  defer to the user if a future source requires login
-- Redistribution allowed: not approved for this project handoff; raw data remains local-only
 
-## Download Plan
+## Acquisition
 
-- Intended destination: `data/raw/srtm_1arcsec_zimbabwe_prototype/`
-- Expected file types: raster tiles, likely GeoTIFF or product archive from EarthExplorer
 - Source artifact names: `S22E028.SRTMGL1.hgt.zip`, `S22E029.SRTMGL1.hgt.zip`,
   `S21E028.SRTMGL1.hgt.zip`, `S21E029.SRTMGL1.hgt.zip`, `S20E028.SRTMGL1.hgt.zip`, and
   `S20E029.SRTMGL1.hgt.zip`
-- V1 preflight bbox EPSG:4326 with 5 km buffer:
+- V1 bbox EPSG:4326 with 5 km buffer:
   `28.514098, -21.007996, 29.398052, -19.984062`
-- Expected file count: 6 SRTM 1x1 degree tiles
-- Expected byte size: bounded local download; actual source archive size is `41,162,741` bytes
-  across six ZIP files.
 - Download command or manual steps:
   `.venv/bin/python bin/acquire/download_srtm_v1_tiles.py`
-- Rate limits or quotas: none encountered during the ESA STEP mirror download
-- Authentication handling: no credentials, cookies, tokens, or private links were used
-- Temporary path, if any: `data/tmp/srtm_1arcsec_zimbabwe_prototype/`
-- Cleanup needed after extraction: remove duplicate archives or label retained source archives
 
-## Download Attempt State
+## Download Record
 
-- Attempt status: completed
 - Attempt date: 2026-06-12
-- Failure reason, if any: not applicable
-- Partial path, if any: none retained
 - Archive state: six ZIP source archives stored under `data/raw/srtm_1arcsec_zimbabwe_prototype/`
 - Extraction state: not extracted; inventory reads the `.hgt` members inside ZIP archives
-- Retry or resume safe: yes, script skips already-present valid ZIP files
-- Cleanup/disposition: temporary `.part` files were not retained
-- Cleanup date: 2026-06-12
 
-## Verification
+## Files
 
-- Download completed: yes
-- Verification date: 2026-06-12
-- Checksum scope: downloaded source ZIP archives
-- Checksum algorithm: SHA-256 preferred
-- Checksum command: `.venv/bin/python bin/acquire/download_srtm_v1_tiles.py` and
-  `.venv/bin/python bin/acquire/inventory_srtm_v1_tiles.py`
-- Checksum value: see `outputs/srtm_1arcsec_zimbabwe_prototype/srtm_raw_file_manifest.csv`
-- Expected files or manifest:
-  `outputs/v1_working_boundary/srtm_v1_tile_plan.csv`
-- Actual files or manifest:
+- Manifest (bytes, SHA-256):
   `outputs/srtm_1arcsec_zimbabwe_prototype/srtm_raw_file_manifest.csv`
-- Expected byte size: `<500 MB` pre-download disk guard
-- Actual byte size: `41,162,741` bytes
-- File-count evidence: 6 planned tiles in
-  `outputs/v1_working_boundary/srtm_v1_tile_plan.csv`
-- File-size evidence:
-  `outputs/srtm_1arcsec_zimbabwe_prototype/srtm_raw_file_manifest.csv`
+- File size: `41,162,741` bytes
+- File count: 6 tiles
 - CRS or georeferencing checked: yes; inventory reports `EPSG:4326`
 - Geometry/raster integrity checked: yes; each archive opens as one `SRTMHGT` band
-- Licence/terms accepted: no credentialed terms were accepted; public-release redistribution is
-  still not approved
 
 Downloaded file evidence:
 
@@ -103,8 +67,8 @@ Downloaded file evidence:
 ## Processing And Use
 
 - Raw data path: `data/raw/srtm_1arcsec_zimbabwe_prototype/`
-- Derived output path: `outputs/srtm_1arcsec_zimbabwe_prototype/` for future terrain products;
-  pre-download tile planning output is under `outputs/v1_working_boundary/`
+- Derived output path: `outputs/srtm_1arcsec_zimbabwe_prototype/`;
+  tile plan under `outputs/v1_working_boundary/`
 - Scripts or commands used:
   `.venv/bin/python bin/acquire/plan_srtm_tiles_for_v1.py`,
   `.venv/bin/python bin/acquire/download_srtm_v1_tiles.py`,
@@ -117,13 +81,4 @@ Downloaded file evidence:
   scoring is not started
 - Known limitations: some SRTM tiles may still contain voids; hydrological conditioning is not
   guaranteed
-- Replacement or update rule: replace only if mentor supplies a more authoritative DEM or if
-  Copernicus DEM comparison is explicitly requested
-- Validation role: terrain input only, not direct validation evidence
-
-## Release Boundary
-
-- May be committed: no
-- May be used in public examples: no unless replaced by synthetic or approved sample data
-- May be included in release archives: no unless explicitly approved
-- Public-safe summary available: yes, this registry note without local files
+- Use: terrain input for the Zimbabwe V1 chain

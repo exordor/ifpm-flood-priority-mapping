@@ -7,17 +7,12 @@
 - Source service: `https://geoservicios.sernanp.gob.pe/arcgis/rest/services/servicios_ogc/peru_sernanp_0102/MapServer/0`
 - Access date: 2026-07-13
 - Access method: public ArcGIS REST query, no account required
-- Licence: not stated by the service metadata; retain source attribution and treat the local extract as internal research data
-- Study area: Arequipa Region plus a 5 km proximity buffer
-- Intended use: national definitive protected-area context inside the
-  provisional Environmental criterion
+- Licence: not stated by the service metadata; attribute SERNANP
+- Study area: former Peru study area (frozen, `peru_hybas_l7_6070641200`) plus a 5 km proximity buffer
+- Used by: protected-area context in the Environmental criterion of the former Peru study area
 - Destination: `data/raw/sernanp_peru_protected_areas/peru_hybas_l7_6070641200_sernanp_protected_areas.gpkg`
-- Reusable: yes for the same source date and Arequipa Region boundary; refresh before a final claim
 - Download command: `.venv/bin/python bin/acquire/query_peru_sernanp_protected_areas.py`
-- Expected scope: a small vector extract; the 2026-07-13 count preflight returned two intersecting features for the buffered Arequipa Region envelope
-- Integrity evidence: `query_manifest.json` records the request URL, feature count, file size, and SHA-256 after download
-- Claim boundary: this download queried only MapServer layer 0. Regional,
-  private, and transitional protected-area layers in the service were not
-  queried, so zero Arequipa Region features in this layer is not evidence that Arequipa Region has no
-  protected or ecologically sensitive areas. Protected-area geometry also does
-  not by itself validate ecological sensitivity.
+- Files: 2 features (Punta Hornillos guano islands; Salinas y Aguada Blanca), 212,992 bytes, SHA-256
+  `68d87e1763a3e90424ffcc0449602a6299c3e0b58c30b7f7341d4f1130b663c7`; request details in `query_manifest.json`
+- Known limitations: only MapServer layer 0 was queried; regional, private and transitional
+  protected-area layers were not.

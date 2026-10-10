@@ -2,11 +2,8 @@
 
 - Dataset id: `secocha_official_proxy_replacements_v1`
 - Access date: 2026-08-18
-- Study area: active A7367 reference frame plus 25 km facility context and 5 km mining context
-- Intended use: external evidence that reduces reliance on WorldCover built-up and mining-point proxies
-- Claim level: `context_evidence`
-- PIM use: excluded from scoring; FullAudit only, default-disabled
-- Reusable/public release: local research reuse only. Public redistribution is not approved by this note.
+- Study area: A7367 reference frame plus 25 km facility context and 5 km mining context
+- Used by: context layers in the Secocha FullAudit QGIS package (off by default); not part of the PIM score
 
 ## Sources
 
@@ -50,4 +47,4 @@
 - Short summary: `outputs/secocha_official_proxy_replacements/proxy_replacement_summary.md`
 - QGIS delivery: `exports/qgis_packages/secocha/FullAudit/`
 
-The acquisition compares ArcGIS count responses with returned GeoJSON feature counts and fails on service errors, count mismatches, or transfer-limit flags. The manifest records raw and processed SHA-256 hashes. The four new QGIS layers are kept outside the PIM score.
+The acquisition compares ArcGIS count responses with returned GeoJSON feature counts and fails on service errors, count mismatches, or transfer-limit flags. The manifest records raw and processed SHA-256 hashes.
