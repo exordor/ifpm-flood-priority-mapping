@@ -10,13 +10,10 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CHAIN_CONFIG = ROOT / "context/docs/research-map/peru_authoritative_figure_chain.csv"
+CHAIN_CONFIG = ROOT / "bin/package/peru_authoritative_figure_chain.csv"
 CHAIN_BUILDER = ROOT / "bin/package/build_peru_report_figure_chain.py"
 OVERLAY_EXPORTER = ROOT / "bin/visualize/export_peru_evidence_overlay_maps.py"
 OVERLAY_INDEX = ROOT / "outputs/slide_ready_figures/peru_evidence_overlays/index.csv"
-ACTIVE_TERMINOLOGY = ROOT / "bin/check_active_terminology.py"
-PROJECT_TERMINOLOGY = ROOT / "bin/check_project_terminology.py"
-GLOSSARY_CHECK = ROOT / "bin/check_glossary_sources.py"
 ENVIRONMENTAL_BUILDER = ROOT / "bin/criteria/build_pim_environmental_sensitivity.py"
 
 
@@ -136,20 +133,6 @@ class PeruReportFigureGovernanceTest(unittest.TestCase):
         self.assertIn("outputs/mentor_boundary_decision", legacy)
         slide_files = {str(path) for path in module.LEGACY_SLIDE_FILES}
         self.assertIn("outputs/slide_ready_figures/equal_ahp_hotspot_overlay_summary.csv", slide_files)
-
-    def test_active_checks_do_not_recreate_archived_report_directories(self):
-        active = load_module("check_active_terminology_governance", ACTIVE_TERMINOLOGY)
-        project = load_module("check_project_terminology_governance", PROJECT_TERMINOLOGY)
-        glossary = load_module("check_glossary_sources_governance", GLOSSARY_CHECK)
-
-        self.assertEqual(active.DEFAULT_OUTPUT.parent.name, "project_checks")
-        self.assertEqual(project.DEFAULT_OUTPUT.parent.name, "project_checks")
-        self.assertEqual(project.DEFAULT_SUMMARY.parent.name, "project_checks")
-        self.assertEqual(glossary.DEFAULT_OUTPUT.parent.name, "project_checks")
-        active_dirs = {str(path.relative_to(ROOT)) for path in active.ACTIVE_OUTPUT_DIRS}
-        self.assertIn("outputs/peru_report_figure_chain", active_dirs)
-        self.assertNotIn("outputs/mentor_boss_priority_explanation", active_dirs)
-        self.assertNotIn("outputs/zimbabwe_peru_prototype_comparison", active_dirs)
 
     def test_environmental_summary_writer_creates_the_new_output_directory(self):
         module = load_module("build_pim_environmental_sensitivity_governance", ENVIRONMENTAL_BUILDER)

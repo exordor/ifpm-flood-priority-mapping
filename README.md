@@ -52,9 +52,9 @@ ifpm-flood-pipeline/
 
 ## Document Navigation
 
-- [Research overview](context/docs/research-map/RESEARCH_OVERVIEW.md): current scope and study area.
-- [Research map](context/docs/research-map/README.md): experiments, results, decisions and reproducibility.
-- [Data management](context/docs/data-management/README.md): dataset provenance, download checks and reference grids.
+- [Experiments](context/docs/research-map/EXPERIMENTS.md): current experiments, commands and results.
+- [Decision log](context/docs/research-map/DECISION_LOG.md): decisions in force, including weights.
+- [Dataset registry](context/docs/data-management/registry/): source and licence per dataset.
 - [Terminology](context/docs/glossary.md).
 - [Internal context](context/README.md): what is kept under `context/`.
 - [Local tooling](bin/README.md): processing and verification entry points.

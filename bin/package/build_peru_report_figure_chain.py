@@ -12,14 +12,14 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-CONFIG = ROOT / "context/docs/research-map/peru_authoritative_figure_chain.csv"
+CONFIG = ROOT / "bin/package/peru_authoritative_figure_chain.csv"
 OUTPUT_ROOT = ROOT / "outputs/peru_report_figure_chain"
 CURRENT_DIR = OUTPUT_ROOT / "current"
 MANIFEST = OUTPUT_ROOT / "manifest.csv"
 ARCHIVE_DIR = ROOT / "outputs/_archive/2026-07-11_peru_figure_governance"
 
 INPUTS = [
-    ROOT / "context/docs/research-map/peru_authoritative_figure_chain.csv",
+    ROOT / "bin/package/peru_authoritative_figure_chain.csv",
     ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/peru_raw_main_12_input_factors_panel_no_title_caption.png",
     ROOT / "outputs/slide_ready_figures/peru_raw_input_factor_maps/peru_raw_main_12_input_factors_panel_no_title_caption.pdf",
     ROOT / "outputs/slide_ready_figures/peru_pim_criteria_maps/peru_flood_hazard_5class_no_title_caption.png",

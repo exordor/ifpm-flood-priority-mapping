@@ -1,13 +1,10 @@
 # IFPM Private Context
 
-This directory contains internal project context for Codex-assisted reasoning and document
-preparation.
-
-It is not a deliverable code repository.
+Research records and dataset notes. Not a deliverable code repository.
 
 ## Contents
 
-- [Research map](docs/research-map/README.md): current scope, experiments, results, decisions and execution rules.
+- `docs/research-map/EXPERIMENTS.md` and `DECISION_LOG.md`: current experiments and decisions.
 - `docs/data-management/registry/`: one note per dataset with source, version, access date and licence.
 - `docs/glossary.md`: terminology.
 - `docs/methodology/pim_transformation_flow.md`: PIM transformation flow (Chinese).
@@ -16,7 +13,7 @@ It is not a deliverable code repository.
 - `configs/`: Zimbabwe criteria-stack config read by `bin/` scripts.
 
 Mentor messages, early reviews, superseded plans and archives were removed in the
-2026-10-08 handover cleanup; retrieve them from Git history if needed.
+2026-10-08/10 handover cleanup; retrieve them from Git history if needed.
 
 ## Rule
 

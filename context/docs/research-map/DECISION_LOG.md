@@ -1,469 +1,59 @@
 # Decision Log
 
-Status: active. Why each major choice was made. Each entry: id, date, context,
-decision, reason, alternatives, consequences.
+Decisions still in force, newest first. Superseded decisions (Zimbabwe boundary,
+former Peru area selection, July deliverables, terminology gate, earlier weight
+tables) are in Git history (this file before 2026-10-10).
 
-## D-PERU-SECOCHA-ACTIVE — Secocha replaces the former Peru area as active case
+## 2026-08-14 — Goslar uses the same weights as Secocha
 
-- **Date:** 2026-08-09.
-- **Context:** The Secocha 2023 official INGEMMET/INDECI evidence package is
-  available, but the Secocha anchor lies about 117.7 km outside the former
-  `peru_hybas_l7_6070641200` model footprint. The user directed that the Peru
-  research area switch to Secocha and that the former area be frozen.
-- **Decision:** Activate `peru_secocha_a7367_reference_extent_v1`, a provisional
-  30 km² EPSG:32718 working window read from the coordinate frame of INGEMMET
-  A7367 Map 7. Freeze `peru_hybas_l7_6070641200` and all existing outputs under
-  `outputs/srtm_1arcsec_peru_pilot/` as a read-only historical baseline.
-- **Reason:** A like-for-like model rerun must spatially cover the historical
-  event. Keeping the old area active would make Secocha validation impossible;
-  overwriting it would destroy the existing baseline and provenance.
-- **Alternatives:** continue the former area and keep Secocha external only
-  (rejected by the scope change); overwrite the former outputs (rejected because
-  it destroys reproducibility); call the A7367 reference box a catchment or
-  event footprint (rejected because the evidence does not support that claim).
-- **Consequences:**
-  - The active boundary is a `diagnostic_only` reference extent, not a final
-    catchment or digitized debris-flow footprint.
-  - The old priority raster, run manifest and boundary are checksum-bound in
-    `outputs/srtm_1arcsec_peru_pilot/FROZEN_BASELINE.json`.
-  - New model outputs must use
-    `outputs/peru_secocha_a7367_reference_extent_v1/`.
-  - The area switch does not change PIM weights. Mining remains excluded from
-    the no-mining PIM score and is added only as an external overlay.
-  - Secocha-specific acquisition and the full five-criterion rerun were
-    completed on 2026-08-09 with unchanged Supervisor v07 weights. On 2026-08-11,
-    an original INGEMMET A7367 layer-6 query and a separate Map 7 event-class
-    digitization candidate were added. The 2023 event still cannot be called
-    completed validation until the candidate geometry is independently reviewed
-    and the strict NoData coverage limitation is resolved or explicitly accepted.
+A temporary Goslar-specific reweighting was withdrawn so the two cases stay directly
+comparable. Goslar runs the Secocha chain unchanged on its own inputs.
 
-## D-VERSION-B — 2026-06-16 slide is the authoritative methodology
+## 2026-08-09 — Secocha replaces the former Peru area
 
-- **Date:** 2026-07-02 (recorded), 2026-06-16 (slide received).
-- **Context:** Two methodology versions existed: Version A (original broad
-  picture, 2026-05/2026-06-02) and Version B (2026-06-16 slide). They are not
-  identical.
-- **Decision:** Version B (2026-06-16 slide) is authoritative.
-- **Reason:** most recent, most specific, the version the mentor actively sent.
-  Version B narrows scope: five scored criteria, example weights, an explicit
-  open question on Rehabilitation Potential rather than treating it as a full
-  third module.
-- **Alternatives:** Version A (broad picture with citizen-science + stakeholder
-  iteration + post-mining module). Rejected — de-scoped by Version B.
-- **Consequences:**
-  - In scope: five AHP main criteria; rainfall only as a Flood-side sensitivity
-    implementation layer; AHP-MCDA weighted overlay; sensitivity analysis.
-    Bilateral Zimbabwe-Peru prototype comparison was the June/early-July
-    working route, but the current mainline is superseded by D-PERU-FIRST.
-  - Not required unless mentor re-requests: citizen-science module; stakeholder
-    feedback iteration; post-mining opportunities as a full module.
-  - Open, mentor-gated: Rehabilitation Potential role (D-REHAB).
+The official 2023 Secocha event evidence lies about 118 km outside the former area
+(`peru_hybas_l7_6070641200`), so the model could not be compared with it there. The active
+boundary became `peru_secocha_a7367_reference_extent_v1`. The former area's outputs
+(`outputs/srtm_1arcsec_peru_pilot/`) are frozen; key files are hashed in
+`FROZEN_BASELINE.json` and must not be overwritten.
 
-## D-V1-WAIVER — V1 (Upper Mzingwane catchment, ~3689 km²) accepted with waiver for prototype
+## 2026-08-07 — Supervisor's complete weight table
 
-- **Date:** 2026-06-12 (decision), 2026-06-16 (mentor thumbs-up).
-- **Context:** Boundary discovery produced multiple candidates (HydroBASINS L7
-  ~3700 km², Geoportal `Upper Mzingwane` ~7321.5 km², ~2138 km² literature
-  reference). No source supplied reusable geometry for the literature reference.
-- **Decision:** V1 — the Upper Mzingwane catchment (~3689 km², HydroBASINS
-  level-8, semi-arid; contains Mzingwane Dam and Esigodini, excludes Gwanda) —
-  is accepted with waiver for prototype. C1 (the next-nearest HydroBASINS
-  candidate) is demoted to machine prior only.
-- **Reason:** V1 better matches the mentor's Level-8 downstream-to-Gwanda cue;
-  mentor gave thumbs-up to the V1 evidence board.
-- **Alternatives:** Geoportal named sub-catchment; HydroBASINS L7 union; ~2138
-  km² literature boundary (geometry-unresolved).
-- **Consequences:** V1 — the Upper Mzingwane catchment (~3689 km², semi-arid;
-  contains Mzingwane Dam and Esigodini, excludes Gwanda) — is the prototype
-  boundary. Final thesis boundary remains open (IFPM-D06). Waiver does not
-  authorize final flood-risk
-  interpretation, intervention-priority interpretation, or treating CHIRPS as
-  native 30 m rainfall evidence.
+Top level: Flood 0.34, Sediment 0.25, Land Use 0.17, Environmental 0.10, Socioeconomic 0.14.
 
-## D-AREQUIPA-REGION-CATCHMENT — working catchment selected within Arequipa Region
+| Criterion | Sub-weights |
+|---|---|
+| Flood | rainfall 0.35, TWI 0.25, drainage proximity 0.40 |
+| Sediment | soil K 0.25, LS 0.50, C 0.25 |
+| Land Use | land-cover pressure 0.40, bare/vegetation loss 0.35, built/agriculture/road 0.25 |
+| Environmental | water/wetland 0.65, protected areas 0.35 |
+| Socioeconomic | road access 0.35, settlement/population 0.35, critical infrastructure 0.30 (proxied by building density) |
 
-- **Date:** 2026-06-30.
-- **Context:** Peru side was entirely blank. The mentor had not named a final
-  Peru study site. A boundary was needed to run the terrain chain end-to-end and
-  prove comparability.
-- **Decision:** the working boundary displayed externally as **Arequipa Region** is
-  HydroBASINS L7 `HYBAS_ID=6070641200`, a 2745.4 km² Pacific-slope catchment
-  within Arequipa Region, mainly the
-  Vitor-La Joya-Santa Rita de Siguas area west of Arequipa city. It was chosen
-  by explicit selection rule (pacific-slope, fully inside the
-  Arequipa-Moquegua-Tacna discovery envelope, area comparable to V1,
-  non-terminal).
-- **Reason:** no mentor-named Peru outlet exists; selection rule makes the
-  choice auditable rather than arbitrary.
-- **Alternatives:** wait for mentor to name a site (blocked progress); pick
-  arbitrary largest basin (not defensible).
-- **Consequences:** this Pacific-slope Vitor-La Joya-Santa Rita de Siguas
-  catchment (~2745 km², arid), displayed as **Arequipa Region**, is a provisional comparison
-  catchment, NOT a final research-selected Peru study area. It will be replaced
-  if the mentor names a specific Peru site. No flood-risk/comparison claim from
-  Arequipa Region. Superseded for the current working mainline by D-PERU-FIRST: Arequipa Region remains
-  provisional, but it is now the active Peru-first case to complete.
+The earlier test weights (0.35/0.25/0.20/0.12/0.08) gave nearly the same ranking
+(rho 0.988, top-20% Jaccard 0.85); see `outputs/srtm_1arcsec_peru_pilot/pim_versions/comparison_v02_v07/`.
 
-## D-PERU-FIRST — Peru becomes the current mainline case
+## 2026-08-07 — Mining removed from the score
 
-- **Date:** 2026-07-06.
-- **Context:** During the 2026-07-06 mentor discussion, the mentor directed:
-  "Let's keep Peru and work with Peru first till the end." The immediate
-  methodological point was that the end product should be a flood
-  prioritisation map based on all weighted criteria, with mining data overlaid
-  afterwards to see whether mining areas coincide with high-priority areas.
-  Peru also has stronger current mining evidence through INGEMMET small-mining
-  points, while Zimbabwe mining remains OSM-only / weak.
-- **Decision:** Shift the active project mainline to a Peru-first case study.
-  Complete Arequipa Region first: five-criterion input maps, AHP-weighted prototype
-  prioritisation map, top-priority classes, mining overlay, and a data-strength
-  table. Keep Zimbabwe as a secondary / background comparison and method
-  development baseline, not the result to finish first.
-- **Reason:** Peru currently has the more complete and defensible data stack
-  for the research story, especially mining. Completing one coherent Peru case
-  is stronger than maintaining a symmetric Zimbabwe-Peru comparison while one
-  side has weaker mining evidence.
-- **Alternatives:**
-  - Continue bilateral Zimbabwe-Peru comparison as the mainline (rejected for
-    now: splits attention and over-emphasises weak Zimbabwe evidence).
-  - Switch to Zimbabwe only (rejected: current mining evidence is weaker).
-  - Wait for a final Peru site or final AHP weights (rejected: uncertainty
-    lowers claim level; it does not stop the Peru prototype).
-- **Consequences:**
-  - New outputs and PPT structure should lead with Peru.
-  - Zimbabwe outputs remain usable for background, contrast, or later
-    comparison, but not as the active endpoint.
-  - Arequipa Region is still provisional and not a final research-selected Peru boundary.
-  - The current Peru weight scenario is superseded by
-    D-PERU-MENTOR-WEIGHTS; no equal-weight Peru result remains active.
-  - The final map label should be "prototype flood prioritisation map", not
-    "validated flood-risk map" or "rescue-decision map".
-  - Mining overlay is an interpretation layer over the Peru prioritisation map;
-    it is not validation by itself.
+On Supervisor's direction, mining has zero weight in every criterion. It is shown
+only as a separate overlay after the PIM is computed, to see whether mining areas
+coincide with high-priority areas.
 
-## D-PERU-MENTOR-WEIGHTS — Peru direct AHP weights become the current PIM scenario
+## 2026-07-06 — R-factor and USLE soil loss dropped
 
-- **Date:** 2026-07-06.
-- **Context:** After the Peru-first switch, the mentor supplied a Peru-specific
-  recommended weight table for the Arequipa mining-region case:
-  `FH=0.35`, `SE=0.25`, `LM=0.20`, `ES=0.12`, `SV=0.08`, plus local
-  sub-criteria weights.
-- **Decision:** Use those direct Peru weights as the current main PIM scenario
-  (`mentor_peru_direct_pim`) and as the only weight set shown in the reporting
-  result. Do not retain or regenerate an active equal-weight Peru scenario. Do
-  not use the older slide pairwise matrix as the current Peru mainline scenario.
-- **Reason:** The new table is site-specific and newer than the generic
-  example matrix. It matches the mentor's current Peru-first direction.
-- **Alternatives:** keep the old slide matrix (rejected for the current Peru
-  run because it is generic/older); keep flood-sediment-heavy as a third
-  scenario (rejected for the current PPT/mainline because the mentor asked for
-  the weighted prioritisation model, not extra scenario storytelling).
-- **Consequences:**
-  - Current Peru scenario outputs contain only `mentor_peru_direct_pim`.
-  - The direct weights have no supplied pairwise matrix or consistency ratio,
-    so the current run must not report a CR for them.
-  - All supplied Peru local subweights are now executable. Sediment applies
-    normalized K/LS/C at 0.30/0.45/0.25; Land Use uses a value function distinct
-    from C; Environmental records official SERNANP evidence state.
-  - At the time of this decision, socioeconomic used road/access proximity
-    only. This implementation gap is superseded by
-    D-PERU-EXPOSURE-REFRESH (2026-07-10).
+The June V1/V2 R-factor products used wrong coefficients and were deleted. Sediment
+is an additive score of normalized K, LS and C and does not need R. Reopen only if
+an absolute soil-loss rate (t/ha/yr) is required.
 
-## D-PERU-EXPOSURE-REFRESH — implement exposure while keeping capacity context separate
+## 2026-06-16 — Method: five-criterion PIM by weighted overlay
 
-- **Date:** 2026-07-10.
-- **Context:** WorldPop population, INEI district poverty, OSM buildings and
-  health-service points, and SINPAD emergency records are now locally available.
-  The supplied Peru sub-criteria table specifies 0.45 road/access and 0.55
-  infrastructure exposure, but does not assign poverty or health weights.
-- **Decision:** Implement the PIM socioeconomic criterion as 0.45 road/access
-  proximity plus 0.55 infrastructure exposure. Implement infrastructure
-  exposure as an explicitly provisional 0.50 WorldPop population + 0.50 OSM
-  mapped-building blend. Export INEI poverty and OSM health remoteness as
-  response-capacity context outside the PIM overlay. Use SINPAD only for
-  point co-location diagnostics.
-- **Reason:** This closes the road-only exposure gap while preserving the
-  supplied AHP hierarchy and avoiding unapproved poverty/health subweights or
-  validation leakage.
-- **Consequences:** The direct Peru scenario is rerun from the new fifth
-  criterion. Mean contribution and variability diagnostics are exported so
-  spatial prevalence is not misreported as an effective weight. The result remains
-  `sensitivity_scenario`; WorldPop numbers
-  provide endogenous exposure accounting, and SINPAD remains diagnostic point
-  context rather than a validated flood extent.
+From the mentor's methodology slide: PIM = weighted sum of Flood, Sediment, Land Use,
+Environmental and Socioeconomic criteria, each normalized to 0–1. This is a
+prioritisation index, not hydrodynamic flood modelling. Citizen science, stakeholder
+iteration and a post-mining module are out of scope.
 
-## D-PERU-CRITERIA-GOVERNANCE — align the five executable criteria with current evidence
+## Standing rules
 
-- **Date:** 2026-07-13.
-- **Context:** Audit found a mislocated Peru SoilGrids K extraction, rainfall
-  normalization influenced by values outside Arequipa Region, reuse of the RUSLE C value
-  function for Land Use, an unqualified empty protected-area component, and
-  obsolete equal-weight Peru outputs.
-- **Decision:** Correct the SoilGrids source window and align K with an explicit
-  250 m effective-resolution warning; normalize rainfall from Arequipa Region boundary
-  cells only; implement Sediment as additive normalized K/LS/C with local
-  weights 0.30/0.45/0.25; use a separate WorldCover land-use pressure function;
-  use official SERNANP protected areas and record verified local absence; retain
-  socioeconomic weights 0.45/0.55 while exporting prevalence diagnostics; run
-  only the direct Peru weight set.
-- **Reason:** This makes the executable hierarchy match the supplied five-
-  criterion and subcriterion tables without turning missing evidence into a
-  validated claim or confusing source prevalence with AHP weights.
-- **Consequences:** Scoreable PIM coverage is 95.0998% on the five-criterion
-  common-support domain. The remaining 4.9002% stays unscored; evidence-support
-  rasters distinguish LS, K, and other missing inputs. The direct
-  highest-priority quintile is 521.356 km². Environmental is driven by
-  water/wetland evidence because no SERNANP national definitive layer-0 geometry
-  occurs within Arequipa Region + 5 km; other protected-area layers were not queried. All outputs remain
-  provisional or `sensitivity_scenario`, not validated flood risk.
-  Dependency diagnostics are kept separate from the AHP calculation: shared
-  WorldCover use (`rho=0.498`), road-led Socioeconomic ordering (`rho=0.970`),
-  and water-led Environmental ordering are reported, but no absent subweight is
-  silently reassigned and no supplied weight is recalibrated from raster means.
-
-## D-ZIMBABWE-MENTOR-WEIGHTS — Zimbabwe direct AHP weights archived as a secondary experiment
-
-- **Date:** 2026-07-06.
-- **Context:** After the Peru-first switch, a Zimbabwe-specific recommended
-  weight table was supplied for the Upper Mzingwane catchment:
-  `FH=0.32`, `SE=0.23`, `LM=0.18`, `ES=0.12`, `SV=0.15`, plus local
-  sub-criteria weights.
-- **Decision:** The secondary `boundary_v1 / rainfall_exposure_v0_4` experiment
-  used the direct Zimbabwe weights as `mentor_zimbabwe_direct_pim`. Its former
-  equal-weight comparison is historical only. Exclude the experiment and its
-  downstream comparisons from the default Peru-first pipeline and current
-  reporting chain.
-- **Reason:** The new table is site-specific and aligns the secondary
-  Zimbabwe prototype with the same five-main-criterion framework used by
-  Peru, while keeping Peru as the active mainline.
-- **Alternatives:** keep the old slide matrix in the current Zimbabwe run
-  (rejected for current outputs because a newer site-specific table exists);
-  promote Zimbabwe back to mainline (rejected because D-PERU-FIRST still
-  applies).
-- **Consequences:**
-  - Historical Zimbabwe outputs may still contain equal-weight artifacts, but
-    the current pipeline regenerates only `mentor_zimbabwe_direct_pim`.
-  - The direct weights have no supplied pairwise matrix or consistency ratio,
-    so the current run must not report a CR for them.
-  - Flood subweights are implemented as rainfall 0.35, TWI 0.30, and drainage
-    proximity 0.35.
-  - Land Use / ASM subweights are implemented as land-cover pressure 0.40 and
-    mining pressure 0.60, but Zimbabwe mining evidence remains a weak USGS
-    mineral-reference proximity indicator rather than a verified ASM footprint.
-  - Environmental is implemented as water/wetland context 0.55 plus protected /
-    ecological context 0.45.
-  - Sediment independently applies boundary-standardized spatial K / LS / C at
-    0.35 / 0.35 / 0.30; SoilGrids K remains 250 m effective evidence after
-    alignment to the reference grid.
-  - Socioeconomic still uses road/access proximity only; independent
-    infrastructure exposure is recorded as missing.
-
-## D-CRITERIA-V0-2 — honest-label criteria stack repair
-
-- **Date:** 2026-06-29.
-- **Context:** `criteria_stack_v0_1` worked technically but two semantic/data-
-  policy problems: `K×LS×C` was mislabelled as sediment risk, and NoData was
-  filled as low pressure. Mining and exposure criteria were the weakest.
-- **Decision:** `criteria_stack_v0_2` splits the hidden averages, renames to
-  honest labels (`land_cover_pressure`, `mining_pressure`,
-  `soil_erosion_factors`), and preserves NoData instead of filling.
-- **Reason:** AGENTS.md §Criteria Design Rules requires criterion names that
-  describe what the data actually measure, and NoData must remain NoData unless
-  a documented method justifies imputation.
-- **Alternatives:** keep v0.1 labelling (violates criteria-design rules);
-  over-broaden to sediment risk (no accepted R-factor).
-- **Replacement rules** (a v0.2 update may replace a v0.1 criterion only if
-  stronger by at least one of):
-  - official source instead of public proxy;
-  - observed flood/mining impact instead of generic proximity;
-  - better temporal match;
-  - clear V1 overlap;
-  - documented licence and reproducibility;
-  - no false precision from resampling.
-- **Consequences:** v0.1 remains the frozen baseline; v0.2 outputs do not
-  overwrite v0.1. If evidence is not stronger, v0.2 keeps the baseline criterion
-  and marks the missing dataset in the mentor trip request list.
-
-## D-EXECUTION-POLICY — uncertainty reduces claim level, not pauses execution
-
-- **Date:** 2026-06-29 (IFPM-090).
-- **Context:** Multiple "defensive gates" treated uncertainty as a reason to
-  pause. This blocked legitimate data-processing work behind thesis-level
-  decisions that are the mentor's responsibility.
-- **Decision:** Convert defensive gates into execution-status rules.
-  Uncertainty reduces claim level; it does not automatically pause execution.
-- **Reason:** separates HiWi data-processing scope from mentor/thesis claim
-  scope. Data production (downloads, preprocessing, indicator derivation,
-  standardization, diagnostic overlays with documented weights) is GO and
-  self-authorizing via documented defaults. Interpretable claims (validated
-  flood-risk map, intervention priority, Zimbabwe-Peru comparison, publication)
-  remain NO-GO and are the mentor's calls.
-- **Alternatives:** keep global pauses (blocked progress); remove all gates
-  (loses claim discipline).
-- **Consequences:** the five claim levels
-  (`diagnostic_only`/`provisional`/`sensitivity_scenario`/`mentor_review_ready`/
-  `final_claim`) become the standard status vocabulary. Pause only when required
-  inputs are missing and no provisional substitute exists, code cannot run with
-  the exact error documented, continuing would overwrite valid outputs, or the
-  user explicitly asks to pause. See `REPRODUCIBILITY.md` §Execution status.
-
-## D-JULY18-SCOPE — locked deliverable scope for 18 July mentor trip
-
-- **Date:** 2026-07-02 (revised 2026-07-03).
-- **Context:** The bilateral comparison the mentor wants already existed at
-  ~80% completion but was buried in `outputs/`. Work drifted to engineering
-  refactoring because the real scientific direction was invisible. Three
-  mentor/boss-facing artifacts existed but were scattered and each lacked one
-  piece.
-- **Decision:** Lock scope for two deliverables, built entirely from existing
-  data and scripts. No new criteria, no new downloads, no final claims.
-  - Deliverable 1: integrated main figure with bilateral comparison + per-pixel
-    priority-criterion colouring + clear "why" (4 panels, takeaway, claim level
-    on figure face).
-  - Deliverable 2: boss short process figure with goal header and bilateral
-    label.
-- **Reason:** the mentor independently asked (2026-07-02 Teams) for exactly what
-  was half-built.
-- **Alternatives:** broad new modelling (blocked by gates); broad `bin/`
-  refactoring as primary activity (no scientific value).
-- **Consequences:** the integrated comparison pack is generated under
-  `outputs/zimbabwe_peru_prototype_comparison/`. Out of scope for 7/18: new
-  Zimbabwe mining work; Voi site switch; final flood-risk claim; final
-  Zimbabwe-Peru comparison; weight authorisation; broad `bin/` refactoring.
-- **QA criteria:** non-participant identifies study area, main result, key
-  driver within 30 seconds; claim level on figure face in plain language;
-  takeaway is a statement not a question; legends/colourbars/captions do not
-  hide evidence; criterion names are plain.
-
-## D-RFACTOR-DEPRECATE — all V1/V2 R and USLE A products deprecated
-
-- **Date:** 2026-06-19 (audit), 2026-07-01 (products removed).
-- **Context:** A spot-check found an unverified R-factor coefficient. A full
-  audit revealed the V1 R applies P-based Renard-Freimund coefficients to MFI
-  with an invented break, manufacturing the bimodality.
-- **Decision:** all V1/V2 R-factor rasters and all USLE A rasters derived from
-  them are deprecated and removed. The "V2 resolves the bimodality" framing is
-  invalid.
-- **Reason:** wrong coefficients AND wrong break; absolute values untrustworthy.
-- **What stays safe:** `a_structure_K_LS_C_30m.tif` (K×LS×C erosion-source
-  structure, no rainfall-erosivity factor); K, LS, C factors (all verified);
-  hydrology and terrain preprocessing; CHIRPS
-  rainfall-comparison products; ERA5 empirical R diagnostics; top-20%
-  selection-survival structure test (with caveats).
-- **Consequences:** USLE A absolute values blocked until R-method decision
-  (RQ1). New R-factor products may be generated as `provisional` or
-  `sensitivity_scenario` if method, source, value range, uncertainty, and
-  lineage are documented. (Superseded for the critical path by
-  D-RFACTOR-QUARANTINE below.)
-
-## D-RFACTOR-QUARANTINE — R-factor removed from the critical path
-
-- **Date:** 2026-07-06.
-- **Context:** R-factor had been the highest-priority open question (RQ1) since
-  the 2026-06-19 formula audit (D-RFACTOR-DEPRECATE). It recurrently consumed
-  attention through three mechanisms: (a) the original error opened a rabbit
-  hole with no exit sign; (b) the project's own execution-status policy
-  ("uncertainty reduces claim level, does not automatically pause") was not
-  applied to R-factor, which was treated as a blocker; (c) the technical work
-  (six literature methods, two incompatible families ~6× apart, ERA5 lower-
-  bound) was interesting enough to keep pulling focus. Meanwhile R-factor is
-  one sub-component of one criterion (sediment) out of five, not the project
-  mainline.
-- **Decision:** Quarantine R-factor out of the critical path. At the time of
-  this decision the prototype used a K×LS×C structure layer; current Peru work
-  supersedes that implementation with normalized K/LS/C AHP subcriteria, which
-  also do not require R. USLE A absolute values (ton/ha/yr) are no longer required
-  for the prototype priority map. RQ1, H-RF-FAMILIES, and the R-factor
-  experiments move to `deferred` status. The R-factor record stays in
-  `RESULTS.md` §R-factor as a deferred technical record, not an active blocker.
-- **Reason:** In the historical multiplicative structure test, R only scaled
-  absolute magnitude and did not change rank. In the current Peru additive
-  K/LS/C criterion, R is not an input at all. The v0.2 honest-label repair already renamed this criterion
-  `soil_erosion_factors` (not "sediment risk") — the quarantine completes what
-  that rename started. This decision operationalises the existing
-  D-EXECUTION-POLICY rule that the project was not applying to R-factor.
-- **Alternatives considered:**
-  - Keep R-factor as the highest-priority open question (rejected: no stop
-    condition; recursion loop continues).
-  - Delete the R-factor history entirely (rejected: the audit/verification
-    work is sound and may be needed if the mentor requires USLE A; deletion
-    loses traceable evidence).
-  - Demote the entire sediment criterion to weight 0 (rejected for now: the
-    slide matrix gives sediment weight 0.226, second highest; unilateral
-    demotion may diverge from mentor expectation. K×LS×C keeps the criterion
-    live with honest evidence.)
-- **Consequences:**
-  - The PIM prototype priority map no longer waits on R-factor.
-  - Reversible: if a quantitative USLE A product is required,
-    R-factor is reopened and the deferred record in `RESULTS.md` becomes the
-    active starting point.
-  - IFPM-074 (V2 R-factor) and the dead V2 set stay deferred; no rework now.
-
-## D-TERMINOLOGY — active terminology gate
-
-- **Date:** 2026-07-02 (audit), 2026-07-03 (execution).
-- **Context:** Human-facing terms needed to be checked against mainstream
-  literature; broad `*_proxy` names were leaking into active workflow.
-- **Decision:** stop using broad `*_proxy` names in the active workflow. Active
-  criteria now use `flood_conditioning_factors`, `soil_erosion_factors`,
-  `land_cover_pressure`, `mining_pressure`, `exposure_indicators`,
-  `rainfall_climatology`. Active gate is `bin/check_active_terminology.py`.
-- **Reason:** P1 findings: the deprecated `flood_hazard_proxy` name misused the
-  standard word "hazard" (no inundation evidence); the deprecated coined internal
-  shorthand `R-invariant` is not a mainstream USLE/RUSLE term.
-- **Consequences:** active terminology gate must pass before sending any
-  mentor/boss-facing package. 5 v0.1 + 6-13 files archived 2026-07-03; 3 live
-  files rewritten; `violation` count stayed at 0. Remaining hits of the coined
-  shorthand are all in the dead V2 set or living docs to fix opportunistically.
-
-## D-PERU-FIGURE-CHAIN — one authoritative Peru reporting entrypoint
-
-- **Date:** 2026-07-11.
-- **Context:** multiple old comparison boards, scenario maps, report catalogs,
-  and internal QA figures remained discoverable beside current Peru outputs.
-  This made it unclear which figures represented the active study mainline.
-- **Decision:** the only current reporting entrypoint is
-  `outputs/peru_report_figure_chain/current/`, generated from
-  `context/docs/research-map/peru_authoritative_figure_chain.csv`. Its order is
-  raw inputs → five standardized criteria → direct-weight AHP PIM →
-  mining/population context → weighted-contribution explanation → SINPAD
-  co-location diagnostic.
-- **Claim boundary:** the AHP PIM remains a `sensitivity_scenario`;
-  mining/population overlays are model-input context; SINPAD is
-  `diagnostic_only`, not independent model validation.
-- **Consequences:** superseded report surfaces and legacy slide-ready scenario
-  figures were first moved to `outputs/_archive/2026-07-11_peru_figure_governance/`
-  and then deleted during the 2026-07-15 output cleanup because they are reproducible.
-  Current QA checks write to `outputs/project_checks/` so
-  they do not recreate archived report directories. Historical generation
-  scripts remain available for traceability but their outputs are not included
-  in the authoritative chain.
-
-## IFPM-DNN decision register (mentor-gated)
-
-These decisions are recorded in `RESEARCH_QUESTIONS.md` and block final claims.
-They are not project decisions; they are mentor decisions awaiting input.
-
-| id | decision needed | current state |
-|---|---|---|
-| IFPM-D01 | Final modelling unit (pixel / sub-basin / mixed) | blocked |
-| IFPM-D02 | Peru boundary rule (admin / hydrographic / clipped) | concrete candidates exist; mentor-gated |
-| IFPM-D03 | Validation evidence hierarchy | blocked for final validation; sparse SINPAD point context only |
-| IFPM-D04 | AHP weighting protocol + matrix authorisation | candidate matrix exists as `sensitivity_scenario`; auth open |
-| IFPM-D05 | Mining-data interpretation rule + Rehabilitation Potential role | open |
-| IFPM-D06 | Upper Mzingwane boundary acceptance (final thesis) | V1 waiver only |
-
-## Lineage
-
-Absorbs content from:
-- `project_objective_calibration_2026-07-02.md` (D-VERSION-B)
-- `task_progress_board.md` §Blocked Or Needs Decision (IFPM-D01..D06)
-- `boundary_v1_criteria_stack_v0_2_2026-06-29.md` (D-CRITERIA-V0-2)
-- `july18_deliverable_scope_2026-07-02.md` (D-JULY18-SCOPE)
-- `real_data_execution_preflight_gate.md` (D-EXECUTION-POLICY scope split)
-- `rfactor_investigation_consolidated.md` §1, §6 (D-RFACTOR-DEPRECATE)
-- `terminology_audit_2026-07-02.md` (D-TERMINOLOGY)
-- `assumptions_log.md` (decision-style assumptions)
-- `real_data_preprocessing_design.md` (boundary acceptance rules → D-V1-WAIVER)
-- `_archive/superseded_boundary_exploration_2026-06/v1_working_boundary_decision_2026-06-12.md` (D-V1-WAIVER)
-- `_archive/superseded_process_notes_2026-06/peru_pilot_boundary_decision_2026-06-30.md` (historical Arequipa Region boundary-selection note)
+- NoData stays NoData; it is never scored as low risk.
+- Coarse inputs (CHIRPS ~5 km, SoilGrids 250 m) keep their native resolution as a
+  stated limitation even after resampling to 30 m.
+- Do not write new runs into the frozen former Peru output folder.

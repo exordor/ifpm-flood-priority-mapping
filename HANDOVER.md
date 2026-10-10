@@ -23,10 +23,10 @@ IFPM 是一个洪水优先级（flood prioritisation）多准则原型。它把�
 
 | 位置 | 内容 | 是否在 Git 里 |
 |---|---|---|
-| `README.md`、`AGENTS.md` | 工作区总说明；`AGENTS.md` 是给 AI 助手的规则，也是项目约定的最完整记录 | 是 |
+| `README.md`、`AGENTS.md` | 工作区总说明；`AGENTS.md` 是一页纸的工作约定（目录、数据登记、建模规则） | 是 |
 | `bin/` | 约 190 个处理脚本，按阶段分目录；入口和说明见 `bin/README.md` | 是 |
 | `tests/` | 60 个测试文件 | 是 |
-| `context/docs/research-map/` | 项目主记录：`RESEARCH_OVERVIEW.md`（范围）、`EXPERIMENTS.md`（每个实验的命令和结论）、`DECISION_LOG.md`、`RESULTS.md` 等 | 是 |
+| `context/docs/research-map/` | 项目主记录：`EXPERIMENTS.md`（当前实验的命令、输出和结论）、`DECISION_LOG.md`（仍然有效的决定，含权重） | 是 |
 | `context/docs/data-management/registry/` | 每个数据集的来源、许可和下载记录 | 是 |
 | `context/docs/glossary.md`、`context/docs/methodology/` | 术语表；PIM 方法说明（中文） | 是 |
 | `context/docs/mentor-explanation/` | 只剩给 Supervisor 的英文移交草稿和邮件草稿 | 是 |
@@ -80,7 +80,6 @@ QGIS 用来打开审阅项目。现有 `.venv` 是在 macOS 上建的，换机�
 
 - `pipeline.yaml` 的默认 include 链仍是旧秘鲁区脚本，Secocha 和 Goslar 用的是独立 runner，没有接进 DAG。
 - `bin/` 里部分津巴布韦脚本引用了已在 8 月清理掉的 `outputs/_archive/...` 文件，现在跑不起来（`export_v1_working_boundary.py`、`prepare_v1_multicriteria_evidence.py`、`plot_v1_boundary_paper.py`）。津巴布韦已是背景案例，影响不大。
-- 部分概览文档（`context/docs/research-map/` 下的派生文档）仍写着旧权重 0.35/0.25/0.20/0.12/0.08。以 `run_manifest.json` 为准。
 - 一些旧字段名比实际证据宽泛，比如树冠覆盖下降只是植被损失代理指标。9 月的语义说明在 `goslar_abzucht_display_rectangle_v1/component_semantics_v1/` 和 `input_semantics_followup_v1/`。
 - 部分原始数据因许可限制没有放进移交包（见移交包里的 `EXCLUSIONS.json`），历史重跑可能需要重新申请。
 - 下载 CLMS 和 Sentinel 像元的脚本需要本机的访问凭据文件，凭据不在仓库里。
@@ -101,3 +100,5 @@ QGIS 用来打开审阅项目。现有 `.venv` 是在 macOS 上建的，换机�
 - 参考论文移到 `context/references/`。
 
 2026-10-09 补充精简 `context/`：只保留研究记录、数据登记、术语表、方法说明和 Supervisor 移交草稿，另外留下 `context/configs/`，因为 `bin/` 里的脚本要读取它。导师沟通稿、早期核查报告、旧计划和归档、下载前检查、参考网格规则、导师方法框架截图和最初的数据清单都已删除（Git 历史里可以找回）。参考论文 PDF 也已删除，它不在 Git 里。保留下来的研究记录里还有少数路径指向已删除的文件，这些是历史出处，需要时去 Git 历史里查。
+
+2026-10-10 精简文档和代码里过时与防御性的内容：研究记录从 9 份合并成 `EXPERIMENTS.md` 和 `DECISION_LOG.md` 两份，只写当前实验和仍然有效的决定；`AGENTS.md` 从 467 行的 AI 管理规则改成一页纸的工作约定；术语表只保留当前准则和字段含义；删除 4 个只检查措辞的脚本（`check_*terminology*`、`check_glossary_sources`、`check_top20_priority_wording`）及对应测试；旧秘鲁区的图表配置移到 `bin/package/`。
