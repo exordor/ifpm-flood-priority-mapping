@@ -1,6 +1,6 @@
 # IFPM 移交说明
 
-日期：2026-10-08。本文写给接手这个工作区的人，读完应该知道项目在做什么、东西在哪、怎么跑、下一步该做什么。给 Supervisor 的英文说明草稿在 `context/docs/mentor-explanation/Supervisor_Handover_Draft_2026-10-08.md`。
+日期：2026-10-08。本文写给接手这个工作区的人，读完应该知道项目在做什么、东西在哪、怎么跑、下一步该做什么。
 
 ## 1. 项目是什么
 
@@ -29,7 +29,6 @@ IFPM 是一个洪水优先级（flood prioritisation）多准则原型。它把�
 | `context/docs/research-map/` | 项目主记录：`EXPERIMENTS.md`（当前实验的命令、输出和结论）、`DECISION_LOG.md`（仍然有效的决定，含权重） | 是 |
 | `context/docs/data-management/registry/` | 每个数据集的来源、许可和下载记录 | 是 |
 | `context/docs/glossary.md`、`context/docs/methodology/` | 术语表；PIM 方法说明（中文） | 是 |
-| `context/docs/mentor-explanation/` | 只剩给 Supervisor 的英文移交草稿和邮件草稿 | 是 |
 | `data/raw/`、`data/validation/` | 原始数据，约 17 GB | 否 |
 | `outputs/` | 所有结果，索引见 `outputs/README.md` | 否 |
 | `exports/` | QGIS 便携包 | 否 |
@@ -103,4 +102,4 @@ uv sync --extra hydrology    # 按 uv.lock 装 Python 3.11+ 和全部依赖，�
 
 2026-10-10 精简文档和代码里过时与防御性的内容：研究记录从 9 份合并成 `EXPERIMENTS.md` 和 `DECISION_LOG.md` 两份，只写当前实验和仍然有效的决定；`AGENTS.md` 从 467 行的 AI 管理规则改成一页纸的工作约定；术语表只保留当前准则和字段含义；删除 4 个只检查措辞的脚本（`check_*terminology*`、`check_glossary_sources`、`check_top20_priority_wording`）及对应测试；旧秘鲁区的图表配置移到 `bin/package/`。
 
-2026-10-10 删除 `exports/IFPM_Supervisor_Handover_2026-10-08.zip`（14 GB，精简前的完整快照）及其校验文件，以及 8 月分享包和 6 月导师汇报包两个 zip；删除根目录的 PPT 模板 `pre/summary01.potx` 和未使用的 QGIS 样式库 `symbology-style.db`。
+2026-10-10 删除 `exports/IFPM_Supervisor_Handover_2026-10-08.zip`（14 GB，精简前的完整快照）及其校验文件，以及 8 月分享包和 6 月导师汇报包两个 zip；删除根目录的 PPT 模板 `pre/summary01.potx` 和未使用的 QGIS 样式库 `symbology-style.db`。另外删除打包脚本 `bin/package/build_supervisor_handover.py`、两份给 Supervisor 的英文移交信草稿，以及津巴布韦旧配置 `context/configs/boundary_v1_criteria_stack_v0_2.csv` 和读取它的 `bin/criteria/build_boundary_v1_criteria_stack.py`。

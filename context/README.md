@@ -8,9 +8,6 @@ Research records and dataset notes. Not a deliverable code repository.
 - `docs/data-management/registry/`: one note per dataset with source, version, access date and licence.
 - `docs/glossary.md`: terminology.
 - `docs/methodology/pim_transformation_flow.md`: PIM transformation flow (Chinese).
-- `docs/mentor-explanation/`: English handover draft and email draft for Supervisor (read by
-  `bin/package/build_supervisor_handover.py`).
-- `configs/`: Zimbabwe criteria-stack config read by `bin/` scripts.
 
 Mentor messages, early reviews, superseded plans and archives were removed in the
 2026-10-08/10 handover cleanup; retrieve them from Git history if needed.

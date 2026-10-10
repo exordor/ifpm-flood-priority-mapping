@@ -81,7 +81,6 @@ class StandardizationAbstractionTest(unittest.TestCase):
             ROOT / "bin/criteria/build_peru_hybas_l7_6070641200_soil_k_factor.py",
             ROOT / "bin/criteria/build_peru_hybas_l7_6070641200_rainfall_criterion.py",
             ROOT / "bin/criteria/build_peru_hybas_l7_6070641200_criteria_stack.py",
-            ROOT / "bin/criteria/build_boundary_v1_criteria_stack.py",
             ROOT / "bin/factors/run_goslar_peru_style_chain.py",
             ROOT / "bin/criteria/build_peru_exposure_indicators.py",
             ROOT / "bin/scenarios/run_peru_optimized_land_change_sensitivity.py",

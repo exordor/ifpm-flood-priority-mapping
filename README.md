@@ -35,12 +35,10 @@ lead with Peru.
 ```text
 context/
   docs/
-    research-map/         Research map: experiments, results, decisions, reproducibility, hypotheses.
+    research-map/         Current experiments and decisions.
     data-management/      Dataset registry: source, version, access date and licence per dataset.
     methodology/          PIM transformation flow (Chinese).
-    mentor-explanation/   English handover draft and email draft for Supervisor.
     glossary.md           Terminology.
-  configs/                Zimbabwe criteria-stack config read by bin/ scripts.
 
 ifpm-flood-pipeline/
   src/                     Minimal deliverable pipeline code.
