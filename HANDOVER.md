@@ -42,11 +42,11 @@ IFPM 是一个洪水优先级（flood prioritisation）多准则原型。它把�
 环境（在工作区根目录）：
 
 ```sh
-uv sync                      # 按 pyproject.toml 和 uv.lock 重建 .venv
-uv sync --extra hydrology    # 水文脚本还需要 WhiteboxTools
+# 先装 uv（Mac 可用 brew install uv），再在工作区根目录运行：
+uv sync --extra hydrology    # 按 uv.lock 装 Python 3.11+ 和全部依赖，生成 .venv
 ```
 
-QGIS 用来打开审阅项目。现有 `.venv` 是在 macOS 上建的，换机器需要重建。
+`--extra hydrology` 会装 WhiteboxTools，两条主链算水文时都要用；第一次运行时它会自动下载一个程序文件，需要联网。rasterio 和 geopandas 自带 GDAL，不用另外装。现有 `.venv` 是在 macOS 上建的，换机器需要重建。QGIS 只用来打开审阅项目，单独安装。
 
 主要命令：
 
@@ -60,7 +60,7 @@ QGIS 用来打开审阅项目。现有 `.venv` 是在 macOS 上建的，换机�
 .venv/bin/python bin/analysis/report_goslar_multiriver_full.py
 
 # 测试
-.venv/bin/python -m pytest tests
+.venv/bin/python -m unittest discover -s tests
 ```
 
 其余 Goslar/Abzucht 命令逐条写在 `context/docs/research-map/EXPERIMENTS.md` 对应实验下。
