@@ -1,6 +1,6 @@
 # IFPM 移交说明
 
-日期：2026-10-08。本文写给接手这个工作区的人，读完应该知道项目在做什么、东西在哪、怎么跑、下一步该做什么。英文版给 Supervisor 的说明在 `exports/IFPM_Supervisor_Handover_2026-10-08.zip` 里的 `HANDOVER_EN.md`（源文件在 `context/docs/mentor-explanation/Supervisor_Handover_Draft_2026-10-08.md`）。
+日期：2026-10-08。本文写给接手这个工作区的人，读完应该知道项目在做什么、东西在哪、怎么跑、下一步该做什么。给 Supervisor 的英文说明草稿在 `context/docs/mentor-explanation/Supervisor_Handover_Draft_2026-10-08.md`。
 
 ## 1. 项目是什么
 
@@ -32,10 +32,10 @@ IFPM 是一个洪水优先级（flood prioritisation）多准则原型。它把�
 | `context/docs/mentor-explanation/` | 只剩给 Supervisor 的英文移交草稿和邮件草稿 | 是 |
 | `data/raw/`、`data/validation/` | 原始数据，约 17 GB | 否 |
 | `outputs/` | 所有结果，索引见 `outputs/README.md` | 否 |
-| `exports/` | 打包好的移交包和分享包（zip） | 否 |
+| `exports/` | 8 月分享包、6 月导师汇报包和 QGIS 便携包（zip） | 否 |
 | `ifpm-flood-pipeline/` | 独立的交付代码仓库（自己的 `.git`），只有合成数据测试 | 单独仓库 |
 
-注意：`data/`、`outputs/`、`exports/` 都被 `.gitignore` 忽略。只 clone 仓库拿不到数据和结果，需要整体拷贝文件夹或使用 `exports/` 里的移交 zip。
+注意：`data/`、`outputs/`、`exports/` 都被 `.gitignore` 忽略。只 clone 仓库拿不到数据和结果，需要整体拷贝文件夹。
 
 ## 4. 怎么运行
 
@@ -90,7 +90,7 @@ uv sync --extra hydrology    # 按 uv.lock 装 Python 3.11+ 和全部依赖，�
 2. 检查各准则的覆盖率和代理指标含义，缺数据的地方要在图上可见，不能当作低风险。
 3. 把 Secocha 和 Goslar 的 runner 接进 `pipeline.yaml`，或者干脆让 `pipeline.yaml` 只服务这两条链，去掉旧秘鲁区默认链。
 4. 在接手人的机器上重建环境，跑一遍测试和上面的主要命令，确认可复现。
-5. 确认 Supervisor 能打开移交 zip 里的 QGIS 审阅项目。
+5. 确认接手的人能打开 `outputs/` 里的 QGIS 审阅项目。
 
 ## 8. 本次精简做了什么（2026-10-08）
 
@@ -102,3 +102,5 @@ uv sync --extra hydrology    # 按 uv.lock 装 Python 3.11+ 和全部依赖，�
 2026-10-09 补充精简 `context/`：只保留研究记录、数据登记、术语表、方法说明和 Supervisor 移交草稿，另外留下 `context/configs/`，因为 `bin/` 里的脚本要读取它。导师沟通稿、早期核查报告、旧计划和归档、下载前检查、参考网格规则、导师方法框架截图和最初的数据清单都已删除（Git 历史里可以找回）。参考论文 PDF 也已删除，它不在 Git 里。保留下来的研究记录里还有少数路径指向已删除的文件，这些是历史出处，需要时去 Git 历史里查。
 
 2026-10-10 精简文档和代码里过时与防御性的内容：研究记录从 9 份合并成 `EXPERIMENTS.md` 和 `DECISION_LOG.md` 两份，只写当前实验和仍然有效的决定；`AGENTS.md` 从 467 行的 AI 管理规则改成一页纸的工作约定；术语表只保留当前准则和字段含义；删除 4 个只检查措辞的脚本（`check_*terminology*`、`check_glossary_sources`、`check_top20_priority_wording`）及对应测试；旧秘鲁区的图表配置移到 `bin/package/`。
+
+2026-10-10 删除 `exports/IFPM_Supervisor_Handover_2026-10-08.zip`（14 GB，精简前的完整快照）及其校验文件。
