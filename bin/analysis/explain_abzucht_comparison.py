@@ -138,26 +138,26 @@ def main():
     max_errors['final_pim']=final_error
     manifest={'claim_level':'diagnostic_only','command':'.venv/bin/python bin/analysis/explain_abzucht_comparison.py','component_count':n,'component_names':list(comps),'support':support,'statistics':rows,'case_selection':'Closest to group median PIM; tie nearest candidate pixel centroid; no forced extremum','reconstruction_errors':max_errors,'inputs':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in set(inputs+[Path(__file__),Path(__file__).with_name('compare_abzucht_hq100.py')])},'limits':['All components present is availability, not accuracy or complete raw-data provenance','PIM threshold 0.6 retained for illustrative groups, not calibrated flood threshold','Nearby comparison is not a matched control','Roads are existing OSM snapshot, not verified asset inventory']}
     (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-    text = f"""# Goslar / Abzucht 对比图改进说明
+    text = f"""# Goslar / Abzucht comparison figure improvement notes
 
-状态：diagnostic_only。评分、权重和阈值未改动；本包解释现有结果。
+Status: diagnostic_only. Scores, weights and thresholds are unchanged; this package explains the existing results.
 
-洪水子指标在 HQ100 区域与完整周边 1 km 环带的均值分别为 {fhrows[0]['mean']:.3f} 和 {fhrows[1]['mean']:.3f}，综合评分为 {pr[0]['mean']:.3f} 和 {pr[1]['mean']:.3f}。两个量的语义不同，均不直接表示淹水概率；环带包含地图外的部分，属于描述性地理对照。
+The mean flood sub-indicator is {fhrows[0]['mean']:.3f} in the HQ100 area and {fhrows[1]['mean']:.3f} in the full surrounding 1 km ring; the combined score is {pr[0]['mean']:.3f} and {pr[1]['mean']:.3f}. The two quantities have different meanings, and neither directly represents inundation probability. The ring includes parts outside the map and serves as a descriptive geographic comparison.
 
-- [洪水子指标与综合评分](01_flood_vs_priority.png)：同范围、同颜色分级。洪水子指标对洪泛区的响应更突出，综合评分还取决于其他因素。
-- [模型分项可用性](02_component_availability.png)：全部 {n} 个模型分项都有有限值的像元占 {full:.2f}%。其余像元缺少至少一项，但原流程会重新分配分项权重而仍然得到综合分。LS 的缺失包括主动排除河道；人口缺失记录的含义仍不确定。分项都有值也不等于来源准确或独立。
-- [三个位置及贡献](03_explanation_cases.png)：每组选最接近该组 PIM 中位数的像元，再按空间位置解开并列。背景灰线为已有 OSM 道路。具体坐标、候选数量和缺项见 cases.json，位置可用 case_locations.gpkg 加载。
+- [Flood sub-indicator and combined score](01_flood_vs_priority.png): same extent and same color classes. The flood sub-indicator responds more strongly to the floodplain, while the combined score also depends on other factors.
+- [Model component availability](02_component_availability.png): Cells with finite values for all {n} model components make up {full:.2f}% of the total. The remaining cells lack at least one component, but the original workflow redistributes the component weights and still produces a combined score. Missing LS includes deliberately excluded channels; the meaning of missing population records remains uncertain. Having values for all components does not mean the sources are accurate or independent.
+- [Three locations and their contributions](03_explanation_cases.png): for each group, the cell closest to the group's median PIM is selected, and ties are broken by spatial position. The grey background lines are existing OSM roads. Exact coordinates, candidate counts and missing components are in cases.json; the locations can be loaded from case_locations.gpkg.
 
 """
     for case in serial:
-        text += f"## 位置 {case['case']}：{case['description']}\n\nPIM={case['pim']:.3f}，洪水子指标={case['flood_indicator']:.3f}；可用分项 {case['components_present']}/{n}。缺项：{', '.join(case['missing']) or '无'}。\n\n"
-    text += """位置 A 的洪水子指标已经较高，但综合分仍不到 0.6。侵蚀分项的贡献很低，不过这里 K 和 LS 都缺失，侵蚀项实际由剩下的 C 因子支撑，不能据此断言当地实际侵蚀很低。土地覆盖项贡献也较低。这解释了综合分与洪水子指标的差别。
+        text += f"## Location {case['case']}: {case['description']}\n\nPIM={case['pim']:.3f}, flood sub-indicator={case['flood_indicator']:.3f}; available components {case['components_present']}/{n}. Missing components: {', '.join(case['missing']) or 'none'}.\n\n"
+    text += """Location A already has a fairly high flood sub-indicator, but its combined score is still below 0.6. The erosion component contributes very little, but K and LS are both missing here, so the erosion term rests only on the remaining C factor; this does not show that actual local erosion is low. The land-cover contribution is also low. This explains the difference between the combined score and the flood sub-indicator.
 
-位置 B 在官方 HQ100 范围外，洪水子指标仍较高，且土地覆盖等因素共同抬高综合分。它提示需要复核局部河网和各项数据，但在缺少实测证据时不能称作误报。位置 C 展示洪泛区内达到 0.6 的例子，也有缺项；高分不能替代完整数据证据。
+Location B lies outside the official HQ100 extent, yet its flood sub-indicator is still fairly high, and land cover and other factors together raise its combined score. This suggests that the local stream network and the individual data layers need review, but without observed evidence it cannot be called a false positive. Location C shows an example inside the floodplain that reaches 0.6; it also has missing components, and a high score cannot substitute for complete data evidence.
 
-本次完成的是诊断与表达改进，没有修补原始人口/土壤数据或修改模型。下一步若修复缺项，应作为另一个有明确数据语义的实验。
+This round delivers diagnostic and presentation improvements; it did not repair the original population/soil data or modify the model. If the missing components are repaired next, that should be a separate experiment with clearly defined data semantics.
 
-复现：`.venv/bin/python bin/analysis/explain_abzucht_comparison.py`。分项到五个指标、五个指标到 PIM 的重建误差必须小于 1e-5；输入哈希记录在 manifest.json。
+Reproduce: `.venv/bin/python bin/analysis/explain_abzucht_comparison.py`. The reconstruction error from the components to the five indicators and from the five indicators to the PIM must be below 1e-5; input hashes are recorded in manifest.json.
 """
     (OUT/'READING_NOTE.md').write_text(text)
     print(json.dumps({'support':support,'scores':rows,'cases':serial},indent=2))

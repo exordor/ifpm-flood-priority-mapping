@@ -9,7 +9,7 @@ import geopandas as gpd
 from shapely.geometry import Point, box
 from compare_goslar_multiriver import ROOT,BASE,read_grid,raster_mask,clean_ring,write_csv,sha
 OUT=BASE.parent/'input_semantics_followup_v1'
-ALIASES={'land_cover_pressure':'地类径流倾向代理','bare_soil_vegetation_loss':'2018–2024树冠覆盖下降比例','built_agriculture_road_expansion':'现状建设或耕地与道路邻近代理','road_access_proximity':'道路邻近性（20公里衰减）','settlement_population':'已发布普查人口分项','critical_infrastructure':'已筛选OSM设施邻近性（2公里衰减）','water_wetland_context':'水体或湿地邻近性（10公里衰减）','protected_ecological_context':'Natura2000保护区邻近性（10公里衰减）','soil_k_factor':'相对土壤可蚀性','ls_factor':'坡面LS因子（河道排除）','c_factor':'地类赋值的覆盖管理因子','rainfall_climatology':'降雨气候指标','twi_wetness':'地形湿润指数','drainage_proximity':'排水网络邻近性'}
+ALIASES={'land_cover_pressure':'Land-cover runoff tendency proxy','bare_soil_vegetation_loss':'2018–2024 tree-cover decline share','built_agriculture_road_expansion':'Current built-up or cropland and road-proximity proxy','road_access_proximity':'Road proximity (20 km decay)','settlement_population':'Published census population component','critical_infrastructure':'Proximity to filtered OSM facilities (2 km decay)','water_wetland_context':'Water or wetland proximity (10 km decay)','protected_ecological_context':'Natura2000 protected-area proximity (10 km decay)','soil_k_factor':'Relative soil erodibility','ls_factor':'Hillslope LS factor (channels excluded)','c_factor':'Land-cover-assigned cover-management factor','rainfall_climatology':'Rainfall climatology indicator','twi_wetness':'Topographic wetness index','drainage_proximity':'Drainage-network proximity'}
 def main():
  OUT.mkdir(parents=True,exist_ok=True);inputs={}
  def pin(p):inputs[str(p.relative_to(ROOT))]=sha(p);return p

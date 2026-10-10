@@ -163,25 +163,25 @@ def main():
     table('high_cells.csv',details)
     make_figures(out,arrays,rollup,buckets,ref,bounds,hq,stream)
     baseline=rollup[0]
-    note=f'''# Abzucht 高分格子与官方 HQ100 的距离
+    note=f'''# Distance between Abzucht high-score cells and the official HQ100
 
-固定当前展示长方形、30米网格和综合优先级≥0.6阈值。对高分像元中心到官方多边形求精确欧氏距离；分组0/0-30/30-60/60-90/90-150/>150米。用像元方框与多边形相交检查中心落外但边缘触及HQ100的格子。下表只描述空间贴近程度，不估计洪水预测精度。
+The current display rectangle, the 30 m grid and the combined-priority threshold ≥0.6 are fixed. Exact Euclidean distances are computed from high-score cell centers to the official polygon and grouped as 0/0-30/30-60/60-90/90-150/>150 m. Intersecting each cell square with the polygon identifies cells whose center falls outside HQ100 but whose edge touches it. The table below describes only spatial proximity and does not estimate flood-prediction accuracy.
 
-原始34%：长方形高分{baseline['high_cells']}格，HQ100内{baseline['inside_hq100_high']}格，外{baseline['outside_hq100_high']}格。外部高分中，中心在30米内{next(r['cells'] for r in buckets if r['scenario']=='Original 34%' and r['distance_group']==LABELS[1])}格；{baseline['outside_cell_intersects_hq100']}格的30米方框实际触碰多边形；距离超过150米{baseline['outside_over_150m']}格（占外部高分{baseline['outside_over_150m_share']:.1%}）。因此边缘栅格化只能解释小部分HQ100外部高分分布，不能把其余外部高分直接判为模型错误。
+Original 34%: the rectangle has {baseline['high_cells']} high-score cells, {baseline['inside_hq100_high']} inside HQ100 and {baseline['outside_hq100_high']} outside. Among the outside high-score cells, {next(r['cells'] for r in buckets if r['scenario']=='Original 34%' and r['distance_group']==LABELS[1])} have their center within 30 m; the 30 m squares of {baseline['outside_cell_intersects_hq100']} cells actually touch the polygon; {baseline['outside_over_150m']} cells are more than 150 m away ({baseline['outside_over_150m_share']:.1%} of outside high-score cells). Edge rasterization therefore explains only a small part of the high scores outside HQ100, and the remaining outside high scores cannot be judged directly as model errors.
 
-三种情景的HQ100内部{baseline['hq100_center_cells']}个格子中心全部有PIM值。补全情景在展示长方形有{rollup[1]['rectangle_cells']-rollup[1]['scored_rectangle_cells']}个无值格子，分析时保留为NoData，未当作低分。外部高分数量不是假阳性率，因为展示长方形包含其他排水支线和非HQ100区域，且PIM不是洪水范围预测。
+In all three scenarios, all {baseline['hq100_center_cells']} cell centers inside HQ100 have a PIM value. The completed scenario has {rollup[1]['rectangle_cells']-rollup[1]['scored_rectangle_cells']} cells without a value in the display rectangle; they are kept as NoData in the analysis and not treated as low scores. The number of outside high-score cells is not a false-positive rate, because the display rectangle includes other drainage branches and non-HQ100 areas, and the PIM is not a flood-extent prediction.
 
-模型自身提取的排水线（DEM汇流阈值500）上，原始地图外部高分有{baseline['outside_high_on_model_stream']}格；距HQ100超过150米的外部高分中有{baseline['far_over_150m_on_model_stream']}格直接落在该排水线格子上。模型评分含排水邻近因子，这种对齐至少部分来自模型构造；该排水线也不是独立观测的官方河道，不能据此证明其位置正确或HQ100有偏差。
+On the model's own extracted drainage lines (DEM flow-accumulation threshold 500), the original map has {baseline['outside_high_on_model_stream']} outside high-score cells; of the outside high-score cells more than 150 m from HQ100, {baseline['far_over_150m_on_model_stream']} fall directly on these drainage-line cells. The model score includes a drainage-proximity factor, so this alignment comes at least partly from the model's construction. The drainage lines are also not independently observed official watercourses, so they cannot prove that their position is correct or that HQ100 is offset.
 
 ''' 
     for row in rollup[1:]:
-        note+=f"- {row['scenario']}：高分{row['high_cells']}格；HQ100内{row['inside_hq100_high']}，外{row['outside_hq100_high']}；外部超过150米{row['outside_over_150m']}格。\n"
+        note+=f"- {row['scenario']}: {row['high_cells']} high-score cells; {row['inside_hq100_high']} inside HQ100, {row['outside_hq100_high']} outside; {row['outside_over_150m']} outside cells more than 150 m away.\n"
     note+='''
-本分析不把HQ100向外缓冲后算成“命中率”：30/60/90米只用于诊断距离。HQ100是官方模型情景，不是2017年实测淹水范围。30米中心判定、像元边缘相交和模型排水线分别统计，不能混为同一证据。洪水子指标与综合PIM语义不同；周边高分也可能受其他准则或其他水系影响。
+This analysis does not buffer HQ100 outward to compute a "hit rate": 30/60/90 m are used only as diagnostic distances. HQ100 is an official model scenario, not the observed 2017 inundation extent. The 30 m center test, the cell-edge intersection and the model drainage lines are counted separately and must not be merged into one line of evidence. The flood sub-indicator and the combined PIM have different meanings; nearby high scores may also be driven by other criteria or other water systems.
 
-后续若要判断河道位置是否真实偏移，应引入独立官方河道中心线或高精度航测河道，并检查CRS、DEM、水系阈值。若要验证实际2017年洪水，须另获事件淹水范围或可定位的观测，不应将本HQ100调权参照重复当作独立验证。
+To judge later whether the channel position is truly offset, bring in an independent official channel centerline or a high-accuracy aerial survey of the channel, and check the CRS, DEM and stream threshold. To validate the actual 2017 flood, obtain the event inundation extent or locatable observations separately; this HQ100 weight-tuning reference must not be reused as independent validation.
 
-复现：`.venv/bin/python bin/analysis/diagnose_abzucht_spatial_offset.py`。结果：summary.csv、distance_buckets.csv、high_cells.csv、三张分类栅格、PNG/SVG/PDF图和manifest.json。
+Reproduce: `.venv/bin/python bin/analysis/diagnose_abzucht_spatial_offset.py`. Results: summary.csv, distance_buckets.csv, high_cells.csv, three classification rasters, PNG/SVG/PDF figures and manifest.json.
 '''
     (out/'READING_NOTE.md').write_text(note)
     remember(Path(__file__))

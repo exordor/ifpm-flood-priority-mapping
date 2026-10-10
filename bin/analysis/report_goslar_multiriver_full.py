@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""TOOLING: read-back checks and Chinese handoff for the expanded run."""
+"""TOOLING: read-back checks and English handoff for the expanded run."""
 import json,sys
 from pathlib import Path
 import numpy as np,pandas as pd,geopandas as gpd,rasterio
@@ -60,8 +60,8 @@ def main():
  qa['narrow_map_tick_corrections']=corrected;qa['report_tool_sha256']=sha(Path(__file__))
  (OUT/'validation.json').write_text(json.dumps(qa,indent=2)+'\n')
  def get(pid,metric,zone,pct=34):return table[(table.product_id==pid)&(table.flood_percent==pct)&(table.inclusion=='center')&(table.radius_m==1000)&(table.metric==metric)&(table.zone==zone)].iloc[0]
- text='# 扩大边界后的多河流对比\n\n新范围完整包含保留的14项官方洪泛区资料及外围2公里对照区，并与原模型范围合并。面积'+f"{m['area_km2']:.2f}平方公里；30米格网中{qa['target_cells']:,}格位于评价区，{qa['scored_cells']:,}格有综合PIM，{qa['no_score_cells']:,}格无评分。状态：诊断性对比，不是最终洪水预测验证。\n\n"
- text+='## 原始34%洪水权重结果\n\n均值按洪泛区内／外围1公里列出，环带排除全部已取得的洪泛区；采用像元中心归属。官方划定范围与明确重现期的水力情景分开，公告日期不作洪灾发生年份。\n\n|河流/资料|评分格/洪泛区格|洪水指标 内/外|PIM 内/外|区内PIM≥0.6|\n|---|---:|---:|---:|---:|\n'
+ text='# Multi-river comparison after boundary expansion\n\nThe new extent fully contains the 14 retained official flood-area sources and a 2 km outer reference zone, merged with the original model extent. Area: '+f"{m['area_km2']:.2f} km2; on the 30 m grid, {qa['target_cells']:,} cells lie in the assessment area, {qa['scored_cells']:,} cells have a composite PIM and {qa['no_score_cells']:,} cells have no score. Status: diagnostic comparison, not a final validation of flood prediction.\n\n"
+ text+='## Results with the original 34% flood weight\n\nMeans are listed for inside the flood area / the outside 1 km ring; the ring excludes all acquired flood areas, and cells are assigned by cell center. Official designated extents are kept separate from hydraulic scenarios with an explicit return period, and announcement dates are not treated as flood-event years.\n\n|River/source|Scored cells/flood-area cells|Flood indicator inside/outside|PIM inside/outside|PIM≥0.6 inside|\n|---|---:|---:|---:|---:|\n'
  summary=[]
  for _,p in products.iterrows():
   pi=get(p.product_id,'PIM','inside');po=get(p.product_id,'PIM','ring');fi=get(p.product_id,'Flood indicator','inside');fo=get(p.product_id,'Flood indicator','ring');cv=coverage[coverage.product_id==p.product_id].iloc[0]
@@ -69,8 +69,8 @@ def main():
   summary.append({'product_id':p.product_id,'river':p.river,'scenario':p.scenario,'family':p.family,'inside_cells':int(pi.valid_cells),'ring_cells':int(po.valid_cells),'flood_inside':fi['mean'],'flood_outside':fo['mean'],'pim_inside':pi['mean'],'pim_outside':po['mean'],'pim_high_share':pi.high_share})
  pd.DataFrame(summary).to_csv(OUT/'summary.csv',index=False)
  sf=pd.DataFrame(summary);reg=sf[sf.family=='regulatory']
- text+='\n洪水指标区内均值高于环带的河流：'+ '、'.join(reg.loc[reg.flood_inside>reg.flood_outside,'river'])+'；未高于环带：'+('、'.join(reg.loc[reg.flood_inside<=reg.flood_outside,'river']) or '无')+'。\n'
- text+='综合PIM区内均值高于环带的河流：'+ '、'.join(reg.loc[reg.pim_inside>reg.pim_outside,'river'])+'；未高于环带：'+('、'.join(reg.loc[reg.pim_inside<=reg.pim_outside,'river']) or '无')+'。这是同一口径下的描述性对照。\n'
+ text+='\nRivers whose mean flood indicator inside is higher than in the ring: '+ ', '.join(reg.loc[reg.flood_inside>reg.flood_outside,'river'])+'; not higher than the ring: '+(', '.join(reg.loc[reg.flood_inside<=reg.flood_outside,'river']) or 'none')+'.\n'
+ text+='Rivers whose mean composite PIM inside is higher than in the ring: '+ ', '.join(reg.loc[reg.pim_inside>reg.pim_outside,'river'])+'; not higher than the ring: '+(', '.join(reg.loc[reg.pim_inside<=reg.pim_outside,'river']) or 'none')+'. This is a descriptive comparison on the same basis.\n'
  contribution=[];allflood=products.geometry.union_all()
  for _,p in products.iterrows():
   inside=raster_mask(p.geometry,ref)&valid;ring=raster_mask(clean_ring(p.geometry,1000,allflood),ref)&~raster_mask(allflood,ref)&valid
@@ -78,8 +78,8 @@ def main():
    iv=float(a[inside].mean());ov=float(a[ring].mean());weight=n['main_weights'][key]
    contribution.append(dict(product_id=p.product_id,river=p.river,criterion=key,inside_mean=iv,ring_mean=ov,weight=weight,inside_contribution=iv*weight,ring_contribution=ov*weight,contribution_difference=(iv-ov)*weight))
  pd.DataFrame(contribution).to_csv(OUT/'criterion_comparison.csv',index=False)
- text+='\n各因素区内/外均值及对PIM差值的贡献在criterion_comparison.csv中列出；贡献是标准化因素得分乘原权重，不把低分直接解释为洪水不存在。\n'
- text+='\n## 权重敏感性\n\n|河流/资料|34% 区内/外PIM|50% 区内/外PIM|60% 区内/外PIM|70% 区内/外PIM|\n|---|---:|---:|---:|---:|\n'
+ text+='\nThe inside/outside means of each criterion and their contributions to the PIM difference are listed in criterion_comparison.csv; a contribution is the normalized criterion score multiplied by the original weight, and a low score is not read directly as absence of flooding.\n'
+ text+='\n## Weight sensitivity\n\n|River/source|34% PIM inside/outside|50% PIM inside/outside|60% PIM inside/outside|70% PIM inside/outside|\n|---|---:|---:|---:|---:|\n'
  for _,p in products.iterrows():
   text+='|'+p.river+' / '+p.scenario+'|'+ '|'.join(f'{get(p.product_id,"PIM","inside",w)["mean"]:.3f}/{get(p.product_id,"PIM","ring",w)["mean"]:.3f}' for w in [34,50,60,70])+'|\n'
  stability=[]
@@ -91,18 +91,18 @@ def main():
     assert len(part)==6
     lo=float(part.min());hi=float(part.max());stability.append(dict(product_id=pid,metric=metric,flood_percent=pct,minimum_difference=lo,maximum_difference=hi,status='positive_all' if lo>0 else ('negative_all' if hi<0 else 'mixed')))
  stable=pd.DataFrame(stability);stable.to_csv(OUT/'sensitivity_stability.csv',index=False)
- text+='\n## 对照设置的稳健性\n\n12项资料的洪水指标区内均值在六种设置下都高于环带；Innerste HQ100/HQ25在中心归属、1公里环带下仅高约0.0034/0.0024，改变设置后差值会变号，因此不能称其一致性明确。14项资料包含同河流不同情景，不能当作14条独立河流。\n\n'
- text+='|洪水权重|六种设置均为区内PIM更高|随设置改变方向|六种设置均为区内PIM更低|\n|---|---:|---:|---:|\n'
+ text+='\n## Robustness to reference settings\n\nFor 12 sources, the mean flood indicator inside is higher than in the ring under all six settings. For Innerste HQ100/HQ25 it is only about 0.0034/0.0024 higher with center assignment and the 1 km ring, and the sign of the difference flips under other settings, so their consistency cannot be called clear. The 14 sources include different scenarios of the same river and cannot be treated as 14 independent rivers.\n\n'
+ text+='|Flood weight|Inside PIM higher in all six settings|Direction varies with settings|Inside PIM lower in all six settings|\n|---|---:|---:|---:|\n'
  for pct in [34,50,60,70]:
   q=stable[(stable.metric=='PIM')&(stable.flood_percent==pct)]
   text+=f'|{pct}%|{int((q.status=="positive_all").sum())}|{int((q.status=="mixed").sum())}|{int((q.status=="negative_all").sum())}|\n'
- text+='\n## 如何解释\n\n扩大边界解决的是评价覆盖不足，不能保证指标与官方洪泛区更一致。洪水指标与PIM分别比较；提高洪水权重会使PIM更接近现有洪水指标，并不会修正洪水指标自身的空间模式。详细敏感性表包含500米、1公里、2公里环带与中心/接触两种像元归属，不把像元当独立样本检验显著性。\n\n'
- text+='保留原标准化锚点与原人口空白规则。人口发布表省略格可能是真零或保密处理后的零，当前仍不填零；缺失组件通过原可用项权重重分配处理。因此有PIM评分不代表所有组件都有数据，详见component_coverage.csv。人口、土壤等缺项影响不能解释为真实低风险。\n\n'
- d=m['old_area_comparison'];text+=f'相对于未经设施边缘修复的原冻结34%基准，原区域重叠{d["common_cells"]:,}格的PIM平均绝对变化为{d["mean_absolute_change"]:.6f}，最大绝对变化为{d["max_absolute_change"]:.6f}。分因素变化见old_area_criterion_changes.csv。扩大汇流计算域、重投影网格变化、设施和水体边缘修复、OSM等源快照日期差异都会影响旧区域，不能把变化全部归因于边界本身。土壤原始数据在旧范围的重叠部分逐值一致，其对齐栅格的部分差异来自预处理而非土壤源值更新。原始栅格与权重未改写，输入哈希已核对。\n\n'
- text+=f'人口层旧区共同有效{popdelta["common_cells"]:,}格，原有效但新结果缺失{popdelta["old_valid_now_absent"]}格；共同有效格最大标准化差为{popdelta["max_absolute_difference"]:.6f}。这里保持的是原处理规则，并非承诺重投影后每格值不变。\n\n'
- text+='道路和设施采用2026年9月14日的OSM响应，实际快照时间为UTC 14:19:31–15:00:19，各请求日期与校验记录保存在来源清单中。7月旧缓存及未成功的Ohsome尝试均未用于评分；与原模型的快照日期差异仍需保留在解释中。\n\n'
- text+='地形计算域比评价矩形每边再外扩10.02公里，仍不是完整上游流域，汇流相关结果保留边界依赖。官方范围为法规/模型情景证据；范围外高分不称误报，重叠比例不称预测准确率。\n\n'
- text+='复现：`.venv/bin/python bin/analysis/run_goslar_multiriver_full.py`，随后`.venv/bin/python bin/analysis/report_goslar_multiriver_full.py`。PNG/SVG图采用相同左右双图、固定色阶和0.6阈值，图内不放结论。四张overview概览叠加8条河流的法规边界；6个HWRM情景各自单独出图，避免不同情景边界重叠。QGIS可直接读取两个GPKG和评分TIF。来源文件及校验在expansion_manifest.json，逐产品版本继承comparison_boundaries.gpkg属性。\n'
+ text+='\n## How to interpret\n\nExpanding the boundary fixes insufficient assessment coverage; it does not guarantee closer agreement between the indicators and the official flood areas. The flood indicator and the PIM are compared separately. Raising the flood weight brings the PIM closer to the existing flood indicator, but it does not correct the spatial pattern of the flood indicator itself. The detailed sensitivity table covers 500 m, 1 km and 2 km rings and two cell-assignment rules (center/touched); cells are not treated as independent samples for significance testing.\n\n'
+ text+='The original normalization anchors and the original rule for population gaps are kept. Cells omitted from the published population table may be true zeros or zeros suppressed for confidentiality; they are still not filled with zero. Missing components are handled by redistributing the weight to the originally available components. Having a PIM score therefore does not mean that every component has data; see component_coverage.csv. The effect of missing components such as population or soil cannot be interpreted as genuinely low risk.\n\n'
+ d=m['old_area_comparison'];text+=f'Relative to the original frozen 34% baseline without facility edge repair, the mean absolute PIM change over the {d["common_cells"]:,} overlapping cells of the original area is {d["mean_absolute_change"]:.6f}, and the maximum absolute change is {d["max_absolute_change"]:.6f}. Changes by criterion are in old_area_criterion_changes.csv. The enlarged flow-accumulation domain, changes in the reprojected grid, facility and water-body edge repair, and differences in source snapshot dates (OSM and others) all affect the old area, so the changes cannot all be attributed to the boundary itself. The original soil data are identical value by value where they overlap the old extent; part of the differences in the aligned raster comes from preprocessing, not from updated soil source values. The original rasters and weights were not rewritten, and the input hashes were checked.\n\n'
+ text+=f'In the old area, the population layer has {popdelta["common_cells"]:,} cells valid in both versions, and {popdelta["old_valid_now_absent"]} cells that were valid before are missing in the new result; the maximum normalized difference over the common valid cells is {popdelta["max_absolute_difference"]:.6f}. What is preserved here is the original processing rule, not a promise that every cell value is unchanged after reprojection.\n\n'
+ text+='Roads and facilities use the OSM responses of 14 September 2026; the actual snapshot time was UTC 14:19:31–15:00:19, and the date and checksum of each request are kept in the source inventory. The old July cache and the unsuccessful Ohsome attempts were not used for scoring; the difference in snapshot dates relative to the original model still needs to be kept in mind when interpreting the results.\n\n'
+ text+='The terrain domain extends a further 10.02 km beyond each side of the assessment rectangle; it is still not the complete upstream catchment, so flow-accumulation results remain boundary-dependent. The official extents are regulatory or model-scenario evidence; high scores outside them are not called false positives, and overlap shares are not called prediction accuracy.\n\n'
+ text+='Reproduce: `.venv/bin/python bin/analysis/run_goslar_multiriver_full.py`, then `.venv/bin/python bin/analysis/report_goslar_multiriver_full.py`. The PNG/SVG figures use the same left/right two-panel layout, fixed color scale and 0.6 threshold, with no conclusions inside the figures. The four overview maps overlay the regulatory boundaries of 8 rivers; each of the 6 HWRM scenarios has its own map so that boundaries of different scenarios do not overlap. QGIS can read the two GPKG files and the score TIFs directly. Source files and checksums are in expansion_manifest.json, and the version of each product is carried in the attributes of comparison_boundaries.gpkg.\n'
  (OUT/'READING_NOTE.md').write_text(text)
  files={str(p.relative_to(OUT)):sha(p) for p in sorted(OUT.rglob('*')) if p.is_file() and p.name!='output_checksums.json'}
  (OUT/'output_checksums.json').write_text(json.dumps(files,indent=2)+'\n');print(json.dumps(qa,indent=2))

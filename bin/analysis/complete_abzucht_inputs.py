@@ -245,22 +245,22 @@ def main():
     for source in [Path(__file__),ROOT/'bin/analysis/repair_abzucht_gaps.py',ROOT/'bin/analysis/abzucht_frozen_normalization.py',
                    ROOT/'bin/analysis/compare_abzucht_hq100.py',ROOT/'bin/analysis/tune_abzucht_weights.py',ROOT/'bin/_lib/standardization.py']:pin(source)
     bests={name:max([r for r in rankings if r['scenario']==name],key=lambda r:(r['high_share_gap'],-r['flood_weight'])) for name in scenarios}
-    report='''# Abzucht 输入补全与权重重算
+    report='''# Abzucht input completion and weight recalculation
 
-本轮用整层 GHSL2020 人口估计和 SoilGrids2017 土壤预测替换了存在缺项的输入；不把新旧土壤版本拼接，不将缺失填零。0坡度TWI沿用0.1度候选下限。原始数据和旧试验保留。
+This round replaces inputs that had gaps with the full-layer GHSL2020 population estimate and the SoilGrids2017 soil prediction. Old and new soil versions are not mixed, and missing values are not filled with zero. Zero-slope TWI keeps the 0.1-degree candidate lower bound. The original data and earlier experiments are retained.
 
-LS 缺失经重算核验全部来自原先的河道排除（汇流>500格），不是缺少DEM。soil2017_hillslope 保留该处不适用，并显式用 K/C 各50%组成河道处侵蚀因素；任何其他适用输入缺失都会阻止该指标评分。soil2017_allterrain 另将同一LS公式延伸到河道，作为方法敏感性方案，不能称为河道处被补回的有效坡面LS数据。
+Recalculation confirms that all missing LS values come from the original channel exclusion (flow accumulation >500 cells), not from missing DEM data. soil2017_hillslope keeps these locations as not applicable and explicitly forms the erosion factor in channels from K and C at 50% each; a missing value in any other applicable input still blocks scoring of that indicator. soil2017_allterrain additionally extends the same LS formula into the channels as a method-sensitivity scenario; it must not be described as valid hillslope LS data restored in the channels.
 
-所有替代源均是预测或模型估计。100%有限数值不表示完整观测或准确率；SoilGrids2017是旧版本，不能因为更完整就认为比当前版本更准。土壤K沿用旧标准化锚点，截断数量与重叠区版本差异见soil_version_comparison.csv。
+All replacement sources are predictions or model estimates. 100% finite values do not mean complete observation or accuracy. SoilGrids2017 is an older version and should not be considered more accurate than the current version just because it is more complete. Soil K keeps the old normalization anchors; clipping counts and version differences in the overlap area are in soil_version_comparison.csv.
 
 '''
     for name in scenarios:
         r=next(r for r in summary if r['scenario']==name and r['zone']=='HQ100')
-        report+=f"- {name}: HQ100全部14项齐全 {r['all_14']}/{r['total']}；全部适用项齐全 {r['all_applicable']}/{r['total']}。\n"
-    report+='\n同一共同支持域、原主权重及34–80%全部已试权重重算；HQ100用于调参比较，不能作为独立验证。\n\n'
-    report+=f"德国官方BK50土壤类型在HQ100内覆盖{bk_evidence['soil_type_cells']}/{bk_evidence['hq100_cells']}格。公开字段没有数值K，因此只作为土壤存在和类型背景；没有用土壤名称猜K。\n\n"
-    for name,r in bests.items():report+=f"- {name}: 固定0.6阈值下，本轮候选最高差值在洪水权重{r['flood_weight']:.0%}，内外高分比例差{100*r['high_share_gap']:.2f}个百分点。\n"
-    report+=f'\n复现：`.venv/bin/python bin/acquire/pull_abzucht_soilgrids2017.py`，然后`{COMMAND}`。原始人口替换依据见既有gap_repair_v1。\n'
+        report+=f"- {name}: all 14 components present in HQ100 {r['all_14']}/{r['total']}; all applicable components present {r['all_applicable']}/{r['total']}.\n"
+    report+='\nAll tried weights (the original main weights and 34–80%) were recalculated on the same common support domain; HQ100 is used for tuning comparison and cannot serve as independent validation.\n\n'
+    report+=f"The official German BK50 soil types cover {bk_evidence['soil_type_cells']}/{bk_evidence['hq100_cells']} cells inside HQ100. The public fields contain no numeric K, so they serve only as background on soil presence and type; K was not guessed from soil names.\n\n"
+    for name,r in bests.items():report+=f"- {name}: at the fixed 0.6 threshold, the highest gap among this round's candidates is at a flood weight of {r['flood_weight']:.0%}, with an inside-outside high-score share difference of {100*r['high_share_gap']:.2f} percentage points.\n"
+    report+=f'\nReproduce: `.venv/bin/python bin/acquire/pull_abzucht_soilgrids2017.py`, then `{COMMAND}`. The rationale for the original population replacement is in the existing gap_repair_v1.\n'
     (out/'READING_NOTE.md').write_text(report)
     # Reopen all persisted arrays; exact score/class support equality.
     for (name,f),a in rasters.items():

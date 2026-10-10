@@ -270,13 +270,13 @@ def report(out,inventory,rows,cases,drivers):
     def get(pid,metric,zone,radius=1000,inclusion='center'):
         return next(r for r in rows if r['product_id']==pid and r['metric']==metric and r['zone']==zone and r['radius_m']==radius and r['inclusion']==inclusion)
     def number(x):return '—' if x is None else f'{x:.3f}'
-    text='# 多河流对比结果\n\n本轮仅比较原模型已有覆盖。公告日期不是洪灾日期；主图左侧为洪水子指标，右侧为综合PIM，均保持原始输入、权重、尺度及阈值。解释放在图外。\n\n'
-    text+='官方划定范围用 regulatory_extent 标识，不把所有法规图层无条件等同于逐要素核实的HQ100。Abzucht既有HQ100比较口径保留；补充HWRM采用明确的重现期字段。两个Oker HQ20自交几何以make_valid修复，面积变化见manifest.json，原数据未修改。\n\n## 逐河流结果\n\n| 河流/资料 | 有效格数 | 资料面积覆盖率 | 洪水指标 内/外 | PIM 内/外 | PIM≥0.6占比（内） |\n|---|---:|---:|---|---|---:|\n'
+    text='# Multi-river comparison results\n\nThis round compares only areas already covered by the original model. Announcement dates are not flood-event dates. In the main maps, the left panel shows the flood sub-indicator and the right panel the composite PIM; original inputs, weights, scales and thresholds are all kept unchanged. Interpretation is given outside the figures.\n\n'
+    text+='Official designated extents are labelled regulatory_extent; not every regulatory layer is automatically treated as a feature-by-feature verified HQ100. The existing Abzucht HQ100 comparison basis is retained; the supplementary HWRM data use an explicit return-period field. Two self-intersecting Oker HQ20 geometries were repaired with make_valid; the area changes are recorded in manifest.json, and the original data were not modified.\n\n## Results by river\n\n| River/source | Valid cells | Source-area coverage | Flood indicator inside/outside | PIM inside/outside | Share PIM≥0.6 (inside) |\n|---|---:|---:|---|---|---:|\n'
     summary=[]
     for inv in inventory:
         pid=inv['product_id'];label=f"{inv['river']} / {inv['family']} / {inv['scenario']}"
         if pid is None:
-            text+=f'| {label} | — | — | 缺空间数据 | — | — |\n';continue
+            text+=f'| {label} | — | — | missing spatial data | — | — |\n';continue
         fi=get(pid,'Flood indicator','inside');fo=get(pid,'Flood indicator','ring');pi=get(pid,'PIM','inside');po=get(pid,'PIM','ring')
         share='—' if pi['high_share'] is None else f"{100*pi['high_share']:.2f}%"
         text+=f"| {label} | {pi['valid_cells']} | {100*inv['boundary_coverage_fraction']:.2f}% | {number(fi['mean'])}/{number(fo['mean'])} | {number(pi['mean'])}/{number(po['mean'])} | {share} |\n"
@@ -284,7 +284,7 @@ def report(out,inventory,rows,cases,drivers):
                             inside_cells=pi['valid_cells'],ring_cells=po['valid_cells'],boundary_coverage_fraction=inv['boundary_coverage_fraction'],
                             flood_inside_mean=fi['mean'],flood_ring_mean=fo['mean'],pim_inside_mean=pi['mean'],pim_ring_mean=po['mean'],
                             pim_inside_high_share=pi['high_share']))
-    text+='\n“外”指剔除所有已取得官方洪泛区后的1公里环带，并限制在模型有效范围。包括同一河流其他重现期的范围，仅用于排除对照区，不合并目标洪水情景。覆盖率以保留的资料多边形面积为分母；不是整条河流的覆盖率。详细中位数、样本数、NoData和环带面积见statistics.csv。\n\n## 稳健性与解释\n\n'
+    text+='\n"Outside" means the 1 km ring left after removing all acquired official flood areas, restricted to the valid model extent. The removed areas include the extents of other return periods of the same river; they are used only to exclude cells from the reference ring, and target flood scenarios are not merged. Coverage uses the retained source polygon area as the denominator; it is not coverage of the whole river. Detailed medians, sample sizes, NoData counts and ring areas are in statistics.csv.\n\n## Robustness and interpretation\n\n'
     for inv in inventory:
         pid=inv['product_id']
         if not pid or not inv['center_valid_cells']:continue
@@ -296,22 +296,22 @@ def report(out,inventory,rows,cases,drivers):
                     i=get(pid,metric,'inside',radius,inclusion);r=get(pid,metric,'ring',radius,inclusion)
                     if i['mean'] is not None and r['mean'] is not None:differences.append(i['mean']-r['mean'])
             if differences:
-                direction='全部为正' if min(differences)>0 else ('全部为负' if max(differences)<0 else '方向随设置变化')
-                findings.append(f'{metric}内减外均值差 {min(differences):.3f}～{max(differences):.3f}，{direction}')
-        text+=f"- {inv['river']} / {inv['family']} / {inv['scenario']}："+'；'.join(findings)+'。\n'
-    text+='\n跨河流归纳：所有10个有覆盖的资料/情景，洪水子指标的内外均值差在六种设置下均为正。综合PIM仅Abzucht稳定为正；Grane与Innerste稳定为负；Oker的部分版本随设置改变方向。PIM中洪水子指标权重为0.34，其他四项合计0.66，因此洪水指标较高并不保证综合优先级较高。Grane的侵蚀因子负差抵消洪水项正差；Oker还受到土地利用压力项负差影响；Innerste的侵蚀、土地利用和社会经济项共同抵消洪水项优势。具体加权差见下表及criterion_contributions.csv。这里说明评分构成，不证明现实中的因果机制。\n\n这些是描述性空间对应关系，不是预测准确率或独立事件验证；环带不是匹配的统计控制组。范围外高分不能判为误报。Innerste等仅覆盖很少范围的结果不能推广到整条河流。洪水情景与模型可能共享地形或河网信息。0.6是现有优先级阈值，不是校准的洪水识别阈值。\n\n## 示例点与贡献\n\nC为范围内高分，A为范围内未达0.6，B为清理后的1公里外围环带高分。各组选最接近组内PIM中位数的格子；不存在的组不强行选择。案例不是独立验证样本。\n\n'
-    names={'flood_hazard':'洪水子指标','sediment':'侵蚀因子','landuse_asm':'土地利用压力','environmental':'环境指标','socioeconomic':'社会经济指标'}
-    text+='按整个比较区分解PIM内外均值差（加权贡献，非因果效应）：\n\n'
+                direction='all positive' if min(differences)>0 else ('all negative' if max(differences)<0 else 'direction varies with settings')
+                findings.append(f'{metric} inside-minus-outside mean difference {min(differences):.3f} to {max(differences):.3f}, {direction}')
+        text+=f"- {inv['river']} / {inv['family']} / {inv['scenario']}: "+'; '.join(findings)+'.\n'
+    text+='\nCross-river summary: for all 10 covered sources/scenarios, the inside-minus-outside mean difference of the flood sub-indicator is positive under all six settings. For the composite PIM, only Abzucht is consistently positive; Grane and Innerste are consistently negative; some Oker versions change direction depending on the setting. The flood sub-indicator has a weight of 0.34 in the PIM and the other four criteria together have 0.66, so a higher flood indicator does not guarantee a higher composite priority. For Grane, the negative difference in the erosion factor offsets the positive flood difference; Oker is additionally affected by a negative difference in the land-use pressure term; for Innerste, the erosion, land-use and socioeconomic terms together offset the flood advantage. The specific weighted differences are listed below and in criterion_contributions.csv. This explains how the score is composed; it does not prove a real-world causal mechanism.\n\nThese are descriptive spatial correspondences, not predictive accuracy or independent event validation; the ring is not a matched statistical control group. High scores outside the extents cannot be classed as false positives. Results that cover only a small part of the extent, such as Innerste, cannot be generalized to the whole river. The flood scenarios and the model may share terrain or river-network information. 0.6 is the existing priority threshold, not a calibrated flood-detection threshold.\n\n## Example cells and contributions\n\nC is a high-scoring cell inside the extent, A is a cell inside the extent below 0.6, and B is a high-scoring cell in the cleaned 1 km outside ring. In each group the cell closest to the median PIM of the group is chosen; groups with no cells are not forced. The cases are not independent validation samples.\n\n'
+    names={'flood_hazard':'flood sub-indicator','sediment':'erosion factor','landuse_asm':'land-use pressure','environmental':'environmental indicator','socioeconomic':'socioeconomic indicator'}
+    text+='Decomposition of the PIM inside-minus-outside mean difference over the whole comparison area (weighted contributions, not causal effects):\n\n'
     for inv in inventory:
         pid=inv['product_id']
         if not pid or not inv['center_valid_cells']:continue
         d={key:next(x['mean_contribution'] for x in drivers if x['product_id']==pid and x['zone']=='inside' and x['criterion']==key)-next(x['mean_contribution'] for x in drivers if x['product_id']==pid and x['zone']=='ring' and x['criterion']==key) for key in names if any(x['product_id']==pid and x['zone']=='ring' and x['criterion']==key and x['mean_contribution'] is not None for x in drivers)}
-        text+=f"- {inv['river']} / {inv['family']} / {inv['scenario']}："+'；'.join(f'{names[k]} {v:+.3f}' for k,v in d.items())+'。\n'
-    text+='\n具体代表格：\n\n'
+        text+=f"- {inv['river']} / {inv['family']} / {inv['scenario']}: "+'; '.join(f'{names[k]} {v:+.3f}' for k,v in d.items())+'.\n'
+    text+='\nRepresentative cells:\n\n'
     for c in cases:
         top=sorted(c['contributions'],key=c['contributions'].get,reverse=True)[:2]
-        text+=f"- {c['product_id']} / {c['group']}：PIM {c['pim']:.3f}，洪水 {c['flood_indicator']:.3f}；最大两项贡献 "+'、'.join(f"{names.get(k,k)}={c['contributions'][k]:.3f}" for k in top)+f"；缺项：{','.join(c['missing_components']) or '无'}。\n"
-    text+='\n缺项会导致原流程使用剩余分项并重新分配分项权重；例如缺K、LS时侵蚀项只由C支撑，不能据此判断实际侵蚀低。点坐标、完整贡献及缺项在cases.json和GeoPackage的cases图层。\n\n本轮不调整权重、不扩大覆盖。是否需要下一步改变指标，应先结合各河流一致性与缺项情况确定。\n\n复现：`.venv/bin/python bin/analysis/compare_goslar_multiriver.py`。来源、脚本和输出校验记录见manifest.json。\n'
+        text+=f"- {c['product_id']} / {c['group']}: PIM {c['pim']:.3f}, flood {c['flood_indicator']:.3f}; two largest contributions "+', '.join(f"{names.get(k,k)}={c['contributions'][k]:.3f}" for k in top)+f"; missing components: {','.join(c['missing_components']) or 'none'}.\n"
+    text+='\nMissing components cause the original pipeline to use the remaining components and redistribute their weights; for example, when K and LS are missing the erosion term is supported by C alone, so this cannot be taken to mean that actual erosion is low. Cell coordinates, full contributions and missing components are in cases.json and in the cases layer of the GeoPackage.\n\nThis round does not adjust weights or extend coverage. Whether the indicators should be changed in a next step should first be decided in light of cross-river consistency and the missing components.\n\nReproduce: `.venv/bin/python bin/analysis/compare_goslar_multiriver.py`. Sources, scripts and output checksums are recorded in manifest.json.\n'
     (out/'READING_NOTE.md').write_text(text)
     write_csv(out/'comparison_summary.csv',summary)
 

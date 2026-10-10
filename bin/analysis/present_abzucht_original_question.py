@@ -104,25 +104,25 @@ def main():
         a.set_title(f'{key}: priority {c["pim"]:.3f} | flood {c["flood_indicator"]:.3f}',fontsize=11,loc='left',pad=12)
     for fmt in ['png','svg','pdf']:fig.savefig(OUT/f'original_question_comparison.{fmt}',dpi=180)
     plt.close(fig)
-    note=f'''# 原始问题的回答
+    note=f'''# Answer to the original question
 
-现有结果显示一定洪水响应，但综合高优先级区与官方洪泛区吻合有限。该结果足够向导师讨论指标目标与偏差原因，不能据此直接调权或报告预测准确率。
+The existing results show some flood response, but the overlap between the high combined-priority areas and the official floodplain is limited. This result is sufficient for discussing the indicator's goal and the reasons for the discrepancy with the supervisor, but it does not justify adjusting the weights directly or reporting prediction accuracy.
 
-本包仅使用原人口、原土壤输入、原权重和固定标准化尺度；不使用GHSL替代人口。主图由现有栅格和已核验的三个示例点生成，没有重跑或修改评分。
+This package uses only the original population, the original soil inputs, the original weights and the fixed normalization scales; the GHSL replacement population is not used. The main figure is generated from existing rasters and the three verified example points; scoring was not rerun or modified.
 
-- HQ100内{htotal}个30米格子：高分{counts['C']}格（{share:.2f}%），低于0.6的{counts['A']}格（{100-share:.2f}%）。长方形内还有{counts['B']}个高分格子在HQ100外。这三组不是完整混淆矩阵；灰色是其余区域，范围外不代表没有洪水。
-- 洪水子指标均值：HQ100内{fh_in:.3f}、完整外围1公里环带{fh_out:.3f}；综合PIM为{pim_in:.3f}、{pim_out:.3f}。环带是描述性对照，并非匹配的统计控制组。
-- C点（吻合）：PIM{by_case['C']['pim']:.3f}，洪水{by_case['C']['flood_indicator']:.3f}。洪水、土地覆盖及其他因素共同形成高总分。
-- A点（洪泛区内未达高分）：PIM{by_case['A']['pim']:.3f}，洪水{by_case['A']['flood_indicator']:.3f}。洪水项贡献仍高，土地覆盖和侵蚀项贡献较小，综合分因此未到0.6。
-- B点（洪泛区外高分）：PIM{by_case['B']['pim']:.3f}，洪水{by_case['B']['flood_indicator']:.3f}。土地覆盖等因素也较高；只能说与这个HQ100情景不一致，不能判定误报。
+- {htotal} 30 m cells inside HQ100: {counts['C']} high-score cells ({share:.2f}%) and {counts['A']} cells below 0.6 ({100-share:.2f}%). The rectangle also contains {counts['B']} high-score cells outside HQ100. These three groups are not a complete confusion matrix; grey is the remaining area, and being outside the extent does not mean there is no flooding.
+- Mean flood sub-indicator: {fh_in:.3f} inside HQ100 and {fh_out:.3f} in the full outer 1 km ring; the combined PIM is {pim_in:.3f} and {pim_out:.3f}. The ring is a descriptive comparison, not a matched statistical control group.
+- Point C (agreement): PIM {by_case['C']['pim']:.3f}, flood {by_case['C']['flood_indicator']:.3f}. Flood, land cover and other factors together produce the high total score.
+- Point A (inside the floodplain, not high-scoring): PIM {by_case['A']['pim']:.3f}, flood {by_case['A']['flood_indicator']:.3f}. The flood contribution is still high, but the land-cover and erosion contributions are small, so the combined score does not reach 0.6.
+- Point B (high score outside the floodplain): PIM {by_case['B']['pim']:.3f}, flood {by_case['B']['flood_indicator']:.3f}. Land cover and other factors are also high; this can only be described as inconsistent with this HQ100 scenario and cannot be judged a false positive.
 
-三个示例都缺土壤K、坡面LS、人口。侵蚀项实际上只使用剩余C因子，暴露项也按剩余分项计算。因此A点很低的侵蚀贡献不能解释为当地实际侵蚀很低。案例选择是各组最接近PIM中位数的格子，不代表该组所有位置。
+All three examples lack soil K, hillslope LS and population. The erosion term actually uses only the remaining C factor, and the exposure term is likewise computed from the remaining components. The very low erosion contribution at Point A therefore cannot be interpreted as low actual local erosion. Each case is the cell closest to its group's median PIM and does not represent every location in that group.
 
-建议：先明确PIM应表达洪水危险程度还是综合干预优先级；若是后者，就应把洪水子指标单独与HQ100比较，而不是要求整条洪泛区都变红。权重调整需要进一步证据。
+Recommendation: first clarify whether the PIM should express flood hazard or combined intervention priority. If it is the latter, the flood sub-indicator should be compared with HQ100 on its own, rather than expecting the whole floodplain to turn red. Weight adjustments need further evidence.
 
-图例分类来自像元中心叠加，边界精细差异受30米网格影响。HQ100为官方模型情景，不是实际洪水的完整观测标签；0.6是现有优先级分级阈值，不是校准的洪水判断阈值。
+The legend classes come from a cell-center overlay, so fine boundary differences are affected by the 30 m grid. HQ100 is an official model scenario, not a complete observed label of actual flooding; 0.6 is the existing priority classification threshold, not a calibrated flood threshold.
 
-复现：`.venv/bin/python bin/analysis/present_abzucht_original_question.py`。运行会检查上游来源哈希、分组数量、示例点分组和贡献值；结果清单见manifest.json。
+Reproduce: `.venv/bin/python bin/analysis/present_abzucht_original_question.py`. The run checks upstream source hashes, group counts, example-point groups and contribution values; the output manifest is manifest.json.
 '''
     (OUT/'READING_NOTE.md').write_text(note)
     message=f'''I found a partial correspondence with the official Abzucht HQ100 zone, but limited overlap with our high combined-priority class. Only {share:.1f}% of the zone reaches a priority score of 0.6 or above. The flood indicator itself is higher inside the zone than in the surrounding 1 km area ({fh_in:.3f} versus {fh_out:.3f}).

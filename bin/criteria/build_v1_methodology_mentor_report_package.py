@@ -191,24 +191,24 @@ sensitivity before creating AHP pairwise comparisons.
 
 
 def readme() -> str:
-    return """# 汇报包使用说明
+    return """# How to use the report package
 
-这个包用于和 mentor 汇报 Upper Mzingwane 原型已经处理过哪些证据层，以及下一步需要她决定什么。
+This package is for reporting to the mentor which evidence layers have already been processed for the Upper Mzingwane prototype, and what she needs to decide next.
 
-建议发送顺序：
+Suggested sending order:
 
-1. 先发送 `mentor_message_en.txt` 里的文字。
-2. 附上 `mentor_brief_en.md` 或复制其中的 Key Results。
-3. 优先发送以下图：
+1. First send the text in `mentor_message_en.txt`.
+2. Attach `mentor_brief_en.md` or copy its Key Results.
+3. Send these figures first:
    - `figures/figure_01_v1_working_boundary.png`
    - `figures/figure_02_chirps_rainfall_comparison.png`
    - `figures/figure_03_terrain_diagnostic.png`
    - `figures/figure_07_population_built_up_exposure.png`
-4. 如果 mentor 想细看，再发送 land-cover、water、protected areas、rehabilitation panels。
-5. 如果 mentor 问数据来源，发 `tables/source_manifest.csv`。
-6. 如果 mentor 问哪些因素可以进 AHP，发 `tables/v1_full_methodology_evidence_matrix.csv`。
+4. If the mentor wants more detail, send the land-cover, water, protected areas and rehabilitation panels.
+5. If the mentor asks about data sources, send `tables/source_manifest.csv`.
+6. If the mentor asks which factors can go into the AHP, send `tables/v1_full_methodology_evidence_matrix.csv`.
 
-不要把这个包描述成 flood-risk result。它只是 criteria/evidence review package。
+Do not describe this package as a flood-risk result. It is only a criteria/evidence review package.
 """
 
 

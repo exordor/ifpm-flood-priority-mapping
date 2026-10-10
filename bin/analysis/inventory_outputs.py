@@ -17,55 +17,55 @@ REPORT_DIR = OUTPUTS / "project_checks/output_inventory_2026-08-18"
 
 # Status is about present-day use, not scientific validity.
 DIRECTORIES: dict[str, tuple[str, str, str, str]] = {
-    "[root]": ("目录索引", "outputs 根目录说明、历史索引和小型规划记录", "不进入评分", "保留说明；隐藏文件可清理"),
-    "boundary_v1": ("冻结基线", "Zimbabwe Upper Mzingwane 旧版准则、降雨和优先级工作流", "历史比较/方法溯源", "保留，只读"),
-    "chirps_v3_zimbabwe_prototype": ("冻结基线", "Zimbabwe CHIRPS 降雨比较和图件", "粗分辨率降雨背景", "保留，只读"),
-    "esa_worldcover_2021_goslar": ("Goslar 当前链", "Goslar WorldCover/CLMS 土地覆盖与 C-factor 派生层", "进入或解释土地覆盖准则", "保留"),
-    "esa_worldcover_2021_peru_pilot": ("冻结基线", "旧 Peru pilot 的 WorldCover/C-factor", "旧 Peru 土地覆盖准则输入", "保留，只读"),
-    "esa_worldcover_2021_v1_methodology": ("冻结基线", "Zimbabwe V1 WorldCover/C-factor", "旧方法输入", "保留，只读"),
-    "geofabrik_osm_peru_pilot": ("冻结基线", "旧 Peru pilot 的 OSM 道路和采矿邻近指标", "旧代理指标", "保留，只读"),
-    "goslar_2017_satellite_validation": ("Goslar 验证", "2017 前后 Sentinel-2 水体候选变化", "L2 独立一致性证据，不进入评分", "保留"),
-    "goslar_focus_boundary": ("Goslar 当前链", "Goslar layout focus extent 边界", "裁剪和展示范围，不是流域", "保留"),
-    "goslar_harz_2024_focus_area": ("Goslar 验证", "焦点区来源登记、事件证据和位置图", "范围/事件上下文", "保留"),
-    "goslar_l2_independent_consistency": ("Goslar 验证", "Goslar L2 独立一致性统计结果", "支持 L2 证据等级，不进入 PIM", "保留"),
-    "goslar_mining_context_overlay": ("Goslar 上下文", "LBEG/OSM mining context overlay", "外部背景图层，权重 0", "保留"),
-    "goslar_official_hydrology_and_flood_data": ("Goslar 验证", "官方水文边界和 HWRM 洪水情景边界", "外部验证/范围背景，不进入评分", "保留"),
-    "goslar_qgis_project_package": ("Goslar 交付", "Goslar FullAudit 工作区 QGIS 包、样式和 QA", "审计项目源；正式发送使用 exports 包", "保留"),
-    "goslar_qgis_project_package_compact": ("Goslar 交付", "Goslar ReviewMap 工作区 QGIS 包", "精简审阅项目源", "保留"),
-    "goslar_sentinel_bare_soil_candidate": ("Goslar 支持", "Sentinel-2 裸土频率和 NDVI 变化候选层", "土地覆盖升级诊断", "保留"),
-    "hydrosheds_boundary_decision": ("历史方法", "Upper Mzingwane 边界候选诊断", "边界选择溯源", "保留，小文件"),
-    "indeci_sinpad_peru_flood_events": ("冻结基线", "旧 Peru 区域 SINPAD 洪灾事件摘要", "历史事件上下文", "保留，只读"),
-    "inei_peru_poverty_2018": ("冻结基线", "INEI Arequipa 贫困数据登记", "旧社会经济来源记录", "保留，只读"),
-    "ingemmet_catastro_minero_peru_pilot": ("冻结基线", "旧 Peru pilot 官方采矿权压力层", "旧 mining-pressure 输入", "保留，只读"),
-    "mapbiomas_peru_collection3_change_pilot": ("Secocha 支持", "MapBiomas 多期土地变化对齐与指标", "土地变化候选/敏感性证据", "保留"),
-    "mentor_voi_rainfall_intake": ("历史方法", "导师提供降雨档案的结构和字段盘点", "来源溯源", "保留，小文件"),
-    "methodology_figures": ("方法说明", "可编辑方法流程图及导出图", "报告/论文方法说明", "保留；可清理隐藏备份"),
-    "peru_boundary_discovery": ("冻结基线", "旧 Peru 边界发现与拓扑检查", "选址过程溯源", "保留，只读"),
-    "peru_gap_closure_analysis": ("冻结基线", "旧 Peru 人口/SINPAD 与 PIM 共位分析", "旧数据缺口分析", "保留，只读"),
-    "peru_integrated_briefing_board": ("报告支持", "Peru 综合汇报板", "旧区域汇报图", "保留，只读"),
-    "peru_pilot_boundary": ("冻结基线", "旧 southern Peru pilot 边界及预检", "旧比较范围", "保留，只读"),
-    "peru_report_figure_chain": ("报告支持", "Peru 因子到结果的报告图链", "旧 Peru 图件", "保留，只读"),
-    "peru_scope": ("Secocha 当前链", "当前 Peru/Secocha 研究区激活与覆盖审计", "控制实际研究范围", "保留"),
-    "peru_secocha_a7367_reference_extent_v1": ("Secocha 当前链", "Secocha 五准则、输入和优先级完整输出", "当前 Secocha provisional PIM 主目录", "保留"),
-    "peru_secocha_boundary": ("Secocha 当前链", "Secocha active reference extent 边界", "裁剪与参考范围", "保留"),
-    "peru_secocha_qgis_project_package": ("Secocha 交付", "Secocha FullAudit 工作区 QGIS 包", "审计项目源；正式发送使用 exports 包", "保留"),
-    "peru_secocha_qgis_project_package_compact": ("Secocha 交付", "Secocha ReviewMap 工作区 QGIS 包", "精简审阅项目源", "保留"),
-    "pim_environmental_sensitivity": ("历史方法", "早期 environmental sensitivity 汇总", "方法溯源，不是当前结果", "可后续归档"),
-    "presentation_assets": ("汇报材料", "QGIS 截图、GeoTIFF 和拼图素材", "PPT 制作输入", "保留当前使用素材"),
-    "presentation_previews": ("汇报材料", "当前可编辑 PPT、渲染页和 contact sheet", "演示稿 QA", "保留"),
-    "project_checks": ("工程 QA", "术语、清单和全项目检查报告", "工程审计，不进入评分", "保留"),
-    "secocha_2023_validation": ("Secocha 验证", "2023 事件证据、地点、卫星处理和对比图", "provisional 验证证据，不进入 PIM", "保留"),
-    "slide_ready_figures": ("汇报材料", "可直接用于幻灯片的优先级、准则和 overlay 图", "汇报/附录图件", "保留"),
-    "soilgrids_250m_peru_pilot": ("冻结基线", "旧 Peru SoilGrids K-factor", "旧土壤侵蚀输入", "保留，只读"),
-    "soilgrids_250m_sediment_candidate": ("冻结基线", "Zimbabwe SoilGrids K-factor 候选", "旧侵蚀因子输入", "保留，只读"),
-    "srtm_1arcsec_goslar": ("Goslar 当前链", "Goslar 地形、水文、五准则和 priority 输出", "当前 diagnostic_only PIM 主目录；目录名为历史兼容", "保留"),
-    "srtm_1arcsec_peru_pilot": ("冻结基线", "旧 Peru pilot 全套地形、准则和场景", "已冻结，不是当前 Secocha 主线", "保留，只读"),
-    "srtm_1arcsec_zimbabwe_prototype": ("冻结基线", "Zimbabwe 地形、水文和侵蚀派生层", "旧区域比较基线", "保留，只读"),
-    "v1_working_boundary": ("冻结基线", "Upper Mzingwane frozen working boundary 与图件", "旧 Zimbabwe 空间范围", "保留，只读"),
-    "worldpop_peru_population": ("冻结基线", "WorldPop Peru 子集登记", "旧人口来源记录", "保留，只读"),
-    "zimbabwe_geoportal_subcatchments_2025": ("冻结基线", "Zimbabwe Geoportal 与 HydroBASINS 重叠摘要", "旧边界溯源", "保留，只读"),
-    "zimbabwe_integrated_briefing_board": ("报告支持", "Zimbabwe 综合汇报板", "旧区域汇报图", "保留，只读"),
-    "zimbabwe_report_figure_chain": ("报告支持", "Zimbabwe 因子到结果的报告图链", "旧 Zimbabwe 图件", "保留，只读"),
+    "[root]": ("directory index", "outputs root notes, historical indexes and small planning records", "not used in scoring", "keep the notes; hidden files can be cleaned up"),
+    "boundary_v1": ("frozen baseline", "Zimbabwe Upper Mzingwane former criteria, rainfall and priority workflow", "historical comparison/method provenance", "keep, read-only"),
+    "chirps_v3_zimbabwe_prototype": ("frozen baseline", "Zimbabwe CHIRPS rainfall comparison and figures", "coarse-resolution rainfall background", "keep, read-only"),
+    "esa_worldcover_2021_goslar": ("Goslar current chain", "Goslar WorldCover/CLMS land cover and C-factor derived layers", "feeds or explains the land-cover criterion", "keep"),
+    "esa_worldcover_2021_peru_pilot": ("frozen baseline", "WorldCover/C-factor for the former Peru pilot area", "former Peru land-cover criterion input", "keep, read-only"),
+    "esa_worldcover_2021_v1_methodology": ("frozen baseline", "Zimbabwe V1 WorldCover/C-factor", "former method input", "keep, read-only"),
+    "geofabrik_osm_peru_pilot": ("frozen baseline", "OSM road and mining-proximity indicators for the former Peru pilot area", "former proxy indicator", "keep, read-only"),
+    "goslar_2017_satellite_validation": ("Goslar validation", "Sentinel-2 water-body candidate change before and after 2017", "L2 independent consistency evidence, not used in scoring", "keep"),
+    "goslar_focus_boundary": ("Goslar current chain", "Goslar layout focus extent boundary", "clip and display extent, not a catchment", "keep"),
+    "goslar_harz_2024_focus_area": ("Goslar validation", "focus area source register, event evidence and location maps", "extent/event context", "keep"),
+    "goslar_l2_independent_consistency": ("Goslar validation", "Goslar L2 independent consistency statistics", "supports L2 evidence level, not used in PIM", "keep"),
+    "goslar_mining_context_overlay": ("Goslar context", "LBEG/OSM mining context overlay", "external background layer, weight 0", "keep"),
+    "goslar_official_hydrology_and_flood_data": ("Goslar validation", "official hydrology boundaries and HWRM flood scenario boundaries", "external validation/extent background, not used in scoring", "keep"),
+    "goslar_qgis_project_package": ("Goslar delivery", "Goslar FullAudit workspace QGIS package, styles and QA", "audit project source; use the exports package for formal delivery", "keep"),
+    "goslar_qgis_project_package_compact": ("Goslar delivery", "Goslar ReviewMap workspace QGIS package", "compact review project source", "keep"),
+    "goslar_sentinel_bare_soil_candidate": ("Goslar support", "Sentinel-2 bare-soil frequency and NDVI change candidate layers", "land-cover upgrade diagnostic", "keep"),
+    "hydrosheds_boundary_decision": ("historical method", "Upper Mzingwane boundary candidate diagnostic", "boundary selection provenance", "keep, small files"),
+    "indeci_sinpad_peru_flood_events": ("frozen baseline", "SINPAD flood event summary for the former Peru area", "historical event context", "keep, read-only"),
+    "inei_peru_poverty_2018": ("frozen baseline", "INEI Arequipa poverty data register", "former socio-economic source record", "keep, read-only"),
+    "ingemmet_catastro_minero_peru_pilot": ("frozen baseline", "official mining-concession pressure layer for the former Peru pilot area", "former mining-pressure input", "keep, read-only"),
+    "mapbiomas_peru_collection3_change_pilot": ("Secocha support", "MapBiomas multi-period land change alignment and indicators", "land change candidate/sensitivity evidence", "keep"),
+    "mentor_voi_rainfall_intake": ("historical method", "structure and field inventory of the supervisor-provided rainfall archive", "source provenance", "keep, small files"),
+    "methodology_figures": ("method documentation", "editable method flowcharts and exported figures", "report/thesis method documentation", "keep; hidden backups can be cleaned up"),
+    "peru_boundary_discovery": ("frozen baseline", "former Peru boundary discovery and topology checks", "site selection provenance", "keep, read-only"),
+    "peru_gap_closure_analysis": ("frozen baseline", "former Peru population/SINPAD and PIM co-location analysis", "former data gap analysis", "keep, read-only"),
+    "peru_integrated_briefing_board": ("report support", "Peru integrated briefing board", "former area briefing figure", "keep, read-only"),
+    "peru_pilot_boundary": ("frozen baseline", "former southern Peru pilot boundary and pre-checks", "former comparison extent", "keep, read-only"),
+    "peru_report_figure_chain": ("report support", "Peru factor-to-result report figure chain", "former Peru figures", "keep, read-only"),
+    "peru_scope": ("Secocha current chain", "current Peru/Secocha study area activation and coverage audit", "controls the actual study extent", "keep"),
+    "peru_secocha_a7367_reference_extent_v1": ("Secocha current chain", "full Secocha outputs for the five criteria, inputs and priority", "main directory for the current Secocha provisional PIM", "keep"),
+    "peru_secocha_boundary": ("Secocha current chain", "Secocha active reference extent boundary", "clip and reference extent", "keep"),
+    "peru_secocha_qgis_project_package": ("Secocha delivery", "Secocha FullAudit workspace QGIS package", "audit project source; use the exports package for formal delivery", "keep"),
+    "peru_secocha_qgis_project_package_compact": ("Secocha delivery", "Secocha ReviewMap workspace QGIS package", "compact review project source", "keep"),
+    "pim_environmental_sensitivity": ("historical method", "early environmental sensitivity summary", "method provenance, not a current result", "can be archived later"),
+    "presentation_assets": ("presentation material", "QGIS screenshots, GeoTIFFs and collage assets", "slide deck production input", "keep assets currently in use"),
+    "presentation_previews": ("presentation material", "current editable PPT, rendered slides and contact sheet", "slide deck QA", "keep"),
+    "project_checks": ("engineering QA", "terminology, inventories and project-wide check reports", "engineering audit, not used in scoring", "keep"),
+    "secocha_2023_validation": ("Secocha validation", "2023 event evidence, locations, satellite processing and comparison figures", "provisional validation evidence, not used in PIM", "keep"),
+    "slide_ready_figures": ("presentation material", "slide-ready priority, criteria and overlay figures", "presentation/appendix figures", "keep"),
+    "soilgrids_250m_peru_pilot": ("frozen baseline", "former Peru SoilGrids K-factor", "former soil erosion input", "keep, read-only"),
+    "soilgrids_250m_sediment_candidate": ("frozen baseline", "Zimbabwe SoilGrids K-factor candidate", "former erosion factor input", "keep, read-only"),
+    "srtm_1arcsec_goslar": ("Goslar current chain", "Goslar terrain, hydrology, five-criteria and priority outputs", "main directory for the current diagnostic_only PIM; directory name kept for historical compatibility", "keep"),
+    "srtm_1arcsec_peru_pilot": ("frozen baseline", "full terrain, criteria and scenario set for the former Peru pilot area", "frozen, not the current Secocha main line", "keep, read-only"),
+    "srtm_1arcsec_zimbabwe_prototype": ("frozen baseline", "Zimbabwe terrain, hydrology and erosion derived layers", "former area comparison baseline", "keep, read-only"),
+    "v1_working_boundary": ("frozen baseline", "Upper Mzingwane frozen working boundary and figures", "former Zimbabwe spatial extent", "keep, read-only"),
+    "worldpop_peru_population": ("frozen baseline", "WorldPop Peru subset register", "former population source record", "keep, read-only"),
+    "zimbabwe_geoportal_subcatchments_2025": ("frozen baseline", "Zimbabwe Geoportal and HydroBASINS overlap summary", "former boundary provenance", "keep, read-only"),
+    "zimbabwe_integrated_briefing_board": ("report support", "Zimbabwe integrated briefing board", "former area briefing figure", "keep, read-only"),
+    "zimbabwe_report_figure_chain": ("report support", "Zimbabwe factor-to-result report figure chain", "former Zimbabwe figures", "keep, read-only"),
 }
 
 
@@ -82,28 +82,28 @@ def file_role(path: Path) -> str:
     name = path.name.lower()
     suffix = path.suffix.lower()
     if suffix == ".qgz":
-        return "QGIS 项目文件"
+        return "QGIS project file"
     if suffix == ".qml":
-        return "QGIS 图层样式"
+        return "QGIS layer style"
     if "manifest" in name or "lineage" in name or "registry" in name:
-        return "来源/运行清单"
+        return "source/run manifest"
     if "diagnostic" in name or "qa" in name or "check" in name or "coverage" in name:
-        return "质量检查/诊断"
+        return "quality check/diagnostic"
     if suffix in {".tif", ".tiff"}:
-        return "栅格输入、派生层或评分结果"
+        return "raster input, derived layer or scoring result"
     if suffix in {".gpkg", ".geojson"}:
-        return "矢量边界、事件或上下文图层"
+        return "vector boundary, event or context layer"
     if suffix in {".png", ".pdf", ".svg", ".webp"}:
-        return "地图、图表或渲染预览"
+        return "map, chart or rendered preview"
     if suffix in {".csv", ".json", ".xml", ".ndjson"}:
-        return "结构化结果、参数或检查记录"
+        return "structured result, parameters or check record"
     if suffix in {".md", ".txt"}:
-        return "说明、结论或交接记录"
+        return "notes, conclusions or handover record"
     if suffix in {".pptx", ".xlsx", ".drawio"}:
-        return "可编辑交付材料"
+        return "editable deliverable"
     if suffix == ".bkp" or name.startswith("."):
-        return "隐藏文件或编辑器备份"
-    return "其他生成文件"
+        return "hidden file or editor backup"
+    return "other generated file"
 
 
 def main() -> None:
@@ -177,16 +177,16 @@ def main() -> None:
     groups = Counter(str(row["group"]) for row in summary)
     largest = sorted(summary, key=lambda row: int(row["size_bytes"]), reverse=True)
     md = [
-        "# IFPM outputs 文件与用途清单",
+        "# IFPM outputs files and purpose inventory",
         "",
-        f"生成时间：{generated}",
+        f"Generated: {generated}",
         "",
-        f"当前 `outputs/` 共 **{len(rows):,} 个文件**、**{human_size(total_bytes)}**，分布在 **{len(summary)} 个一级目录**。",
-        "完整逐文件明细见 `all_output_files.csv`；以下表格用于快速判断目录作用和保留策略。",
+        f"The current `outputs/` tree holds **{len(rows):,} files** totalling **{human_size(total_bytes)}**, spread across **{len(summary)} top-level directories**.",
+        "See `all_output_files.csv` for the full per-file listing; the table below gives a quick view of each directory's role and retention policy.",
         "",
-        "## 一级目录用途",
+        "## Top-level directory purposes",
         "",
-        "| 目录 | 类别 | 文件数 | 大小 | 作用 | 与评分/证据关系 | 建议 |",
+        "| Directory | Group | Files | Size | Purpose | Scoring/evidence role | Recommendation |",
         "|---|---:|---:|---:|---|---|---|",
     ]
     for row in sorted(summary, key=lambda item: (str(item["group"]), str(item["directory"]))):
@@ -194,22 +194,22 @@ def main() -> None:
             f"| `{row['directory']}` | {row['group']} | {row['file_count']} | {row['size_human']} | "
             f"{row['purpose']} | {row['scoring_or_evidence_role']} | {row['retention']} |"
         )
-    md.extend(["", "## 空间占用最大的目录", ""])
+    md.extend(["", "## Largest directories by disk usage", ""])
     for index, row in enumerate(largest[:10], 1):
         md.append(f"{index}. `{row['directory']}` — {row['size_human']} / {row['file_count']} files")
     md.extend(
         [
             "",
-            "## 阅读规则",
+            "## Reading rules",
             "",
-            "- `Goslar 当前链` 与 `Secocha 当前链`：模型计算或范围控制的当前输出。",
-            "- `验证`、`上下文`：用于独立证据或地图解释；除非清单明确说明，不进入 PIM。",
-            "- `交付`：工作区 QGIS 构建结果；真正发送给对方的是 `exports/qgis_packages/`。",
-            "- `冻结基线`：保留用于历史比较和复现，不应继续写入或当成当前 Secocha/Goslar 结果。",
-            "- 本清单描述文件用途，不把 diagnostic/provisional 输出升级为最终洪水风险结论。",
+            "- `Goslar current chain` and `Secocha current chain`: current outputs used for model computation or extent control.",
+            "- `validation`, `context`: used for independent evidence or map interpretation; not used in PIM unless the manifest explicitly says so.",
+            "- `delivery`: workspace QGIS build results; what is actually sent to recipients is `exports/qgis_packages/`.",
+            "- `frozen baseline`: kept for historical comparison and reproduction; do not write to it further or treat it as current Secocha/Goslar results.",
+            "- This inventory describes file purposes; it does not upgrade diagnostic/provisional outputs to final flood-risk conclusions.",
             "",
-            f"文件类型统计：{dict(Counter(str(row['extension']) for row in rows).most_common())}",
-            f"目录类别统计：{dict(groups)}",
+            f"File type counts: {dict(Counter(str(row['extension']) for row in rows).most_common())}",
+            f"Directory group counts: {dict(groups)}",
         ]
     )
     (REPORT_DIR / "README.md").write_text("\n".join(md) + "\n", encoding="utf-8")
@@ -264,52 +264,52 @@ def main() -> None:
         "manifest": {
             "version": 1,
             "surface": "report",
-            "title": "IFPM outputs 文件与用途清单",
-            "description": "当前 outputs 目录的用途、状态、空间占用和保留建议。",
+            "title": "IFPM outputs files and purpose inventory",
+            "description": "Purpose, status, disk usage and retention advice for the current outputs directories.",
             "generatedAt": generated,
             "sources": [source],
             "blocks": [
-                {"id": "title", "type": "markdown", "body": "# IFPM outputs 文件与用途清单"},
+                {"id": "title", "type": "markdown", "body": "# IFPM outputs files and purpose inventory"},
                 {
                     "id": "technical-summary",
                     "type": "markdown",
                     "sourceId": "outputs_inventory",
                     "body": (
-                        f"## 当前输出以旧 Peru pilot 基线为主要空间占用\n\n"
-                        f"盘点覆盖 **{len(rows):,} 个文件、{human_size(total_bytes)}、{len(summary)} 个一级目录**。"
-                        "Goslar 与 Secocha 当前链、验证证据、QGIS 工作区包均已单独标注；冻结基线保留用于复现，"
-                        "不能当作当前模型结果。"
+                        f"## Current outputs are dominated in size by the former Peru pilot baseline\n\n"
+                        f"The inventory covers **{len(rows):,} files, {human_size(total_bytes)}, {len(summary)} top-level directories**. "
+                        "The Goslar and Secocha current chains, validation evidence and QGIS workspace packages are labelled separately; "
+                        "frozen baselines are kept for reproducibility and must not be treated as current model results."
                     ),
                 },
                 {
                     "id": "size-finding",
                     "type": "markdown",
                     "sourceId": "outputs_inventory",
-                    "body": "## 存储高度集中在少数冻结基线目录\n\n下图显示空间占用构成，`README.md` 的 Top 10 排名和 `output_directory_summary.csv` 提供精确值。是否删除仍取决于复现和历史比较需要。",
+                    "body": "## Storage is concentrated in a few frozen baseline directories\n\nThe chart below shows the disk usage composition; the Top 10 ranking in `README.md` and `output_directory_summary.csv` give exact values. Whether to delete anything still depends on reproducibility and historical comparison needs.",
                 },
                 {"id": "size-chart", "type": "chart", "chartId": "storage_composition"},
                 {
                     "id": "usage-guide",
                     "type": "markdown",
-                    "body": "## 使用指南与限制\n\n**查明细：** `README.md` 和 `output_directory_summary.csv` 列出全部一级目录；`all_output_files.csv` 列出 1,134 个文件。\n\n**看当前模型：** Goslar 使用 `srtm_1arcsec_goslar/`，Secocha 使用 `peru_secocha_a7367_reference_extent_v1/`；四个 `*_qgis_project_package*` 是工作区项目，对外交付在 `exports/qgis_packages/`。\n\n**看历史基线：** `srtm_1arcsec_peru_pilot/`、`boundary_v1/` 与 Zimbabwe prototype 只读保留。是否继续保留约 898 MiB 的 Peru pilot，应由复现需求决定。\n\n**口径：** 递归统计 `outputs/` 普通文件，不含 `data/` 和 `exports/`。目录用途不能替代各 raster/manifest 的科学声明；新增未分类目录会使盘点脚本失败。",
+                    "body": "## Usage guide and limitations\n\n**Details:** `README.md` and `output_directory_summary.csv` list all top-level directories; `all_output_files.csv` lists 1,134 files.\n\n**Current models:** Goslar uses `srtm_1arcsec_goslar/`, Secocha uses `peru_secocha_a7367_reference_extent_v1/`; the four `*_qgis_project_package*` directories are workspace projects, and external deliverables are in `exports/qgis_packages/`.\n\n**Historical baselines:** `srtm_1arcsec_peru_pilot/`, `boundary_v1/` and the Zimbabwe prototype are kept read-only. Whether to keep the roughly 898 MiB Peru pilot should depend on reproducibility needs.\n\n**Scope:** Counts regular files under `outputs/` recursively, excluding `data/` and `exports/`. Directory purposes do not replace the scientific statements in each raster/manifest; a new unclassified directory makes the inventory script fail.",
                 },
             ],
             "cards": [],
             "charts": [
                 {
                     "id": "storage_composition",
-                    "title": "outputs 空间占用构成",
-                    "subtitle": "五个最大一级目录与其余目录合计，MiB",
+                    "title": "outputs disk usage composition",
+                    "subtitle": "five largest top-level directories plus all others combined, MiB",
                     "type": "pie",
                     "intent": "composition",
                     "dataset": "storage_composition",
                     "sourceId": "outputs_inventory",
                     "encodings": {
-                        "x": {"field": "label", "type": "nominal", "label": "目录"},
+                        "x": {"field": "label", "type": "nominal", "label": "directory"},
                         "y": {"field": "size_mib", "type": "quantitative", "label": "MiB", "unit": "MiB"},
                         "tooltip": [
-                            {"field": "directory", "type": "text", "label": "目录"},
-                            {"field": "file_count", "type": "quantitative", "label": "文件数"},
+                            {"field": "directory", "type": "text", "label": "directory"},
+                            {"field": "file_count", "type": "quantitative", "label": "file count"},
                         ],
                     },
                     "valueFormat": "number",

@@ -138,17 +138,17 @@ def main():
         path=remember(ROOT/info['path'],info['sha256'])
         image=Image.open(path).convert('RGB')
         make_overlay(out,label,image,info,atkis,hq,stream,stream_transform,high,cases)
-    note=f'''# Abzucht 细河道与航拍复核
+    note=f'''# Abzucht fine-scale watercourse and aerial imagery check
 
-基于 LGLN ATKIS Basis-DLM `AX_Gewaesserachse` 小范围查询（{len(atkis)} 条线，约 {summary['atkis_axis_total_length_km']:.1f} km）及三个 DOP20 局部视图；LGLN (2026), CC BY 4.0。ATKIS 是独立于 DEM 的官方地物资料，但与旧 WRRL 的主河线几何高度相同，不能当作两份独立确认。三张DOP图**中心点**的WMS元数据日期分别为 {capture_dates}；拼接影像的其他位置可能是不同日期，只能用于较新的地物背景，不能视作2017年淹水。
+Based on a small-area query of the LGLN ATKIS Basis-DLM `AX_Gewaesserachse` ({len(atkis)} lines, about {summary['atkis_axis_total_length_km']:.1f} km) and three local DOP20 views; LGLN (2026), CC BY 4.0. ATKIS is official feature data independent of the DEM, but its main-channel geometry is nearly identical to the older WRRL line, so the two cannot be treated as two independent confirmations. The WMS metadata dates for the **center points** of the three DOP images are {capture_dates}. Other parts of the mosaic may have different dates, so the imagery can only serve as recent feature background and cannot be read as 2017 inundation.
 
-217个WRRL Abzucht采样点到ATKIS任意河道轴线的中位距离 {summary['atkis_to_wfd_sample_median_m']:.2f}m、90分位 {summary['atkis_to_wfd_sample_p90_m']:.2f}m。原先标出的17段模型河网间隙中，{summary['prior_model_gap_samples']}/{summary['prior_model_gap_samples']}个采样点距ATKIS轴线≤15m。因此这些间隙不是旧WRRL独有的概化偏移；但距离到**任意**ATKIS轴线仍不能证明 Abzucht 主河道与模型线一一对应。
+The median distance from the 217 WRRL Abzucht sample points to any ATKIS watercourse axis is {summary['atkis_to_wfd_sample_median_m']:.2f} m, and the 90th percentile is {summary['atkis_to_wfd_sample_p90_m']:.2f} m. In the 17 previously flagged model stream-network gaps, {summary['prior_model_gap_samples']}/{summary['prior_model_gap_samples']} sample points lie ≤15 m from an ATKIS axis. These gaps are therefore not a generalization offset unique to the older WRRL line. However, distance to **any** ATKIS axis still does not prove a one-to-one correspondence between the main Abzucht channel and the model line.
 
-原始高分、HQ100外>150m的{len(far)}格：距ATKIS轴线≤30m {counts['within_30m']}格、30–60m {counts['30_to_60m']}格、60–90m {counts['60_to_90m']}格、>90m {counts['over_90m']}格。细河道资料解释了一部分远处高分与官方水系的空间贴近，但仍有大量远离所绘河道的格子。ATKIS没有记载不等于不存在地下涵洞或临时排水路径。
+Of the {len(far)} original high-score cells more than 150 m outside HQ100, {counts['within_30m']} cells lie ≤30 m from an ATKIS axis, {counts['30_to_60m']} cells lie 30–60 m away, {counts['60_to_90m']} cells lie 60–90 m away and {counts['over_90m']} cells lie >90 m away. The fine-scale watercourse data explain why some of the distant high scores sit close to the official water network, but many cells remain far from any mapped watercourse. Absence from ATKIS does not mean that no underground culvert or temporary drainage path exists.
 
-案例A距ATKIS河道 {summary['case_atkis_distances_m']['A']:.1f}m；案例C距 {summary['case_atkis_distances_m']['C']:.1f}m。案例C的模型流线落在铁路/建成区背景附近，当前航拍上不能单凭此点断定有无地下排水；更不能据此验证2017年洪水。三张叠加图供人工逐段核查。
+Case A is {summary['case_atkis_distances_m']['A']:.1f} m from an ATKIS watercourse; Case C is {summary['case_atkis_distances_m']['C']:.1f} m away. The model flow line at Case C runs near a railway / built-up background. The current aerial imagery alone cannot decide whether underground drainage exists at this point, and it certainly cannot validate the 2017 flood. The three overlay maps are provided for manual section-by-section review.
 
-本轮保持分数、权重和HQ100不变；ATKIS和DOP均不进入PIM。复现：`{COMMAND}`。逐段、逐格、案例表及哈希清单与图件同目录。
+This round keeps the scores, weights and HQ100 unchanged; neither ATKIS nor DOP enters the PIM. Reproduce: `{COMMAND}`. The per-run, per-cell and case tables and the hash manifest are in the same directory as the figures.
 '''
     (out/'READING_NOTE.md').write_text(note)
     remember(Path(__file__))

@@ -37,5 +37,5 @@ compared against official regulatory flood zones (HQ100 etc.), not observed even
 | **Full multi-river extent** (`goslar_multiriver_full_extent_v1/frozen_scale_v1`) | `run_goslar_multiriver_full.py`, then `report_goslar_multiriver_full.py` | 739 km² covering all 14 official products (8 regulatory zones, 6 hydraulic scenarios); flood weights 34/50/60/70%. Within 1 km, the flood criterion is higher inside all 8 regulatory zones, but PIM is higher only for Wedde, Abzucht and Ecker. **Main open issue.** |
 
 Goslar and Abzucht outputs are under `outputs/goslar_abzucht_display_rectangle_v1/<experiment>/`
-unless named otherwise; each has a Chinese `READING_NOTE.md`. Tests:
+unless named otherwise; each has a `READING_NOTE.md`. Tests:
 `.venv/bin/python -m unittest discover -s tests`.

@@ -1,6 +1,6 @@
 # IFPM Flood Risk Modelling Workspace
 
-> New to this project? Start with [HANDOVER.md](HANDOVER.md) (Chinese handover
+> New to this project? Start with [HANDOVER.md](HANDOVER.md) (handover
 > note, 2026-10-08). It summarises the current state, directory map and next steps.
 
 This workspace uses a split boundary:
@@ -37,7 +37,7 @@ context/
   docs/
     research-map/         Current experiments and decisions.
     data-management/      Dataset registry: source, version, access date and licence per dataset.
-    methodology/          PIM transformation flow (Chinese).
+    methodology/          PIM transformation flow.
     glossary.md           Terminology.
 
 ifpm-flood-pipeline/

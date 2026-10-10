@@ -71,19 +71,19 @@ def main():
         for p in primary:
             if not (raster_mask(p['geometry'],ref)&valid).any():continue
             make_map(OUT/f"{p['river'].lower()}_{pct}",f"{p['river']} | Flood weight {pct}%",[p],p['geometry'].intersection(boundary).buffer(500).bounds,criteria['flood_hazard'],scenarios[pct],ref)
-    note='# 洪水因素权重50%、60%、70%的多河流对比\n\n状态：权重敏感性情景。仅改变五项组合权重；其他四项按原比例缩减。原人口、土壤、归一化、有效范围和0.6阈值不变。左图洪水子指标不变，右图为对应权重PIM。\n\n复现：`.venv/bin/python bin/analysis/compare_multiriver_weights.py`。\n\n| 河流/资料 | 洪水权重 | 内/外均值 | 均值差 | 内/外高分比例 | 高分比例差（百分点） |\n|---|---:|---|---:|---|---:|\n'
+    note='# Multi-river comparison with flood weights of 50%, 60% and 70%\n\nStatus: weight sensitivity scenarios. Only the weights of the five-criterion combination are changed; the other four criteria are scaled down in their original proportions. The original population, soil, normalization, valid extent and 0.6 threshold are unchanged. The left panel shows the unchanged flood sub-indicator, and the right panel the PIM for the corresponding weight.\n\nReproduce: `.venv/bin/python bin/analysis/compare_multiriver_weights.py`.\n\n| River/source | Flood weight | Inside/outside mean | Mean difference | Inside/outside high-score share | High-score share difference (percentage points) |\n|---|---:|---|---:|---|---:|\n'
     for r in summary:
         if r['mean_gap'] is None:continue
         note+=f"| {r['river']} / {r['family']} / {r['scenario']} | {r['flood_weight']:.0%} | {r['inside_mean']:.3f}/{r['ring_mean']:.3f} | {r['mean_gap']:+.3f} | {r['inside_high_share']:.2%}/{r['ring_high_share']:.2%} | {r['high_share_gap']*100:+.2f} |\n"
-    note+='\n表中采用中心归属和清理后的1公里环带；所有已取得官方洪泛范围从环带排除。完整六种设置在statistics.csv。四条无覆盖河流保留空结果，不能评价；Innerste主比较仅12格。原边界来源、覆盖分母和缺项沿用multiriver_comparison_v1。\n\n稳健性：以下为六种设置下高分比例差的最小值至最大值（百分点）。\n\n'
+    note+='\nThe table uses center assignment and the cleaned 1 km ring; all acquired official flood extents are excluded from the ring. All six settings are in statistics.csv. The four rivers without coverage keep empty results and cannot be assessed; the main Innerste comparison has only 12 cells. The original boundary sources, coverage denominators and missing components are carried over from multiriver_comparison_v1.\n\nRobustness: below are the minimum to maximum high-score share differences across the six settings (percentage points).\n\n'
     for _,p in products.iterrows():
         if not any(r['product_id']==p.product_id and r['mean_gap'] is not None for r in rows):continue
         parts=[]
         for pct in [34,50,60,70]:
             v=[r['high_share_gap']*100 for r in rows if r['product_id']==p.product_id and r['flood_weight']==pct/100 and r['high_share_gap'] is not None]
-            parts.append(f'{pct}%：{min(v):+.2f}～{max(v):+.2f}')
-        note+=f'- {p.river} / {p.family} / {p.scenario}：'+ '；'.join(parts)+'。\n'
-    note+='\n解释边界：提高洪水权重会让综合PIM更接近洪水子指标。若洪水指标原本在范围内较高，均值差随权重增大是加权公式的预期行为；需要同时看高分比例差及跨河流稳定性。不能只凭范围内变红选择权重，也不能据此验证其他优先级目标。此轮用同一批洪泛资料比较权重，属于参考资料引导的敏感性分析，不是独立验证；不自动选择最终权重。\n'
+            parts.append(f'{pct}%: {min(v):+.2f} to {max(v):+.2f}')
+        note+=f'- {p.river} / {p.family} / {p.scenario}: '+ '; '.join(parts)+'.\n'
+    note+='\nLimits of interpretation: raising the flood weight brings the composite PIM closer to the flood sub-indicator. If the flood indicator is already higher inside the extents, a mean difference that grows with the weight is the expected behavior of the weighted formula; the high-score share difference and the stability across rivers must be considered as well. A weight cannot be chosen just because the extents turn redder, nor can this be used to validate the other priority objectives. This round compares weights using the same set of flood data, so it is a sensitivity analysis guided by reference data, not an independent validation; no final weight is selected automatically.\n'
     (OUT/'READING_NOTE.md').write_text(note)
     pin(Path(__file__));pin(Path(__file__).with_name('tune_abzucht_weights.py'))
     for p,d in inputs.items():assert sha(ROOT/p)==d,p

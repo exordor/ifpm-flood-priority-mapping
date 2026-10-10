@@ -269,37 +269,37 @@ def main():
     for name, digest in inputs.items():
         if sha(ROOT/name) != digest: raise ValueError(f'Input mutated: {name}')
     make_figures(arrays, rows, coverage, rectangle & mask, bounds, hq, ref)
-    census_note = '重新核对全国人口CSV后，额外找到937条位于旧截取范围之外的记录；这些记录不增加当前模型域内的有效像元。原人口缺失仍保留，未填零。'
-    note = f'''# Abzucht 缺项处理结果
+    census_note = 'Rechecking the national population CSV found 937 additional records outside the old clipping extent; these records add no valid cells inside the current model domain. The original population gaps are retained and not filled with zero.'
+    note = f'''# Abzucht gap handling results
 
-新增人口估计使显示长方形的14项完整覆盖率从5.78%升至59.77%。这是替代数据和数值处理的敏感性方案，原结果未覆盖。
+The added population estimate raises the share of the display rectangle with all 14 components complete from 5.78% to 59.77%. This is a sensitivity scenario based on replacement data and numerical treatment; the original results were not overwritten.
 
-- 人口：原Zensus2022覆盖26.05%；GHSL2020模型人口覆盖100%。整层替换，没有将两个年份混填。100米人口数按面积分配到30米网格，有效分辨率仍为100米。
-- 湿度TWI：原缺失67格均为零坡度；仅这些格子以0.01°、0.1°、1°三个候选小坡度计算。展示0.1°方案，全部结果在comparison.csv。不是新增观测。
-- 土壤K：仍为61.44%覆盖。已有SoilGrids覆盖地理范围，但有源数据缺值；查过的LBEG接口未返回可用数值，未用颜色等级或邻近值填补。
-- 坡面LS：仍为96.57%覆盖；原流程主动排除河道，保持不适用/缺项。
+- Population: the original Zensus2022 covered 26.05%; the GHSL2020 modeled population covers 100%. The whole layer was replaced; the two years were not mixed. The 100 m population counts were distributed to the 30 m grid by area, so the effective resolution is still 100 m.
+- Wetness TWI: the 67 originally missing cells all have zero slope; only these cells were computed with three small candidate slopes of 0.01°, 0.1° and 1°. The 0.1° variant is shown; all results are in comparison.csv. These are not new observations.
+- Soil K: coverage remains 61.44%. The existing SoilGrids data cover the geographic extent, but the source data have missing values; the LBEG interfaces checked returned no usable numeric values, and no gaps were filled from color classes or neighboring values.
+- Hillslope LS: coverage remains 96.57%; the original workflow deliberately excludes channels, which stay not applicable/missing.
 
 {census_note}
 
-综合PIM均值：长方形0.425→0.397；HQ100内0.470→0.445；完整外围1公里环带0.419→0.390。人口替代方案没有改变洪水子指标；平坦地形方案对整体洪水子指标影响很小。评分下降来自人口来源、年份及原缺项时分项权重重新分配的差异，不是洪水风险下降的证据。主权重、分项权重、标准化锚点和分级阈值均未改变。
+Mean combined PIM: rectangle 0.425→0.397; inside HQ100 0.470→0.445; full outer 1 km ring 0.419→0.390. The population replacement did not change the flood sub-indicator, and the flat-terrain treatment has very little effect on the overall flood sub-indicator. The drop in scores comes from differences in population source and year and in how component weights were redistributed where components were originally missing; it is not evidence of reduced flood risk. The main weights, component weights, normalization anchors and classification thresholds are all unchanged.
 
-人口分配守恒检查相对误差{mass_check['relative_error']*100:.5f}%；基线重建最大误差{error:.3g}。输入与输出哈希见manifest.json。
+Relative error of the population-allocation conservation check: {mass_check['relative_error']*100:.5f}%; maximum baseline reconstruction error: {error:.3g}. Input and output hashes are in manifest.json.
 
-图：coverage_before_after.png；population_replacement_comparison.png。
-QGIS栅格：ghsl_flat_0.1deg/priority.tif；ghsl_flat_0.1deg/component_count.tif。原人口方案可继续使用原项目；新方案须单独加载。
+Figures: coverage_before_after.png; population_replacement_comparison.png.
+QGIS rasters: ghsl_flat_0.1deg/priority.tif; ghsl_flat_0.1deg/component_count.tif. The original population scenario can continue to use the original project; the new scenario must be loaded separately.
 
-复现：
+Reproduce:
 ```
 .venv/bin/python bin/acquire/pull_abzucht_ghsl_population.py
 .venv/bin/python bin/analysis/repair_abzucht_gaps.py
 .venv/bin/python -m unittest discover -s tests -p 'test_abzucht*.py'
 ```
 
-资料依据：
-- GHSL产品：https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe
-- 普查说明：原ZIP中的Datensatzbeschreibung_Bevoelkerungszahl_Gitterzellen.xlsx，Version2（2024-09-30）。未发布不等于无人，涉及CKM与未分配地址。
-- SoilGrids掩膜：https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html
-- LBEG测试：BK50KFAKTOR，https://nibis.lbeg.de/net3/public/ikxcms/?pgid=2603 ；PkgId24的WMS层L2131仅返回覆盖元数据；WFS未配置。这不证明其他服务不存在可用土壤数据。
+Sources:
+- GHSL product: https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe
+- Census notes: Datensatzbeschreibung_Bevoelkerungszahl_Gitterzellen.xlsx in the original ZIP, Version2 (2024-09-30). Unpublished does not mean unpopulated; it involves CKM and unassigned addresses.
+- SoilGrids mask: https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html
+- LBEG test: BK50KFAKTOR, https://nibis.lbeg.de/net3/public/ikxcms/?pgid=2603 ; the WMS layer L2131 of PkgId24 returned only coverage metadata; WFS is not configured. This does not prove that no usable soil data exist in other services.
 '''
     (OUT/'READING_NOTE.md').write_text(note)
     manifest['outputs'] = {str(p.relative_to(OUT)):dict(bytes=p.stat().st_size,sha256=sha(p)) for p in sorted(OUT.rglob('*')) if p.is_file() and p.name != 'manifest.json'}

@@ -218,24 +218,24 @@ def main():
     fig.text(.09,.88,'Red: score increases; blue: decreases | HQ100 outline: blue at left, white at right',fontsize=11)
     save(fig,'change_and_drivers')
     remember(Path(__file__));remember(Path(__file__).with_name('compare_abzucht_hq100.py'))
-    boundary_note = '该候选位于搜索上限，尚未发现内部最优点。' if chosen==CAP else '该候选仅为当前离散试验中最优，不代表连续权重的科学最优。'
-    note=f'''# Goslar / Abzucht 权重试验
+    boundary_note = 'This candidate lies at the search upper bound; no interior optimum has been found yet.' if chosen==CAP else 'This candidate is only the best within the current discrete trials and does not represent the scientific optimum over continuous weights.'
+    note=f'''# Goslar / Abzucht weight trials
 
-方向：洪水权重从34%逐步增加，其余四项按原比例缩减。两轮比较后，在固定0.6阈值下，{chosen:.0%}是本次有界搜索中表现最好的候选。{boundary_note}
+Direction: the flood weight is raised step by step from 34%, and the other four criteria are scaled down in their original proportions. After two rounds of comparison, at the fixed 0.6 threshold, {chosen:.0%} is the best-performing candidate in this bounded search. {boundary_note}
 
-基准、粗试和细试见 comparison.csv；全部权重见 weights.csv。粗试为34/45/55/65/75/80%；细试为{fine_values}。排序依据固定0.6阈值下“H​Q100内高分比例减外围完整1公里环带高分比例”，并列时优先较小洪水权重。80%上限是保留其他指标至少20%的工作假设，不是科学最优约束。
+The baseline, coarse trials and fine trials are in comparison.csv; all weights are in weights.csv. The coarse trials were 34/45/55/65/75/80%; the fine trials were {fine_values}. Candidates are ranked by "high-score share inside HQ100 minus high-score share in the full outer 1 km ring" at the fixed 0.6 threshold, with ties going to the smaller flood weight. The 80% cap is a working assumption that keeps at least 20% for the other indicators, not a scientifically optimal constraint.
 
-HQ100内高分比例从{coarse[0]['inside_high_share']:.2%}升至{selected['inside_high_share']:.2%}，外围从{coarse[0]['ring_high_share']:.2%}升至{selected['ring_high_share']:.2%}；内外差从{100*coarse[0]['high_share_gap']:.2f}增至{100*selected['high_share_gap']:.2f}个百分点。纯洪水指标（100%，仅作端点参照）内高分也只有{endpoint['inside_high_share']:.2%}，所以单靠调权不能让整条HQ100区域都成为高分。
+The high-score share inside HQ100 rose from {coarse[0]['inside_high_share']:.2%} to {selected['inside_high_share']:.2%}, and in the outer ring from {coarse[0]['ring_high_share']:.2%} to {selected['ring_high_share']:.2%}; the inside-outside gap grew from {100*coarse[0]['high_share_gap']:.2f} to {100*selected['high_share_gap']:.2f} percentage points. Even the pure flood indicator (100%, used only as an endpoint reference) reaches a high-score share inside HQ100 of only {endpoint['inside_high_share']:.2%}, so weight tuning alone cannot make the whole HQ100 area high-scoring.
 
-本次停止于两轮有界试验。建议先将{chosen:.0%}作为洪水主导候选与原34%并排交给负责人判断；若需要保留更强综合优先级含义，可同时看65%。继续向100%逼近会逐渐退化成单一洪水指标，不能据此宣称已得到科学最优权重。
+This round stopped after two bounded rounds of trials. The recommendation is to first hand {chosen:.0%} as the flood-dominated candidate, side by side with the original 34%, to the responsible person for a decision; if a stronger combined-priority meaning should be kept, 65% can be considered as well. Moving further toward 100% gradually degenerates into a single flood indicator, and this cannot be used to claim that scientifically optimal weights have been found.
 
-权重选择依赖高分阈值：阈值0.5下，本次候选中{threshold_best['0.5']['flood_weight']:.0%}的内外比例差最大；阈值0.7下，各候选HQ100内达到阈值的比例范围为{min(r['inside_high_share'] for r in threshold_rows if r['threshold']==.7 and r['flood_weight']<=CAP):.2%}到{max(r['inside_high_share'] for r in threshold_rows if r['threshold']==.7 and r['flood_weight']<=CAP):.2%}。因此不能称{chosen:.0%}为不依赖阈值的最优权重。
+The weight choice depends on the high-score threshold: at threshold 0.5, {threshold_best['0.5']['flood_weight']:.0%} has the largest inside-outside share gap among this round's candidates; at threshold 0.7, the share of HQ100 cells reaching the threshold ranges from {min(r['inside_high_share'] for r in threshold_rows if r['threshold']==.7 and r['flood_weight']<=CAP):.2%} to {max(r['inside_high_share'] for r in threshold_rows if r['threshold']==.7 and r['flood_weight']<=CAP):.2%} across candidates. {chosen:.0%} therefore cannot be called an optimal weight independent of the threshold.
 
-状态：sensitivity_scenario。HQ100参与候选权重筛选，因此它在本实验中是调参参照，不能再作为独立验证。不是2017实际事件精度。均值差随权重线性变化，不能用作寻找最优点的证据。0.5/0.7阈值只作附表敏感性检查，不改变本次排序及地图分级。
+Status: sensitivity_scenario. HQ100 was used to screen the candidate weights, so in this experiment it is a tuning reference and can no longer serve as independent validation. This is not accuracy against the actual 2017 event. The mean difference changes linearly with the weight and cannot be used as evidence for finding an optimum. The 0.5/0.7 thresholds serve only as a supplementary-table sensitivity check and do not change this round's ranking or map classes.
 
-固定原有五个指标、标准化尺度、网格和支持域；不混入GHSL替换实验、不改分项权重。继承原指标按可用分项重分配权重的局限：有限的综合分不等于所有土壤/人口分项齐全。覆盖及已有分项缺失统计见manifest；本次不插补NoData。主地图仅显示原长方形，统计环带包含长方形之外部分。
+The original five indicators, normalization scales, grid and support domain are fixed; the GHSL replacement experiment is not mixed in, and component weights are not changed. The original indicators' limitation of redistributing weights over available components is inherited: a finite combined score does not mean that all soil/population components are present. Coverage and existing component-missingness statistics are in the manifest; NoData is not imputed in this round. The main map shows only the original rectangle, while the statistical ring includes parts outside the rectangle.
 
-复现：`{COMMAND}`。输入哈希、网格、基准重建、覆盖和输出重开检查均在脚本中执行。输出栅格、表、图与manifest放在同一目录；原基准不变。没有新增下载或最终权重批准。
+Reproduce: `{COMMAND}`. Input hashes, grid, baseline reconstruction, coverage and output reopen checks are all performed in the script. Output rasters, tables, figures and the manifest are in the same directory; the original baseline is unchanged. No new downloads were made and no final weights were approved.
 '''
     (OUT/'READING_NOTE.md').write_text(note)
     # Reopen every score raster and check persisted values and fixed support.

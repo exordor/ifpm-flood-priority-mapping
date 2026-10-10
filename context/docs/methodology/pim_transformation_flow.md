@@ -1,45 +1,45 @@
-# PIM 转换流程 — 从原始数据到优先级地图
+# PIM transformation flow: from raw data to the priority map
 
-本文说明 Secocha 和 Goslar 两条链怎样从原始数据算出优先级地图（PIM）。具体数值以各输出目录里的 `run_manifest.json` 为准；代码入口是 `bin/factors/run_peru_secocha_chain.py`（Goslar 用同一套代码，入口是 `run_goslar_peru_style_chain.py`）。
+This note explains how the Secocha and Goslar chains compute the Priority Intervention Map (PIM) from raw data. The exact values are the ones recorded in `run_manifest.json` in each output folder. The code entry point is `bin/factors/run_peru_secocha_chain.py` (Goslar uses the same code, with the entry point `run_goslar_peru_style_chain.py`).
 
-## 1. 三层结构
+## 1. Three-layer structure
 
 ```
-原始数据                    组件 (0-1)                    主准则 (0-1)        PIM
+Raw data                    Components (0-1)              Main criteria (0-1) PIM
 SRTM/Copernicus DEM   →  twi_wetness, drainage_proximity ┐
-CHIRPS / REGNIE 降雨   →  rainfall_climatology            ┴→ Flood     0.34 ┐
+CHIRPS / REGNIE rain  →  rainfall_climatology            ┴→ Flood     0.34 ┐
 SoilGrids K           →  soil_k_factor                   ┐                 │
-DEM 坡长坡度          →  ls_factor                        ├→ Sediment  0.25 │
+DEM slope length      →  ls_factor                        ├→ Sediment  0.25 │
 WorldCover            →  c_factor                        ┘                 │
 WorldCover / CLMS     →  land_cover_pressure,            ┐                 ├→ PIM (0-1)
                          bare_soil_vegetation_loss,      ├→ Land Use  0.17 │
                          built_agriculture_road_expansion┘                 │
-WorldCover / 保护区    →  water_wetland, protected        ─→ Environmental 0.10
-OSM / 人口 / 建筑      →  road_access, settlement_population,
+WorldCover / protect. →  water_wetland, protected        ─→ Environmental 0.10
+OSM / pop. / bldgs    →  road_access, settlement_population,
                          critical_infrastructure          ─→ Socioeconomic 0.14 ┘
 ```
 
-子权重见 `context/docs/research-map/DECISION_LOG.md`。采矿不进入计算，只在 PIM 算完后作为对照图层叠加。
+In the diagram, "DEM slope length" stands for the DEM-derived slope length and slope, "protect." for protected areas, "pop." for population and "bldgs" for buildings. The sub-weights are listed in `context/docs/research-map/DECISION_LOG.md`. Mining is not part of the calculation; it is only overlaid as a comparison layer after the PIM has been computed.
 
-## 2. 每一步的规则
+## 2. Rules for each step
 
-**变成 0–1 的三种方式**
-- 连续量（TWI、距离、LS、K、降雨、人口等）：取研究区内第 2 和第 98 百分位作为上下限，线性缩放并截断到 0–1。距离类指标再取 1 − 值，使“离得越近分越高”。
-- 分类数据（WorldCover 土地类别）：按查表把每个类别映射成一个 0–1 值。
-- 矢量范围（保护区、水体）：在范围内为 1，范围外为 0。
+**Three ways of converting to 0–1**
+- Continuous values (TWI, distance, LS, K, rainfall, population, etc.): the 2nd and 98th percentiles within the study area are used as the lower and upper bounds, and values are scaled linearly and clipped to 0–1. Distance indicators are then converted to 1 − value, so that "closer means a higher score".
+- Categorical data (WorldCover land classes): each class is mapped to a 0–1 value using a lookup table.
+- Vector extents (protected areas, water bodies): 1 inside the extent, 0 outside it.
 
-百分位缩放的结果是研究区内的相对排序，换研究区上下限就会变。Goslar 扩展区沿用原 Abzucht 区的上下限（“冻结锚点”），这样新旧区域的分数可以直接比较。
+Percentile scaling gives a relative ranking within the study area, so the bounds change when the study area changes. The Goslar extension area reuses the bounds of the original Abzucht area (the "frozen normalization anchors"), so that scores in the new and old areas can be compared directly.
 
-**加权求和**
-- 组件按子权重加成主准则，主准则按顶层权重加成 PIM，每层权重之和为 1。
-- 只有所有组件都有值的像元才计算分数。缺任何一项，该像元就是 NoData，不用 0 填补，也不把缺失组件的权重分给别的组件。
-- Goslar 的部分旧分支例外：缺组件时按已有组件重新分配权重。相关实验的说明里已经注明。
+**Weighted sum**
+- Components are combined into main criteria using the sub-weights, and main criteria are combined into the PIM using the top-level weights. The weights in each layer sum to 1.
+- A score is only computed for pixels where every component has a value. If any component is missing, the pixel is NoData. It is not filled with 0, and the weight of the missing component is not redistributed to other components.
+- Some older Goslar branches are an exception: when a component is missing, its weight is redistributed across the available components. This is noted in the descriptions of the affected experiments.
 
-**分级出图**：PIM 按 0.2 等间距分成五级，0.6 以上算“高”。0.6 只是显示用的分界，不是经过验证的洪水阈值。
+**Classed maps**: the PIM is split into five classes at equal intervals of 0.2, and values of 0.6 and above count as "high". The 0.6 cut-off is only a display break, not a validated flood threshold.
 
-## 3. 需要记住的局限
+## 3. Limitations to keep in mind
 
-- CHIRPS 降雨的原始分辨率约 5 km，SoilGrids 是 250 m，对齐到 30 m 网格后精度并没有提高。
-- 泥沙准则是侵蚀源的相对评分，不是土壤流失量（没有使用 R 因子）。
-- 部分字段名比数据本身的含义宽，详见 `context/docs/glossary.md`。
-- 地图空白处是缺数据，不是低风险。
+- The native resolution of CHIRPS rainfall is about 5 km and SoilGrids is 250 m. Aligning them to the 30 m grid does not make them more precise.
+- The sediment criterion is a relative score of erosion sources, not a soil loss amount (no R factor is used).
+- Some field names are broader than what the data actually represent; see `context/docs/glossary.md` for details.
+- Blank areas on the map are missing data, not low risk.

@@ -1,107 +1,109 @@
-# IFPM 移交说明
+# IFPM handover note
 
-日期：2026-10-08。本文写给接手这个工作区的人，读完应该知道项目在做什么、东西在哪、怎么跑、下一步该做什么。
+Date: 2026-10-08. This note is for whoever takes over this workspace. After reading it you should know what the project does, where things are, how to run it and what to do next.
 
-## 1. 项目是什么
+## 1. What the project is
 
-IFPM 是一个洪水优先级（flood prioritisation）多准则原型。它把五大 PIM 准则（洪水 FH、泥沙/土壤侵蚀 SE、土地利用 LU、环境 ES、社会经济 SV）标准化到 0–1，按权重叠加成综合优先级图。结果都是原型或诊断级别（`diagnostic_only` / `provisional`），不是经过验证的洪水预测模型。
+IFPM is a multi-criteria flood prioritisation prototype. It normalizes the five main PIM criteria (flood FH, sediment/soil erosion SE, land use LU, environmental ES, socioeconomic SV) to 0–1 and combines them with weights into a composite priority map. All results are prototype or diagnostic level (`diagnostic_only` / `provisional`). They are not a validated flood prediction model.
 
-当前权重（Supervisor 完整规格）：FH 0.34 / SE 0.25 / LU 0.17 / ES 0.10 / SV 0.14。每次运行实际使用的权重以输出目录里的 `run_manifest.json` 为准。采矿不再是准则，只作为单独的对比图层。
+Current weights (Supervisor full specification): FH 0.34 / SE 0.25 / LU 0.17 / ES 0.10 / SV 0.14. The weights actually used in each run are the ones recorded in `run_manifest.json` in the output folder. Mining is no longer a criterion; it is only kept as a separate comparison layer.
 
-## 2. 研究区和现状
+## 2. Study areas and current status
 
-| 研究区 | 状态 | 主要输出 |
+| Study area | Status | Main outputs |
 |---|---|---|
-| 德国 Goslar（Abzucht 和 8 个法定洪水区的多河流扩展，约 739 km²） | 9 月最新工作，活跃 | `outputs/goslar_multiriver_full_extent_v1/frozen_scale_v1/`，`outputs/goslar_abzucht_display_rectangle_v1/` |
-| 秘鲁 Secocha（A7367 Map 7 的 30 km² 参考窗口，不是流域） | 活跃，provisional | `outputs/peru_secocha_a7367_reference_extent_v1/`，`outputs/secocha_2023_validation/` |
-| 旧秘鲁区 `peru_hybas_l7_6070641200` | 冻结基线，只读，禁止写入新结果 | `outputs/srtm_1arcsec_peru_pilot/`（含 7 个权重版本） |
-| 津巴布韦 Upper Mzingwane（`boundary_v1`） | 背景案例，不再推进 | `outputs/boundary_v1/` 等 |
+| Goslar, Germany (multi-river extension covering Abzucht and 8 regulatory flood zones, about 739 km²) | Most recent work (September), active | `outputs/goslar_multiriver_full_extent_v1/frozen_scale_v1/`, `outputs/goslar_abzucht_display_rectangle_v1/` |
+| Secocha, Peru (a 30 km² reference window from A7367 Map 7, not a catchment) | Active, provisional | `outputs/peru_secocha_a7367_reference_extent_v1/`, `outputs/secocha_2023_validation/` |
+| Former Peru area `peru_hybas_l7_6070641200` | Frozen baseline, read-only; do not write new results here | `outputs/srtm_1arcsec_peru_pilot/` (contains 7 weight versions) |
+| Upper Mzingwane, Zimbabwe (`boundary_v1`) | Background case, no longer being developed | `outputs/boundary_v1/` and others |
 
-最重要的未解决问题：在 Goslar 扩展对比里，洪水准则在 8 个法定洪水区内都高于各自外围 1 km 环带，但综合优先级只在 3 个区更高。也就是说综合指数和洪水证据的关系还没理顺。
+The most important open problem: in the Goslar extension comparison, the flood criterion is higher inside all 8 regulatory flood zones than in their surrounding 1 km rings, but the composite priority is higher in only 3 of them. In other words, the relationship between the composite index and the flood evidence has not yet been sorted out.
 
-## 3. 目录地图
+## 3. Directory map
 
-| 位置 | 内容 | 是否在 Git 里 |
+| Location | Contents | In Git? |
 |---|---|---|
-| `README.md`、`AGENTS.md` | 工作区总说明；`AGENTS.md` 是一页纸的工作约定（目录、数据登记、建模规则） | 是 |
-| `bin/` | 约 190 个处理脚本，按阶段分目录；入口和说明见 `bin/README.md` | 是 |
-| `tests/` | 60 个测试文件 | 是 |
-| `context/docs/research-map/` | 项目主记录：`EXPERIMENTS.md`（当前实验的命令、输出和结论）、`DECISION_LOG.md`（仍然有效的决定，含权重） | 是 |
-| `context/docs/data-management/registry/` | 每个数据集的来源、许可和下载记录 | 是 |
-| `context/docs/glossary.md`、`context/docs/methodology/` | 术语表；PIM 方法说明（中文） | 是 |
-| `data/raw/`、`data/validation/` | 原始数据，约 17 GB | 否 |
-| `outputs/` | 所有结果，索引见 `outputs/README.md` | 否 |
-| `exports/` | QGIS 便携包 | 否 |
-| `ifpm-flood-pipeline/` | 独立的交付代码仓库（自己的 `.git`），只有合成数据测试 | 单独仓库 |
+| `README.md`, `AGENTS.md` | General workspace description; `AGENTS.md` is a one-page set of working conventions (folders, data registration, modelling rules) | Yes |
+| `bin/` | About 190 processing scripts, grouped into folders by stage; entry points and descriptions are in `bin/README.md` | Yes |
+| `tests/` | 60 test files | Yes |
+| `context/docs/research-map/` | Main project record: `EXPERIMENTS.md` (commands, outputs and conclusions of current experiments) and `DECISION_LOG.md` (decisions that are still in force, including the weights) | Yes |
+| `context/docs/data-management/registry/` | Source, licence and download record for each dataset | Yes |
+| `context/docs/glossary.md`, `context/docs/methodology/` | Glossary; PIM method note (English) | Yes |
+| `data/raw/`, `data/validation/` | Raw data, about 17 GB | No |
+| `outputs/` | All results; the index is in `outputs/README.md` | No |
+| `exports/` | Portable QGIS packages | No |
+| `ifpm-flood-pipeline/` | Separate delivery code repository (with its own `.git`); it only has tests on synthetic data | Separate repository |
 
-注意：`data/`、`outputs/`、`exports/` 都被 `.gitignore` 忽略。只 clone 仓库拿不到数据和结果，需要整体拷贝文件夹。
+Note: `data/`, `outputs/` and `exports/` are all ignored by `.gitignore`. Cloning the repository alone does not give you the data or the results; you need to copy the whole folder.
 
-## 4. 怎么运行
+## 4. How to run it
 
-环境（在工作区根目录）：
+Environment (in the workspace root):
 
 ```sh
-# 先装 uv（Mac 可用 brew install uv），再在工作区根目录运行：
-uv sync --extra hydrology    # 按 uv.lock 装 Python 3.11+ 和全部依赖，生成 .venv
+# Install uv first (on a Mac you can use brew install uv), then run in the workspace root:
+uv sync --extra hydrology    # installs Python 3.11+ and all dependencies from uv.lock and creates .venv
 ```
 
-`--extra hydrology` 会装 WhiteboxTools，两条主链算水文时都要用；第一次运行时它会自动下载一个程序文件，需要联网。rasterio 和 geopandas 自带 GDAL，不用另外装。现有 `.venv` 是在 macOS 上建的，换机器需要重建。QGIS 只用来打开审阅项目，单独安装。
+`--extra hydrology` installs WhiteboxTools, which both main chains need for the hydrology steps. On first run it automatically downloads a program file, so it needs an internet connection. rasterio and geopandas ship with their own GDAL, so you do not need to install it separately. The existing `.venv` was built on macOS and must be rebuilt on a different machine. QGIS is only used to open the review projects and is installed separately.
 
-主要命令：
+Main commands:
 
 ```sh
 # Secocha
 .venv/bin/python bin/factors/run_peru_secocha_chain.py
 .venv/bin/python bin/validate/validate_peru_secocha_chain.py
 
-# Goslar 扩展对比
+# Goslar extension comparison
 .venv/bin/python bin/analysis/run_goslar_multiriver_full.py
 .venv/bin/python bin/analysis/report_goslar_multiriver_full.py
 
-# 测试
+# Tests
 .venv/bin/python -m unittest discover -s tests
 ```
 
-其余 Goslar/Abzucht 命令逐条写在 `context/docs/research-map/EXPERIMENTS.md` 对应实验下。
+The remaining Goslar/Abzucht commands are listed one by one under the corresponding experiments in `context/docs/research-map/EXPERIMENTS.md`.
 
-不要用 `python bin/pipeline.py run` 的默认链：它仍然指向冻结的旧秘鲁区。
+Do not use the default chain of `python bin/pipeline.py run`: it still points to the frozen former Peru area.
 
-快速看结果：用 QGIS 打开 `outputs/peru_secocha_qgis_project_package_compact/IFPM_Peru_Secocha_ReviewMap.qgz` 和 `outputs/goslar_qgis_project_package_compact/IFPM_Goslar_ReviewMap.qgz`。Goslar 最新结论的说明在 `outputs/goslar_multiriver_full_extent_v1/frozen_scale_v1/READING_NOTE.md`。
+To look at results quickly, open `outputs/peru_secocha_qgis_project_package_compact/IFPM_Peru_Secocha_ReviewMap.qgz` and `outputs/goslar_qgis_project_package_compact/IFPM_Goslar_ReviewMap.qgz` in QGIS. The explanation of the latest Goslar conclusions is in `outputs/goslar_multiriver_full_extent_v1/frozen_scale_v1/READING_NOTE.md`.
 
-## 5. Git 状态
+## 5. Git status
 
-- 以分支 `codex/goslar-validation-2024` 为准。2026-10-08 已把 9 月所有未提交的工作提交到这个分支（本地，未推送）。
-- `main` 落后于当前分支，且有一个与当前分支重复的提交（“Centralize numeric standardization”）。不要在 `main` 上继续工作；需要时把当前分支合并或重置过去。
-- `weights/supervisor-full-spec` 分支已经并入当前分支，已删除。
-- 仓库没有配置远程推送记录，是否推送到哪里由接手方决定。
+- The branch `codex/goslar-validation-2024` is the reference. On 2026-10-08 all uncommitted work from September was committed to this branch (locally, not pushed).
+- `main` is behind the current branch and has one commit that duplicates a commit on the current branch ("Centralize numeric standardization"). Do not keep working on `main`; when needed, merge or reset the current branch onto it.
+- The `weights/supervisor-full-spec` branch has been merged into the current branch and deleted.
+- The repository has no configured push remote. Whether and where to push is up to the person taking over.
 
-## 6. 已知问题
+## 6. Known issues
 
-- `pipeline.yaml` 的默认 include 链仍是旧秘鲁区脚本，Secocha 和 Goslar 用的是独立 runner，没有接进 DAG。
-- `bin/` 里部分津巴布韦脚本引用了已在 8 月清理掉的 `outputs/_archive/...` 文件，现在跑不起来（`export_v1_working_boundary.py`、`prepare_v1_multicriteria_evidence.py`、`plot_v1_boundary_paper.py`）。津巴布韦已是背景案例，影响不大。
-- 一些旧字段名比实际证据宽泛，比如树冠覆盖下降只是植被损失代理指标。9 月的语义说明在 `goslar_abzucht_display_rectangle_v1/component_semantics_v1/` 和 `input_semantics_followup_v1/`。
-- 部分原始数据因许可限制没有放进移交包（见移交包里的 `EXCLUSIONS.json`），历史重跑可能需要重新申请。
-- 下载 CLMS 和 Sentinel 像元的脚本需要本机的访问凭据文件，凭据不在仓库里。
+- The default include chain in `pipeline.yaml` still uses the former Peru area scripts. Secocha and Goslar use standalone runners that are not connected to the DAG.
+- Some Zimbabwe scripts in `bin/` reference `outputs/_archive/...` files that were cleaned up in August, so they no longer run (`export_v1_working_boundary.py`, `prepare_v1_multicriteria_evidence.py`, `plot_v1_boundary_paper.py`). Zimbabwe is now a background case, so the impact is small.
+- Some older field names are broader than the actual evidence. For example, tree canopy cover loss is only a proxy for vegetation loss. The September notes on semantics are in `goslar_abzucht_display_rectangle_v1/component_semantics_v1/` and `input_semantics_followup_v1/`.
+- Some raw data were left out of the handover package because of licence restrictions (see `EXCLUSIONS.json` in the handover package). Rerunning historical results may require requesting access again.
+- The scripts that download CLMS and Sentinel pixels need an access credentials file on the local machine. The credentials are not in the repository.
 
-## 7. 下一步建议
+## 7. Suggested next steps
 
-1. 决定综合优先级指数怎么和洪水证据对照评估。如果要调权重，先留出一份独立的评估数据，不要用同一份数据既调权重又做验证。
-2. 检查各准则的覆盖率和代理指标含义，缺数据的地方要在图上可见，不能当作低风险。
-3. 把 Secocha 和 Goslar 的 runner 接进 `pipeline.yaml`，或者干脆让 `pipeline.yaml` 只服务这两条链，去掉旧秘鲁区默认链。
-4. 在接手人的机器上重建环境，跑一遍测试和上面的主要命令，确认可复现。
-5. 确认接手的人能打开 `outputs/` 里的 QGIS 审阅项目。
+1. Decide how the composite priority index should be evaluated against the flood evidence. If you want to tune the weights, first set aside an independent evaluation dataset; do not use the same data both to tune the weights and to validate them.
+2. Check the coverage and proxy meaning of each criterion. Places with missing data must be visible on the map and must not be treated as low risk.
+3. Connect the Secocha and Goslar runners to `pipeline.yaml`, or simply make `pipeline.yaml` serve only these two chains and remove the default former Peru area chain.
+4. Rebuild the environment on the new person's machine, run the tests and the main commands above, and confirm that the results can be reproduced.
+5. Confirm that the person taking over can open the QGIS review projects in `outputs/`.
 
-## 8. 本次精简做了什么（2026-10-08）
+## 8. What this cleanup did (2026-10-08)
 
-- 删除约 17 GB 重复和临时文件：`exports/` 里三个与 zip 完全相同的解压文件夹（zip 已逐文件核对），`tmp/`（8 月 PPT 中间版本，含一个网站 cookies 文件），`data/tmp/`，12 个 `*_previous_<时间戳>` 自动备份目录，根目录的 `IFPM_for_ChatGPT_QA.zip`，以及缓存和 `.DS_Store`。
-- 删除 `bin/_archive/` 里 22 个废弃脚本和两张无用的生成图片（可从 Git 历史找回）。
-- 重写 `outputs/README.md`，删除过时的 `outputs/OUTPUTS_INDEX.csv`；更新 `README.md`、`bin/README.md`、`context/README.md`。
-- 参考论文移到 `context/references/`。
+- Deleted about 17 GB of duplicate and temporary files: three extracted folders in `exports/` that were identical to their zips (the zips were checked file by file), `tmp/` (intermediate versions of the August PPT, including a website cookies file), `data/tmp/`, 12 automatic backup folders named `*_previous_<timestamp>`, `IFPM_for_ChatGPT_QA.zip` in the root folder, and caches and `.DS_Store` files.
+- Deleted 22 obsolete scripts and two unused generated images in `bin/_archive/` (they can be recovered from the Git history).
+- Rewrote `outputs/README.md` and deleted the outdated `outputs/OUTPUTS_INDEX.csv`; updated `README.md`, `bin/README.md` and `context/README.md`.
+- Moved the reference papers to `context/references/`.
 
-2026-10-09 补充精简 `context/`：只保留研究记录、数据登记、术语表、方法说明和 Supervisor 移交草稿，另外留下 `context/configs/`，因为 `bin/` 里的脚本要读取它。导师沟通稿、早期核查报告、旧计划和归档、下载前检查、参考网格规则、导师方法框架截图和最初的数据清单都已删除（Git 历史里可以找回）。参考论文 PDF 也已删除，它不在 Git 里。保留下来的研究记录里还有少数路径指向已删除的文件，这些是历史出处，需要时去 Git 历史里查。
+On 2026-10-09 `context/` was cleaned up further. Only the research records, data registry, glossary, method notes and the Supervisor handover draft were kept, plus `context/configs/`, because scripts in `bin/` read it. The mentor communication drafts, early verification reports, old plans and archives, pre-download checks, reference grid rules, screenshots of the mentor's method framework and the original data inventory were deleted (they can be recovered from the Git history). The reference paper PDFs were also deleted; they are not in Git. A few paths in the remaining research records still point to deleted files. These are historical references; look them up in the Git history when needed.
 
-2026-10-10 精简文档和代码里过时与防御性的内容：研究记录从 9 份合并成 `EXPERIMENTS.md` 和 `DECISION_LOG.md` 两份，只写当前实验和仍然有效的决定；`AGENTS.md` 从 467 行的 AI 管理规则改成一页纸的工作约定；术语表只保留当前准则和字段含义；删除 4 个只检查措辞的脚本（`check_*terminology*`、`check_glossary_sources`、`check_top20_priority_wording`）及对应测试；
+On 2026-10-10 outdated and defensive content was removed from the documentation and code. The research records were merged from 9 files into two, `EXPERIMENTS.md` and `DECISION_LOG.md`, which only describe current experiments and decisions that are still in force. `AGENTS.md` was changed from 467 lines of AI management rules into a one-page set of working conventions. The glossary now only keeps the current criteria and field meanings. Four scripts that only checked wording (`check_*terminology*`, `check_glossary_sources`, `check_top20_priority_wording`) and their tests were deleted.
 
-2026-10-10 删除 `exports/IFPM_Supervisor_Handover_2026-10-08.zip`（14 GB，精简前的完整快照）及其校验文件，以及 8 月分享包和 6 月导师汇报包两个 zip；删除根目录的 PPT 模板 `pre/summary01.potx` 和未使用的 QGIS 样式库 `symbology-style.db`。另外删除打包脚本 `bin/package/build_supervisor_handover.py`、两份给 Supervisor 的英文移交信草稿，以及津巴布韦旧配置 `context/configs/boundary_v1_criteria_stack_v0_2.csv` 和读取它的 `bin/criteria/build_boundary_v1_criteria_stack.py`。
+On 2026-10-10 `exports/IFPM_Supervisor_Handover_2026-10-08.zip` (14 GB, the full snapshot taken before the cleanup) and its checksum file were deleted, together with two zips: the August sharing package and the June mentor report package. The root PPT template `pre/summary01.potx` and the unused QGIS style library `symbology-style.db` were also deleted. In addition, the packaging script `bin/package/build_supervisor_handover.py`, two English handover letter drafts for Supervisor, the old Zimbabwe configuration `context/configs/boundary_v1_criteria_stack_v0_2.csv` and the script that read it, `bin/criteria/build_boundary_v1_criteria_stack.py`, were deleted.
 
-2026-10-10 删除 24 个只用于汇报、幻灯片和导师展示的出图和打包脚本及其配置表（旧秘鲁区和津巴布韦的报告图、简报板、PPT 用图、旧版 QGIS 项目打包等）和 6 个只测它们的测试，同步清理 `pipeline.yaml`、`bin/README.md` 和其余测试里的引用。`export_peru_raw_input_factor_maps`、`export_peru_pim_criteria_maps`、`export_paper_style_single_maps`、`build_ifpm_qgis_project_package` 暂时保留，因为津巴布韦出图脚本或测试还在调用它们。
+On 2026-10-10 24 plotting and packaging scripts used only for reports, slides and mentor presentations were deleted along with their configuration tables (report figures, briefing boards, PPT figures and old QGIS project packaging for the former Peru area and Zimbabwe), together with 6 tests that only tested them. References to them in `pipeline.yaml`, `bin/README.md` and the remaining tests were cleaned up at the same time. `export_peru_raw_input_factor_maps`, `export_peru_pim_criteria_maps`, `export_paper_style_single_maps` and `build_ifpm_qgis_project_package` are kept for now, because Zimbabwe plotting scripts or tests still call them.
+
+2026-10-10: translated all remaining Chinese text in the workspace to English: this note, the PIM method note, the strings and comments in 17 scripts under `bin/`, and the READING_NOTE.md files and inventory tables under `outputs/`. Checksums in the affected output manifests were updated to match. Text inside existing figures (PNG/PDF) was not changed.
