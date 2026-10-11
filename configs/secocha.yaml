@@ -1,0 +1,133 @@
+# Secocha (Peru) chain settings for `python -m ifpm run secocha`.
+#
+# Values are copied from bin/factors/run_secocha_pim_chain.py, which ran the Goslar chain
+# with Secocha paths and five Secocha-specific stages. Those five differences are the
+# `terrain.dem_method`, `rainfall`, `protected_areas`, `exposure` and `criterion_support`
+# settings below. Input dataset ids are defined in configs/datasets.yaml.
+
+area: secocha
+metric_crs: EPSG:32718      # UTM 18S
+res_m: 30.0
+nodata: -9999.0
+log_prefix: peru-secocha
+
+weights:
+  main: {flood_hazard: 0.34, sediment: 0.25, landuse_asm: 0.17, environmental: 0.10, socioeconomic: 0.14}
+  components:
+    flood_hazard: {rainfall_climatology: 0.35, twi_wetness: 0.25, drainage_proximity: 0.40}
+    sediment: {soil_k_factor: 0.25, ls_factor: 0.50, c_factor: 0.25}
+    landuse_asm: {land_cover_pressure: 0.40, bare_soil_vegetation_loss: 0.35, built_agriculture_road_expansion: 0.25}
+    environmental: {water_wetland_context: 0.65, protected_ecological_context: 0.35}
+    socioeconomic: {road_access_proximity: 0.35, settlement_population: 0.35, critical_infrastructure: 0.30}
+  built_agriculture_road: [0.50, 0.50]
+# Secocha: a criterion is scored only where all its components are valid (no renormalization).
+criterion_support: strict
+
+luts:
+  c_factor: {10: 0.001, 20: 0.010, 30: 0.020, 40: 0.200, 50: 0.050, 60: 0.700, 70: 0.000, 80: 0.000, 90: 0.050, 95: 0.010, 100: 0.030}
+  land_use_pressure: {10: 0.10, 20: 0.15, 30: 0.20, 40: 0.80, 50: 1.00, 60: 0.25, 70: 0.00, 80: 0.00, 90: 0.00, 95: 0.00, 100: 0.10}
+  land_cover_runoff_pressure: {10: 0.15, 20: 0.25, 30: 0.35, 40: 0.70, 50: 1.00, 60: 0.90, 70: 0.40, 80: 0.00, 90: 0.10, 95: 0.10, 100: 0.20}
+  bare_soil_vegetation_loss: {10: 0.0, 20: 0.0, 30: 0.0, 40: 0.0, 50: 0.0, 60: 1.0, 70: 0.0, 80: 0.0, 90: 0.0, 95: 0.0, 100: 0.0}
+  built_up_pressure: {10: 0.0, 20: 0.0, 30: 0.0, 40: 0.0, 50: 1.0, 60: 0.0, 70: 0.0, 80: 0.0, 90: 0.0, 95: 0.0, 100: 0.0}
+  agricultural_pressure: {10: 0.0, 20: 0.0, 30: 0.0, 40: 1.0, 50: 0.0, 60: 0.0, 70: 0.0, 80: 0.0, 90: 0.0, 95: 0.0, 100: 0.0}
+water_wetland_classes: [80, 90]
+
+terrain:
+  dem_method: srtm_zip            # NASA SRTMGL1 tile read from the zip, bilinear to the metric grid
+  dem_buffer_m: 1000
+  grid_rounding: ceil             # int(ceil(extent / res)) for the buffered grid
+stream_threshold: 500
+ls_cap: 50.0
+k_si_factor: 0.1317
+
+decay_m: {roads: 20000.0, water: 10000.0}
+
+rainfall:
+  method: chirps                  # CHIRPS v3 latam monthly, read over HTTP
+  dataset: secocha_chirps_monthly
+  months: [12, 1, 2, 3]           # December of year y, January-March of y+1
+  season_years: [2014, 2023]      # inclusive first years of the seasons 2014/15-2023/24
+  window_pad_deg: 0.2
+# Protected areas: the SERNANP query returned no features; score 0 inside the extent.
+protected_areas:
+  method: confirmed_absence
+  dataset: secocha_sernanp_query
+# Exposure: WorldPop population; critical infrastructure = WorldCover built-up class.
+exposure:
+  method: worldpop
+  dataset: secocha_worldpop
+
+chain_files:
+  DEM: terrain_preprocessing/secocha_dem_utm18s_30m.tif
+  DEM_BUFFERED: terrain_preprocessing/secocha_dem_buffered_utm18s_30m.tif
+  SLOPE: terrain_preprocessing/secocha_slope_degrees_utm18s_30m.tif
+  SLOPE_BUFFERED: terrain_preprocessing/secocha_slope_degrees_buffered_utm18s_30m.tif
+  FILLED: hydrology_derivatives/secocha_dem_filled.tif
+  D8_PNTR: hydrology_derivatives/secocha_flow_direction_d8.tif
+  FLOW_ACC_CELLS: hydrology_derivatives/secocha_flow_accumulation.tif
+  FLOW_ACC_SCA: hydrology_derivatives/secocha_flow_accumulation_sca.tif
+  STREAMS_T500: hydrology_derivatives/secocha_streams_t500.tif
+  DISTANCE: hydrology_derivatives/secocha_distance_to_drainage_t500.tif
+  TWI: hydrology_derivatives/secocha_twi.tif
+  LS_CAPPED: ls_factor/secocha_ls_factor_capped50_hillslope_30m.tif
+  K_ALIGNED: soil_k_factor/soil_k_factor_aligned_250m_effective_30m.tif
+  K_SCORED: soil_k_factor/soil_k_factor_0_1.tif
+  RAINFALL: rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif
+landcover_files:
+  CFACTOR: c_factor_30m.tif
+  LAND_USE_PRESSURE: land_use_pressure_30m.tif
+  LAND_COVER_RUNOFF: land_cover_runoff_pressure_30m.tif
+  BARE_SOIL_LOSS: bare_soil_vegetation_loss_proxy_30m.tif
+  BUILT_UP_PRESSURE: built_up_pressure_30m.tif
+  AGRICULTURAL_PRESSURE: agricultural_pressure_30m.tif
+priority_filename: priority_secocha_direct_pim.tif
+
+inputs:
+  dem: secocha_srtm
+  worldcover: secocha_worldcover
+  soilgrids_k: secocha_soilgrids_k
+  roads: secocha_osm_roads
+  mining_overlay: secocha_mining_overlay
+
+extents:
+  reference:
+    method: basin
+    focus_area_id: secocha_reference_extent
+    boundary: secocha_boundary
+    chain_dir: outputs/secocha_pim_chain
+    landcover_dir: outputs/secocha_pim_chain/worldcover_factors
+    stages: [dem, slope, hydrology, ls_factor, worldcover_cfactor, soilgrids_kfactor, osm_roads,
+             rainfall, protected_areas, criteria_stack, exposure_indicators,
+             environmental_sensitivity, priority_scenarios, validate]
+    verify:
+      - outputs/secocha_pim_chain/criteria_stack/criteria/*.tif
+      - outputs/secocha_pim_chain/priority_scenarios/pim_criteria/*.tif
+      - outputs/secocha_pim_chain/priority_scenarios/scenarios/*.tif
+      - outputs/secocha_pim_chain/priority_scenarios/*.tif
+      - outputs/secocha_pim_chain/quality_assurance/*.json
+
+# Validation (python -m ifpm run secocha --step validate): grid, value-range and class
+# checks plus point sampling of the event evidence. Writes quality_assurance/chain_validation.json.
+validation:
+  evidence:
+    - [INGEMMET A7367 field anchor, secocha_field_anchors]
+    - [INDECI response location, secocha_indeci_locations]
+    - [INGEMMET mining record, secocha_mining_overlay]
+  frozen_baseline: peru_former_frozen_baseline
+  experiment_id: supervisor_full_spec_v07_secocha
+
+manifest:
+  experiment_id: supervisor_full_spec_v07_secocha
+  boundary_role: A7367 Map 7 coordinate-frame diagnostic extent; not catchment or event footprint
+  claim_level: provisional
+  nodata_policy: strict common support within each criterion and across the five main criteria; no weight renormalization on missing components
+  mining_role: external overlay only; excluded from PIM score
+  data_sources:
+    dem: NASA SRTMGL1 S16W074, 1 arc-second
+    rainfall: CHIRPS v3 Dec-Mar 2014/15-2023/24, 0.05 degree native
+    land_cover: ESA WorldCover 2021 v200, 10 m native
+    soil: ISRIC SoilGrids 250 m effective resolution
+    roads: Geofabrik Peru OSM extract
+    population: WorldPop Peru 2020 UN-adjusted
+    protected_areas: SERNANP layer 0 query; zero features within 25 km
+  note: Active Peru Secocha prototype using unchanged Supervisor v07 weights; not a final flood-risk result.

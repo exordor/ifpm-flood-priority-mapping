@@ -12,6 +12,19 @@ Active cases: Secocha (Peru) and Goslar (Germany). Zimbabwe is a background case
 
 The former Peru area `peru_former` is a frozen baseline. Its outputs are kept under `outputs/peru_former_pim_chain/` and must not receive new runs.
 
+## How to run
+
+Set up the environment with `uv sync --extra hydrology` (see [HANDOVER.md](HANDOVER.md) §4). The config-driven chain (`ifpm/`, settings in `configs/`) is the new way to run both study areas:
+
+```sh
+.venv/bin/python -m ifpm list                                  # areas, extents and stages
+.venv/bin/python -m ifpm run secocha                           # writes to outputs/_rerun/secocha/
+.venv/bin/python -m ifpm run goslar --extent basin --step rainfall
+.venv/bin/python -m ifpm verify secocha                        # compare a rerun with the current outputs
+```
+
+`run` never writes over the current outputs: it writes under `--out` (default `outputs/_rerun/<area>/`) with the same relative paths. The older per-script commands in `bin/` still work for now.
+
 ## Directory Structure
 
 See the directory map in [HANDOVER.md](HANDOVER.md) §3.

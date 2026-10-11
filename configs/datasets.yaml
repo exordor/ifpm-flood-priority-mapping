@@ -1,0 +1,146 @@
+# Input datasets read by the ifpm chains (python -m ifpm ...).
+#
+# Paths are relative to the workspace root. Source, licence and download details for
+# each dataset are in context/docs/data-management/registry/<registry>.md.
+# `layer` is the GeoPackage layer when a file holds several; `pattern` names the files
+# inside a folder; `{year}`/`{month}` are filled in by the code.
+#
+# A few inputs live under outputs/ because an earlier, separate step produced them
+# (boundaries, CLMS land-cover layers, the multi-river product boundaries). The chains
+# only read them.
+
+# --- Goslar: official WRRL basin chain -------------------------------------------------
+goslar_basin_boundary:
+  path: outputs/goslar_official_hydrology_and_flood_data/goslar_official_hydrologic_reference_boundary.gpkg
+  layer: goslar_official_hydrologic_reference_boundary
+  registry: goslar_official_hydrology_and_flood_data
+goslar_copernicus_dem:
+  path: data/raw/copernicus_dem_30m_goslar/Copernicus_DSM_COG_10_N51_00_E010_00_DEM.tif
+  registry: goslar_pim_chain_sources
+goslar_worldcover:
+  path: data/raw/esa_worldcover_2021_goslar/ESA_WorldCover_10m_2021_v200_N51E009_Map.tif
+  registry: goslar_pim_chain_sources
+goslar_soilgrids_k:
+  path: data/raw/soilgrids_250m_goslar_official_basin/k_factor_0_30cm_avg_250m_us.tif
+  registry: goslar_pim_chain_sources
+goslar_osm_roads:
+  path: data/raw/goslar_official_hydrology_and_flood_data/osm_goslar_official_basin_roads.gpkg
+  registry: goslar_official_hydrology_and_flood_data
+goslar_osm_facilities:
+  path: data/raw/goslar_official_hydrology_and_flood_data/osm_goslar_infrastructure_candidates.gpkg
+  layer: osm_infrastructure_candidates
+  registry: goslar_official_hydrology_and_flood_data
+goslar_osm_facilities_overpass:
+  path: data/raw/goslar_official_hydrology_and_flood_data/osm_goslar_infrastructure_overpass.json
+  registry: goslar_official_hydrology_and_flood_data
+goslar_zensus_basin:
+  path: data/raw/zensus2022_goslar_official_basin/goslar_official_basin_population_100m_3035.tif
+  registry: goslar_pim_chain_sources
+goslar_regnie:
+  path: data/raw/dwd_regnie_germany/raw
+  pattern: grids_germany_monthly_precipitation_{year}{month:02d}.asc.gz
+  registry: goslar_pim_chain_sources
+goslar_natura2000:
+  path: data/raw/eea_natura2000_goslar/goslar_natura2000_2024.gpkg
+  registry: goslar_pim_chain_sources
+goslar_clms_tcd_loss:
+  path: outputs/goslar_esa_worldcover_2021/c_factor/clms_tcd_vegetation_loss_2018_2024_goslar_official_basin_30m.tif
+  registry: clms_hrl_bare_soil_tcd_goslar
+goslar_clms_bare_soil:
+  path: outputs/goslar_esa_worldcover_2021/c_factor/clms_bare_soil_after_2024_goslar_official_basin_30m.tif
+  registry: clms_hrl_bare_soil_tcd_goslar
+goslar_clms_tcd_mosaic:
+  path: data/raw/clms_hrl_tcd_goslar_official_basin/{year}/goslar_official_basin_tcd_{year}_10m_mosaic.tif
+  registry: clms_hrl_bare_soil_tcd_goslar
+goslar_mining_overlay:
+  path: outputs/goslar_mining_context_overlay/goslar_mining_context_overlay.gpkg
+goslar_mining_overlay_manifest:
+  path: outputs/goslar_mining_context_overlay/mining_overlay_manifest.json
+goslar_official_basins:
+  path: outputs/goslar_official_hydrology_and_flood_data/goslar_wfd_drainage_basins_focus_overlap.gpkg
+goslar_hwrm_flood_hazard:
+  path: outputs/goslar_official_hydrology_and_flood_data/goslar_hwrm_flood_hazard_boundaries_12km.gpkg
+goslar_official_source_lineage:
+  path: outputs/goslar_official_hydrology_and_flood_data/source_lineage.json
+goslar_official_diagnostics:
+  path: outputs/goslar_official_hydrology_and_flood_data/diagnostics.json
+goslar_nlwkn_2017_report:
+  path: data/validation/goslar_harz_2024_focus_area/official_event_and_hazard_data/NLWKN_Hochwasserbericht_Juli_2017.pdf
+
+# --- Goslar: Abzucht and multi-river extents -------------------------------------------
+goslar_regulatory_flood_zones:
+  path: data/validation/goslar_2017_regulatory_flood_context/nlwkn_current_regulatory_flood_zones_goslar.geojson
+  registry: goslar_2017_regulatory_flood_context
+goslar_multiriver_products:
+  # Product boundaries (8 regulatory zones + 6 HWRM scenarios) written by the superseded
+  # comparison bin/analysis/compare_goslar_multiriver.py; read as an input here.
+  path: outputs/goslar_abzucht_diagnostics/multiriver_comparison/comparison_boundaries.gpkg
+  layer: products
+goslar_multiriver_dem_tiles:
+  path: data/raw/copernicus_dem_30m_goslar_multiriver
+  pattern: "*.tif"
+  manifest: data/raw/copernicus_dem_30m_goslar_multiriver/source_manifest.json
+  registry: copernicus_dem_30m_goslar_multiriver
+goslar_multiriver_soilgrids_k:
+  path: data/raw/soilgrids_250m_goslar_multiriver/k_factor_0_30cm_avg_250m_us.tif
+  manifest: data/raw/soilgrids_250m_goslar_multiriver/soilgrids_goslar_diagnostics.json
+  registry: soilgrids_250m_goslar_multiriver
+goslar_multiriver_osm_roads:
+  path: data/raw/goslar_multiriver_osm/roads.gpkg
+  manifest: data/raw/goslar_multiriver_osm/source_manifest.json
+  registry: goslar_multiriver_osm
+goslar_multiriver_osm_facilities:
+  path: data/raw/goslar_multiriver_osm/facilities.gpkg
+  manifest: data/raw/goslar_multiriver_osm/source_manifest.json
+  registry: goslar_multiriver_osm
+goslar_multiriver_natura2000:
+  path: data/raw/eea_natura2000_goslar_multiriver/protected.gpkg
+  manifest: data/raw/eea_natura2000_goslar_multiriver/source_manifest.json
+  registry: eea_natura2000_goslar_multiriver
+goslar_multiriver_zensus_clip:
+  path: data/raw/zensus2022_goslar_multiriver/population_native_100m.tif
+  sha256: 3a0ace691c7f7b09500acf23c7292634c5cd22ecb81d02c3867dd946f246bcb0
+  registry: zensus2022_goslar_multiriver
+goslar_zensus_national_zip:
+  # National 100 m grid; no longer present. Used instead of the clip only if it exists.
+  path: data/tmp/zensus2022_goslar/Zensus2022_Bevoelkerungszahl.zip
+  member: Zensus2022_Bevoelkerungszahl_100m-Gitter.csv
+  registry: zensus2022_goslar_multiriver
+
+# --- Secocha (Peru) ---------------------------------------------------------------------
+secocha_boundary:
+  path: outputs/secocha_boundary/secocha_boundary.gpkg
+  layer: secocha_active_boundary
+secocha_srtm:
+  path: data/raw/srtm_1arcsec_secocha/S16W074.SRTMGL1.hgt.zip
+  member: S16W074.hgt
+  registry: null  # no registry note yet
+secocha_worldcover:
+  path: data/raw/esa_worldcover_2021_peru_former/ESA_WorldCover_10m_2021_v200_S18W075_Map.tif
+  registry: esa_worldcover_2021_peru_former
+secocha_worldpop:
+  path: data/raw/worldpop_peru_population/per_ppp_2020_UNadj.tif
+  registry: worldpop_peru_population
+secocha_osm_roads:
+  path: data/raw/geofabrik_osm_peru_former/extracted/gis_osm_roads_free_1.shp
+  registry: geofabrik_osm_peru_former
+secocha_sernanp_query:
+  path: data/raw/sernanp_protected_areas_secocha/secocha_sernanp_layer0_query.geojson
+  registry: null  # no registry note yet
+secocha_mining_overlay:
+  path: data/raw/ingemmet_catastro_minero_secocha/secocha_pequena_mineria.gpkg
+  registry: null  # no registry note yet
+secocha_soilgrids_k:
+  path: data/raw/soilgrids_250m_secocha/k_factor_0_30cm_avg_250m_us.tif
+  registry: soilgrids_250m_secocha
+secocha_chirps_monthly:
+  # Read over HTTP at run time (windowed reads); not cached locally.
+  url: https://data.chc.ucsb.edu/products/CHIRPS/v3.0/monthly/latam/tifs
+  pattern: chirps-v3.0.{year}.{month:02d}.tif
+  registry: null  # no registry note yet
+secocha_field_anchors:
+  path: outputs/secocha_2023_validation/ingemmet_field_anchors.geojson
+secocha_indeci_locations:
+  path: outputs/secocha_2023_validation/indeci_response_locations.geojson
+peru_former_frozen_baseline:
+  path: outputs/peru_former_pim_chain/FROZEN_BASELINE.json

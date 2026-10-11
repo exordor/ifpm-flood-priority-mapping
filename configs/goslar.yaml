@@ -1,0 +1,243 @@
+# Goslar (Germany) chain settings for `python -m ifpm run goslar`.
+#
+# Values are copied from bin/factors/run_goslar_pim_chain.py and the two extent wrappers
+# (bin/analysis/run_abzucht_expanded.py, bin/analysis/run_goslar_multiriver_full.py).
+# Input dataset ids are defined in configs/datasets.yaml.
+
+area: goslar
+metric_crs: EPSG:32632      # UTM 32N
+res_m: 30.0
+nodata: -9999.0
+log_prefix: goslar-peru-style
+
+# Supervisor v07 weights (unchanged for Goslar). Order matters: it is the order of the
+# floating-point accumulation in the old code.
+weights:
+  main: {flood_hazard: 0.34, sediment: 0.25, landuse_asm: 0.17, environmental: 0.10, socioeconomic: 0.14}
+  components:
+    flood_hazard: {rainfall_climatology: 0.35, twi_wetness: 0.25, drainage_proximity: 0.40}
+    sediment: {soil_k_factor: 0.25, ls_factor: 0.50, c_factor: 0.25}
+    landuse_asm: {land_cover_pressure: 0.40, bare_soil_vegetation_loss: 0.35, built_agriculture_road_expansion: 0.25}
+    environmental: {water_wetland_context: 0.65, protected_ecological_context: 0.35}
+    socioeconomic: {road_access_proximity: 0.35, settlement_population: 0.35, critical_infrastructure: 0.30}
+  # Built/agriculture/road expansion proxy: max(built, agriculture) and road access, 50/50.
+  built_agriculture_road: [0.50, 0.50]
+  # Combined infrastructure exposure layer (written, not scored): population and facilities.
+  infrastructure_mix: [0.50, 0.50]
+# How the components of one criterion are combined: weighted mean of the valid components.
+criterion_support: available_weight
+
+# ESA WorldCover class -> value lookup tables.
+luts:
+  c_factor: {10: 0.001, 20: 0.010, 30: 0.020, 40: 0.200, 50: 0.050, 60: 0.700, 70: 0.000, 80: 0.000, 90: 0.050, 95: 0.010, 100: 0.030}
+  land_use_pressure: {10: 0.10, 20: 0.15, 30: 0.20, 40: 0.80, 50: 1.00, 60: 0.25, 70: 0.00, 80: 0.00, 90: 0.00, 95: 0.00, 100: 0.10}
+  land_cover_runoff_pressure: {10: 0.15, 20: 0.25, 30: 0.35, 40: 0.70, 50: 1.00, 60: 0.90, 70: 0.40, 80: 0.00, 90: 0.10, 95: 0.10, 100: 0.20}
+  bare_soil_vegetation_loss: {10: 0.0, 20: 0.0, 30: 0.0, 40: 0.0, 50: 0.0, 60: 1.0, 70: 0.0, 80: 0.0, 90: 0.0, 95: 0.0, 100: 0.0}
+  built_up_pressure: {10: 0.0, 20: 0.0, 30: 0.0, 40: 0.0, 50: 1.0, 60: 0.0, 70: 0.0, 80: 0.0, 90: 0.0, 95: 0.0, 100: 0.0}
+  agricultural_pressure: {10: 0.0, 20: 0.0, 30: 0.0, 40: 1.0, 50: 0.0, 60: 0.0, 70: 0.0, 80: 0.0, 90: 0.0, 95: 0.0, 100: 0.0}
+water_wetland_classes: [80, 90]
+
+terrain:
+  dem_method: copernicus_tile     # one EPSG:4326 tile, bilinear to the metric grid
+  dem_buffer_m: 1000              # DEM/hydrology buffer around the boundary
+  grid_rounding: round            # int(round(extent / res)) for the buffered grid
+stream_threshold: 500             # flow-accumulation cells for streams and LS channel cells
+ls_cap: 50.0
+k_si_factor: 0.1317               # US-unit K to SI (t ha h / ha MJ mm)
+
+# Linear distance decay (m) to 0 for the proximity layers.
+decay_m: {roads: 20000.0, protected: 10000.0, water: 10000.0, facilities: 2000.0}
+
+rainfall:
+  method: regnie                  # DWD REGNIE monthly grids, EPSG:31467
+  dataset: goslar_regnie
+  months: [6, 7, 8]
+  years: [1991, 2020]             # inclusive
+
+# Output file names. `chain_files` are relative to the extent's chain folder, `landcover_files`
+# to its land-cover folder. Folders inside the chain folder are fixed (see ifpm/chain.py).
+chain_files:
+  DEM: terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif
+  DEM_BUFFERED: terrain_preprocessing/goslar_focus_dem_buffered_utm32n_30m.tif
+  SLOPE: terrain_preprocessing/goslar_focus_slope_degrees_utm32n_30m.tif
+  SLOPE_BUFFERED: terrain_preprocessing/goslar_focus_slope_degrees_buffered_utm32n_30m.tif
+  FILLED: hydrology_derivatives/goslar_focus_dem_filled.tif
+  D8_PNTR: hydrology_derivatives/goslar_focus_flow_direction_d8.tif
+  FLOW_ACC_CELLS: hydrology_derivatives/goslar_focus_flow_accumulation.tif
+  FLOW_ACC_SCA: hydrology_derivatives/goslar_focus_flow_accumulation_sca.tif
+  STREAMS_T500: hydrology_derivatives/goslar_focus_streams_t500.tif
+  DISTANCE: hydrology_derivatives/goslar_focus_distance_to_drainage_t500.tif
+  TWI: hydrology_derivatives/goslar_focus_twi.tif
+  LS_CAPPED: ls_factor/goslar_focus_ls_factor_capped50_hillslope_30m.tif
+  K_ALIGNED: soil_k_factor/soil_k_factor_aligned_250m_effective_30m.tif
+  K_SCORED: soil_k_factor/soil_k_factor_0_1.tif
+  RAINFALL: rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif
+landcover_files:
+  CFACTOR: c_factor_goslar_focus_30m.tif
+  LAND_USE_PRESSURE: land_use_pressure_goslar_focus_30m.tif
+  LAND_COVER_RUNOFF: land_cover_runoff_pressure_goslar_focus_30m.tif
+  BARE_SOIL_LOSS: bare_soil_vegetation_loss_proxy_goslar_focus_30m.tif
+  BUILT_UP_PRESSURE: built_up_pressure_goslar_focus_30m.tif
+  AGRICULTURAL_PRESSURE: agricultural_pressure_goslar_focus_30m.tif
+priority_filename: priority_goslar_direct_pim.tif
+
+# Inputs shared by all Goslar extents (dataset ids). Extents override some of them.
+inputs:
+  dem: goslar_copernicus_dem
+  worldcover: goslar_worldcover
+  soilgrids_k: goslar_soilgrids_k
+  roads: goslar_osm_roads
+  facilities: goslar_osm_facilities
+  population: goslar_zensus_basin
+  protected: goslar_natura2000
+  clms_tcd_loss: goslar_clms_tcd_loss
+  clms_bare_soil: goslar_clms_bare_soil
+
+# Extents, in run order. `python -m ifpm run goslar` runs all of them; later extents read
+# the outputs of earlier ones from the same --out folder when present, else from outputs/.
+extents:
+  basin:
+    method: basin
+    focus_area_id: goslar_wrrl_basin
+    boundary: goslar_basin_boundary
+    chain_dir: outputs/goslar_pim_chain
+    landcover_dir: outputs/goslar_esa_worldcover_2021/c_factor
+    stages: [dem, slope, hydrology, ls_factor, worldcover_cfactor, soilgrids_kfactor, osm_roads,
+             rainfall, protected_areas, criteria_stack, exposure_indicators,
+             environmental_sensitivity, priority_scenarios]
+    verify:
+      - outputs/goslar_pim_chain/criteria_stack/criteria/*.tif
+      - outputs/goslar_pim_chain/priority_scenarios/**/*.tif
+
+  # Abzucht HQ100 comparison extent: basin plus the HQ100 polygon buffered by 1 km;
+  # basin percentile anchors frozen (re-fitted from the basin run, then applied).
+  abzucht_hq100:
+    method: abzucht
+    focus_area_id: goslar_abzucht_hq100_expanded_extent
+    out_dir: outputs/goslar_abzucht_hq100_expanded_extent/fixed_scale
+    fill_display_rectangle: false
+    baseline_extent: basin
+    hq100_uesg_id: 917
+    hq100_buffer_m: 1000
+    display_margin_m: 500
+    buffer_cells: 34
+    tcd_years: [2018, 2024]
+    command: .venv/bin/python -m ifpm run goslar --extent abzucht_hq100
+    stages: [prepare, slope, hydrology, ls_factor, soilgrids_kfactor, osm_roads, rainfall,
+             protected_areas, criteria_stack, exposure_indicators, environmental_sensitivity,
+             priority_scenarios, report, overlay]
+    verify:
+      - outputs/goslar_abzucht_hq100_expanded_extent/fixed_scale/chain/priority_scenarios/**/*.tif
+      - outputs/goslar_abzucht_hq100_expanded_extent/fixed_scale/frozen_normalization.json
+
+  # Same plus the full HQ100 display rectangle (polygon bounds + 500 m). The multi-river
+  # extent takes its anchors and starting boundary from this one.
+  abzucht:
+    method: abzucht
+    focus_area_id: goslar_abzucht_display_rectangle
+    out_dir: outputs/goslar_abzucht_diagnostics/fixed_scale
+    fill_display_rectangle: true
+    baseline_extent: basin
+    hq100_uesg_id: 917
+    hq100_buffer_m: 1000
+    display_margin_m: 500
+    buffer_cells: 34
+    tcd_years: [2018, 2024]
+    command: .venv/bin/python -m ifpm run goslar --extent abzucht
+    stages: [prepare, slope, hydrology, ls_factor, soilgrids_kfactor, osm_roads, rainfall,
+             protected_areas, criteria_stack, exposure_indicators, environmental_sensitivity,
+             priority_scenarios, report, overlay]
+    verify:
+      - outputs/goslar_abzucht_diagnostics/fixed_scale/chain/priority_scenarios/**/*.tif
+      - outputs/goslar_abzucht_diagnostics/fixed_scale/frozen_normalization.json
+
+  # Multi-river extent: the Abzucht extent plus all 14 retained official flood products
+  # buffered by 2 km; four DEM tiles; frozen anchors from the Abzucht extent.
+  multiriver:
+    method: multiriver
+    focus_area_id: goslar_multiriver_full_extent
+    out_dir: outputs/goslar_multiriver_full_extent/fixed_scale
+    baseline_extent: abzucht
+    products: goslar_multiriver_products
+    product_buffer_m: 2000
+    buffer_cells: 334             # terrain/hydrology padding (10.02 km)
+    road_query_buffer_m: 3000
+    facility_pad_m: 2040
+    proximity_pad_m: 10020
+    flood_percents: [50, 60, 70]
+    ring_radii_m: [500, 1000, 2000]
+    tcd_years: [2018, 2024]
+    command: .venv/bin/python -m ifpm run goslar --extent multiriver
+    inputs:
+      dem_tiles: goslar_multiriver_dem_tiles
+      soilgrids_k: goslar_multiriver_soilgrids_k
+      roads: goslar_multiriver_osm_roads
+      facilities: goslar_multiriver_osm_facilities
+      protected: goslar_multiriver_natura2000
+      population_clip: goslar_multiriver_zensus_clip
+      population_zip: goslar_zensus_national_zip
+    stages: [prepare, terrain, landcover, hydrology, ls_factor, soilgrids_kfactor, osm_roads,
+             rainfall, protected_areas, criteria_stack, exposure_indicators,
+             environmental_sensitivity, priority_scenarios, comparison, report]
+    verify:
+      - outputs/goslar_multiriver_full_extent/fixed_scale/chain/priority_scenarios/**/*.tif
+      - outputs/goslar_multiriver_full_extent/fixed_scale/pim_flood_*.tif
+      - outputs/goslar_multiriver_full_extent/fixed_scale/*.csv
+
+# Descriptive fields copied into the basin run_manifest.json (unchanged text).
+manifest:
+  focus_area_name: Goslar official WRRL water-body union (hydrologic reference, not an event footprint)
+  enters_pim_score: false
+  claim_level: provisional
+  weight_contract: identical to Secocha Supervisor v07; no Goslar-specific reweighting
+  local_weight_limitations:
+    landuse_asm: bare_soil_vegetation_loss uses positive 2018-2024 Copernicus HRL Tree Cover Density decline; this is a provisional vegetation-loss proxy, not a validated forest-loss product
+    socioeconomic: critical_infrastructure uses independent OSM facility proximity (2 km decay); coverage and operating status remain community-data limitations
+  mining_role: external context overlay only
+  mining_enters_pim_score: false
+  official_hydrology_interpretation: >-
+    Official WRRL polygons provide hydrologic context; HWRM layers are modelled regulatory
+    scenarios, not observed 2017 flooding; OSM facilities require class filtering before scoring.
+  normalization:
+    method: 2-98 percentile clip then min-max to [0,1]
+    module: ifpm/normalize.py:percentile_minmax
+    applied_to: [twi, drainage_proximity(inverted), ls_factor, c_factor, soil_k_factor, rainfall_climatology, population_exposure]
+    not_percentile: road_access_proximity (direct 20 km linear decay); bare_soil/built/agriculture (LUT, not standardized)
+  nodata_policy:
+    worldcover: NoData preserved (not converted to 0); LUT applied to valid classes only.
+    soilgrids: NoData preserved; K-factor NaN cells kept NaN through standardization.
+    hydrology_background: Stream-mask background 0 is semantic (not-a-stream), retained.
+  effective_resolutions:
+    dem: 30 m (Copernicus DEM GLO-30 native ~30 m)
+    worldcover: 10 m native, resampled nearest to 30 m
+    soilgrids_k: 250 m native, resampled nearest to 30 m (effective 250 m)
+    rainfall_regnie: 1 km native, provisional 30 m resample (effective 1 km)
+    population_zensus: 100 m native, sum-resampled to 30 m
+  soilgrids_method: Williams (1995) US units, 0-30 cm depth-weighted; SI via x0.1317
+  data_sources:
+    rainfall: DWD REGNIE monthly grid, JJA 1991-2020 mean (30-y climate normal), 1 km native, provisional 30 m resample
+    protected_areas: EEA Natura 2000 2024 (FFH + SPA)
+    dem: Copernicus DEM GLO-30 (N51E010); outputs/goslar_pim_chain/ dir name is legacy
+    population: Destatis Zensus 2022 100 m grid (EPSG:3035)
+    mining_overlay: LBEG/NIBIS mining-right fields plus OSM mining features within 12 km; external context only
+    official_hydrology: Lower Saxony Umweltkarten WRRL drainage basins / water bodies; external hydrologic context
+    flood_hazard_scenarios: NLWKN HWRM-RL Oker and Innerste HQ scenarios; modelled regulatory context, not observed 2017 inundation
+    infrastructure_candidates: OpenStreetMap schools, hospitals, emergency services, works, substations and stations; candidate only
+    clms_bare_soil: Copernicus HRL VLCC Bare Soil After 2024 (10 m native; provisional indicator input)
+    clms_tcd_loss: Copernicus HRL VLCC Tree Cover Density 2018-2024 positive decline (10 m native; provisional vegetation-loss proxy)
+  boundary_contract:
+    id: goslar_wrrl_basin
+    source: Lower Saxony Umweltkarten WRRL DrainBasin_Waterbody_LOCAL
+    area_km2: 153.778655
+    claim: provisional official water-body reference; not an observed 2017 inundation footprint
+  note: Goslar provisional prototype using an official WRRL water-body reference union; not final or validated flood risk.
+  # Context datasets recorded in the manifest lineage (not used in the score).
+  context_datasets:
+    mining_overlay: goslar_mining_overlay
+    mining_overlay_manifest: goslar_mining_overlay_manifest
+    wfd_drainage_basins: goslar_official_basins
+    hwrm_flood_hazard_boundaries: goslar_hwrm_flood_hazard
+    source_lineage: goslar_official_source_lineage
+    diagnostics: goslar_official_diagnostics
+    nlwkn_2017_report: goslar_nlwkn_2017_report
+    osm_infrastructure_candidates: goslar_osm_facilities_overpass

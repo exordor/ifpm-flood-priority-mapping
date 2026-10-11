@@ -48,7 +48,19 @@ uv sync --extra hydrology    # installs Python 3.11+ and all dependencies from u
 
 `--extra hydrology` installs WhiteboxTools, which both main chains need for the hydrology steps. On first run it automatically downloads a program file, so it needs an internet connection. rasterio and geopandas ship with their own GDAL, so you do not need to install it separately. The existing `.venv` was built on macOS and must be rebuilt on a different machine. QGIS is only used to open the review projects and is installed separately.
 
-Main commands:
+New way (config-driven package `ifpm/`, settings in `configs/goslar.yaml`, `configs/secocha.yaml` and `configs/datasets.yaml`):
+
+```sh
+.venv/bin/python -m ifpm list                         # areas, extents and their stages
+.venv/bin/python -m ifpm run secocha                  # all stages incl. validation
+.venv/bin/python -m ifpm run goslar                   # extents basin, abzucht_hq100, abzucht, multiriver in order
+.venv/bin/python -m ifpm run goslar --extent multiriver --step comparison,report
+.venv/bin/python -m ifpm verify goslar                # pass/fail table against the current outputs
+```
+
+`run` writes under `--out` (default `outputs/_rerun/<area>/`, same relative paths as `outputs/`) and never over the current outputs; `verify` compares that folder with the current outputs (identical, or within 1e-6 for rasters). The QGIS review projects are not yet part of `ifpm`.
+
+Older per-script commands (still in place):
 
 ```sh
 # Secocha
