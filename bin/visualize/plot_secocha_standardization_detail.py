@@ -21,10 +21,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import rasterio
 from matplotlib.patches import FancyBboxPatch
-from openpyxl import Workbook
-from openpyxl.styles import Alignment, Font, PatternFill
-from openpyxl.utils import get_column_letter
-from openpyxl.worksheet.table import Table, TableStyleInfo
+
+try:  # optional dependency, only needed for the xlsx audit table
+    from openpyxl import Workbook
+    from openpyxl.styles import Alignment, Font, PatternFill
+    from openpyxl.utils import get_column_letter
+    from openpyxl.worksheet.table import Table, TableStyleInfo
+except ImportError:
+    Workbook = None
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -1096,6 +1100,8 @@ def render_process_figure(
 
 def write_excel(path: Path, rows: list[dict], study_area: str = STUDY_AREA) -> None:
     """Write a compact detail table with separate explanations and rule sheets."""
+    if Workbook is None:
+        raise SystemExit("openpyxl is needed for the xlsx audit table: .venv/bin/python -m pip install openpyxl")
     workbook = Workbook()
     readme = workbook.active
     readme.title = "Read me"

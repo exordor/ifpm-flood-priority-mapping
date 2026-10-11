@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 import unittest
 from pathlib import Path
@@ -12,7 +13,15 @@ PYTHON = ROOT / ".venv/bin/python"
 SCRIPT = ROOT / "bin/acquire/export_goslar_focus_boundary.py"
 
 
+# Regenerating these files writes into the real outputs/; the default run stays read-only.
+WRITES_OUTPUTS = unittest.skipUnless(
+    os.environ.get("IFPM_WRITE_OUTPUTS") == "1",
+    "regenerates files under outputs/; set IFPM_WRITE_OUTPUTS=1 to run",
+)
+
+
 class GoslarFocusBoundaryTest(unittest.TestCase):
+    @WRITES_OUTPUTS
     def test_exports_goslar_focus_boundary_gpkg(self):
         completed = subprocess.run(
             [str(PYTHON), str(SCRIPT)],

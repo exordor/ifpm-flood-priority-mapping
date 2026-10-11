@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 import subprocess
 import unittest
 import zipfile
@@ -16,6 +17,13 @@ CHAIN = ROOT / "bin/factors/run_secocha_pim_chain.py"
 BASE = ROOT / "outputs/secocha_pim_chain"
 PACKAGE = ROOT / "outputs/secocha_qgis_full_audit"
 PORTABLE = ROOT / "exports/qgis_packages/secocha/FullAudit"
+
+
+# Regenerating these files writes into the real outputs/; the default run stays read-only.
+WRITES_OUTPUTS = unittest.skipUnless(
+    os.environ.get("IFPM_WRITE_OUTPUTS") == "1",
+    "regenerates files under outputs/; set IFPM_WRITE_OUTPUTS=1 to run",
+)
 
 
 class PeruSecochaChainTest(unittest.TestCase):
@@ -78,6 +86,7 @@ class PeruSecochaChainTest(unittest.TestCase):
         self.assertNotIn("Goslar", xml)
         self.assertIn("Secocha", xml)
 
+    @WRITES_OUTPUTS
     def test_qgis_direct_scored_layers_expose_weights(self):
         subprocess.run([PYTHON, ROOT / "bin/package/build_secocha_qgis_full_audit.py"], cwd=ROOT, check=True)
         with (PACKAGE / "manifest.csv").open(newline="", encoding="utf-8") as handle:

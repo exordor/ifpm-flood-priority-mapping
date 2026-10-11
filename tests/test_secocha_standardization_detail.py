@@ -9,8 +9,12 @@ import zipfile
 from pathlib import Path
 
 import numpy as np
-from openpyxl import load_workbook
 import rasterio
+
+try:  # openpyxl is optional (not a declared dependency); the xlsx audit table needs it
+    from openpyxl import load_workbook
+except ImportError:
+    load_workbook = None
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +23,7 @@ SCRIPT = ROOT / "bin/visualize/plot_secocha_standardization_detail.py"
 BASE = ROOT / "outputs/secocha_pim_chain"
 
 
+@unittest.skipIf(load_workbook is None, "openpyxl is not installed; the script writes an xlsx table")
 class PeruSecochaStandardizationDetailTest(unittest.TestCase):
     def test_builds_source_backed_standardization_detail(self):
         with tempfile.TemporaryDirectory() as temporary:

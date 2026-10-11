@@ -1,5 +1,6 @@
 import json
 import hashlib
+import os
 import subprocess
 import unittest
 from pathlib import Path
@@ -15,6 +16,13 @@ OUT = ROOT / "outputs/goslar_pim_chain"
 SECOCHA_MANIFEST = (
     ROOT
     / "outputs/secocha_pim_chain/priority_scenarios/run_manifest.json"
+)
+
+
+# Regenerating these files writes into the real outputs/; the default run stays read-only.
+WRITES_OUTPUTS = unittest.skipUnless(
+    os.environ.get("IFPM_WRITE_OUTPUTS") == "1",
+    "regenerates files under outputs/; set IFPM_WRITE_OUTPUTS=1 to run",
 )
 
 
@@ -101,6 +109,7 @@ class GoslarPeruStyleChainTest(unittest.TestCase):
         self.assertIn("rainfall", catalog["stages"])
         self.assertIn("protected_areas", catalog["stages"])
 
+    @WRITES_OUTPUTS
     def test_chain_runs_and_produces_reference_grid_and_priority_map(self):
         completed = subprocess.run(
             [str(PYTHON), str(SCRIPT), "--max-stage", "priority_scenarios"],

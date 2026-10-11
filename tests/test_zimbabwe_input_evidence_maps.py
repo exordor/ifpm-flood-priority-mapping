@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import importlib.util
+import os
 import sys
 import unittest
 from pathlib import Path
@@ -19,6 +20,13 @@ def load_module():
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
+
+
+# Regenerating these files writes into the real outputs/; the default run stays read-only.
+WRITES_OUTPUTS = unittest.skipUnless(
+    os.environ.get("IFPM_WRITE_OUTPUTS") == "1",
+    "regenerates files under outputs/; set IFPM_WRITE_OUTPUTS=1 to run",
+)
 
 
 class ZimbabweInputEvidenceMapsTest(unittest.TestCase):
@@ -59,6 +67,7 @@ class ZimbabweInputEvidenceMapsTest(unittest.TestCase):
             self.assertIn(slug, peru_specs)
             self.assertEqual(zimbabwe_specs[slug].colors, peru_specs[slug].colors, slug)
 
+    @WRITES_OUTPUTS
     def test_current_inputs_generate_individual_maps_panels_and_index(self):
         module = load_module()
         module.main()
@@ -93,6 +102,7 @@ class ZimbabweInputEvidenceMapsTest(unittest.TestCase):
             "rainfall_climatology; twi; distance_to_drainage; soil_k_factor; ls_factor; c_factor",
         )
 
+    @WRITES_OUTPUTS
     def test_claim_levels_and_coverage_are_governed(self):
         module = load_module()
         module.main()

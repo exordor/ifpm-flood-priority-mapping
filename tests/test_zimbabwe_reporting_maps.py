@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import importlib.util
+import os
 import sys
 import unittest
 from pathlib import Path
@@ -31,6 +32,13 @@ def load_named_module(path: Path, name: str):
     sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
+
+
+# Regenerating these files writes into the real outputs/; the default run stays read-only.
+WRITES_OUTPUTS = unittest.skipUnless(
+    os.environ.get("IFPM_WRITE_OUTPUTS") == "1",
+    "regenerates files under outputs/; set IFPM_WRITE_OUTPUTS=1 to run",
+)
 
 
 class ZimbabweReportingMapsTest(unittest.TestCase):
@@ -78,12 +86,14 @@ class ZimbabweReportingMapsTest(unittest.TestCase):
             "run_zimbabwe_rainfall_exposure_for_manifest_test",
         )
 
-        for path in scenario.OUTPUTS:
+        # handoff.md was removed on purpose in the 2026-10-10 Markdown cleanup.
+        expected = [path for path in scenario.OUTPUTS if path.name != "handoff.md"]
+        for path in expected:
             self.assertTrue(path.exists(), path)
         with scenario.RUN_MANIFEST.open(newline="", encoding="utf-8") as handle:
             rows = list(csv.DictReader(handle))
         manifest_paths = {row["path"] for row in rows}
-        for path in scenario.OUTPUTS:
+        for path in expected:
             if path != scenario.RUN_MANIFEST:
                 self.assertIn(scenario.rel(path), manifest_paths)
         self.assertIn(scenario.rel(Path(scenario.__file__)), manifest_paths)
@@ -148,6 +158,7 @@ class ZimbabweReportingMapsTest(unittest.TestCase):
         self.assertTrue(np.array_equal(np.isfinite(priority), common))
         self.assertLess(float(np.max(np.abs(priority[common] - expected[common]))), 2e-6)
 
+    @WRITES_OUTPUTS
     def test_current_inputs_build_reporting_chain(self):
         module = load_module()
 

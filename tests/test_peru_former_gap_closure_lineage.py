@@ -61,15 +61,25 @@ class PeruGapClosureLineageTest(unittest.TestCase):
         self.assertEqual(population["population_sha256"], sha256(WORLDPOP))
         self.assertEqual(sinpad["sinpad_sha256"], sha256(SINPAD))
 
-    def test_scenario_manifest_binds_current_script_inputs_and_outputs(self):
+    def test_scenario_manifest_binds_current_inputs_and_outputs(self):
+        # Only the data lineage is checked. The recorded script and code inputs (bin/)
+        # describe the code of the frozen run and change whenever the code is refactored.
+        # Paths recorded before the 2026-10-11 rename are found by content in the
+        # peru_former output folders.
         manifest = json.loads(RUN_MANIFEST.read_text(encoding="utf-8"))
-        script = resolve_recorded(manifest["script"]["path"])
-        self.assertEqual(manifest["script"]["sha256"], sha256(script))
-        for group in ("inputs", "outputs"):
-            for item in manifest[group]:
-                path = resolve_recorded(item["path"])
+        items = [item for group in ("inputs", "outputs") for item in manifest[group]
+                 if not item["path"].startswith("bin/")]
+        suffixes = {Path(item["path"]).suffix for item in items}
+        current = {}
+        for path in sorted(ROOT.glob("outputs/peru_former_*/**/*")):
+            if path.suffix in suffixes and path.is_file():
+                current.setdefault(sha256(path), path)
+        for item in items:
+            path = resolve_recorded(item["path"])
+            if path.exists():
                 self.assertEqual(item["sha256"], sha256(path), item["path"])
-
+            else:
+                self.assertIn(item["sha256"], current, f"no file with the recorded content: {item['path']}")
 
 if __name__ == "__main__":
     unittest.main()

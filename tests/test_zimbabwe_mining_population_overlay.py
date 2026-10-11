@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import importlib.util
+import os
 import sys
 import unittest
 from pathlib import Path
@@ -26,16 +27,24 @@ def load_module():
     return module
 
 
+# Regenerating these files writes into the real outputs/; the default run stays read-only.
+WRITES_OUTPUTS = unittest.skipUnless(
+    os.environ.get("IFPM_WRITE_OUTPUTS") == "1",
+    "regenerates files under outputs/; set IFPM_WRITE_OUTPUTS=1 to run",
+)
+
+
 class ZimbabweMiningPopulationOverlayTest(unittest.TestCase):
     def test_overlay_uses_footprints_and_population_context(self):
         module = load_module()
 
         self.assertIn("global_mining_polygons_v2", str(module.MINING_FOOTPRINTS))
-        self.assertIn("worldpop_zwe_2020", str(module.POPULATION))
+        self.assertIn("worldpop_2020_zimbabwe", str(module.POPULATION))
         script_text = SCRIPT.read_text(encoding="utf-8").lower()
         self.assertNotIn("top20", script_text)
         self.assertNotIn("geometry.centroid", script_text)
 
+    @WRITES_OUTPUTS
     def test_export_is_traceable_and_boundary_clipped(self):
         module = load_module()
         module.main()

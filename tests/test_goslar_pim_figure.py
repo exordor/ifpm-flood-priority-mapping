@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 import unittest
 from pathlib import Path
@@ -9,7 +10,15 @@ PYTHON = ROOT / ".venv/bin/python"
 SCRIPT = ROOT / "bin/visualize/plot_goslar_pim_overview.py"
 
 
+# Regenerating these files writes into the real outputs/; the default run stays read-only.
+WRITES_OUTPUTS = unittest.skipUnless(
+    os.environ.get("IFPM_WRITE_OUTPUTS") == "1",
+    "regenerates files under outputs/; set IFPM_WRITE_OUTPUTS=1 to run",
+)
+
+
 class GoslarPimOverviewTest(unittest.TestCase):
+    @WRITES_OUTPUTS
     def test_builds_priority_and_criteria_overview(self):
         completed = subprocess.run(
             [str(PYTHON), str(SCRIPT)],

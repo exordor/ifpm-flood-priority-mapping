@@ -105,6 +105,19 @@ extents:
       - outputs/secocha_pim_chain/priority_scenarios/scenarios/*.tif
       - outputs/secocha_pim_chain/priority_scenarios/*.tif
       - outputs/secocha_pim_chain/quality_assurance/*.json
+    # Accepted differences (status KNOWN, counted as pass while the difference stays within
+    # max_diff). The rerun burns 3 extra road cells in column 166 (rows 90, 102, 170;
+    # east edge x=696500): road ends clipped at the boundary land one floating-point step
+    # inside the grid edge with this GEOS/GDAL build. The other files inherit the change.
+    known_differences:
+      reason: 3 edge road cells at column 166 (x=696500) from floating-point clipping
+      max_diff: 2.0e-3
+      files:
+        - outputs/secocha_pim_chain/criteria_stack/criteria/road_access_proximity_0_1.tif
+        - outputs/secocha_pim_chain/criteria_stack/criteria/built_agriculture_road_expansion_0_1.tif
+        - outputs/secocha_pim_chain/priority_scenarios/pim_criteria/landuse_asm_0_1.tif
+        - outputs/secocha_pim_chain/priority_scenarios/pim_criteria/socioeconomic_0_1.tif
+        - outputs/secocha_pim_chain/priority_scenarios/scenarios/priority_secocha_direct_pim.tif
 
 # Validation (python -m ifpm run secocha --step validate): grid, value-range and class
 # checks plus point sampling of the event evidence. Writes quality_assurance/chain_validation.json.

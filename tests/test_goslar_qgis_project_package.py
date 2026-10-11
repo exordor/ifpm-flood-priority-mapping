@@ -4,6 +4,7 @@ import csv
 import hashlib
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -28,6 +29,13 @@ def load_module():
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
+
+
+# Regenerating these files writes into the real outputs/; the default run stays read-only.
+WRITES_OUTPUTS = unittest.skipUnless(
+    os.environ.get("IFPM_WRITE_OUTPUTS") == "1",
+    "regenerates files under outputs/; set IFPM_WRITE_OUTPUTS=1 to run",
+)
 
 
 class GoslarQgisProjectPackageTest(unittest.TestCase):
@@ -281,6 +289,7 @@ class GoslarQgisProjectPackageTest(unittest.TestCase):
         or Path("/Applications/QGIS-LTR.app").exists(),
         "QGIS is not installed",
     )
+    @WRITES_OUTPUTS
     def test_qgis_build_and_layer_qa(self):
         validator = ROOT / "bin/validate/validate_goslar_qgis_layer_rendering.py"
         subprocess.run([sys.executable, str(SCRIPT)], cwd=ROOT, check=True)
@@ -305,6 +314,7 @@ class GoslarQgisProjectPackageTest(unittest.TestCase):
         self.assertIn('source="../', project_xml)
 
     @unittest.skipUnless(GENERATED_PACKAGE_AVAILABLE, "run the Goslar QGIS package builder first")
+    @WRITES_OUTPUTS
     def test_manifest_records_valid_layers_and_styles(self):
         # The boundary GPKG write is non-deterministic (SQLite internals), and
         # the focus-boundary test re-exports it. Rebuild the package first so
