@@ -13,23 +13,12 @@ from shapely.geometry import Point, box
 ROOT = Path(__file__).resolve().parents[1]
 PYTHON = ROOT / ".venv/bin/python"
 SCRIPT = ROOT / "bin/acquire/pull_goslar_mining_overlay.py"
-CHAIN = ROOT / "bin/factors/run_goslar_pim_chain.py"
 
 
 def load_module():
     spec = importlib.util.spec_from_file_location("pull_goslar_mining_overlay", SCRIPT)
     if spec is None or spec.loader is None:
         raise AssertionError(f"cannot load {SCRIPT}")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-def load_chain_module():
-    spec = importlib.util.spec_from_file_location("goslar_chain_for_mining_test", CHAIN)
-    if spec is None or spec.loader is None:
-        raise AssertionError(f"cannot load {CHAIN}")
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
@@ -99,32 +88,6 @@ class GoslarMiningOverlayTest(unittest.TestCase):
         self.assertEqual(
             {source["provider"] for source in catalog["sources"]},
             {"LBEG/NIBIS", "OpenStreetMap/Overpass"},
-        )
-
-    def test_chain_catalog_declares_mining_as_external_overlay(self):
-        """Catches the model silently treating mining context as a sixth criterion."""
-        completed = subprocess.run(
-            [str(PYTHON), str(CHAIN), "--catalog-only"],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        self.assertEqual(completed.returncode, 0, completed.stderr)
-        catalog = json.loads(completed.stdout)
-        self.assertEqual(catalog["mining_role"], "external context overlay only")
-        self.assertFalse(catalog["mining_enters_pim_score"])
-
-    def test_missing_external_overlay_does_not_block_pim_lineage(self):
-        """Catches an optional context layer becoming a hard model dependency."""
-        module = load_chain_module()
-        missing = ROOT / "outputs/does_not_exist/mining_overlay.gpkg"
-        self.assertEqual(
-            module.optional_lineage_record(missing),
-            {
-                "path": "outputs/does_not_exist/mining_overlay.gpkg",
-                "exists": False,
-            },
         )
 
 

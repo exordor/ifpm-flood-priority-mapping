@@ -10,14 +10,8 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / "bin"))
 
 from ifpm import scoring  # noqa: E402
-
-try:  # the old helpers exist until the bin/ scripts are removed
-    from _lib import goslar_comparison as old
-except ImportError:
-    old = None
 
 WEIGHTS = {"flood_hazard": .34, "sediment": .22, "landuse_asm": .16, "environmental": .14, "socioeconomic": .14}
 
@@ -69,17 +63,6 @@ class AlternativeWeightsTest(unittest.TestCase):
         self.assertAlmostEqual(w["sediment"] / w["landuse_asm"], WEIGHTS["sediment"] / WEIGHTS["landuse_asm"])
         with self.assertRaises(ValueError):
             scoring.weights_at(WEIGHTS, 1.5)
-
-    @unittest.skipIf(old is None, "bin/_lib not present")
-    def test_identical_to_old_helpers(self):
-        layers = criteria(2)
-        support = np.ones((30, 30), dtype=bool)
-        support[:3] = False
-        for pct in (50, 60, 70):
-            self.assertEqual(scoring.weights_at(WEIGHTS, pct / 100), old.weights_at(WEIGHTS, pct / 100))
-            new = scoring.score_at(layers, scoring.weights_at(WEIGHTS, pct / 100), support)
-            np.testing.assert_array_equal(new, old.score_at(layers, old.weights_at(WEIGHTS, pct / 100), support))
-            self.assertEqual(scoring.summarize(new, support), old.summarize(new, support))
 
 
 class ClassTest(unittest.TestCase):

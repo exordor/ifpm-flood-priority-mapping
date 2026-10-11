@@ -8,20 +8,17 @@ Scripts here work on real local data under `data/` and `outputs/`.
 
 ## Current entry points (September 2026 state)
 
-The active work (Secocha and Goslar) is run by standalone runners, not by the
-`pipeline.yaml` default chain. The default chain still targets the
-frozen former Peru area (`outputs/peru_former_pim_chain/`) and must not be
-used for new runs.
+Secocha and Goslar are run by the config-driven package `ifpm/` (settings in
+`configs/`), not by scripts in this folder:
 
 ```bash
-# Secocha five-criterion chain (Supervisor weights) and its validation report
-.venv/bin/python bin/factors/run_secocha_pim_chain.py
-.venv/bin/python bin/validate/validate_secocha_pim_chain.py
-
-# Goslar expanded multi-river comparison and report
-.venv/bin/python bin/analysis/run_goslar_multiriver_full.py
-.venv/bin/python bin/analysis/report_goslar_multiriver_full.py
+.venv/bin/python -m ifpm run secocha
+.venv/bin/python -m ifpm run goslar --extent multiriver
+.venv/bin/python -m ifpm verify goslar
 ```
+
+The `pipeline.yaml` default chain still targets the frozen former Peru area
+(`outputs/peru_former_pim_chain/`) and must not be used for new runs.
 
 Other Goslar/Abzucht commands are listed per experiment in
 `context/docs/research-map/EXPERIMENTS.md`.
@@ -68,11 +65,8 @@ duplicated across dozens of scripts:
 - `run_grid_gate(reference, rasters, output)` — invoke the V1 grid-compatibility check
 - `ROOT`, `NODATA` — canonical constants
 
-`bin/_lib/standardization.py` holds the canonical numeric standardizers.
-`bin/_lib/fixed_scale.py` fits and applies frozen percentile anchors (used by the
-expanded Goslar runs). `bin/_lib/goslar_comparison.py` holds the comparison and scoring
-helpers the Goslar full-extent run needs (`read_grid`, `summarize`, `representative`,
-`weights_at`, `score_at`, `census_grid`, `load_module`).
+`bin/_lib/standardization.py` holds the canonical numeric standardizers used by the
+remaining Peru and Zimbabwe scripts.
 
 ## Declaring dependencies for the DAG
 

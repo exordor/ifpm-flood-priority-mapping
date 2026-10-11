@@ -23,7 +23,7 @@ Set up the environment with `uv sync --extra hydrology` (see [HANDOVER.md](HANDO
 .venv/bin/python -m ifpm verify secocha                        # compare a rerun with the current outputs
 ```
 
-`run` never writes over the current outputs: it writes under `--out` (default `outputs/_rerun/<area>/`) with the same relative paths. The older per-script commands in `bin/` still work for now.
+`run` never writes over the current outputs: it writes under `--out` (default `outputs/_rerun/<area>/`) with the same relative paths. Secocha and Goslar no longer have per-script runners in `bin/`.
 
 ## Directory Structure
 

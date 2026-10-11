@@ -80,7 +80,6 @@ class StandardizationAbstractionTest(unittest.TestCase):
             ROOT / "bin/criteria/build_peru_former_soil_k_factor.py",
             ROOT / "bin/criteria/build_peru_former_rainfall_criterion.py",
             ROOT / "bin/criteria/build_peru_former_criteria_stack.py",
-            ROOT / "bin/factors/run_goslar_pim_chain.py",
             ROOT / "bin/criteria/build_peru_former_exposure_indicators.py",
         )
         duplicate_names = (

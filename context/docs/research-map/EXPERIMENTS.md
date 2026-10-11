@@ -8,8 +8,13 @@ Commands run from the workspace root.
 
 One-off diagnostic scripts were removed on 2026-10-11 (refactor phase 1); their results stay
 in the output folders and in this file. Recover any of them with `git show 6e2ed8b:<path>`.
-Helpers the final Goslar run still needs moved to `bin/_lib/goslar_comparison.py` and
-`bin/_lib/fixed_scale.py` (was `bin/analysis/abzucht_fixed_scale_normalization.py`).
+The Goslar and Secocha runners were replaced by `python -m ifpm run <area>` on 2026-10-11
+(refactor step 2b; settings in `configs/`). Recover a replaced script with
+`git show c2baf04:<path>`: `bin/factors/run_goslar_pim_chain.py`,
+`bin/factors/run_secocha_pim_chain.py`, `bin/validate/validate_secocha_pim_chain.py`,
+`bin/analysis/{compare_abzucht_hq100,run_abzucht_expanded,compare_goslar_multiriver,run_goslar_multiriver_full,report_goslar_multiriver_full}.py`,
+`bin/_lib/{fixed_scale,goslar_comparison}.py`, and their tests
+`tests/test_{goslar_pim_chain,secocha_pim_chain,goslar_multiriver,abzucht_overlay,goslar_comparison_helpers,abzucht_fixed_scale_normalization}.py`.
 
 ## Secocha, Peru
 
@@ -19,27 +24,27 @@ catchment or event footprint. Outputs: `outputs/secocha_pim_chain/`.
 
 | Experiment | Command | Result |
 |---|---|---|
-| Five-criterion PIM (`supervisor_full_spec_v07_secocha`) | `bin/factors/run_secocha_pim_chain.py` | 30 m grid, Supervisor weights, no NoData filling. 15.65% of valid cells High (0.6–0.8), none Very High. Mining is a separate overlay, not in the score. |
-| Chain checks | `bin/validate/validate_secocha_pim_chain.py` | Writes `quality_assurance/chain_validation.json`: grids match, criteria within 0–1, PIM valid coverage 97.20%. |
+| Five-criterion PIM (`supervisor_full_spec_v07_secocha`) | `python -m ifpm run secocha` | 30 m grid, Supervisor weights, no NoData filling. 15.65% of valid cells High (0.6–0.8), none Very High. Mining is a separate overlay, not in the score. |
+| Chain checks | `python -m ifpm run secocha --step validate` | Writes `quality_assurance/chain_validation.json`: grids match, criteria within 0–1, PIM valid coverage 97.20%. |
 | 2023 event comparison | `bin/analysis/digitize_secocha_a7367_map7_event.py` | Two 5 February classes digitized from Map 7 (0.211 km², in `outputs/secocha_2023_validation/observed_hazard/`). PIM covers 66.2% of these cells; 19.1% of covered cells are High versus 15.6% study-wide. The digitized polygons have not been independently reviewed. |
 
 ## Goslar, Germany
 
-Uses the same chain and Supervisor weights as Secocha (`bin/factors/run_goslar_pim_chain.py`),
+Uses the same chain and Supervisor weights as Secocha (`python -m ifpm run goslar --extent basin`),
 compared against official regulatory flood zones (HQ100 etc.), not observed event footprints.
 
 | Experiment | Output folder / command | Result |
 |---|---|---|
-| Abzucht HQ100 overlay | `compare_abzucht_hq100.py` | HQ100 mean PIM 0.475 vs 0.418 in a 1 km outside ring. |
-| Expanded area and display rectangle (`fixed_scale`) | `run_abzucht_expanded.py [--fill-display-rectangle]` | Extends coverage to all HQ100 cells with normalization anchors fixed from the original area. HQ100 mean 0.470, 6.06% of HQ100 cells ≥0.6. |
+| Abzucht HQ100 overlay | `ifpm run goslar --extent abzucht_hq100` | HQ100 mean PIM 0.475 vs 0.418 in a 1 km outside ring. |
+| Expanded area and display rectangle (`fixed_scale`) | `ifpm run goslar --extent abzucht` | Extends coverage to all HQ100 cells with normalization anchors fixed from the original area. HQ100 mean 0.470, 6.06% of HQ100 cells ≥0.6. |
 | Explanation figures (`explanation`) | `explain_abzucht_comparison.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/explain_abzucht_comparison.py`) | Flood criterion 0.507 inside HQ100 vs 0.373 in the ring; PIM 0.470 vs 0.419. Only 5.8% of cells have all 14 components. |
 | Input gaps (`gap_repair`, `input_completion`) | `repair_abzucht_gaps.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/repair_abzucht_gaps.py`), `complete_abzucht_inputs.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/complete_abzucht_inputs.py`) | GHSL population and 2017 SoilGrids fill the population and soil gaps in HQ100. These are source replacements, not recovered observations. |
 | Weight sensitivity (`weight_sensitivity`) | `tune_abzucht_weights.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/tune_abzucht_weights.py`) | Flood weight 34–80% tested. 80% gives the largest inside/outside gap at the 0.6 cutoff, but it is at the edge of the range and depends on the cutoff. HQ100 was used to tune, so it cannot also validate. |
 | Spatial checks (`spatial_offset`, `river_alignment`, `atkis_dop_check`) | `diagnose_abzucht_spatial_offset.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/diagnose_abzucht_spatial_offset.py`), `check_abzucht_river_alignment.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/check_abzucht_river_alignment.py`), `check_abzucht_atkis_dop.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/check_abzucht_atkis_dop.py`) | 386 of 420 high cells lie outside HQ100. Model drainage is a median 47 m from the official Abzucht line. |
-| Multi-river comparison (`multiriver_comparison`, `multiriver_flood_weights_50_60_70`) | `compare_goslar_multiriver.py`, `compare_multiriver_weights.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/compare_multiriver_weights.py`) | Flood criterion is higher inside every covered regulatory zone; PIM is not. Raising the flood weight to 50/60/70% helps Abzucht but not Oker or Innerste. |
+| Multi-river comparison (`multiriver_comparison`, `multiriver_flood_weights_50_60_70`) | `compare_goslar_multiriver.py` (replaced by `ifpm` 2026-10-11; recover: `git show c2baf04:bin/analysis/compare_goslar_multiriver.py`), `compare_multiriver_weights.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/compare_multiriver_weights.py`) | Flood criterion is higher inside every covered regulatory zone; PIM is not. Raising the flood weight to 50/60/70% helps Abzucht but not Oker or Innerste. |
 | Semantics audit (`component_semantics`, `input_semantics_followup`) | `diagnose_multiriver_low_scores.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/diagnose_multiriver_low_scores.py`), `audit_multiriver_input_semantics.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/audit_multiriver_input_semantics.py`) | Oker scores low on sediment and land use. "Bare soil" is really tree-cover loss and "expansion" is static proximity; field names were left unchanged. |
 | Facility-distance fix (`facility_edge_repair`) | `repair_multiriver_facility_edges.py` (removed 2026-10-11; recover: `git show 6e2ed8b:bin/analysis/repair_multiriver_facility_edges.py`) | Facilities outside the grid were being dropped; fixed with a padded grid. Innerste mean rises 0.418 → 0.448. |
-| **Full multi-river extent** (`goslar_multiriver_full_extent/fixed_scale`) | `run_goslar_multiriver_full.py`, then `report_goslar_multiriver_full.py` | 739 km² covering all 14 official products (8 regulatory zones, 6 hydraulic scenarios); flood weights 34/50/60/70%. Within 1 km, the flood criterion is higher inside all 8 regulatory zones, but PIM is higher only for Wedde, Abzucht and Ecker. **Main open issue.** |
+| **Full multi-river extent** (`goslar_multiriver_full_extent/fixed_scale`) | `ifpm run goslar --extent multiriver` | 739 km² covering all 14 official products (8 regulatory zones, 6 hydraulic scenarios); flood weights 34/50/60/70%. Within 1 km, the flood criterion is higher inside all 8 regulatory zones, but PIM is higher only for Wedde, Abzucht and Ecker. **Main open issue.** |
 
 Goslar and Abzucht outputs are under `outputs/goslar_abzucht_diagnostics/<experiment>/`
 unless named otherwise; each has a `READING_NOTE.md`. Tests:
@@ -50,7 +55,7 @@ unless named otherwise; each has a `READING_NOTE.md`. Tests:
 Condensed from the former registry notes `goslar_pim_chain_sources` and
 `goslar_official_hydrology_and_flood_data`. Source facts stay in those registry notes.
 
-**Chain** (`bin/factors/run_goslar_pim_chain.py`; outputs under
+**Chain** (`python -m ifpm run goslar --extent basin`, `configs/goslar.yaml`; outputs under
 `outputs/goslar_pim_chain/priority_scenarios/`, manifest `run_manifest.json`):
 
 1. Boundary: raster mask from `goslar_wrrl_basin` (153.779 km², union of the

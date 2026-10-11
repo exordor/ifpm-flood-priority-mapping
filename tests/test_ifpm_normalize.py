@@ -1,4 +1,4 @@
-"""ifpm.normalize on small synthetic arrays (NumPy only), checked against bin/_lib."""
+"""ifpm.normalize on small synthetic arrays (NumPy only), checked against bin/_lib/standardization.py while it exists."""
 
 from __future__ import annotations
 
@@ -15,10 +15,9 @@ sys.path.insert(0, str(ROOT / "bin"))
 from ifpm.normalize import Normalizer, apply, fit, percentile_minmax  # noqa: E402
 
 try:  # the old helpers exist until the bin/ scripts are removed
-    from _lib import fixed_scale as old_fixed_scale
     from _lib import standardization as old_standardization
 except ImportError:
-    old_fixed_scale = old_standardization = None
+    old_standardization = None
 
 
 def sample(seed=0, shape=(40, 50)):
@@ -81,15 +80,6 @@ class FixedScaleTest(unittest.TestCase):
         out = apply(bigger, anchors, np.concatenate([mask, mask]))
         self.assertEqual(float(np.nanmax(out)), 1.0)
         np.testing.assert_array_equal(out[:data.shape[0]], baseline)
-
-    @unittest.skipIf(old_fixed_scale is None, "bin/_lib not present")
-    def test_identical_to_old_helper(self):
-        data, mask = sample(3)
-        for options in [{}, {"invert": True}, {"constant_policy": "zeros"}]:
-            self.assertEqual(fit(data, mask, **options), old_fixed_scale.fit(data, mask, **options))
-            anchors = fit(data, mask, **options)
-            np.testing.assert_array_equal(apply(data * 2, anchors, mask),
-                                          old_fixed_scale.apply(data * 2, anchors, mask))
 
 
 class NormalizerTest(unittest.TestCase):

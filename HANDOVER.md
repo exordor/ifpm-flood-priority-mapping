@@ -24,8 +24,8 @@ The most important open problem: in the Goslar extension comparison, the flood c
 | Location | Contents | In Git? |
 |---|---|---|
 | `README.md`, `AGENTS.md` | General workspace description; `AGENTS.md` is a one-page set of working conventions (folders, data registration, modelling rules) | Yes |
-| `bin/` | 84 processing scripts and helpers, grouped into folders by stage; entry points and descriptions are in `bin/README.md` | Yes |
-| `tests/` | 31 test files | Yes |
+| `bin/` | 73 processing scripts and helpers for the Peru and Zimbabwe chains, QGIS packaging and data acquisition, grouped into folders by stage; entry points and descriptions are in `bin/README.md` | Yes |
+| `tests/` | 30 test files; tests that would regenerate files under `outputs/` run only with `IFPM_WRITE_OUTPUTS=1` | Yes |
 | `tools/` | `verify_baseline.py`: records and compares key outputs for regression checks | Yes |
 | `context/docs/research-map/` | Main project record: `EXPERIMENTS.md` (commands, outputs and conclusions of current experiments) and `DECISION_LOG.md` (decisions that are still in force, including the weights) | Yes |
 | `context/docs/data-management/registry/` | Source, licence and download record for each dataset | Yes |
@@ -58,24 +58,15 @@ New way (config-driven package `ifpm/`, settings in `configs/goslar.yaml`, `conf
 .venv/bin/python -m ifpm verify goslar                # pass/fail table against the current outputs
 ```
 
-`run` writes under `--out` (default `outputs/_rerun/<area>/`, same relative paths as `outputs/`) and never over the current outputs; `verify` compares that folder with the current outputs (identical, or within 1e-6 for rasters). The QGIS review projects are not yet part of `ifpm`.
+`run` writes under `--out` (default `outputs/_rerun/<area>/`, same relative paths as `outputs/`) and never over the current outputs; `verify` compares that folder with the current outputs (identical, or within 1e-6 for rasters; differences accepted in the config show as KNOWN). The QGIS review projects are not yet part of `ifpm`.
 
-Older per-script commands (still in place):
+Tests:
 
 ```sh
-# Secocha
-.venv/bin/python bin/factors/run_secocha_pim_chain.py
-.venv/bin/python bin/validate/validate_secocha_pim_chain.py
-
-# Goslar extension comparison
-.venv/bin/python bin/analysis/run_goslar_multiriver_full.py
-.venv/bin/python bin/analysis/report_goslar_multiriver_full.py
-
-# Tests
 .venv/bin/python -m unittest discover -s tests
 ```
 
-The remaining Goslar/Abzucht commands are listed one by one under the corresponding experiments in `context/docs/research-map/EXPERIMENTS.md`.
+The per-experiment Goslar/Abzucht commands are listed in `context/docs/research-map/EXPERIMENTS.md`.
 
 Do not use the default chain of `python bin/pipeline.py run`: it still points to the frozen former Peru area.
 
