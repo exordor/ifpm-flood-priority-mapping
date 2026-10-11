@@ -27,19 +27,7 @@ LOCAL_OUTPUTS_READY = all(
 
 
 def resolve_recorded(path_text: str) -> Path:
-    """Map a path recorded before the 2026-10-11 rename to its current location."""
-    path = ROOT / path_text
-    if path.exists():
-        return path
-    rename_log = ROOT / "outputs/RENAMED_2026-10-11.csv"
-    if rename_log.exists():
-        import csv
-        with rename_log.open(encoding="utf-8") as handle:
-            pairs = sorted(((r["old_path"], r["new_path"]) for r in csv.DictReader(handle)), key=lambda p: -len(p[0]))
-        for old, new in pairs:
-            if path_text == old or path_text.startswith(old + "/"):
-                return resolve_recorded(new + path_text[len(old):])
-    return path
+    return ROOT / path_text
 
 
 def sha256(path: Path) -> str:
