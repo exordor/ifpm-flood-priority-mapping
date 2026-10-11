@@ -11,7 +11,6 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 SCENARIO_PATH = ROOT / "bin/scenarios/run_peru_former_priority_scenarios.py"
 ENVIRONMENT_PATH = ROOT / "bin/criteria/build_pim_environmental_sensitivity.py"
-DEPENDENCY_PATH = ROOT / "bin/analysis/summarize_peru_former_criterion_dependency.py"
 WORLDCOVER_PATH = ROOT / "bin/factors/derive_peru_former_worldcover_cfactor.py"
 STACK_PATH = ROOT / "bin/criteria/build_peru_former_criteria_stack.py"
 
@@ -96,9 +95,6 @@ class PeruNoMiningBaselineTest(unittest.TestCase):
 
         self.assertNotIn("mining_pressure", module.COMPONENT_PATHS)
         self.assertNotIn("mining_pressure", module.PIM_COMPONENTS["landuse_asm"])
-
-        dependency = load_module(DEPENDENCY_PATH, "peru_no_mining_dependency")
-        self.assertFalse(any("mining_pressure" in path.name for path in dependency.INPUTS))
 
         stack = load_module(STACK_PATH, "peru_no_mining_stack")
         output_names = {path.name for path in stack.OUTPUTS}

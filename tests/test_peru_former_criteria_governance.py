@@ -9,17 +9,6 @@ import numpy as np
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LOCAL_GOVERNANCE_OUTPUTS_READY = all(
-    path.exists()
-    for path in (
-        ROOT / "outputs/peru_former_pim_chain/priority_scenarios/pim_criteria/flood_hazard_0_1.tif",
-        ROOT / "outputs/peru_former_pim_chain/priority_scenarios/priority_screening_summary.csv",
-        ROOT / "outputs/peru_former_gap_closure_analysis/peru_sinpad_colocation_cohorts.csv",
-    )
-) and "marginal_weighted_sd_share" in (
-    ROOT
-    / "outputs/peru_former_pim_chain/exposure_indicators/exposure_indicators_contribution_diagnostics.csv"
-).read_text(encoding="utf-8")
 LOCAL_SOIL_K_SOURCE_READY = (
     ROOT / "outputs/peru_former_soilgrids_k_factor/k_factor_peru_former_0_5cm_250m.tif"
 ).exists()
@@ -314,47 +303,6 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
 
         np.testing.assert_array_equal(support, np.array([[1, 2, 3, 4]], dtype="uint8"))
 
-    @unittest.skipUnless(
-        LOCAL_GOVERNANCE_OUTPUTS_READY,
-        "requires ignored local governance outputs",
-    )
-    def test_data_strength_table_describes_the_five_current_criteria(self):
-        module = load_module(
-            "bin/analysis/summarize_peru_former_criterion_data_strength.py",
-            "summarize_peru_criterion_data_strength_governance",
-        )
-
-        rows = module.build_rows()
-        by_criterion = {row["criterion_id"]: row for row in rows}
-
-        self.assertEqual(
-            set(by_criterion),
-            {"flood_hazard", "sediment", "landuse_asm", "environmental", "socioeconomic"},
-        )
-        self.assertIn("0.30 SoilGrids K", by_criterion["sediment"]["implementation"])
-        self.assertNotIn("K x LS x C composite", by_criterion["sediment"]["implementation"])
-        self.assertIn("dedicated mining evidence excluded", by_criterion["landuse_asm"]["implementation"])
-        self.assertEqual(
-            by_criterion["environmental"]["evidence_state"],
-            "sernanp_national_definitive_layer_checked_no_feature_within_context_zone",
-        )
-        self.assertEqual(by_criterion["flood_hazard"]["validation_state"], "not validated")
-        self.assertIn("conditioning", by_criterion["flood_hazard"]["display_name"].lower())
-        self.assertIn("not an event-extreme", by_criterion["flood_hazard"]["known_limit"])
-        self.assertIn("context", by_criterion["environmental"]["display_name"].lower())
-        self.assertIn("indicator", by_criterion["socioeconomic"]["display_name"].lower())
-        self.assertIn("SINPAD", by_criterion["flood_hazard"]["model_level_diagnostic"])
-        self.assertIn("marginal weighted SD share", by_criterion["socioeconomic"]["known_limit"])
-        self.assertIn(
-            "Spearman rho",
-            by_criterion["landuse_asm"]["dependency_sensitivity_diagnostic"],
-        )
-        self.assertIn(
-            "water/wetland",
-            by_criterion["environmental"]["dependency_sensitivity_diagnostic"],
-        )
-        self.assertTrue(all(row["validation_state"] != "validated" for row in rows))
-
     def test_report_criterion_labels_preserve_framework_ids_but_expose_indicators(self):
         criteria_maps = load_module(
             "bin/visualize/export_peru_former_pim_criteria_maps.py",
@@ -365,52 +313,6 @@ class PeruCriteriaGovernanceTest(unittest.TestCase):
         self.assertIn("conditioning", labels["flood_hazard"].lower())
         self.assertIn("context", labels["environmental"].lower())
         self.assertIn("indicator", labels["socioeconomic"].lower())
-
-    def test_sinpad_diagnostic_separates_scored_and_unscored_support_causes(self):
-        module = load_module(
-            "bin/analysis/compare_peru_former_pim_sinpad_colocation.py",
-            "compare_peru_pim_sinpad_colocation_governance",
-        )
-        frame = module.gpd.GeoDataFrame(
-            {
-                "pim_score": [0.7, 0.8, 0.4],
-                "in_top20_priority_cells": [True, False, False],
-                "evidence_support_class": [1, 2, 3],
-            }
-        )
-        frame.loc[1:, "pim_score"] = np.nan
-
-        row = module.summarize_cohort("test", frame, selected_area_fraction=0.2)
-
-        self.assertEqual(row["valid_pim_count"], 1)
-        self.assertEqual(row["unscored_count"], 2)
-        self.assertEqual(row["unscored_ls_missing_count"], 1)
-        self.assertEqual(row["unscored_k_missing_count"], 1)
-        self.assertEqual(row["selected_area_fraction"], 0.2)
-        self.assertNotIn("uniform_null", row)
-
-    def test_dependency_diagnostic_quantifies_rank_and_top_quintile_change(self):
-        module = load_module(
-            "bin/analysis/summarize_peru_former_criterion_dependency.py",
-            "summarize_peru_criterion_dependency_governance",
-        )
-        reference = np.array([[0.1, 0.2, 0.8, 0.9]], dtype="float32")
-        candidate = np.array([[0.1, 0.3, 0.7, 0.95]], dtype="float32")
-
-        pair = module.pair_metrics(reference, candidate, max_samples=100)
-        sensitivity = module.pim_alternative_metrics(
-            reference,
-            current_component=np.zeros_like(reference),
-            alternative_component=np.array([[0.0, 0.0, 1.0, 1.0]], dtype="float32"),
-            main_weight=0.1,
-            max_samples=100,
-        )
-
-        self.assertAlmostEqual(pair["spearman_rho"], 1.0)
-        self.assertEqual(pair["common_cell_count"], 4)
-        self.assertGreater(sensitivity["mean_abs_difference"], 0.0)
-        self.assertGreaterEqual(sensitivity["top_quintile_jaccard"], 0.0)
-        self.assertLessEqual(sensitivity["top_quintile_jaccard"], 1.0)
 
     def test_soil_k_normalization_preserves_boundary_and_spans_unit_interval(self):
         module = load_module(

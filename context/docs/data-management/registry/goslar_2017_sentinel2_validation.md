@@ -11,6 +11,7 @@
   `Contains modified Copernicus Sentinel data`
 - Reproducible command:
   `.venv/bin/python bin/acquire/pull_goslar_2017_sentinel2_validation.py`
+  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/pull_goslar_2017_sentinel2_validation.py`.)
 - Raw scene-window destination:
   `data/validation/goslar_harz_2024_focus_area/satellite_2017/scenes/`
 - Derived outputs: `outputs/goslar_2017_satellite_validation/`
@@ -39,6 +40,7 @@ imagery cannot see through canopy or clouds, and the NDWI rule has no shadow/ter
 
 Command:
 `.venv/bin/python bin/analysis/goslar_l2_independent_consistency.py`
+(Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/analysis/goslar_l2_independent_consistency.py`.)
 
 Outputs:
 

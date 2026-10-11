@@ -24,8 +24,9 @@ The most important open problem: in the Goslar extension comparison, the flood c
 | Location | Contents | In Git? |
 |---|---|---|
 | `README.md`, `AGENTS.md` | General workspace description; `AGENTS.md` is a one-page set of working conventions (folders, data registration, modelling rules) | Yes |
-| `bin/` | About 160 processing scripts, grouped into folders by stage; entry points and descriptions are in `bin/README.md` | Yes |
-| `tests/` | 53 test files | Yes |
+| `bin/` | 84 processing scripts and helpers, grouped into folders by stage; entry points and descriptions are in `bin/README.md` | Yes |
+| `tests/` | 31 test files | Yes |
+| `tools/` | `verify_baseline.py`: records and compares key outputs for regression checks | Yes |
 | `context/docs/research-map/` | Main project record: `EXPERIMENTS.md` (commands, outputs and conclusions of current experiments) and `DECISION_LOG.md` (decisions that are still in force, including the weights) | Yes |
 | `context/docs/data-management/registry/` | Source, licence and download record for each dataset | Yes |
 | `context/docs/glossary.md`, `context/docs/methodology/` | Glossary; PIM method note | Yes |
@@ -78,7 +79,8 @@ To look at results quickly, open `outputs/secocha_qgis_review/IFPM_Peru_Secocha_
 ## 6. Known issues
 
 - The default include chain in `pipeline.yaml` still uses the former Peru area scripts. Secocha and Goslar use standalone runners that are not connected to the DAG.
-- Some Zimbabwe scripts in `bin/` reference `outputs/_archive/...` files that were cleaned up in August, so they no longer run (`export_zimbabwe_boundary.py`, `prepare_zimbabwe_multicriteria_evidence.py`, `plot_zimbabwe_boundary_paper.py`). Zimbabwe is now a background case, so the impact is small.
+- The Zimbabwe chain cannot be fully rerun from `bin/`: the criteria-stack builder was removed in commit 4fbd10c (recover with `git show 4fbd10c^:bin/criteria/build_boundary_v1_criteria_stack.py`) and the Zimbabwe branch of `build_pim_environmental_sensitivity.py` needs `outputs/v1_full_methodology_evidence_sweep/`, which no longer exists. Zimbabwe is a background case, so the impact is small.
+- The Goslar full-extent run reads Zensus 2022 population from `data/raw/zensus2022_goslar_multiriver/` (the 100 m clip derived from the national archive, which is no longer present); see the registry note `zensus2022_goslar_multiriver`.
 - Some older field names are broader than the actual evidence. For example, tree canopy cover loss is only a proxy for vegetation loss. The September notes on semantics are in `outputs/goslar_abzucht_diagnostics/component_semantics/` and `outputs/goslar_abzucht_diagnostics/input_semantics_followup/`.
 - Some raw data are licence-restricted (see the per-dataset notes in `context/docs/data-management/registry/`). Rerunning historical results may require requesting access again.
 - The scripts that download CLMS and Sentinel pixels need an access credentials file on the local machine. The credentials are not in the repository.

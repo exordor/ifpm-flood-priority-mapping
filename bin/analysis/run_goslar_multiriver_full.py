@@ -8,12 +8,16 @@ from rasterio.transform import from_origin
 from rasterio.warp import reproject,Resampling,transform_bounds
 from scipy.ndimage import distance_transform_edt
 ROOT=Path(__file__).resolve().parents[2];sys.path[:0]=[str(ROOT/'bin'),str(Path(__file__).parent)]
-from run_abzucht_expanded import load
-from abzucht_fixed_scale_normalization import apply
+from _lib.goslar_comparison import load_module as load,census_grid,weights_at,score_at
+from _lib.fixed_scale import apply
 from compare_goslar_multiriver import BASE,sha,read_grid,raster_mask,clean_ring,write_csv,stats,make_map
-from repair_abzucht_gaps import census_grid
-from tune_abzucht_weights import weights_at,score_at
 OUT=ROOT/'outputs/goslar_multiriver_full_extent/fixed_scale'
+# Zensus 2022 national 100 m grid (Destatis). The archive was staged in data/tmp and is no
+# longer present; when absent, the 100 m EPSG:3035 clip that this run derived from it
+# (registry: zensus2022_goslar_multiriver) is read instead. Same values, same grid.
+ZENSUS_NATIONAL_ZIP=ROOT/'data/tmp/zensus2022_goslar/Zensus2022_Bevoelkerungszahl.zip'
+ZENSUS_CLIP=ROOT/'data/raw/zensus2022_goslar_multiriver/population_native_100m.tif'
+ZENSUS_CLIP_SHA256='3a0ace691c7f7b09500acf23c7292634c5cd22ecb81d02c3867dd946f246bcb0'
 
 def main():
  # Full runs deliberately recompute stages; stale checkpoints are never trusted.
@@ -115,9 +119,16 @@ def main():
   a,_=proximity(gpd.read_file(pin(c.PROTECTED_RAW)).to_crs(ref['crs']).geometry,10000);write(c.ES_DIR/'protected_area_context_0_1.tif',a)
  run('protected_areas',protected);run('criteria_stack',c.stage_criteria_stack)
  def exposure():
-  with zipfile.ZipFile(pin(ROOT/'data/tmp/zensus2022_goslar/Zensus2022_Bevoelkerungszahl.zip')) as z:frame=pd.read_csv(z.open('Zensus2022_Bevoelkerungszahl_100m-Gitter.csv'),sep=';')
-  bounds=transform_bounds(ref['crs'],3035,*rasterio.transform.array_bounds(*shape,ref['transform']),densify_pts=21)
-  selected,a,p=census_grid(frame,bounds);f=OUT/'sources/population_native_100m.tif';write(f,a,p,False)
+  if ZENSUS_NATIONAL_ZIP.exists():
+   with zipfile.ZipFile(pin(ZENSUS_NATIONAL_ZIP)) as z:frame=pd.read_csv(z.open('Zensus2022_Bevoelkerungszahl_100m-Gitter.csv'),sep=';')
+   bounds=transform_bounds(ref['crs'],3035,*rasterio.transform.array_bounds(*shape,ref['transform']),densify_pts=21)
+   selected,a,p=census_grid(frame,bounds);f=OUT/'sources/population_native_100m.tif';write(f,a,p,False)
+  else:
+   f=pin(ZENSUS_CLIP)
+   if inputs[str(f.relative_to(ROOT))]!=ZENSUS_CLIP_SHA256:raise ValueError('Promoted Zensus clip differs from the recorded derivation')
+   with rasterio.open(f) as ds:
+    if str(ds.crs)!='EPSG:3035':raise ValueError('Zensus clip must be EPSG:3035')
+    a=ds.read(1,masked=True).astype('float32').filled(np.nan);p=dict(height=ds.height,width=ds.width,crs=ds.crs,transform=ds.transform)
   dest=np.full(shape,np.nan,'float32');reproject(a,dest,src_transform=p['transform'],src_crs=p['crs'],dst_transform=ref['transform'],dst_crs=ref['crs'],resampling=Resampling.sum);pin(f);dest[~mask]=np.nan
   if np.any(mask&(dest==0)):raise ValueError('Unexpected zero population after legacy warp; inspect source-domain coverage')
   std,_,_=norm(dest,mask,constant_policy='zeros')
@@ -172,7 +183,7 @@ def main():
  for p in primary:make_map(OUT/p['river'].lower(),p['river']+' | Expanded coverage', [p],p['geometry'].buffer(500).bounds,criteria['flood_hazard'],pim,ref)
  for _,p in ps[ps.family!='regulatory'].iterrows():make_map(OUT/str(p.product_id),f'{p.river} | {p.scenario}',[dict(p)],p.geometry.buffer(500).bounds,criteria['flood_hazard'],pim,ref)
  pin(Path(__file__));pin(ROOT/'bin/factors/run_goslar_pim_chain.py')
- for helper in ['abzucht_fixed_scale_normalization.py','compare_goslar_multiriver.py','repair_abzucht_gaps.py','tune_abzucht_weights.py']:pin(Path(__file__).parent/helper)
+ for helper in [ROOT/'bin/_lib/fixed_scale.py',ROOT/'bin/_lib/goslar_comparison.py',Path(__file__).parent/'compare_goslar_multiriver.py']:pin(helper)
  for path,h in inputs.items():assert sha(ROOT/path)==h,path
  report=dict(boundary_id='goslar_multiriver_full_extent',experiment_id='fixed_scale',claim_level='diagnostic_only',area_km2=geom.area/1e6,grid_shape=list(shape),target_cells=int(mask.sum()),scored_cells=int(valid.sum()),hydrology_buffer_m=10020,flow_boundary_limitation='Buffered comparison domain, not a complete upstream catchment; hydrology may change on overlap',normalization='frozen original anchors',weights=nm['main_weights'],old_area_comparison=comparison,source_vintage_note=osm.get('snapshot_note','See pinned OSM source manifest for timestamps'),preprocessing_note='Overlap change includes differing vector snapshots, larger terrain domain and grid reprojection effects; native SoilGrids overlap was verified identical',inputs=inputs,command='.venv/bin/python bin/analysis/run_goslar_multiriver_full.py',coverage=coverage)
  (OUT/'expansion_manifest.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))

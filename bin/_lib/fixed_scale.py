@@ -1,6 +1,7 @@
 """Fit baseline-only percentile anchors and apply them to expanded support.
 
-Local experiment tooling. Fit on the original *raw* layer and valid baseline
+Moved on 2026-10-11 from bin/analysis/abzucht_fixed_scale_normalization.py.
+Fit on the original *raw* layer and valid baseline
 support, then persist the returned parameters in the experiment manifest. The
 same units and preprocessing must be used for expanded inputs. Application
 never estimates percentiles from the expanded area.

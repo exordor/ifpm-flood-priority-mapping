@@ -71,11 +71,14 @@ Downloaded file evidence:
   tile plan under `outputs/zimbabwe_boundary/`
 - Scripts or commands used:
   `.venv/bin/python bin/acquire/plan_zimbabwe_srtm_tiles.py`,
+  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/plan_zimbabwe_srtm_tiles.py`.)
   `.venv/bin/python bin/acquire/download_zimbabwe_srtm_tiles.py`,
   `.venv/bin/python bin/acquire/inventory_zimbabwe_srtm_tiles.py`,
+  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/inventory_zimbabwe_srtm_tiles.py`.)
   `.venv/bin/python bin/factors/preprocess_zimbabwe_srtm_dem.py`,
   `.venv/bin/python bin/factors/derive_zimbabwe_srtm_slope.py`, and
   `.venv/bin/python bin/visualize/plot_zimbabwe_srtm_terrain_qa.py`
+  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/visualize/plot_zimbabwe_srtm_terrain_qa.py`.)
 - Standardization/preprocessing notes: V1 DEM and slope diagnostics now exist under
   `outputs/zimbabwe_terrain_hydrology_factors/terrain_preprocessing/`; terrain standardization for
   scoring is not started

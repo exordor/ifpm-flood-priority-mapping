@@ -8,6 +8,7 @@ Working conventions for this workspace.
 |---|---|---|
 | Processing scripts | `bin/` | yes |
 | Tests | `tests/` | yes |
+| Regression check tool | `tools/verify_baseline.py` | yes |
 | Research records, dataset registry | `context/docs/` | yes |
 | Raw downloaded data | `data/raw/<dataset_id>/`, `data/validation/<dataset_id>/` | no |
 | Model outputs, maps, tables | `outputs/<boundary_id>/<experiment_id>/` | no |

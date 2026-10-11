@@ -10,7 +10,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "bin"))
 
-from analysis.abzucht_fixed_scale_normalization import apply, fit
+from _lib.fixed_scale import apply, fit
 from _lib.standardization import percentile_minmax
 
 

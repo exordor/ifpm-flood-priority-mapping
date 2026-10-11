@@ -26,6 +26,11 @@ used for new runs.
 Other Goslar/Abzucht commands are listed per experiment in
 `context/docs/research-map/EXPERIMENTS.md`.
 
+## Regression check
+
+`tools/verify_baseline.py snapshot > baseline.json` records the key outputs of each area;
+`tools/verify_baseline.py compare baseline.json <new_root>` checks a rerun written to `<new_root>`.
+
 ## Legacy pipeline
 
 `bin/pipeline.py` only drives the frozen former-Peru chain; do not use it for new runs.
@@ -62,6 +67,12 @@ duplicated across dozens of scripts:
 - `standardize(data, nodata, invert, p_low, p_high)` — percentile-clip min-max to [0,1]
 - `run_grid_gate(reference, rasters, output)` — invoke the V1 grid-compatibility check
 - `ROOT`, `NODATA` — canonical constants
+
+`bin/_lib/standardization.py` holds the canonical numeric standardizers.
+`bin/_lib/fixed_scale.py` fits and applies frozen percentile anchors (used by the
+expanded Goslar runs). `bin/_lib/goslar_comparison.py` holds the comparison and scoring
+helpers the Goslar full-extent run needs (`read_grid`, `summarize`, `representative`,
+`weights_at`, `score_at`, `census_grid`, `load_module`).
 
 ## Declaring dependencies for the DAG
 

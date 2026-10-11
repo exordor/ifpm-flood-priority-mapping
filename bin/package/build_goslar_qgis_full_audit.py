@@ -9,7 +9,7 @@ are included so the whole pipeline can be inspected in QGIS.
 
 The module can be imported with the workspace Python for configuration tests.
 When executed without PyQGIS it relaunches itself with the QGIS application
-Python, mirroring ``build_peru_former_zimbabwe_qgis_projects.py``.
+Python.
 """
 
 from __future__ import annotations

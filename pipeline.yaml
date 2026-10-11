@@ -38,35 +38,21 @@ include:
   - build_peru_former_exposure_indicators
   - build_pim_environmental_sensitivity
   - run_peru_former_priority_scenarios
-  - summarize_peru_former_criterion_dependency
-  - summarize_peru_former_criterion_data_strength
-  - summarize_peru_former_population_by_pim_class
-  - compare_peru_former_pim_sinpad_colocation
   - export_peru_former_raw_input_factor_maps
   - export_peru_former_pim_criteria_maps
 
 # Scripts to exclude (by name, without .py). These are skipped even if their
 # stage is listed above. Use this to skip DEPRECATED or one-off scripts.
 exclude:
-  - check_data_portals                # needs Chrome CDP, manual
   - download_zimbabwe_srtm_tiles            # needs raw data already planned
   - download_zimbabwe_chirps_rainfall_inputs # needs raw data already planned
   - download_zimbabwe_methodology_inputs    # needs raw data already planned
-  - intake_mentor_voi_rainfall        # needs mentor zip
-  - inventory_mentor_voi_rainfall_archive  # needs mentor zip
   - download_peru_former_worldpop_population_subset # network/large-download step; run explicitly
-  - query_peru_former_sinpad_flood_events         # network ArcGIS query; run explicitly
   - query_peru_former_sernanp_protected_areas     # network ArcGIS query; run explicitly
   - derive_peru_former_soilgrids_kfactor   # network SoilGrids VRT window read; run explicitly
   - build_peru_former_rainfall_criterion          # remote CHIRPS COG reads; run explicitly
-  - compare_peru_former_exposure_refresh          # one-off before/after diagnostic needs archived raster
-  - derive_peru_former_usle_soil_loss       # legacy diagnostic; active Peru Sediment uses independent K/LS/C
   - export_paper_style_single_maps         # scenario-mean sensitivity appendix; run explicitly
-  - run_zimbabwe_priority_scenarios      # archived Zimbabwe multi-scenario/equal-weight experiment
   - run_zimbabwe_rainfall_exposure       # archived Zimbabwe equal/direct comparison
-  - run_zimbabwe_rainfall_sensitivity    # depends on archived Zimbabwe scenario comparison
-  - diagnose_zimbabwe_hotspot_exposure   # depends on archived Zimbabwe scenario comparison
-  - run_zimbabwe_mining_decay_priority_sensitivity # archived Zimbabwe equal/multi-scenario sensitivity
 
 # When true, re-run scripts even if their outputs are newer than inputs.
 force: false
@@ -79,7 +65,6 @@ stop_on_failure: true
 # removed from target dependency chains unless --allow-network is explicit.
 network_scripts:
   - download_peru_former_worldpop_population_subset
-  - query_peru_former_sinpad_flood_events
   - query_peru_former_sernanp_protected_areas
   - derive_peru_former_soilgrids_kfactor    # remote SoilGrids VRT window reads
   - build_peru_former_rainfall_criterion           # remote CHIRPS COG reads

@@ -6,6 +6,7 @@ Source: https://nibis.lbeg.de/cardomap3/ and https://nibis.lbeg.de/net3/public/i
 
 - Local path: `data/raw/lbeg_bk50_abzucht/bk50_abzucht_display_context.gpkg`, 352,256 bytes; checksum in adjacent `source_manifest.json` (export packaging can change on rerun).
 - Command: `.venv/bin/python bin/acquire/pull_abzucht_bk50_context.py`. Uses public NIBIS `AxExportData`, theme `1616`, GPKG, exact display rectangle (26.3 km²). The server returns whole intersecting polygons without clipping.
+  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/pull_abzucht_bk50_context.py`.)
 - Content: 164 features in EPSG:25832 (one invalid source polygon, kept as is). Typed soil polygons cover 561/561 HQ100 grid centres. Fields include `pronum`, `botyp`, `nutzung`; no texture, organic carbon or numeric K. BK50KFAKTOR/L2131 is a two-feature method-coverage layer; no downloadable numerical K or profile-horizon table was found.
 - Known limitations: 1:50,000 scale; rasterizing onto 30 m does not make it 30 m evidence. Numerical K for Abzucht comes from `soilgrids2017_abzucht` instead.
 

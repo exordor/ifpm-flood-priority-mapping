@@ -257,7 +257,7 @@ def run_grid_gate(
     """Run the V1 raster grid-gate check via subprocess.
 
     Unifies the subprocess.run([sys.executable, GRID_GATE, ...]) pattern duplicated
-    across standardize_zimbabwe_terrain, plot_zimbabwe_terrain_mentor_package, derive_zimbabwe_hydrology,
+    across derive_zimbabwe_hydrology,
     derive_peru_former_hydrology, derive_zimbabwe_worldcover_cfactor,
     derive_peru_former_worldcover_cfactor, and prepare_zimbabwe_methodology_evidence.
 

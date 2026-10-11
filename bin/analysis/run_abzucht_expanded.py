@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """TOOLING: isolated boundary expansion, baseline-frozen scaling, no baseline writes."""
 import argparse
-import importlib.util
 import json
 import math
 from pathlib import Path
@@ -18,10 +17,8 @@ from rasterio.transform import from_origin
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'bin'))
 sys.path.insert(0,str(Path(__file__).parent))
-from abzucht_fixed_scale_normalization import fit, apply
-
-def load(name,path):
-    spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+from _lib.fixed_scale import fit, apply
+from _lib.goslar_comparison import load_module as load
 
 OUT=ROOT/'outputs/goslar_abzucht_hq100_expanded_extent/fixed_scale'
 
@@ -158,7 +155,7 @@ def main():
         arr=new[rows.min():rows.max()+1,cols.min():cols.max()+1]
         rect_ref=dict(ref,width=arr.shape[1],height=arr.shape[0],transform=rasterio.windows.transform(window,ref['transform']))
         write(OUT/'display_rectangle_priority.tif',arr,rect_ref)
-    source_files=[Path(__file__),ROOT/'bin/analysis/abzucht_fixed_scale_normalization.py',ROOT/'bin/_lib/standardization.py',ROOT/'bin/factors/run_goslar_pim_chain.py',original_paths['WORLDCOVER_FILE']]
+    source_files=[Path(__file__),ROOT/'bin/_lib/fixed_scale.py',ROOT/'bin/_lib/goslar_comparison.py',ROOT/'bin/_lib/standardization.py',ROOT/'bin/factors/run_goslar_pim_chain.py',original_paths['WORLDCOVER_FILE']]
     source_files += list((c.REGNIE_RAW_DIR/'raw').glob('*.asc.gz'))
     source_files += [ROOT/f'data/raw/clms_hrl_tcd_goslar_official_basin/{yr}/goslar_official_basin_tcd_{yr}_10m_mosaic.tif' for yr in [2018,2024]]
     source_files += [OUT/'frozen_normalization.json']

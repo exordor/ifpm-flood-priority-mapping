@@ -2,8 +2,8 @@
 """Local, fixed-weight HQ100 comparison. TOOLING; outputs are diagnostic_only."""
 from pathlib import Path
 import csv
-import hashlib
 import json
+import sys
 import numpy as np
 import geopandas as gpd
 import rasterio
@@ -17,31 +17,12 @@ from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'bin'))
+from _lib.goslar_comparison import COLORS, LABELS, digest, read_grid, summarize  # noqa: E402
 OUT = ROOT / 'outputs/goslar_wrrl_basin/abzucht_hq100_overlay'
 MANIFEST = ROOT / 'outputs/goslar_pim_chain/priority_scenarios/run_manifest.json'
 VECTOR = ROOT / 'data/validation/goslar_2017_regulatory_flood_context/nlwkn_current_regulatory_flood_zones_goslar.geojson'
-LABELS = {'flood_hazard': 'Flood indicators', 'sediment': 'Erosion factors', 'landuse_asm': 'Land cover', 'environmental': 'Water / ecology', 'socioeconomic': 'Access / exposure'}
 COMMAND = '.venv/bin/python bin/analysis/compare_abzucht_hq100.py'
-COLORS = ['#ffffcc', '#ffeda0', '#feb24c', '#f03b20', '#bd0026']
-
-def digest(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-def read_grid(path, ref=None):
-    with rasterio.open(path) as ds:
-        if ref is not None and (ds.crs != ref['crs'] or ds.transform != ref['transform'] or ds.shape != (ref['height'], ref['width'])):
-            raise ValueError(f'Incompatible reference grid: {path.name}')
-        arr = ds.read(1, masked=True).astype('float64').filled(np.nan)
-        arr[~np.isfinite(arr)] = np.nan
-        return arr, ds.profile
-
-def summarize(arr, zone):
-    vals = arr[zone & np.isfinite(arr)]
-    counts = np.histogram(vals, bins=[0, .2, .4, .6, .8, 1.000001])[0]
-    return {'valid_cells': int(vals.size), 'mean': float(vals.mean()) if vals.size else None,
-            'median': float(np.median(vals)) if vals.size else None,
-            'high_share': float((vals >= .6).mean()) if vals.size else None,
-            'class_counts': counts.tolist()}
 
 def main():
     m = json.loads(MANIFEST.read_text())

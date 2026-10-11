@@ -76,22 +76,6 @@ class PeruHybasL76070641200SocioeconomicIntegrationTest(unittest.TestCase):
 
         self.assertIn("build_peru_former_exposure_indicators", dependencies["run_peru_former_priority_scenarios"])
 
-    def test_pipeline_dag_runs_scenarios_before_exposure_and_colocation_analysis(self):
-        spec = importlib.util.spec_from_file_location("ifpm_pipeline_analysis", PIPELINE_PATH)
-        if spec is None or spec.loader is None:
-            raise RuntimeError(f"cannot load module: {PIPELINE_PATH}")
-        pipeline = importlib.util.module_from_spec(spec)
-        sys.modules["ifpm_pipeline_analysis"] = pipeline
-        spec.loader.exec_module(pipeline)
-
-        dependencies = pipeline.build_dag(pipeline.discover_scripts())
-
-        for target in (
-            "summarize_peru_former_population_by_pim_class",
-            "compare_peru_former_pim_sinpad_colocation",
-        ):
-            self.assertIn("run_peru_former_priority_scenarios", dependencies[target])
-
     def test_default_pipeline_excludes_network_and_one_off_refresh_steps(self):
         spec = importlib.util.spec_from_file_location("ifpm_pipeline_default", PIPELINE_PATH)
         if spec is None or spec.loader is None:
@@ -109,20 +93,12 @@ class PeruHybasL76070641200SocioeconomicIntegrationTest(unittest.TestCase):
         self.assertEqual(selected, set(config["include"]))
 
         self.assertNotIn("download_peru_former_worldpop_population_subset", selected)
-        self.assertNotIn("query_peru_former_sinpad_flood_events", selected)
         self.assertNotIn("query_peru_former_sernanp_protected_areas", selected)
         self.assertNotIn("derive_peru_former_soilgrids_kfactor", selected)
         self.assertNotIn("build_peru_former_rainfall_criterion", selected)
-        self.assertNotIn("compare_peru_former_exposure_refresh", selected)
-        self.assertNotIn("derive_peru_former_usle_soil_loss", selected)
-        self.assertNotIn("run_zimbabwe_priority_scenarios", selected)
         self.assertNotIn("run_zimbabwe_rainfall_exposure", selected)
-        self.assertNotIn("run_zimbabwe_rainfall_sensitivity", selected)
-        self.assertNotIn("diagnose_zimbabwe_hotspot_exposure", selected)
-        self.assertNotIn("run_zimbabwe_mining_decay_priority_sensitivity", selected)
         self.assertIn("build_peru_former_exposure_indicators", selected)
         self.assertIn("run_peru_former_priority_scenarios", selected)
-        self.assertIn("summarize_peru_former_criterion_data_strength", selected)
 
         self.assertIn("build_peru_former_rainfall_criterion", config["network_scripts"])
         stale_tokens = (

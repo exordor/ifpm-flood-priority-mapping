@@ -21,8 +21,8 @@ from matplotlib.colors import ListedColormap, BoundaryNorm
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 
-from compare_abzucht_hq100 import read_grid, summarize, COLORS
-from explain_abzucht_comparison import representative
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+from _lib.goslar_comparison import read_grid, summarize, COLORS, representative
 
 ROOT=Path(__file__).resolve().parents[2]
 BASE=ROOT/'outputs/goslar_abzucht_diagnostics/fixed_scale'
@@ -228,7 +228,7 @@ def main():
         make_map(OUT/pid,title,selected,limits,flood,pim,ref)
     write_csv(OUT/'criterion_contributions.csv',drivers)
     report(OUT,inventory,results,cases,drivers)
-    remember(Path(__file__));remember(Path(__file__).with_name('compare_abzucht_hq100.py'));remember(Path(__file__).with_name('explain_abzucht_comparison.py'))
+    remember(Path(__file__));remember(ROOT/'bin/_lib/goslar_comparison.py')
     for path,digest in inputs.items():
         if sha(ROOT/path)!=digest:raise ValueError('Input changed during comparison: '+path)
     outmanifest=dict(boundary_id='goslar_abzucht_display_rectangle',experiment_id='multiriver_comparison',claim_level='diagnostic_only',

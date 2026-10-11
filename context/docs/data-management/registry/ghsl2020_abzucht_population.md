@@ -7,6 +7,7 @@
 - Access date: 2026-09-14. Public, no account. CC BY 4.0; attribute European Commission/JRC.
 - Study area: `goslar_abzucht_display_rectangle` reference grid with native-window padding.
 - Command: `.venv/bin/python bin/acquire/pull_abzucht_ghsl_population.py`.
+  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/pull_abzucht_ghsl_population.py`.)
 - Local path: `data/raw/ghsl2020_abzucht_population/`
 - Files: `GHS_POP_E2020_GLOBE_R2023A_54009_100_V1_0_R3_C19.zip` (41,019,822 bytes, SHA-256
   `736d07c99453834235d62c2c9eab9f37450809d6621b9ea8d6255e4ae7f44dd1`); clipped

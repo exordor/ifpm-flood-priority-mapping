@@ -61,7 +61,9 @@ Status: downloaded and processed for the V1 rainfall-sensitivity comparison.
   - `.venv/bin/python bin/acquire/plan_zimbabwe_chirps_rainfall_metrics.py`
   - `.venv/bin/python bin/acquire/download_zimbabwe_chirps_rainfall_inputs.py`
   - `.venv/bin/python bin/investigate/compare_zimbabwe_chirps_rainfall_metrics.py`
+    (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/investigate/compare_zimbabwe_chirps_rainfall_metrics.py`.)
   - `.venv/bin/python bin/visualize/plot_zimbabwe_chirps_rainfall_comparison.py`
+    (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/visualize/plot_zimbabwe_chirps_rainfall_comparison.py`.)
 - Standardization/preprocessing notes: keep CHIRPS at native rainfall scale and compute V1
   zonal summaries; do not resample to the V1 30 m terrain grid for pixel-level overlay
 - Known limitations: 0.05 degree rainfall grid is much coarser than 30 m terrain layers; use
