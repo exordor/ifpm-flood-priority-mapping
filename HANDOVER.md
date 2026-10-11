@@ -24,8 +24,8 @@ The most important open problem: in the Goslar extension comparison, the flood c
 | Location | Contents | In Git? |
 |---|---|---|
 | `README.md`, `AGENTS.md` | General workspace description; `AGENTS.md` is a one-page set of working conventions (folders, data registration, modelling rules) | Yes |
-| `bin/` | About 190 processing scripts, grouped into folders by stage; entry points and descriptions are in `bin/README.md` | Yes |
-| `tests/` | 60 test files | Yes |
+| `bin/` | About 160 processing scripts, grouped into folders by stage; entry points and descriptions are in `bin/README.md` | Yes |
+| `tests/` | 53 test files | Yes |
 | `context/docs/research-map/` | Main project record: `EXPERIMENTS.md` (commands, outputs and conclusions of current experiments) and `DECISION_LOG.md` (decisions that are still in force, including the weights) | Yes |
 | `context/docs/data-management/registry/` | Source, licence and download record for each dataset | Yes |
 | `context/docs/glossary.md`, `context/docs/methodology/` | Glossary; PIM method note | Yes |
