@@ -130,7 +130,6 @@ def plot_map(output_dir: Path) -> dict[str, object]:
     output_dir.mkdir(parents=True, exist_ok=True)
     stem = output_dir / "goslar_pim_overview"
     fig.savefig(stem.with_suffix(".png"), dpi=200, bbox_inches="tight", facecolor="white")
-    fig.savefig(stem.with_suffix(".svg"), bbox_inches="tight", facecolor="white")
     plt.close(fig)
 
     manifest = {
@@ -153,7 +152,7 @@ def plot_map(output_dir: Path) -> dict[str, object]:
         },
         "classification": "equal interval 0-1, five classes, Peru-compatible ColorBrewer palettes",
         "layout_overlap_count": int(overlap_count),
-        "outputs": [stem.with_suffix(".png").name, stem.with_suffix(".svg").name],
+        "outputs": [stem.with_suffix(".png").name],
     }
     (output_dir / "goslar_pim_overview_manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

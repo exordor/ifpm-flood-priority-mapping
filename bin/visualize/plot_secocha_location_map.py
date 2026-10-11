@@ -248,7 +248,6 @@ def plot_map(output_dir: Path) -> dict[str, object]:
     output_dir.mkdir(parents=True, exist_ok=True)
     stem = output_dir / "peru_experiment_and_secocha_location_map"
     fig.savefig(stem.with_suffix(".png"), dpi=220, bbox_inches="tight", facecolor="white")
-    fig.savefig(stem.with_suffix(".svg"), bbox_inches="tight", facecolor="white")
     plt.close(fig)
 
     manifest = {
@@ -266,7 +265,7 @@ def plot_map(output_dir: Path) -> dict[str, object]:
         "secocha_extent_is_catchment": False,
         "layout_overlap_count": int(overlap_count),
         "crs_detail_panel": CRS_UTM18S,
-        "outputs": [stem.with_suffix(".png").name, stem.with_suffix(".svg").name],
+        "outputs": [stem.with_suffix(".png").name],
     }
     manifest_path = output_dir / "peru_experiment_and_secocha_location_map_manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

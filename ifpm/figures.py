@@ -29,7 +29,7 @@ def _extent_km(profile):
 
 
 def make_map(path, title, products, limits, flood, pim, ref, sparse_x_ticks=False):
-    """Flood indicator (left) and PIM (right) with official flood-zone outlines; PNG and SVG."""
+    """Flood indicator (left) and PIM (right) with official flood-zone outlines (PNG)."""
     import geopandas as gpd
     extent = _extent_km(ref)
     fig, axes = plt.subplots(1, 2, figsize=(13, 7))
@@ -70,8 +70,7 @@ def make_map(path, title, products, limits, flood, pim, ref, sparse_x_ticks=Fals
     fig.legend(handles=[Line2D([0], [0], color='#005da8', label='Official flood-zone boundary'),
                         Patch(facecolor='#f0f0f0', label='No model score')],
                loc='lower center', bbox_to_anchor=(.51, .012), ncol=2, frameon=False, fontsize=10)
-    for fmt in ['png', 'svg']:
-        fig.savefig(path.with_suffix('.' + fmt), dpi=180)
+    fig.savefig(path.with_suffix('.png'), dpi=180)
     plt.close(fig)
 
 
@@ -146,6 +145,5 @@ def hq100_figure(out, pim, profile, vectors, boundary, geom, categories, stats, 
     fig.text(.045, .91, subtitle, fontsize=12)
     fig.text(.045, .025, 'Prototype scenario comparison | NLWKN HQ100 (2026; local snapshot) | '
              'Existing 30 m PIM and weights | Not observed-event accuracy', fontsize=10, color='#444444')
-    for fmt in ['png', 'svg']:
-        fig.savefig(out / f'abzucht_hq100_comparison.{fmt}', dpi=180)
+    fig.savefig(out / 'abzucht_hq100_comparison.png', dpi=180)
     plt.close(fig)

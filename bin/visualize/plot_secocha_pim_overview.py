@@ -105,15 +105,15 @@ def main():
              fontsize=8.5, color="#555555")
     fig.subplots_adjust(top=.90, bottom=.07, left=.04, right=.985, hspace=.28, wspace=.13)
     out_dir = BASE / "figures"; out_dir.mkdir(parents=True, exist_ok=True)
-    png = out_dir / "secocha_pim_overview.png"; svg = out_dir / "secocha_pim_overview.svg"
+    png = out_dir / "secocha_pim_overview.png"
     fig.savefig(png, dpi=200, bbox_inches="tight", facecolor="white")
-    fig.savefig(svg, bbox_inches="tight", facecolor="white"); plt.close(fig)
+    plt.close(fig)
     manifest = {
         "figure_id": "secocha_pim_overview", "boundary_id": "secocha_reference_extent",
         "claim_level": "provisional", "weights_changed": False,
         "mining_role": "external overlay only", "classification": "equal interval 0-1, five classes",
         "color_palettes": {"priority": PRIORITY_COLORS, **CRITERIA_COLORS},
-        "outputs": [png.name, svg.name],
+        "outputs": [png.name],
     }
     (out_dir / "secocha_pim_overview_manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     print(json.dumps(manifest, indent=2))

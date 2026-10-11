@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import math
+import shutil
 import types
 import zipfile
 from pathlib import Path
@@ -477,6 +478,7 @@ def run_multiriver(cfg: Config, extent: str, run_root: Path, steps: list[str] | 
         distance = distance_transform_edt(~streams, sampling=(res, res))
         write(p['DISTANCE'], distance[crop])
         write(p['STREAMS_T500'], streams[crop].astype('float32'))
+        shutil.rmtree(tmp)  # buffered WhiteboxTools grids; the cropped copies are kept above
 
     def soil(_ctx):
         pin(p['SOILGRIDS_K_SNAPSHOT'])
@@ -584,12 +586,9 @@ def run_multiriver(cfg: Config, extent: str, run_root: Path, steps: list[str] | 
               'priority_scenarios': priority,
               'comparison': lambda _c: compare.multiriver_comparison(state),
               'report': lambda _c: compare.multiriver_report(state)}
-    checkpoint = out / 'checkpoints'
-    ctx.mkdir(checkpoint)
     for name in ext["stages"]:
         if name == "prepare" or (steps is not None and name not in steps):
             continue
         print('Run', name, flush=True)
         ctx.normalize.start(name)
         stages[name](ctx)
-        ctx.write_text(checkpoint / name, 'complete\n')

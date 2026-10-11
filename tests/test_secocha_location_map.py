@@ -23,7 +23,6 @@ class PeruSecochaLocationMapTest(unittest.TestCase):
             )
             self.assertEqual(completed.returncode, 0, completed.stderr)
             self.assertTrue((output / "peru_experiment_and_secocha_location_map.png").exists())
-            self.assertTrue((output / "peru_experiment_and_secocha_location_map.svg").exists())
             manifest = json.loads(
                 (output / "peru_experiment_and_secocha_location_map_manifest.json").read_text(
                     encoding="utf-8"

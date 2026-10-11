@@ -182,7 +182,6 @@ def plot_map(output_dir: Path) -> dict[str, object]:
     output_dir.mkdir(parents=True, exist_ok=True)
     stem = output_dir / "goslar_focus_area_location_map"
     fig.savefig(stem.with_suffix(".png"), dpi=220, bbox_inches="tight", facecolor="white")
-    fig.savefig(stem.with_suffix(".svg"), bbox_inches="tight", facecolor="white")
     plt.close(fig)
 
     manifest = {
@@ -192,7 +191,7 @@ def plot_map(output_dir: Path) -> dict[str, object]:
         "focus_extent_wgs84": list(FOCUS_EXTENT_WGS84),
         "focus_extent_is_hazard_footprint": False,
         "layout_overlap_count": int(overlap_count),
-        "outputs": [stem.with_suffix(".png").name, stem.with_suffix(".svg").name],
+        "outputs": [stem.with_suffix(".png").name],
     }
     manifest_path = output_dir / "goslar_focus_area_location_map_manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

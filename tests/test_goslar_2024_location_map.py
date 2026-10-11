@@ -23,7 +23,6 @@ class Goslar2024LocationMapTest(unittest.TestCase):
             )
             self.assertEqual(completed.returncode, 0, completed.stderr)
             self.assertTrue((output / "goslar_focus_area_location_map.png").exists())
-            self.assertTrue((output / "goslar_focus_area_location_map.svg").exists())
             manifest = json.loads(
                 (output / "goslar_focus_area_location_map_manifest.json").read_text(encoding="utf-8")
             )

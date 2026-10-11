@@ -416,7 +416,7 @@ def multiriver_report(s) -> None:
              'comes from preprocessing, not from updated soil source values.\n\n')
     text += ('The terrain domain extends a further 10.02 km beyond each side of the assessment rectangle; it is still not '
              'the complete upstream catchment, so flow-accumulation results remain boundary-dependent.\n\n')
-    text += ('Reproduce: `.venv/bin/python -m ifpm run goslar --extent multiriver`. The PNG/SVG figures use the same '
+    text += ('Reproduce: `.venv/bin/python -m ifpm run goslar --extent multiriver`. The PNG figures use the same '
              'left/right two-panel layout, fixed color scale and 0.6 threshold. The four overview maps overlay the '
              'regulatory boundaries of 8 rivers; each of the 6 HWRM scenarios has its own map so that boundaries of '
              'different scenarios do not overlap. QGIS can read the two GPKG files and the score TIFs directly. Source '
