@@ -241,3 +241,450 @@ manifest:
     diagnostics: goslar_official_diagnostics
     nlwkn_2017_report: goslar_nlwkn_2017_report
     osm_infrastructure_candidates: goslar_osm_facilities_overpass
+
+# QGIS review packages (python -m ifpm qgis goslar): one workspace-linked project under out_dir and
+# one self-contained portable copy under portable_dir (plus a zip). ReviewMap keeps the listed
+# layer keys of FullAudit; `visible` replaces the default visibility. Ported from
+# bin/package/build_goslar_qgis_full_audit.py and build_goslar_qgis_review.py.
+qgis:
+  site_key: goslar
+  project_crs: EPSG:32632
+  layers:
+  - key: priority
+    name: Relative flood-priority index
+    group: 1. Priority result
+    path: outputs/goslar_pim_chain/priority_scenarios/scenarios/priority_goslar_direct_pim.tif
+    kind: raster
+    role: priority_result
+    palette: priority
+    visible: true
+    unit: 0-1
+    claim_level: provisional
+    notes: Goslar prototype mirror of the Peru PIM chain; weights FH 0.34 / SE 0.25 / LU 0.17 / ES 0.10 / SV 0.14. Not a validated flood-risk result.
+  - key: flood_hazard
+    name: Flood-conditioning indicator (FH | PIM weight 0.34)
+    group: 2. Five PIM criteria
+    path: outputs/goslar_pim_chain/priority_scenarios/pim_criteria/flood_hazard_0_1.tif
+    kind: raster
+    role: criterion
+    palette: flood_hazard
+    unit: 0-1
+  - key: sediment
+    name: Sediment / erosion score (SE | PIM weight 0.25)
+    group: 2. Five PIM criteria
+    path: outputs/goslar_pim_chain/priority_scenarios/pim_criteria/sediment_0_1.tif
+    kind: raster
+    role: criterion
+    palette: sediment
+    unit: 0-1
+  - key: landuse_asm
+    name: General land-use pressure score (LU | PIM weight 0.17)
+    group: 2. Five PIM criteria
+    path: outputs/goslar_pim_chain/priority_scenarios/pim_criteria/landuse_asm_0_1.tif
+    kind: raster
+    role: criterion
+    palette: landuse_asm
+    unit: 0-1
+  - key: environmental
+    name: Environmental context indicator (ES | PIM weight 0.10)
+    group: 2. Five PIM criteria
+    path: outputs/goslar_pim_chain/priority_scenarios/pim_criteria/environmental_0_1.tif
+    kind: raster
+    role: criterion
+    palette: environmental
+    unit: 0-1
+  - key: socioeconomic
+    name: Socioeconomic exposure indicator (SV | PIM weight 0.14)
+    group: 2. Five PIM criteria
+    path: outputs/goslar_pim_chain/priority_scenarios/pim_criteria/socioeconomic_0_1.tif
+    kind: raster
+    role: criterion
+    palette: socioeconomic
+    unit: 0-1
+  - key: elevation
+    name: Elevation (Copernicus DEM GLO-30)
+    group: 3. Terrain and hydrology
+    path: outputs/goslar_pim_chain/terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif
+    kind: raster
+    role: input_factor
+    palette: terrain
+    unit: m
+  - key: dem_filled
+    name: DEM after sink fill
+    group: 3. Terrain and hydrology
+    path: outputs/goslar_pim_chain/hydrology_derivatives/goslar_focus_dem_filled.tif
+    kind: raster
+    role: input_factor
+    palette: terrain
+    unit: m
+  - key: slope
+    name: Slope
+    group: 3. Terrain and hydrology
+    path: outputs/goslar_pim_chain/terrain_preprocessing/goslar_focus_slope_degrees_utm32n_30m.tif
+    kind: raster
+    role: input_factor
+    palette: slope
+    unit: degrees
+  - key: flow_direction
+    name: Flow direction (D8)
+    group: 3. Terrain and hydrology
+    path: outputs/goslar_pim_chain/hydrology_derivatives/goslar_focus_flow_direction_d8.tif
+    kind: raster
+    role: input_factor
+    palette: hydrology
+    unit: D8 code
+  - key: flow_accumulation
+    name: Flow accumulation (contributing cells)
+    group: 3. Terrain and hydrology
+    path: outputs/goslar_pim_chain/hydrology_derivatives/goslar_focus_flow_accumulation.tif
+    kind: raster
+    role: input_factor
+    palette: hydrology
+    unit: cells
+  - key: streams
+    name: Derived streams (t500)
+    group: 3. Terrain and hydrology
+    path: outputs/goslar_pim_chain/hydrology_derivatives/goslar_focus_streams_t500.tif
+    kind: raster
+    role: input_factor
+    palette: hydrology
+    unit: stream mask
+  - key: distance_drainage
+    name: Distance to derived drainage (FH component weight 0.40)
+    group: 3. Terrain and hydrology
+    path: outputs/goslar_pim_chain/hydrology_derivatives/goslar_focus_distance_to_drainage_t500.tif
+    kind: raster
+    role: input_factor
+    palette: distance
+    unit: m
+    notes: Raw distance input; weight applies after inversion and standardization to the drainage_proximity component.
+  - key: twi
+    name: Topographic wetness index (FH component weight 0.25)
+    group: 3. Terrain and hydrology
+    path: outputs/goslar_pim_chain/hydrology_derivatives/goslar_focus_twi.tif
+    kind: raster
+    role: input_factor
+    palette: wetness
+    unit: TWI
+    notes: Raw TWI input; weight applies after percentile standardization to the twi_wetness component.
+  - key: ls_factor
+    name: LS-factor, Moore and Nieber (SE component weight 0.50)
+    group: 4. Erosion factors
+    path: outputs/goslar_pim_chain/ls_factor/goslar_focus_ls_factor_capped50_hillslope_30m.tif
+    kind: raster
+    role: input_factor
+    palette: erosion
+    unit: LS
+    notes: Raw LS input; weight applies after percentile standardization.
+  - key: soil_k
+    name: Soil erodibility K-factor, SoilGrids 250 m (SE component weight 0.25)
+    group: 4. Erosion factors
+    path: outputs/goslar_pim_chain/soil_k_factor/soil_k_factor_aligned_250m_effective_30m.tif
+    kind: raster
+    role: input_factor
+    palette: erosion
+    unit: K (US customary)
+    notes: Raw K input; weight applies after percentile standardization. SoilGrids effective source resolution is 250 m; BGR official K-factor is only a rendered 1:1,000,000 service, not exported.
+  - key: c_factor
+    name: C-factor, ESA WorldCover (SE component weight 0.25)
+    group: 4. Erosion factors
+    path: outputs/goslar_esa_worldcover_2021/c_factor/c_factor_goslar_focus_30m.tif
+    kind: raster
+    role: input_factor
+    palette: erosion
+    unit: C
+    notes: Raw C input; weight applies after percentile standardization.
+  - key: land_use_pressure
+    name: Land-use pressure, WorldCover LUT (LU component weight 0.40)
+    group: 4. Erosion factors
+    path: outputs/goslar_esa_worldcover_2021/c_factor/land_use_pressure_goslar_focus_30m.tif
+    kind: raster
+    role: input_factor
+    palette: land
+    unit: 0-1
+  - key: rainfall
+    name: Rainfall climatology, REGNIE JJA 1991-2020 (FH component weight 0.35)
+    group: 5. Rainfall
+    path: outputs/goslar_pim_chain/rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif
+    kind: raster
+    role: input_factor
+    palette: rainfall
+    unit: 0-1
+    notes: Standardized FH rainfall component. DWD REGNIE 1 km native, provisional 30 m resample; official 1991-2020 climate normal.
+  - key: population
+    name: Population, Zensus 2022 100 m (SV component weight 0.35)
+    group: 6. Exposure and environment
+    path: outputs/goslar_pim_chain/exposure_indicators/population_exposure_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: population
+    unit: 0-1
+    notes: Standardized settlement_population component. Destatis Zensus 2022 official 100 m grid for the WRRL water-body reference, resampled to 30 m.
+  - key: built_infrastructure
+    name: Critical infrastructure proximity, OSM facilities (SV component weight 0.30)
+    group: 6. Exposure and environment
+    path: outputs/goslar_pim_chain/exposure_indicators/built_infrastructure_exposure_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: population
+    unit: 0-1
+    claim_level: provisional
+    notes: 'Active critical_infrastructure component: proximity to filtered OSM schools, hospitals, emergency services, works, substations and stations with 2 km linear decay. Community coverage and operating status are not guaranteed.'
+  - key: clms_vegetation_loss
+    name: CLMS tree-cover decline 2018-2024 (LU component weight 0.35)
+    group: 6. Exposure and environment
+    path: outputs/goslar_esa_worldcover_2021/c_factor/clms_tcd_vegetation_loss_2018_2024_goslar_official_basin_30m.tif
+    kind: raster
+    role: input_factor
+    palette: land
+    unit: 0-1
+    notes: Active bare_soil_vegetation_loss component. Positive percent-point Copernicus HRL Tree Cover Density decline; provisional vegetation-loss proxy.
+  - key: built_agri_road
+    name: Built, agriculture and road pressure (LU component weight 0.25)
+    group: 6. Exposure and environment
+    path: outputs/goslar_pim_chain/criteria_stack/criteria/built_agriculture_road_expansion_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: land
+    unit: 0-1
+    notes: Active built_agriculture_road_expansion component.
+  - key: road_access
+    name: Road access proximity, OSM (SV component weight 0.35)
+    group: 6. Exposure and environment
+    path: outputs/goslar_pim_chain/criteria_stack/criteria/road_access_proximity_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: distance
+    unit: 0-1
+    notes: Active road_access_proximity component with 20 km linear decay.
+  - key: water_wetland
+    name: Water / wetland context (ES component weight 0.65)
+    group: 6. Exposure and environment
+    path: outputs/goslar_pim_chain/environmental_sensitivity/water_wetland_context_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: wetness
+    unit: 0-1
+    notes: Active water_wetland_context component.
+  - key: protected_area
+    name: Protected-area context, EEA Natura 2000 (ES component weight 0.35)
+    group: 6. Exposure and environment
+    path: outputs/goslar_pim_chain/environmental_sensitivity/protected_area_context_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: land
+    unit: 0-1
+    notes: Active protected_ecological_context component. EEA Natura 2000 2024 (FFH + SPA), proximity score; national non-Natura2000 designations are not included.
+  - key: original_project_focus_extent
+    name: Original project map focus extent (minimum study-area anchor)
+    group: 7. External validation and overlays
+    path: outputs/goslar_focus_boundary/goslar_focus_boundary.gpkg
+    kind: vector
+    role: study_area_anchor
+    visible: true
+    layer_name: goslar_focus_boundary
+    claim_level: project_layout_reference
+    notes: 'Minimum study-area anchor: every adopted Goslar study boundary must be contained by the final analysis domain. Project layout reference only; not a catchment, municipal boundary, or observed inundation footprint. Weight 0; excluded from PIM scoring.'
+  - key: boundary
+    name: Official WRRL water-body reference boundary
+    group: 7. External validation and overlays
+    path: outputs/goslar_official_hydrology_and_flood_data/goslar_official_hydrologic_reference_boundary.gpkg
+    kind: vector
+    role: boundary
+    visible: true
+    layer_name: goslar_official_hydrologic_reference_boundary
+    claim_level: provisional_hydrologic_reference
+    notes: Hydrologic analysis/reference boundary containing the original project focus extent. Weight 0 as an overlay; it defines the current raster mask but is not a PIM criterion, municipal boundary, or observed inundation footprint.
+  - key: natura2000
+    name: EEA Natura 2000 sites (2024)
+    group: 7. External validation and overlays
+    path: data/raw/eea_natura2000_goslar/goslar_natura2000_2024.gpkg
+    kind: vector
+    role: protected_polygons
+    visible: true
+    layer_name: goslar_natura2000_2024
+    claim_level: context_evidence
+  - key: roads
+    name: OSM roads
+    group: 7. External validation and overlays
+    path: data/raw/geofabrik_osm_goslar/extracted/gis_osm_roads_free_1.shp
+    kind: vector
+    role: roads
+    visible: true
+    layer_name: gis_osm_roads_free_1
+    claim_level: context_evidence
+  - key: lbeg_mining_rights
+    name: Mining rights context (LBEG/NIBIS)
+    group: 7. External validation and overlays
+    path: outputs/goslar_mining_context_overlay/goslar_mining_context_overlay.gpkg
+    kind: vector
+    role: mining_context_overlay
+    visible: false
+    layer_name: lbeg_mining_rights
+    claim_level: context_evidence
+    notes: Official legal mining-right fields within a 12 km context buffer; not proof of active extraction and excluded from PIM scoring.
+  - key: osm_mining_points
+    name: Mining locations context (OSM)
+    group: 7. External validation and overlays
+    path: outputs/goslar_mining_context_overlay/goslar_mining_context_overlay.gpkg
+    kind: vector
+    role: mining_context_overlay
+    visible: false
+    layer_name: osm_mining_points
+    claim_level: context_evidence
+    notes: Community-mapped mine, adit and mineshaft points within the focus+12 km context; incomplete evidence, excluded from PIM scoring.
+  - key: osm_mining_areas
+    name: Mining areas context (OSM)
+    group: 7. External validation and overlays
+    path: outputs/goslar_mining_context_overlay/goslar_mining_context_overlay.gpkg
+    kind: vector
+    role: mining_context_overlay
+    visible: false
+    layer_name: osm_mining_areas
+    claim_level: context_evidence
+    notes: Community-mapped mine and quarry area geometries within the focus+12 km context; incomplete evidence, excluded from PIM scoring.
+  - key: wfd_drainage_basins
+    name: Official WRRL drainage basins / water bodies
+    group: 7. External validation and overlays
+    path: outputs/goslar_official_hydrology_and_flood_data/goslar_wfd_drainage_basins_focus_overlap.gpkg
+    kind: vector
+    role: hydrologic_context
+    visible: false
+    layer_name: goslar_wfd_drainage_basins_focus_overlap
+    claim_level: context_evidence
+    notes: Lower Saxony Umweltkarten WRRL polygons overlapping the focus extent. Hydrologic context only; not yet a scored PIM component.
+  - key: hwrm_flood_hazard
+    name: HWRM-RL flood-hazard scenarios (Oker / Innerste)
+    group: 7. External validation and overlays
+    path: outputs/goslar_official_hydrology_and_flood_data/goslar_hwrm_flood_hazard_boundaries_12km.gpkg
+    kind: vector
+    role: flood_hazard_context
+    visible: false
+    layer_name: goslar_hwrm_flood_hazard_boundaries_12km
+    claim_level: context_evidence
+    notes: Modelled regulatory HQ scenarios within focus+12 km. They are independent validation context, not the observed July 2017 inundation footprint and not PIM inputs.
+  - key: affected_locations_2017
+    name: Goslar 2017 flood impacts and emergency response (approximate locations)
+    group: 7. External validation and overlays
+    path: outputs/goslar_2017_affected_location_evidence/goslar_2017_affected_location_evidence.gpkg
+    kind: vector
+    role: historical_event_location_evidence
+    visible: true
+    layer_name: affected_location_evidence
+    claim_level: validation_candidate
+    notes: Nine officially reported affected-place samples positioned with present-day OSM reference coordinates. Location-based historical-event consistency evidence only; not a complete inundation footprint, not a PIM input, and not sufficient for accuracy, recall or IoU.
+  - key: osm_infrastructure
+    name: Critical-infrastructure source points (OSM)
+    group: 7. External validation and overlays
+    path: data/raw/goslar_official_hydrology_and_flood_data/osm_goslar_infrastructure_candidates.gpkg
+    kind: vector
+    role: infrastructure_context
+    visible: false
+    layer_name: osm_infrastructure_candidates
+    claim_level: context_evidence
+    notes: Source evidence for the active critical_infrastructure proximity component. Schools, hospitals, emergency services, works, substations and stations from OSM; community coverage and operating status remain unverified.
+  packages:
+    FullAudit:
+      name: Goslar official WRRL reference - FullAudit processing chain (provisional)
+      out_dir: outputs/goslar_qgis_full_audit
+      portable_dir: exports/qgis_packages/goslar/FullAudit
+      project_file: IFPM_Goslar_FullAudit.qgz
+      readme: |
+        IFPM Goslar QGIS project package
+
+        Recommended entry point: IFPM_Goslar_FullAudit.qgz - Goslar FullAudit processing chain in EPSG:32632.
+        The project uses relative paths to the existing workspace data under data/ and
+        outputs/. Keep this package inside outputs/goslar_qgis_full_audit/ when
+        opening it. The package does not duplicate large raster files.
+
+        Groups follow the processing chain: priority result, five PIM criteria,
+        terrain and hydrology (including intermediate products), erosion factors,
+        rainfall, exposure and environment, and context and evidence. PIM layers are
+        visible by default; criteria and factor layers are available in collapsed
+        groups. The maps are prototype relative-priority outputs, not validated
+        flood-depth, inundation, or emergency-response maps.
+      portable_readme: |
+        IFPM Goslar FullAudit QGIS package
+
+        Open IFPM_Goslar_FullAudit.qgz directly in QGIS 3.44 or later. All referenced GeoTIFF and
+        GeoPackage layers are included under layers/ and use package-local relative
+        paths. The project shows the full Peru-style PIM chain for the Goslar focus
+        area: Copernicus DEM -> slope -> hydrology -> LS/K/C erosion factors -> REGNIE
+        rainfall -> EEA Natura 2000 protected areas -> criteria stack -> exposure and
+        environment -> priority scenarios. Intermediate products are included.
+
+        The visible "Goslar 2017 flood impacts and emergency response (approximate locations)" layer contains nine
+        officially reported affected-place samples positioned with present-day OSM
+        reference coordinates. It is a location-based consistency check only, has
+        weight 0, and is not a complete observed inundation footprint or an accuracy
+        validation dataset.
+
+        The orange dashed polygon labelled "Original project focus extent" is the
+        minimum study-area anchor taken from the original ZLW QGIS print layout. It is
+        included, visible by default, and has weight 0. It is not a catchment,
+        municipal boundary, or observed inundation footprint. Any future Goslar study
+        boundary must fully contain this anchor.
+
+        Three mining context layers are included and switched off by default: official
+        LBEG legal mining-right fields plus OSM mining points and area geometries. They
+        are context evidence only and are excluded from the five-criterion PIM score.
+
+        Priority layers show relative priority values based on the current
+        five-criterion weights. They are prototype maps, not validated flood-depth,
+        inundation, or emergency-response maps. Transparent cells represent NoData.
+        This is a private research handoff; verify source licences before
+        redistribution outside the project team.
+      qa:
+        boundary: outputs/goslar_official_hydrology_and_flood_data/goslar_official_hydrologic_reference_boundary.gpkg
+        boundary_layer: goslar_official_hydrologic_reference_boundary
+        preview_title: Goslar priority preview
+        coverage_floor_percent: 95.0
+        coarse_coverage_floor_percent:
+          soil_k: 80.0
+          rainfall: 80.0
+          population: 5.0
+    ReviewMap:
+      name: Goslar official WRRL reference - ReviewMap presentation package
+      out_dir: outputs/goslar_qgis_review
+      portable_dir: exports/qgis_packages/goslar/ReviewMap
+      project_file: IFPM_Goslar_ReviewMap.qgz
+      keys:
+      - priority
+      - flood_hazard
+      - sediment
+      - landuse_asm
+      - environmental
+      - socioeconomic
+      - distance_drainage
+      - twi
+      - ls_factor
+      - soil_k
+      - c_factor
+      - land_use_pressure
+      - rainfall
+      - population
+      - built_infrastructure
+      - clms_vegetation_loss
+      - built_agri_road
+      - road_access
+      - original_project_focus_extent
+      - boundary
+      - lbeg_mining_rights
+      - osm_mining_points
+      - osm_mining_areas
+      - hwrm_flood_hazard
+      - affected_locations_2017
+      visible:
+      - priority
+      - original_project_focus_extent
+      - boundary
+      - hwrm_flood_hazard
+      - affected_locations_2017
+      readme: |
+        IFPM Goslar ReviewMap QGIS package
+
+        Open IFPM_Goslar_ReviewMap.qgz. This version keeps the priority result, five weighted criteria, selected scored components, the original project focus anchor, boundary, mining context, and HWRM context. It omits terrain intermediates and other audit-only layers. The FullAudit processing chain remains in outputs/goslar_qgis_full_audit/IFPM_Goslar_FullAudit.qgz.
+      portable_readme: |
+        IFPM Goslar ReviewMap QGIS package
+
+        Open IFPM_Goslar_ReviewMap.qgz directly in QGIS 3.44 or later. This version keeps the priority result, five weighted criteria, selected scored components, the original project focus anchor, WRRL reference boundary, 2017 flood impacts and emergency response (approximate locations), mining context, and HWRM context. It omits terrain intermediates and other audit-only layers. The orange dashed original focus anchor is visible, has weight 0, and must be contained by any future adopted Goslar study boundary. It is not a catchment, municipal boundary, or observed inundation footprint.

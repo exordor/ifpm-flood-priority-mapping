@@ -3,6 +3,7 @@
     python -m ifpm list
     python -m ifpm run <area> [--extent NAME|all] [--step S[,S...]] [--out DIR]
     python -m ifpm verify <area> [--extent NAME|all] [--out DIR]
+    python -m ifpm qgis <area> [--package NAME|all] [--qa] [--out DIR | --in-place]
 
 ``run`` writes under DIR (default outputs/_rerun/<area>) using the same relative paths as
 the current outputs, so the current outputs are never overwritten. ``verify`` compares
@@ -72,6 +73,21 @@ def cmd_verify(args) -> int:
     return 0 if ok else 1
 
 
+def cmd_qgis(args) -> int:
+    from . import qgis
+    cfg = Config(args.area)
+    if "qgis" not in cfg.data:
+        raise SystemExit(f"configs/{args.area}.yaml has no qgis section")
+    names = list(cfg["qgis"]["packages"])
+    if args.package != "all":
+        if args.package not in names:
+            raise SystemExit(f"unknown package '{args.package}'; choose from {names}")
+        names = [args.package]
+    out = ROOT if args.in_place else _out_dir(args.area, args.out)
+    qgis.build(cfg, names, out, qa=args.qa)
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="python -m ifpm", description=__doc__.split("\n\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
@@ -85,5 +101,13 @@ def main(argv=None) -> int:
         if name == "run":
             p.add_argument("--step", help="comma-separated stage names; default all stages of the extent")
         p.set_defaults(func=func)
+    p = sub.add_parser("qgis", help="build the QGIS review packages")
+    p.add_argument("area", choices=areas())
+    p.add_argument("--package", default="all", help="package name from the qgis section, or 'all' (default)")
+    p.add_argument("--qa", action="store_true", help="also run the raster coverage QA where configured")
+    where = p.add_mutually_exclusive_group()
+    where.add_argument("--out", help="output root (default outputs/_rerun/<area>)")
+    where.add_argument("--in-place", action="store_true", help="rebuild the live packages under outputs/ and exports/")
+    p.set_defaults(func=cmd_qgis)
     args = parser.parse_args(argv)
     return args.func(args)

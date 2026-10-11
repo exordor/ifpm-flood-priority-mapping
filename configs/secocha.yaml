@@ -144,3 +144,436 @@ manifest:
     population: WorldPop Peru 2020 UN-adjusted
     protected_areas: SERNANP layer 0 query; zero features within 25 km
   note: Active Peru Secocha prototype using unchanged Supervisor v07 weights; not a final flood-risk result.
+
+# QGIS review packages (python -m ifpm qgis secocha): one workspace-linked project under out_dir and
+# one self-contained portable copy under portable_dir (plus a zip). ReviewMap keeps the listed
+# layer keys of FullAudit; `visible` replaces the default visibility. Ported from
+# bin/package/build_secocha_qgis_full_audit.py and build_secocha_qgis_review.py.
+qgis:
+  site_key: secocha
+  project_crs: EPSG:32718
+  lineage:
+    proxy_lineage:
+      path: outputs/secocha_official_proxy_replacements/proxy_replacement_manifest.json
+      template: dataset_id=secocha_official_proxy_replacements; source_manifest_sha256={sha256}.
+  layers:
+  - key: priority
+    name: Relative priority index
+    group: 1. Priority result
+    path: outputs/secocha_pim_chain/priority_scenarios/scenarios/priority_secocha_direct_pim.tif
+    kind: raster
+    role: priority_result
+    palette: priority
+    visible: true
+    unit: 0-1
+    claim_level: provisional
+    notes: Active Secocha Peru prototype with unchanged Supervisor v07 weights; mining is excluded from the score.
+  - key: flood_hazard
+    name: Flood-conditioning indicator (FH | PIM weight 0.34)
+    group: 2. Five PIM criteria
+    path: outputs/secocha_pim_chain/priority_scenarios/pim_criteria/flood_hazard_0_1.tif
+    kind: raster
+    role: criterion
+    palette: flood_hazard
+    unit: 0-1
+    claim_level: provisional
+  - key: sediment
+    name: Sediment / erosion score (SE | PIM weight 0.25)
+    group: 2. Five PIM criteria
+    path: outputs/secocha_pim_chain/priority_scenarios/pim_criteria/sediment_0_1.tif
+    kind: raster
+    role: criterion
+    palette: sediment
+    unit: 0-1
+    claim_level: provisional
+  - key: landuse_asm
+    name: Land-use pressure score (LU | PIM weight 0.17)
+    group: 2. Five PIM criteria
+    path: outputs/secocha_pim_chain/priority_scenarios/pim_criteria/landuse_asm_0_1.tif
+    kind: raster
+    role: criterion
+    palette: landuse_asm
+    unit: 0-1
+    claim_level: provisional
+  - key: environmental
+    name: Environmental context indicator (ES | PIM weight 0.10)
+    group: 2. Five PIM criteria
+    path: outputs/secocha_pim_chain/priority_scenarios/pim_criteria/environmental_0_1.tif
+    kind: raster
+    role: criterion
+    palette: environmental
+    unit: 0-1
+    claim_level: provisional
+  - key: socioeconomic
+    name: Socioeconomic exposure indicator (SV | PIM weight 0.14)
+    group: 2. Five PIM criteria
+    path: outputs/secocha_pim_chain/priority_scenarios/pim_criteria/socioeconomic_0_1.tif
+    kind: raster
+    role: criterion
+    palette: socioeconomic
+    unit: 0-1
+    claim_level: provisional
+  - key: elevation
+    name: Elevation (SRTM 1 arc-second)
+    group: 3. Terrain and hydrology
+    path: outputs/secocha_pim_chain/terrain_preprocessing/secocha_dem_utm18s_30m.tif
+    kind: raster
+    role: input_factor
+    palette: terrain
+    unit: m
+  - key: slope
+    name: Slope
+    group: 3. Terrain and hydrology
+    path: outputs/secocha_pim_chain/terrain_preprocessing/secocha_slope_degrees_utm18s_30m.tif
+    kind: raster
+    role: input_factor
+    palette: slope
+    unit: degrees
+  - key: flow_accumulation
+    name: Flow accumulation (contributing cells)
+    group: 3. Terrain and hydrology
+    path: outputs/secocha_pim_chain/hydrology_derivatives/secocha_flow_accumulation.tif
+    kind: raster
+    role: input_factor
+    palette: hydrology
+    unit: cells
+  - key: streams
+    name: Derived drainage (threshold 500 cells)
+    group: 3. Terrain and hydrology
+    path: outputs/secocha_pim_chain/hydrology_derivatives/secocha_streams_t500.tif
+    kind: raster
+    role: input_factor
+    palette: hydrology
+    unit: stream mask
+  - key: distance_drainage
+    name: Distance to derived drainage (FH component weight 0.40)
+    group: 3. Terrain and hydrology
+    path: outputs/secocha_pim_chain/hydrology_derivatives/secocha_distance_to_drainage_t500.tif
+    kind: raster
+    role: input_factor
+    palette: distance
+    unit: m
+    notes: Raw distance input; weight applies after inversion and standardization to the drainage_proximity component.
+  - key: twi
+    name: Topographic wetness index (FH component weight 0.25)
+    group: 3. Terrain and hydrology
+    path: outputs/secocha_pim_chain/hydrology_derivatives/secocha_twi.tif
+    kind: raster
+    role: input_factor
+    palette: wetness
+    unit: TWI
+    notes: Raw TWI input; weight applies after percentile standardization.
+  - key: ls_factor
+    name: LS factor, capped at 50 (SE component weight 0.50)
+    group: 4. Erosion and land cover
+    path: outputs/secocha_pim_chain/ls_factor/secocha_ls_factor_capped50_hillslope_30m.tif
+    kind: raster
+    role: input_factor
+    palette: erosion
+    unit: LS
+    notes: Raw LS input; weight applies after percentile standardization.
+  - key: soil_k
+    name: Soil erodibility K factor, SoilGrids (SE component weight 0.25)
+    group: 4. Erosion and land cover
+    path: outputs/secocha_pim_chain/soil_k_factor/soil_k_factor_aligned_250m_effective_30m.tif
+    kind: raster
+    role: input_factor
+    palette: erosion
+    unit: K
+    notes: Raw K input; weight applies after percentile standardization. 250 m effective source resolution, resampled to the overlay grid.
+  - key: c_factor
+    name: Cover-management C factor, WorldCover (SE component weight 0.25)
+    group: 4. Erosion and land cover
+    path: outputs/secocha_pim_chain/worldcover_factors/c_factor_30m.tif
+    kind: raster
+    role: input_factor
+    palette: erosion
+    unit: C
+    notes: Raw C input; weight applies after percentile standardization.
+  - key: land_pressure
+    name: Land-cover pressure, WorldCover (LU component weight 0.40)
+    group: 4. Erosion and land cover
+    path: outputs/secocha_pim_chain/worldcover_factors/land_cover_runoff_pressure_30m.tif
+    kind: raster
+    role: input_factor
+    palette: land
+    unit: 0-1
+  - key: bare_soil
+    name: Bare-soil / vegetation-loss proxy (LU component weight 0.35)
+    group: 4. Erosion and land cover
+    path: outputs/secocha_pim_chain/criteria_stack/criteria/bare_soil_vegetation_loss_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: land
+    unit: 0-1
+    notes: Active bare_soil_vegetation_loss component; WorldCover bare/sparse class proxy.
+  - key: built_agri_road
+    name: Built, agriculture and road pressure (LU component weight 0.25)
+    group: 4. Erosion and land cover
+    path: outputs/secocha_pim_chain/criteria_stack/criteria/built_agriculture_road_expansion_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: land
+    unit: 0-1
+    notes: Active built_agriculture_road_expansion component.
+  - key: rainfall
+    name: Rainfall climatology, CHIRPS Dec-Mar (FH component weight 0.35)
+    group: 5. Rainfall
+    path: outputs/secocha_pim_chain/rainfall_criterion/rainfall_climatology_0_1_PROVISIONAL_30m.tif
+    kind: raster
+    role: input_factor
+    palette: rainfall
+    unit: 0-1
+    claim_level: sensitivity_scenario
+    notes: Standardized FH rainfall component. CHIRPS 0.05 degree native; bilinear 30 m resample is only for overlay compatibility.
+  - key: population
+    name: Population exposure, WorldPop 2020 (SV component weight 0.35)
+    group: 6. Exposure and environment
+    path: outputs/secocha_pim_chain/exposure_indicators/population_exposure_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: population
+    unit: 0-1
+    notes: Standardized settlement_population component.
+  - key: built
+    name: Built-up exposure proxy, WorldCover (SV component weight 0.30)
+    group: 6. Exposure and environment
+    path: outputs/secocha_pim_chain/exposure_indicators/built_infrastructure_exposure_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: population
+    unit: 0-1
+    notes: Active critical_infrastructure component as a built-up land-cover proxy; not a facility inventory.
+  - key: road_access
+    name: Road-access proximity, OSM (SV component weight 0.35)
+    group: 6. Exposure and environment
+    path: outputs/secocha_pim_chain/criteria_stack/criteria/road_access_proximity_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: distance
+    unit: 0-1
+    notes: Active road_access_proximity component with 20 km linear decay.
+  - key: water_wetland
+    name: Water and wetland context (ES component weight 0.65)
+    group: 6. Exposure and environment
+    path: outputs/secocha_pim_chain/environmental_sensitivity/water_wetland_context_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: wetness
+    unit: 0-1
+    notes: Active water_wetland_context component.
+  - key: protected
+    name: Protected-area context, confirmed layer-0 absence (ES component weight 0.35)
+    group: 6. Exposure and environment
+    path: outputs/secocha_pim_chain/environmental_sensitivity/protected_area_context_0_1.tif
+    kind: raster
+    role: input_factor
+    palette: land
+    unit: 0-1
+    notes: Active protected_ecological_context component. SERNANP layer 0 returned zero features within 25 km; other protection categories were not queried.
+  - key: boundary
+    name: Active Secocha working boundary (A7367 map frame)
+    group: 7. External validation and overlays
+    path: outputs/secocha_boundary/secocha_boundary.gpkg
+    kind: vector
+    role: boundary
+    visible: true
+    layer_name: secocha_active_boundary
+    claim_level: working_boundary
+    notes: Not an event footprint or catchment boundary.
+  - key: original_a7367
+    name: INGEMMET original A7367 hazard polygons
+    group: 7. External validation and overlays
+    path: data/raw/ingemmet_a7367_cartografia_peligros_secocha/ingemmet_a7367_cartografia_peligros_layer6_secocha.geojson
+    kind: vector
+    role: original_hazard
+    visible: true
+    layer_name: ingemmet_a7367_cartografia_peligros_layer6_secocha
+    claim_level: context_evidence
+    notes: Original INGEMMET Cartografia de Peligros layer 6 query; three A7367 polygons. General geological-hazard cartography, not automatically the observed 5 February footprint.
+  - key: event_footprint
+    name: 5 February event footprint candidate
+    group: 7. External validation and overlays
+    path: outputs/secocha_2023_validation/observed_hazard/secocha_2023_map7_event_digitization.gpkg
+    kind: vector
+    role: event_footprint
+    visible: true
+    layer_name: event_footprint_candidate
+    claim_level: validation_candidate
+    notes: Union of the two explicit 5 February classes from A7367 Map 7; semi-automatic report-map digitization.
+  - key: event_huaico
+    name: 5 February huaico candidate
+    group: 7. External validation and overlays
+    path: outputs/secocha_2023_validation/observed_hazard/secocha_2023_map7_event_digitization.gpkg
+    kind: vector
+    role: event_huaico
+    visible: true
+    layer_name: huaico_2023_02_05
+    claim_level: validation_candidate
+    notes: Legend-colour extraction of Huaico del 5 de febrero from A7367 Map 7.
+  - key: event_mudflow
+    name: 5 February mudflow candidate
+    group: 7. External validation and overlays
+    path: outputs/secocha_2023_validation/observed_hazard/secocha_2023_map7_event_digitization.gpkg
+    kind: vector
+    role: event_mudflow
+    visible: true
+    layer_name: mudflow_2023_02_05
+    claim_level: validation_candidate
+    notes: Legend-colour extraction of Flujo de lodo del 5 de febrero from A7367 Map 7.
+  - key: mining
+    name: INGEMMET mining records (external overlay)
+    group: 7. External validation and overlays
+    path: data/raw/ingemmet_catastro_minero_secocha/secocha_pequena_mineria.gpkg
+    kind: vector
+    role: evidence_points
+    visible: true
+    layer_name: pequena_mineria
+    claim_level: context_evidence
+    notes: Reference/cadastral records; not verified active extraction. External overlay only; excluded from the PIM score.
+  - key: minedu_schools_2023
+    name: MINEDU educational locations (2023 statistical references)
+    group: 7. External validation and overlays
+    path: outputs/secocha_official_proxy_replacements/secocha_official_exposure_mining.gpkg
+    kind: vector
+    role: evidence_points
+    visible: false
+    layer_name: minedu_education_locations_2023
+    claim_level: context_evidence
+    notes: 'Official 2023 education register: 47 context locations, including 11 missing-CODLOCAL service-level locations; 12 locations are inside the active frame. Statistical reference points, not building-accurate or confirmed operational on 5 February. Reported student/teacher fields are service-row sums. Excludes director/contact fields and enters no PIM input. {proxy_lineage}'
+  - key: minam_health_facilities
+    name: MINAM health-facility locations (25 km context)
+    group: 7. External validation and overlays
+    path: outputs/secocha_official_proxy_replacements/secocha_official_exposure_mining.gpkg
+    kind: vector
+    role: evidence_points
+    visible: false
+    layer_name: minam_health_facilities_context
+    claim_level: context_evidence
+    notes: Four official health-facility records within the exact 25 km context and none inside the active frame; live-source event-date status is not established. Source warns points may represent populated-centre locations, not exact building positions. {proxy_lineage}
+  - key: ingemmet_mining_rights
+    name: INGEMMET mining-right polygons (exact 5 km context)
+    group: 7. External validation and overlays
+    path: outputs/secocha_official_proxy_replacements/secocha_official_exposure_mining.gpkg
+    kind: vector
+    role: mining_context_overlay
+    visible: false
+    layer_name: ingemmet_mining_rights
+    claim_level: context_evidence
+    notes: Official referential legal/cadastral rights with status; 173 polygons remain after exact 5 km filtering and 47 have reportable positive-area overlap (at least 1 m2) with the active frame. Not verified active extraction footprints and excluded from PIM. {proxy_lineage}
+  - key: ingemmet_dgm_activity
+    name: 'INGEMMET DGM concession status: EXPLOTACION (exact 5 km context)'
+    group: 7. External validation and overlays
+    path: outputs/secocha_official_proxy_replacements/secocha_official_exposure_mining.gpkg
+    kind: vector
+    role: mining_context_overlay
+    visible: false
+    layer_name: ingemmet_dgm_activity
+    claim_level: context_evidence
+    notes: Two DGM administrative concession records labelled ESTADO_MINEM=EXPLOTACION occur within the exact 5 km context; neither intersects the active frame. Active extraction is not field-verified, informal activity is not ruled out, and the layer is excluded from PIM. {proxy_lineage}
+  - key: field_anchors
+    name: INGEMMET A7367 field anchors
+    group: 7. External validation and overlays
+    path: outputs/secocha_2023_validation/ingemmet_field_anchors.geojson
+    kind: vector
+    role: evidence_points
+    visible: true
+    layer_name: ingemmet_field_anchors
+    claim_level: validation_candidate
+    notes: Report-derived field anchors, not a complete event footprint.
+  - key: response_locations
+    name: INDECI response locations
+    group: 7. External validation and overlays
+    path: outputs/secocha_2023_validation/indeci_response_locations.geojson
+    kind: vector
+    role: evidence_points
+    visible: true
+    layer_name: indeci_response_locations
+    claim_level: validation_candidate
+    notes: Report-derived affected/response locations; report date retained in evidence table.
+  - key: s2_ndwi_before
+    name: Sentinel-2 NDWI, 3 Feb pre-event
+    group: 7. External validation and overlays
+    path: outputs/secocha_2023_validation/satellite_before_after/processed/s2_ndwi_before_10m.tif
+    kind: raster
+    role: validation_raster
+    palette: wetness
+    unit: NDWI
+    claim_level: validation_candidate
+    notes: NDWI=(B03-B08)/(B03+B08); SCL 4-7 valid. Validation context only; does not enter the PIM score.
+  - key: s2_ndwi_after
+    name: Sentinel-2 NDWI, 8 Feb post-event
+    group: 7. External validation and overlays
+    path: outputs/secocha_2023_validation/satellite_before_after/processed/s2_ndwi_after_10m.tif
+    kind: raster
+    role: validation_raster
+    palette: wetness
+    unit: NDWI
+    claim_level: validation_candidate
+    notes: Three days post-event; not peak-flow extent. Validation context only; does not enter the PIM score.
+  - key: s2_new_surface_water
+    name: Sentinel-2 new surface-water candidate
+    group: 7. External validation and overlays
+    path: outputs/secocha_2023_validation/satellite_before_after/processed/s2_new_surface_water_candidate_10m.tif
+    kind: raster
+    role: validation_raster
+    palette: wetness
+    unit: candidate mask
+    claim_level: validation_candidate
+    notes: NDWI>0.15 and SCL-common-valid only. Current candidate count is zero for this debris-flow event; negative diagnostic, not an event footprint.
+  packages:
+    FullAudit:
+      name: 'Peru: Secocha 2023 prototype - FullAudit processing chain'
+      out_dir: outputs/secocha_qgis_full_audit
+      portable_dir: exports/qgis_packages/secocha/FullAudit
+      project_file: IFPM_Peru_Secocha_FullAudit.qgz
+      readme: |
+        Secocha active Peru prototype, FullAudit processing chain. Open IFPM_Peru_Secocha_FullAudit.qgz. See manifest.csv and validation.json for layer lineage and checks. Group 7 includes default-disabled Sentinel-2 candidates and official MINEDU/MINAM/INGEMMET facility and mining context layers; none enters PIM. Event-window CHIRPS and raw Sentinel assets remain under outputs/secocha_2023_validation.
+      portable_readme: |
+        IFPM Peru Secocha QGIS FullAudit package
+
+        Open IFPM_Peru_Secocha_FullAudit.qgz in QGIS. The groups show the complete chain from terrain and hydrology through the five PIM criteria and relative priority result, plus separate A7367 Map 7 huaico and mudflow event candidates. All paths are package-local. The map-frame boundary is diagnostic, not a catchment. Event polygons are semi-automatic report-map digitization candidates. Mining records are external overlays only and do not enter the score. CHIRPS and SoilGrids retain their native-resolution warnings. The FullAudit package includes processed Sentinel-2 validation context plus newly acquired MINEDU 2023 statistical education locations, MINAM health-facility context, INGEMMET mining-right polygons and DGM administrative concession status (ESTADO_MINEM=EXPLOTACION). These four official layers are default-disabled and remain outside PIM: the facility points are not confirmed building-accurate/event-date observations, and mining status is not field-verified active extraction. This is a provisional research prototype, not a final flood-risk or emergency-response map.
+    ReviewMap:
+      name: 'Peru: Secocha 2023 prototype - ReviewMap presentation package'
+      out_dir: outputs/secocha_qgis_review
+      portable_dir: exports/qgis_packages/secocha/ReviewMap
+      project_file: IFPM_Peru_Secocha_ReviewMap.qgz
+      keys:
+      - priority
+      - flood_hazard
+      - sediment
+      - landuse_asm
+      - environmental
+      - socioeconomic
+      - distance_drainage
+      - twi
+      - ls_factor
+      - soil_k
+      - c_factor
+      - land_pressure
+      - bare_soil
+      - built_agri_road
+      - rainfall
+      - population
+      - built
+      - road_access
+      - boundary
+      - event_footprint
+      - event_huaico
+      - event_mudflow
+      - mining
+      visible:
+      - priority
+      - boundary
+      - event_footprint
+      - event_huaico
+      - event_mudflow
+      - mining
+      readme: |
+        IFPM Peru Secocha ReviewMap QGIS package
+
+        Open IFPM_Peru_Secocha_ReviewMap.qgz. This version keeps the priority result, five weighted criteria, selected scored components, boundary, Map 7 event candidates, and mining context. It omits terrain intermediates and other audit-only layers. The FullAudit processing chain remains in outputs/secocha_qgis_full_audit/IFPM_Peru_Secocha_FullAudit.qgz.
+      portable_readme: |
+        IFPM Peru Secocha ReviewMap QGIS package
+
+        Open IFPM_Peru_Secocha_ReviewMap.qgz. This version keeps the priority result, five weighted criteria, selected scored components, boundary, Map 7 event candidates, and mining context. It omits terrain intermediates and other audit-only layers. The FullAudit processing chain remains in outputs/peru_secocha_qgis_project_package/IFPM_Peru_Secocha_FullAudit.qgz.
