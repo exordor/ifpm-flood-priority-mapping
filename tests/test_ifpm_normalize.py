@@ -1,4 +1,4 @@
-"""ifpm.normalize on small synthetic arrays (NumPy only), checked against bin/_lib/standardization.py while it exists."""
+"""ifpm.normalize on small synthetic arrays (NumPy only)."""
 
 from __future__ import annotations
 
@@ -10,15 +10,8 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / "bin"))
 
 from ifpm.normalize import Normalizer, apply, fit, percentile_minmax  # noqa: E402
-
-try:  # the old helpers exist until the bin/ scripts are removed
-    from _lib import standardization as old_standardization
-except ImportError:
-    old_standardization = None
-
 
 def sample(seed=0, shape=(40, 50)):
     rng = np.random.default_rng(seed)
@@ -57,16 +50,6 @@ class PercentileMinmaxTest(unittest.TestCase):
         self.assertTrue((zeros == 0).all())
         expanded, low, high = percentile_minmax(data, constant_policy="expand")
         self.assertEqual(high, low + 1)
-
-    @unittest.skipIf(old_standardization is None, "bin/_lib not present")
-    def test_identical_to_old_helper(self):
-        for seed in range(3):
-            data, mask = sample(seed)
-            for options in [{}, {"invert": True}, {"nodata": -9999.0}, {"constant_policy": "zeros"}]:
-                new = percentile_minmax(data, mask, **options)
-                old = old_standardization.percentile_minmax(data, mask, **options)
-                np.testing.assert_array_equal(new[0], old[0])
-                self.assertEqual(new[1:], old[1:])
 
 
 class FixedScaleTest(unittest.TestCase):

@@ -5,7 +5,7 @@ workspace root, the file at the same relative path under the rerun root is compa
 
 - any file: pass when the sha256 is equal;
 - GeoTIFF: else pass when CRS, transform, shape and NoData mask are identical and the
-  cell-wise difference is at most TOL (same rule as tools/verify_baseline.py);
+  cell-wise difference is at most TOL;
 - CSV: else pass when the rows match in any order (some row orders follow file-system
   glob order) with numbers equal within TOL;
 - JSON: else pass when the parsed content matches with numbers equal within TOL.

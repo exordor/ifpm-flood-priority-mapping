@@ -55,7 +55,7 @@ The catalog keeps the OSM object id or coordinate method for every location.
 - Per point: sampled PIM, class, distance to the nearest High cell, maximum PIM within 100 m,
   source and positional limitation. NoData is not replaced with zero.
 - Radius check (2026-09-07): radii 0/30/50/100/200 m; four locality/reach groups defined in
-  `bin/analysis/goslar_2017_location_diagnostics.json` (the six lower-Abzucht records form one
+  `goslar_2017_location_diagnostics.json` (next to this note) (the six lower-Abzucht records form one
   group), group fractions averaged equally and compared with all valid PIM cells and cells within
   1 km.
 

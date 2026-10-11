@@ -6,20 +6,18 @@ Working conventions for this workspace.
 
 | Content | Location | In Git |
 |---|---|---|
-| Processing scripts | `bin/` | yes |
+| Processing chain and settings | `ifpm/`, `configs/` | yes |
+| Report-figure scripts | `bin/visualize/` | yes |
 | Tests | `tests/` | yes |
-| Regression check tool | `tools/verify_baseline.py` | yes |
+| One-time scripts | `tools/` | yes |
 | Research records, dataset registry | `context/docs/` | yes |
 | Raw downloaded data | `data/raw/<dataset_id>/`, `data/validation/<dataset_id>/` | no |
 | Model outputs, maps, tables | `outputs/<boundary_id>/<experiment_id>/` | no |
 | Packaged handovers | `exports/` | no |
-| Reusable public-safe pipeline | `ifpm-flood-pipeline/` (separate Git repo) | own repo |
 
 - Every new real dataset gets a note in `context/docs/data-management/registry/`:
   source, version, access date, licence, download command, file size or checksum.
 - Never commit credentials, cookies, API keys or absolute local paths.
-- `ifpm-flood-pipeline/` must not depend on `context/`, `data/` or `outputs/`.
-  Do not stage it from the root repo.
 
 ## Study areas
 
@@ -44,7 +42,8 @@ Working conventions for this workspace.
 
 ## Workflow
 
-- Run commands from the workspace root with `.venv/bin/python`.
+- Run commands from the workspace root with `.venv/bin/python`; check a rerun with
+  `python -m ifpm verify <area>` before replacing current outputs.
 - Record new experiments in `context/docs/research-map/EXPERIMENTS.md` with the
   command, output folder and main result.
 - Run the relevant tests in `tests/` after changing code.

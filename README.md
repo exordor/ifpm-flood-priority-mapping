@@ -3,7 +3,7 @@
 > New to this project? Start with [HANDOVER.md](HANDOVER.md) (handover
 > note, 2026-10-08). It summarises the current state, directory map and next steps.
 
-The root repository is the research workspace (scripts in `bin/`, docs in `context/`, local `data/` and `outputs/`); `ifpm-flood-pipeline/` is the reusable code package.
+The root repository is the research workspace (report-figure scripts in `bin/visualize/`, docs in `context/`, local `data/` and `outputs/`); the chain itself is the config-driven package `ifpm/` with settings in `configs/`.
 
 Active cases: Secocha (Peru) and Goslar (Germany). Zimbabwe is a background case.
 
@@ -22,9 +22,10 @@ Set up the environment with `uv sync --extra hydrology` (see [HANDOVER.md](HANDO
 .venv/bin/python -m ifpm run goslar --extent basin --step rainfall
 .venv/bin/python -m ifpm verify secocha                        # compare a rerun with the current outputs
 .venv/bin/python -m ifpm run peru_former                       # frozen area: re-score and check the pins
+.venv/bin/python -m ifpm qgis secocha                          # QGIS packages (needs QGIS)
 ```
 
-`run` never writes over the current outputs: it writes under `--out` (default `outputs/_rerun/<area>/`) with the same relative paths. Secocha and Goslar no longer have per-script runners in `bin/`.
+`run` never writes over the current outputs: it writes under `--out` (default `outputs/_rerun/<area>/`) with the same relative paths.
 
 ## Directory Structure
 
@@ -37,4 +38,4 @@ See the directory map in [HANDOVER.md](HANDOVER.md) §3.
 - [Dataset registry](context/docs/data-management/registry/): source and licence per dataset.
 - [Terminology](context/docs/glossary.md).
 - [Internal context](context/README.md): what is kept under `context/`.
-- [Local tooling](bin/README.md): processing and verification entry points.
+- [Figure scripts](bin/README.md): the report-figure scripts kept in `bin/visualize/`.

@@ -42,61 +42,10 @@ WRITES_OUTPUTS = unittest.skipUnless(
 
 
 class ZimbabweReportingMapsTest(unittest.TestCase):
-    def test_zimbabwe_pim_uses_independent_sediment_components_and_direct_weights(self):
-        scenario = load_named_module(
-            ROOT / "bin/scenarios/run_zimbabwe_rainfall_exposure.py",
-            "run_zimbabwe_rainfall_exposure_for_governance_test",
-        )
-
-        self.assertEqual(
-            scenario.PIM_CRITERIA_ORDER,
-            ["flood_hazard", "sediment", "landuse_asm", "environmental", "socioeconomic"],
-        )
-        self.assertEqual(
-            scenario.PIM_COMPONENTS["sediment"],
-            {"soil_k_factor": 0.35, "ls_factor": 0.35, "c_factor": 0.30},
-        )
-        self.assertNotIn("soil_erosion_factors", scenario.COMPONENT_PATHS)
-        self.assertEqual(scenario.SCENARIO_ID, "mentor_zimbabwe_direct_pim")
-        self.assertAlmostEqual(sum(scenario.ZIMBABWE_MENTOR_MAIN_WEIGHTS.values()), 1.0)
-
-    def test_sediment_requires_common_k_ls_c_support(self):
-        scenario = load_named_module(
-            ROOT / "bin/scenarios/run_zimbabwe_rainfall_exposure.py",
-            "run_zimbabwe_rainfall_exposure_for_nodata_test",
-        )
-        components = {
-            "soil_k_factor": np.array([[0.2, np.nan, 0.2]], dtype="float32"),
-            "ls_factor": np.array([[0.4, 0.4, np.nan]], dtype="float32"),
-            "c_factor": np.array([[0.6, 0.6, 0.6]], dtype="float32"),
-        }
-
-        sediment = scenario.combine_weighted_layers(
-            components,
-            scenario.PIM_COMPONENTS["sediment"],
-        )
-
-        self.assertAlmostEqual(float(sediment[0, 0]), 0.39, places=6)
-        self.assertTrue(np.isnan(sediment[0, 1]))
-        self.assertTrue(np.isnan(sediment[0, 2]))
-
-    def test_current_scenario_outputs_are_declared_and_hash_bound(self):
-        scenario = load_named_module(
-            ROOT / "bin/scenarios/run_zimbabwe_rainfall_exposure.py",
-            "run_zimbabwe_rainfall_exposure_for_manifest_test",
-        )
-
-        # handoff.md was removed on purpose in the 2026-10-10 Markdown cleanup.
-        expected = [path for path in scenario.OUTPUTS if path.name != "handoff.md"]
-        for path in expected:
-            self.assertTrue(path.exists(), path)
-        with scenario.RUN_MANIFEST.open(newline="", encoding="utf-8") as handle:
-            rows = list(csv.DictReader(handle))
-        manifest_paths = {row["path"] for row in rows}
-        for path in expected:
-            if path != scenario.RUN_MANIFEST:
-                self.assertIn(scenario.rel(path), manifest_paths)
-        self.assertIn(scenario.rel(Path(scenario.__file__)), manifest_paths)
+    def test_map_weights_match_the_rescore_config(self):
+        import yaml
+        config = yaml.safe_load((ROOT / "configs/zimbabwe.yaml").read_text(encoding="utf-8"))
+        self.assertEqual(load_module().WEIGHTS, config["weights"]["main"])
 
     def test_reporting_scope_uses_only_direct_weights_and_fixed_classes(self):
         module = load_module()

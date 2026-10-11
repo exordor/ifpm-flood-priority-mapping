@@ -26,7 +26,7 @@ catchment or event footprint. Outputs: `outputs/secocha_pim_chain/`.
 |---|---|---|
 | Five-criterion PIM (`supervisor_full_spec_v07_secocha`) | `python -m ifpm run secocha` | 30 m grid, Supervisor weights, no NoData filling. 15.65% of valid cells High (0.6–0.8), none Very High. Mining is a separate overlay, not in the score. |
 | Chain checks | `python -m ifpm run secocha --step validate` | Writes `quality_assurance/chain_validation.json`: grids match, criteria within 0–1, PIM valid coverage 97.20%. |
-| 2023 event comparison | `bin/analysis/digitize_secocha_a7367_map7_event.py` | Two 5 February classes digitized from Map 7 (0.211 km², in `outputs/secocha_2023_validation/observed_hazard/`). PIM covers 66.2% of these cells; 19.1% of covered cells are High versus 15.6% study-wide. The digitized polygons have not been independently reviewed. |
+| 2023 event comparison | `tools/digitize_secocha_a7367_map7_event.py` | Two 5 February classes digitized from Map 7 (0.211 km², in `outputs/secocha_2023_validation/observed_hazard/`). PIM covers 66.2% of these cells; 19.1% of covered cells are High versus 15.6% study-wide. The digitized polygons have not been independently reviewed. |
 
 ## Goslar, Germany
 

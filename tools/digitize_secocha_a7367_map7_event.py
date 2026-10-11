@@ -25,7 +25,7 @@ from scipy.ndimage import binary_closing, binary_fill_holes, label
 from shapely.geometry import shape
 from shapely.ops import unary_union
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[1]
 PDF = ROOT / "data/validation/secocha_2023_validation/official_reports/ingemmet_a7367_secocha_hazard_assessment.pdf"
 TMP = ROOT / "tmp/pdfs/secocha_a7367_map7"
 OUT = ROOT / "outputs/secocha_2023_validation/observed_hazard"

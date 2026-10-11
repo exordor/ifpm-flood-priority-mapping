@@ -1,14 +1,9 @@
 # Workspace pyproject.toml for the IFPM root context repository.
 #
-# This declares the dependencies of the bin/ exploration scripts (the local
-# TOOLING layer), so the .venv can be reproduced with `uv sync` or
-# `uv pip install -e .`. It is intentionally minimal: it does NOT define a
-# buildable package (there is no src/ at the root) — it is purely a dependency
-# manifest and tool config holder.
-#
-# The independent deliverable repository ifpm-flood-pipeline/ has its OWN
-# pyproject.toml and is not affected by this file. The two are deliberately
-# separate (see AGENTS.md "Public-Safe Gate").
+# This declares the dependencies of the ifpm/ package and the bin/visualize
+# figure scripts, so the .venv can be reproduced with `uv sync`. It is a
+# dependency manifest and tool config holder; ifpm/ is run in place with
+# `python -m ifpm` from the workspace root.
 
 [project]
 name = "ifpm-workspace"

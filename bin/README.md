@@ -1,90 +1,19 @@
-# bin/ — IFPM Pipeline Scripts
+# bin/visualize: report-figure scripts
 
-This directory holds the local exploration and processing scripts for the IFPM
-flood-risk modelling workspace. Scripts are organised into a **7-stage pipeline**
-and orchestrated by `pipeline.py`.
+The processing chain is the config-driven package `ifpm/` (`python -m ifpm`, settings in
+`configs/`). This folder keeps only the scripts that draw report figures from existing
+outputs:
 
-Scripts here work on real local data under `data/` and `outputs/`.
+| Script | Figure |
+|---|---|
+| `plot_goslar_2024_location_map.py`, `plot_secocha_location_map.py` | Study-area location maps |
+| `plot_goslar_pim_overview.py`, `plot_secocha_pim_overview.py` | Priority and five-criteria overview panels |
+| `plot_secocha_standardization_detail.py` | Secocha standardization detail figure and xlsx table (needs `openpyxl`) |
+| `export_peru_former_pim_criteria_maps.py`, `export_peru_former_raw_input_factor_maps.py`, `export_paper_style_single_maps.py` | Former Peru area report maps (shared map helpers) |
+| `export_zimbabwe_reporting_maps.py`, `export_zimbabwe_input_evidence_maps.py`, `export_zimbabwe_mining_population_overlay.py` | Zimbabwe report maps |
 
-## Current entry points (September 2026 state)
+Run from the workspace root, e.g. `.venv/bin/python bin/visualize/plot_secocha_pim_overview.py`.
+Most of them write into `outputs/` (often `outputs/slide_ready_figures/`).
 
-Secocha and Goslar are run by the config-driven package `ifpm/` (settings in
-`configs/`), not by scripts in this folder:
-
-```bash
-.venv/bin/python -m ifpm run secocha
-.venv/bin/python -m ifpm run goslar --extent multiriver
-.venv/bin/python -m ifpm verify goslar
-```
-
-The `pipeline.yaml` default chain still targets the frozen former Peru area
-(`outputs/peru_former_pim_chain/`) and must not be used for new runs.
-
-Other Goslar/Abzucht commands are listed per experiment in
-`context/docs/research-map/EXPERIMENTS.md`.
-
-## Regression check
-
-`tools/verify_baseline.py snapshot > baseline.json` records the key outputs of each area;
-`tools/verify_baseline.py compare baseline.json <new_root>` checks a rerun written to `<new_root>`.
-
-## Legacy pipeline
-
-`bin/pipeline.py` only drives the frozen former-Peru chain; do not use it for new runs.
-
-## Weights
-
-Supervisor complete weight specification: FH/SE/LU/ES/SV =
-0.34 / 0.25 / 0.17 / 0.10 / 0.14. The weights used in each run are recorded in
-its `run_manifest.json`.
-
-## The 7 pipeline stages
-
-Scripts are classified by filename prefix. Each stage consumes the previous
-stage's outputs.
-
-| Stage | Prefixes | What it does |
-|---|---|---|
-| **acquire** | `download_` `plan_` `inventory_` `intake_` `check_data` `discover_` `extract_` | Download, plan, and inventory raw data |
-| **factors** | `preprocess_` `derive_` | Derive terrain/hydrology/USLE factors from raw data |
-| **criteria** | `build_` | Assemble MCDA scoreable criteria (0–1 standardised) |
-| **scenarios** | `run_` | Weighted overlay + sensitivity/stability analysis |
-| **visualize** | `plot_` | Figures |
-| **package** | `prepare_` `standardize_` `export_` `diagnose_` `check_zimbabwe_raster_grid` | Boundary export, evidence packaging, grid checks |
-| **investigate** | `explore_` `compute_` `compare_` `verify_` `summarize_` | One-off diagnostics, comparisons, and summaries |
-
-## Shared helpers (`_lib/`)
-
-`bin/_lib/ifpm_tools.py` provides common functions that were previously
-duplicated across dozens of scripts:
-
-- `load_boundary(gpkg, layer, crs)` — load a single-feature boundary geometry
-- `write_raster(path, data, profile)` — unified float32/deflate/tiled GeoTIFF writer
-- `raster_stats(data, mask)` — summary statistics (two modes: with/without mask)
-- `standardize(data, nodata, invert, p_low, p_high)` — percentile-clip min-max to [0,1]
-- `run_grid_gate(reference, rasters, output)` — invoke the V1 grid-compatibility check
-- `ROOT`, `NODATA` — canonical constants
-
-`bin/_lib/standardization.py` holds the canonical numeric standardizers used by the
-remaining Peru and Zimbabwe scripts.
-
-## Declaring dependencies for the DAG
-
-A script participates in the DAG once it declares module-level `INPUTS` and
-`OUTPUTS` lists:
-
-```python
-from pathlib import Path
-ROOT = Path(__file__).resolve().parents[1]
-
-INPUTS = [
-    ROOT / "outputs" / "zimbabwe_terrain_hydrology_factors" / "terrain_preprocessing" / "zimbabwe_dem_utm35s_30m.tif",
-]
-OUTPUTS = [
-    ROOT / "outputs" / "zimbabwe_terrain_hydrology_factors" / "terrain_preprocessing" / "v1_slope_30m.tif",
-]
-```
-
-The orchestrator parses these statically (no execution needed) to build the DAG,
-so `pipeline.py run --target X` runs X and its full transitive upstream in the
-correct order. Until a script declares I/O it is treated as a standalone node.
+The processing, acquisition and packaging scripts that used to live here were replaced by
+`ifpm` on 2026-10-12; recover one with `git show 206214e:bin/<folder>/<script>.py`.

@@ -51,7 +51,7 @@ Secocha case; not a PIM input and not used to set weights.
 
 ## Map 7 event digitization (2026-08-09)
 
-- Command: `.venv/bin/python bin/analysis/digitize_secocha_a7367_map7_event.py`
+- Command: `.venv/bin/python tools/digitize_secocha_a7367_map7_event.py`
 - Source: INGEMMET A7367, Map 7, PDF page 75, 1:25,000, WGS 84 / UTM zone 18S grid.
 - Classes digitized: `Huaico del 5 de febrero` and `Flujo de lodo del 5 de febrero`. Rockfall,
   debris avalanche, generic debris flow and gully erosion are excluded.

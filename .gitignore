@@ -14,7 +14,6 @@ __pycache__/
 
 # Independent deliverable code repository.
 # The code repo manages itself with its own .git.
-/ifpm-flood-pipeline/
 
 # Temporary working files
 tmp/
