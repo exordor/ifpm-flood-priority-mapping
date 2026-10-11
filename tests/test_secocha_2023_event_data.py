@@ -24,7 +24,7 @@ class Secocha2023EventDataTest(unittest.TestCase):
             ),
         ]:
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-            self.assertEqual(manifest["boundary_id"], "peru_secocha_a7367_reference_extent_v1")
+            self.assertEqual(manifest["boundary_id"], "secocha_reference_extent")
             self.assertEqual(manifest["event_date"], "2023-02-05")
             self.assertEqual(manifest["claim_level"], "validation_candidate")
             self.assertFalse(manifest["enters_pim_score"])
@@ -52,7 +52,7 @@ class Secocha2023EventDataTest(unittest.TestCase):
     def test_sentinel_catalog_has_reproducible_selected_pair_and_quicklooks(self):
         manifest_path = ROOT / "outputs/secocha_2023_validation/satellite_before_after/sentinel_catalog_manifest.json"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        self.assertEqual(manifest["boundary_id"], "peru_secocha_a7367_reference_extent_v1")
+        self.assertEqual(manifest["boundary_id"], "secocha_reference_extent")
         self.assertEqual(manifest["claim_level"], "validation_candidate")
         self.assertFalse(manifest["pixel_asset_downloaded"])
         self.assertEqual(manifest["event_time_utc"], "2023-02-05 19:00-19:17Z")
@@ -122,7 +122,7 @@ class Secocha2023EventDataTest(unittest.TestCase):
             with (base / manifest_name).open(encoding="utf-8") as handle:
                 manifest = json.load(handle)
             self.assertEqual(manifest["event_date"], "2023-02-05")
-            self.assertEqual(manifest["boundary_id"], "peru_secocha_a7367_reference_extent_v1")
+            self.assertEqual(manifest["boundary_id"], "secocha_reference_extent")
             self.assertEqual(manifest["claim_level"], "validation_candidate")
             self.assertFalse(manifest["enters_pim_score"])
             self.assertTrue(manifest["size_checks_passed"])
@@ -139,7 +139,7 @@ class Secocha2023EventDataTest(unittest.TestCase):
         active = json.loads(active_path.read_text(encoding="utf-8"))
         legacy = json.loads(legacy_path.read_text(encoding="utf-8"))
         self.assertEqual(active["status"], "active_scope_check")
-        self.assertEqual(active["current_boundary"]["boundary_id"], "peru_secocha_a7367_reference_extent_v1")
+        self.assertEqual(active["current_boundary"]["boundary_id"], "secocha_reference_extent")
         self.assertTrue(active["current_boundary"]["contains_secocha_anchor"])
         self.assertEqual(legacy["status"], "superseded_legacy_check")
         self.assertEqual(legacy["superseded_by"], "outputs/secocha_2023_validation/spatial_scope_check_active.json")
@@ -155,7 +155,7 @@ class Secocha2023EventDataTest(unittest.TestCase):
         self.assertIn("cum_1d_2023-02-05", windows)
         self.assertIn("cum_7d_2023-01-30_2023-02-05", windows)
         self.assertTrue(csv_path.exists())
-        self.assertEqual(comparison["boundary_id"], "peru_secocha_a7367_reference_extent_v1")
+        self.assertEqual(comparison["boundary_id"], "secocha_reference_extent")
         self.assertEqual(comparison["event_date"], "2023-02-05")
         self.assertEqual(comparison["local_lineage"]["sat"]["stack"]["sha256"], hashlib.sha256((ROOT / comparison["local_lineage"]["sat"]["stack"]["path"]).read_bytes()).hexdigest())
         self.assertEqual(comparison["local_lineage"]["rnl"]["accumulation"]["sha256"], hashlib.sha256((ROOT / comparison["local_lineage"]["rnl"]["accumulation"]["path"]).read_bytes()).hexdigest())

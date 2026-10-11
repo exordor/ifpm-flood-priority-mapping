@@ -16,7 +16,7 @@ from matplotlib.colors import BoundaryNorm, ListedColormap
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT_DIR = ROOT / "outputs/srtm_1arcsec_goslar/priority_scenarios"
+OUT_DIR = ROOT / "outputs/goslar_pim_chain/priority_scenarios"
 PRIORITY = OUT_DIR / "scenarios/priority_goslar_direct_pim.tif"
 CRITERIA = {
     "flood_hazard": "Flood-conditioning indicator (FH)",
@@ -28,7 +28,7 @@ CRITERIA = {
 CRITERIA_DIR = OUT_DIR / "pim_criteria"
 
 # Peru-compatible discrete five-class ColorBrewer palettes (same as
-# bin/visualize/export_peru_pim_criteria_maps.py and
+# bin/visualize/export_peru_former_pim_criteria_maps.py and
 # bin/visualize/export_paper_style_single_maps.py).
 PRIORITY_COLORS = ["#ffffcc", "#ffeda0", "#feb24c", "#f03b20", "#bd0026"]
 CRITERIA_COLORS = {

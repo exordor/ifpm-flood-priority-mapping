@@ -8,7 +8,7 @@ import numpy as np
 import geopandas as gpd
 from shapely.geometry import Point, box
 from compare_goslar_multiriver import ROOT,BASE,read_grid,raster_mask,clean_ring,write_csv,sha
-OUT=BASE.parent/'input_semantics_followup_v1'
+OUT=BASE.parent/'input_semantics_followup'
 ALIASES={'land_cover_pressure':'Land-cover runoff tendency proxy','bare_soil_vegetation_loss':'2018–2024 tree-cover decline share','built_agriculture_road_expansion':'Current built-up or cropland and road-proximity proxy','road_access_proximity':'Road proximity (20 km decay)','settlement_population':'Published census population component','critical_infrastructure':'Proximity to filtered OSM facilities (2 km decay)','water_wetland_context':'Water or wetland proximity (10 km decay)','protected_ecological_context':'Natura2000 protected-area proximity (10 km decay)','soil_k_factor':'Relative soil erodibility','ls_factor':'Hillslope LS factor (channels excluded)','c_factor':'Land-cover-assigned cover-management factor','rainfall_climatology':'Rainfall climatology indicator','twi_wetness':'Topographic wetness index','drainage_proximity':'Drainage-network proximity'}
 def main():
  OUT.mkdir(parents=True,exist_ok=True);inputs={}
@@ -18,13 +18,13 @@ def main():
   documentation=z.read('Datensatzbeschreibung_Bevoelkerungszahl_Gitterzellen.xlsx')
  assert hashlib.sha256(documentation).hexdigest()=='7bb3470e7edda1491e1095a4fecae622fd453abe86a937c8a4e2d14742adcc80'
  (OUT/'population_source_evidence.json').write_text(json.dumps(dict(source_url='https://www.zensus2022.de/static/Zensus_Veroeffentlichung/Zensus2022_Bevoelkerungszahl.zip',version='2 / 2024-09-30',metadata_sha256=hashlib.sha256(documentation).hexdigest(),evidence_cells=['Erläuterungen!B14','Erläuterungen!B16','Erläuterung zu CSV pro 100 m!B22'],interpretation='Published omission can mean true zero or CKM-induced zero; do not identify underlying true population per cell'),indent=2)+'\n')
- prior=json.loads(pin(BASE.parent/'component_semantics_v1/manifest.json').read_text())
+ prior=json.loads(pin(BASE.parent/'component_semantics/manifest.json').read_text())
  for rel,h in prior['inputs'].items():assert sha(pin(ROOT/rel))==h,rel
  m=json.loads((BASE/'chain/priority_scenarios/run_manifest.json').read_text());pim,ref=read_grid(ROOT/m['priority_raster_lineage']['path']);valid=np.isfinite(pim)
- components={};special={'water_wetland_context':'environmental_sensitivity_v0_1/water_wetland_context_0_1.tif','protected_ecological_context':'environmental_sensitivity_v0_1/protected_area_context_0_1.tif','settlement_population':'exposure_indicators/population_exposure_0_1.tif','critical_infrastructure':'exposure_indicators/built_infrastructure_exposure_0_1.tif'}
+ components={};special={'water_wetland_context':'environmental_sensitivity/water_wetland_context_0_1.tif','protected_ecological_context':'environmental_sensitivity/protected_area_context_0_1.tif','settlement_population':'exposure_indicators/population_exposure_0_1.tif','critical_infrastructure':'exposure_indicators/built_infrastructure_exposure_0_1.tif'}
  for ws in m['component_weights'].values():
   for k in ws:components[k]=read_grid(pin(BASE/'chain'/special.get(k,f'criteria_stack/criteria/{k}_0_1.tif')),ref)[0]
- src=pin(BASE.parent/'multiriver_comparison_v1/comparison_boundaries.gpkg');ps=gpd.read_file(src,layer='products');ex=gpd.read_file(src,layer='ring_exclusion').geometry.union_all();zones={'whole_model':valid}
+ src=pin(BASE.parent/'multiriver_comparison/comparison_boundaries.gpkg');ps=gpd.read_file(src,layer='products');ex=gpd.read_file(src,layer='ring_exclusion').geometry.union_all();zones={'whole_model':valid}
  geozones={}
  for _,p in ps[ps.family=='regulatory'].iterrows():
   a=raster_mask(p.geometry,ref)&valid

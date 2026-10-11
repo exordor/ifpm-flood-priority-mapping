@@ -19,8 +19,8 @@ from shapely.geometry import box
 from compare_abzucht_hq100 import COLORS, LABELS, digest, read_grid
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = ROOT / 'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1'
-OUT = BASE.parent / 'weight_sensitivity_v1'
+BASE = ROOT / 'outputs/goslar_abzucht_diagnostics/fixed_scale'
+OUT = BASE.parent / 'weight_sensitivity'
 COMMAND = '.venv/bin/python bin/analysis/tune_abzucht_weights.py'
 COARSE = [.34, .45, .55, .65, .75, .80]
 CAP = .80  # Candidate policy: retain at least 20% for the other criteria.
@@ -105,7 +105,7 @@ def main():
     coverage = {name: dict(total_cells=int(z.sum()), scored_cells=int((z & support).sum()),
                            nodata_cells=int((z & ~support).sum()))
                 for name, z in [('HQ100', raw_inside), ('full_1km_ring', raw_ring), ('rectangle', mask(box(*bounds)))]}
-    support_source = json.loads(remember(BASE.parent/'explanation_v1/manifest.json').read_text())
+    support_source = json.loads(remember(BASE.parent/'explanation/manifest.json').read_text())
     for name, sha in support_source['inputs'].items():
         if digest(ROOT/name) != sha:
             raise ValueError('Availability evidence changed: '+name)
@@ -156,8 +156,8 @@ def main():
                                      nodata=255 if categorical else -9999, compress='deflate')
         with rasterio.open(OUT/name, 'w', **pr) as d:
             d.write(np.where(support, array, pr['nodata']).astype(pr['dtype']), 1)
-            d.update_tags(claim_level='sensitivity_scenario', boundary_id='goslar_abzucht_display_rectangle_v1',
-                          experiment_id='weight_sensitivity_v1', reference_role='HQ100-guided tuning, not independent validation')
+            d.update_tags(claim_level='sensitivity_scenario', boundary_id='goslar_abzucht_display_rectangle',
+                          experiment_id='weight_sensitivity', reference_role='HQ100-guided tuning, not independent validation')
     for f, score in scores.items():
         raster(f'priority_fh_{round(f*100):03d}.tif', score)
     raster('change_from_baseline.tif', scores[chosen]-scores[.34])
@@ -248,8 +248,8 @@ Reproduce: `{COMMAND}`. Input hashes, grid, baseline reconstruction, coverage an
                 raise ValueError('Persisted classification mismatch')
     for name,sha in inputs.items():
         if digest(ROOT/name)!=sha:raise ValueError('Input changed during run')
-    manifest=dict(boundary_id='goslar_abzucht_display_rectangle_v1',experiment_id='weight_sensitivity_v1',
-      claim_level='sensitivity_scenario',command=COMMAND,baseline='frozen_scale_v1',
+    manifest=dict(boundary_id='goslar_abzucht_display_rectangle',experiment_id='weight_sensitivity',
+      claim_level='sensitivity_scenario',command=COMMAND,baseline='fixed_scale',
       selection=dict(objective='maximize inside-minus-ring high-share at fixed 0.6; ties prefer smaller weight',
                      cap=CAP,cap_reason='candidate policy: retain >=20% non-flood weight',coarse=COARSE,fine=fine_values,
                      selected=chosen,at_search_boundary=chosen==CAP,independent_validation=False),

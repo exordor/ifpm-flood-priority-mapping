@@ -15,10 +15,10 @@ import certifi
 import geopandas as gpd
 
 ROOT = Path(__file__).resolve().parents[2]
-BOUNDARY = ROOT / "outputs/peru_secocha_boundary/peru_secocha_active_boundary.gpkg"
+BOUNDARY = ROOT / "outputs/secocha_boundary/secocha_boundary.gpkg"
 OUT_DIR = ROOT / "data/raw/ingemmet_a7367_cartografia_peligros_secocha"
 OUT_PATH = OUT_DIR / "ingemmet_a7367_cartografia_peligros_layer6_secocha.geojson"
-MANIFEST = ROOT / "outputs/peru_secocha_a7367_reference_extent_v1/source_acquisition/ingemmet_original_gis_manifest.json"
+MANIFEST = ROOT / "outputs/secocha_pim_chain/source_acquisition/ingemmet_original_gis_manifest.json"
 SERVICE = "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PELIGROS_GEOLOGICOS/MapServer/6"
 LAYER7_SERVICE = "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PELIGROS_GEOLOGICOS/MapServer/7"
 QUERY_WHERE = "CODIGO = 'A7367' AND DISTRITO = 'Mariano Nicolás Valcárcel' AND PROVINCIA = 'Camaná' AND FECHA_EVAL = 'febrero 2023'"
@@ -93,7 +93,7 @@ def main() -> None:
     gdf = gpd.read_file(OUT_PATH)
     manifest = {
         "dataset_id": "ingemmet_a7367_cartografia_peligros_secocha",
-        "boundary_id": "peru_secocha_a7367_reference_extent_v1",
+        "boundary_id": "secocha_reference_extent",
         "boundary_path": str(BOUNDARY.relative_to(ROOT)),
         "boundary_sha256": sha256(BOUNDARY),
         "access_date": str(date.today()), "source_service": SERVICE,

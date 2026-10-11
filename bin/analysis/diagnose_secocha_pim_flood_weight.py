@@ -15,11 +15,11 @@ from rasterio.features import rasterize
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = ROOT / "outputs/peru_secocha_a7367_reference_extent_v1/priority_scenarios"
+BASE = ROOT / "outputs/secocha_pim_chain/priority_scenarios"
 MANIFEST = BASE / "run_manifest.json"
 EVENT = ROOT / "outputs/secocha_2023_validation/observed_hazard/secocha_2023_map7_event_digitization.gpkg"
 EVENT_MANIFEST = EVENT.parent / "digitization_manifest.json"
-OUT = ROOT / "outputs/peru_secocha_a7367_reference_extent_v1/pim_flood_weight_diagnostic"
+OUT = ROOT / "outputs/secocha_pim_chain/pim_flood_weight_diagnostic"
 NAMES = ("flood_hazard", "sediment", "landuse_asm", "environmental", "socioeconomic")
 THRESHOLD = 0.6
 
@@ -56,7 +56,7 @@ def stats(values: np.ndarray, mask: np.ndarray) -> dict:
 
 def main() -> None:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    if manifest["boundary_id"] != "peru_secocha_a7367_reference_extent_v1":
+    if manifest["boundary_id"] != "secocha_reference_extent":
         raise ValueError("Unexpected boundary")
     if manifest.get("claim_level") != "provisional":
         raise ValueError("Unexpected claim level")

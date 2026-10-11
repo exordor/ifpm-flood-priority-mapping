@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 ROOT = Path(__file__).resolve().parents[2]
 ORIGINAL = ROOT / "data/raw/ingemmet_a7367_cartografia_peligros_secocha/ingemmet_a7367_cartografia_peligros_layer6_secocha.geojson"
 EVENT_GPKG = ROOT / "outputs/secocha_2023_validation/observed_hazard/secocha_2023_map7_event_digitization.gpkg"
-BOUNDARY = ROOT / "outputs/peru_secocha_boundary/peru_secocha_active_boundary.gpkg"
+BOUNDARY = ROOT / "outputs/secocha_boundary/secocha_boundary.gpkg"
 OUT = ROOT / "outputs/secocha_2023_validation/observed_hazard"
 REPORT = OUT / "ingemmet_original_gis_comparison.json"
 FIGURE = OUT / "ingemmet_original_vs_pdf_candidate.png"
@@ -43,7 +43,7 @@ def main() -> None:
         raise RuntimeError("original A7367 GIS failed feature-count, geometry-validity, or positive-area checks")
     if event.is_empty or not event.is_valid or event.area <= 0:
         raise RuntimeError("PDF event candidate is empty or invalid")
-    source_manifest_path = ROOT / "outputs/peru_secocha_a7367_reference_extent_v1/source_acquisition/ingemmet_original_gis_manifest.json"
+    source_manifest_path = ROOT / "outputs/secocha_pim_chain/source_acquisition/ingemmet_original_gis_manifest.json"
     source_manifest = json.loads(source_manifest_path.read_text(encoding="utf-8"))
     if source_manifest["sha256"] != sha256(ORIGINAL):
         raise RuntimeError("original GIS checksum differs from acquisition manifest")

@@ -17,9 +17,9 @@ from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / 'outputs/goslar_wrrl_water_bodies_reference_v1/abzucht_hq100_overlay_v1'
-MANIFEST = ROOT / 'outputs/srtm_1arcsec_goslar/priority_scenarios/run_manifest.json'
-VECTOR = ROOT / 'data/validation/goslar_2017_event_map_candidates_v1/nlwkn_current_regulatory_flood_zones_goslar.geojson'
+OUT = ROOT / 'outputs/goslar_wrrl_basin/abzucht_hq100_overlay'
+MANIFEST = ROOT / 'outputs/goslar_pim_chain/priority_scenarios/run_manifest.json'
+VECTOR = ROOT / 'data/validation/goslar_2017_regulatory_flood_context/nlwkn_current_regulatory_flood_zones_goslar.geojson'
 LABELS = {'flood_hazard': 'Flood indicators', 'sediment': 'Erosion factors', 'landuse_asm': 'Land cover', 'environmental': 'Water / ecology', 'socioeconomic': 'Access / exposure'}
 COMMAND = '.venv/bin/python bin/analysis/compare_abzucht_hq100.py'
 COLORS = ['#ffffcc', '#ffeda0', '#feb24c', '#f03b20', '#bd0026']
@@ -87,7 +87,7 @@ def main():
         raise ValueError('Contributions do not reconstruct PIM')
     OUT.mkdir(parents=True, exist_ok=True)
     report = {
-        'boundary_id': m['focus_area_id'], 'experiment_id': 'abzucht_hq100_overlay_v1',
+        'boundary_id': m['focus_area_id'], 'experiment_id': 'abzucht_hq100_overlay',
         'claim_level': 'diagnostic_only', 'evidence': '2026 HQ100 modelled regulatory scenario, local August snapshot',
         'enters_pim_score': False, 'weights_changed': False, 'event_accuracy': False,
         'command': COMMAND,

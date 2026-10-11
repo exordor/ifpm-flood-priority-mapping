@@ -18,22 +18,22 @@ from rasterio.transform import from_origin
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'bin'))
 sys.path.insert(0,str(Path(__file__).parent))
-from abzucht_frozen_normalization import fit, apply
+from abzucht_fixed_scale_normalization import fit, apply
 
 def load(name,path):
     spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
 
-OUT=ROOT/'outputs/goslar_abzucht_expanded_reference_v1/frozen_scale_v1'
+OUT=ROOT/'outputs/goslar_abzucht_hq100_expanded_extent/fixed_scale'
 
 def main():
     global OUT
     parser=argparse.ArgumentParser()
     parser.add_argument('--fill-display-rectangle',action='store_true',help='Include the HQ100 plot rectangle (polygon bounds plus 500 m on each side)')
     args=parser.parse_args()
-    boundary_id='goslar_abzucht_display_rectangle_v1' if args.fill_display_rectangle else 'goslar_abzucht_expanded_reference_v1'
-    OUT=ROOT/'outputs'/boundary_id/'frozen_scale_v1'
+    boundary_id='goslar_abzucht_display_rectangle' if args.fill_display_rectangle else 'goslar_abzucht_hq100_expanded_extent'
+    OUT=ROOT/'outputs'/('goslar_abzucht_diagnostics' if args.fill_display_rectangle else 'goslar_abzucht_hq100_expanded_extent')/'fixed_scale'
     command='.venv/bin/python bin/analysis/run_abzucht_expanded.py'+(' --fill-display-rectangle' if args.fill_display_rectangle else '')
-    c=load('goslar_expanded_source',ROOT/'bin/factors/run_goslar_peru_style_chain.py')
+    c=load('goslar_expanded_source',ROOT/'bin/factors/run_goslar_pim_chain.py')
     original_paths={k:v for k,v in vars(c).items() if isinstance(v,Path)}
     old_manifest=json.loads((c.SCENARIO_DIR/'run_manifest.json').read_text())
     baseline_inputs=[ROOT/x['path'] for x in old_manifest['criterion_raster_lineage'].values()]+[ROOT/old_manifest['priority_raster_lineage']['path'],c.BOUNDARY_GPKG]
@@ -66,7 +66,7 @@ def main():
     OUT.mkdir(parents=True,exist_ok=True)
     (OUT/'frozen_normalization.json').write_text(json.dumps(anchors,indent=2)+'\n')
     old_geom=c.load_boundary_geometry(c.METRIC_CRS)
-    v=gpd.read_file(ROOT/'data/validation/goslar_2017_event_map_candidates_v1/nlwkn_current_regulatory_flood_zones_goslar.geojson').to_crs(c.METRIC_CRS)
+    v=gpd.read_file(ROOT/'data/validation/goslar_2017_regulatory_flood_context/nlwkn_current_regulatory_flood_zones_goslar.geojson').to_crs(c.METRIC_CRS)
     hq=v[v.uesg_id==917].geometry.union_all()
     geom=old_geom.union(hq.buffer(1000))
     xmin,ymin,xmax,ymax=hq.bounds
@@ -126,7 +126,7 @@ def main():
         index=0;print('Expanded run:',stage,flush=True);getattr(c,'stage_'+stage)()
     # Supplement legacy metadata with authoritative experimental contract.
     nm_path=c.SCENARIO_DIR/'run_manifest.json';nm=json.loads(nm_path.read_text())
-    nm.update(boundary_id=c.FOCUS_AREA_ID,experiment_id='frozen_scale_v1',claim_level='diagnostic_only',focus_area_name=('Original project plus HQ100 buffer and display rectangle' if args.fill_display_rectangle else 'Original project plus HQ100 buffer')+'; comparison extent, not a catchment')
+    nm.update(boundary_id=c.FOCUS_AREA_ID,experiment_id='fixed_scale',claim_level='diagnostic_only',focus_area_name=('Original project plus HQ100 buffer and display rectangle' if args.fill_display_rectangle else 'Original project plus HQ100 buffer')+'; comparison extent, not a catchment')
     nm['normalization']['method']='Baseline 2/98 anchors frozen; see frozen_normalization.json'
     nm['normalization']['frozen_parameters']=str((OUT/'frozen_normalization.json').relative_to(ROOT))
     nm['input_lineage'].pop('clms_bare_soil',None)
@@ -135,7 +135,7 @@ def main():
     with rasterio.open(ROOT/old_manifest['priority_raster_lineage']['path']) as ds:
         old=np.full(new.shape,np.nan,dtype='float32');reproject(ds.read(1),old,src_transform=ds.transform,src_crs=ds.crs,src_nodata=ds.nodata,dst_transform=ref['transform'],dst_crs=ref['crs'],dst_nodata=np.nan,resampling=Resampling.nearest)
     both=np.isfinite(old)&np.isfinite(new);hmask=geometry_mask([hq],out_shape=new.shape,transform=ref['transform'],invert=True)
-    report={'boundary_id':c.FOCUS_AREA_ID,'experiment_id':'frozen_scale_v1','claim_level':'diagnostic_only','command':command,'old_area_km2':old_geom.area/1e6,'expanded_area_km2':geom.area/1e6,'normalization':'baseline anchors frozen','weights_changed':False,'old_valid_cells':int(np.isfinite(old).sum()),'new_valid_cells':int(np.isfinite(new).sum()),'hq100_cells':int(hmask.sum()),'hq100_valid_old':int((hmask&np.isfinite(old)).sum()),'hq100_valid_new':int((hmask&np.isfinite(new)).sum()),'common_mean_abs_change':float(np.abs(new[both]-old[both]).mean()),'common_max_abs_change':float(np.abs(new[both]-old[both]).max()),'baseline_hashes':hashes,'limitations':['Expanded hydrology and proximity calculation can change old-area values despite frozen scales','Retains baseline within-criterion available-component averaging; inspect component coverage','Not hydrologic catchment or observed-event validation']}
+    report={'boundary_id':c.FOCUS_AREA_ID,'experiment_id':'fixed_scale','claim_level':'diagnostic_only','command':command,'old_area_km2':old_geom.area/1e6,'expanded_area_km2':geom.area/1e6,'normalization':'baseline anchors frozen','weights_changed':False,'old_valid_cells':int(np.isfinite(old).sum()),'new_valid_cells':int(np.isfinite(new).sum()),'hq100_cells':int(hmask.sum()),'hq100_valid_old':int((hmask&np.isfinite(old)).sum()),'hq100_valid_new':int((hmask&np.isfinite(new)).sum()),'common_mean_abs_change':float(np.abs(new[both]-old[both]).mean()),'common_max_abs_change':float(np.abs(new[both]-old[both]).max()),'baseline_hashes':hashes,'limitations':['Expanded hydrology and proximity calculation can change old-area values despite frozen scales','Retains baseline within-criterion available-component averaging; inspect component coverage','Not hydrologic catchment or observed-event validation']}
     for key,path in [('soil_k',c.K_SCORED),('tcd',c.CLMS_TCD_LOSS),('population',c.EXPOSURE_DIR/'population_exposure_0_1.tif')]:
         a=c.read_band(path,ref);report[key+'_valid_cells']=int((mask&np.isfinite(a)).sum())
     report['common_changed_cells_gt_1e_5']=int((both & (np.abs(new-old)>1e-5)).sum())
@@ -158,7 +158,7 @@ def main():
         arr=new[rows.min():rows.max()+1,cols.min():cols.max()+1]
         rect_ref=dict(ref,width=arr.shape[1],height=arr.shape[0],transform=rasterio.windows.transform(window,ref['transform']))
         write(OUT/'display_rectangle_priority.tif',arr,rect_ref)
-    source_files=[Path(__file__),ROOT/'bin/analysis/abzucht_frozen_normalization.py',ROOT/'bin/_lib/standardization.py',ROOT/'bin/factors/run_goslar_peru_style_chain.py',original_paths['WORLDCOVER_FILE']]
+    source_files=[Path(__file__),ROOT/'bin/analysis/abzucht_fixed_scale_normalization.py',ROOT/'bin/_lib/standardization.py',ROOT/'bin/factors/run_goslar_pim_chain.py',original_paths['WORLDCOVER_FILE']]
     source_files += list((c.REGNIE_RAW_DIR/'raw').glob('*.asc.gz'))
     source_files += [ROOT/f'data/raw/clms_hrl_tcd_goslar_official_basin/{yr}/goslar_official_basin_tcd_{yr}_10m_mosaic.tif' for yr in [2018,2024]]
     source_files += [OUT/'frozen_normalization.json']

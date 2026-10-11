@@ -26,9 +26,9 @@ from shapely.geometry import Point
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BOUNDARY_PATH = ROOT / "outputs/peru_secocha_boundary/peru_secocha_active_boundary.gpkg"
+BOUNDARY_PATH = ROOT / "outputs/secocha_boundary/secocha_boundary.gpkg"
 BOUNDARY_LAYER = "secocha_active_boundary"
-BOUNDARY_ID = "peru_secocha_a7367_reference_extent_v1"
+BOUNDARY_ID = "secocha_reference_extent"
 METRIC_CRS = "EPSG:32718"
 
 MINEDU_URL = (
@@ -469,7 +469,7 @@ def main() -> None:
 
     finished = datetime.now(timezone.utc)
     manifest = {
-        "dataset_id": "secocha_official_proxy_replacements_v1",
+        "dataset_id": "secocha_official_proxy_replacements",
         "boundary_id": BOUNDARY_ID,
         "boundary": artifact(BOUNDARY_PATH),
         "boundary_layer": BOUNDARY_LAYER,

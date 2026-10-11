@@ -85,7 +85,7 @@ def load_boundary(
 ) -> Any:
     """Load a single-feature boundary geometry from a GeoPackage.
 
-    Mirrors the `load_v1()` / `load_peru_hybas_l7_6070641200()` / `load_boundary()` helpers that were
+    Mirrors the `load_v1()` / `load_peru_former()` / `load_boundary()` helpers that were
     duplicated across ~16 scripts. Asserts exactly one feature (a boundary should
     be a single dissolved polygon) and returns its geometry.
 
@@ -257,9 +257,9 @@ def run_grid_gate(
     """Run the V1 raster grid-gate check via subprocess.
 
     Unifies the subprocess.run([sys.executable, GRID_GATE, ...]) pattern duplicated
-    across standardize_v1_terrain, plot_v1_terrain_mentor_package, derive_v1_hydrology,
-    derive_peru_pilot_hydrology, derive_v1_worldcover_cfactor,
-    derive_peru_pilot_worldcover_cfactor, and prepare_v1_full_methodology_evidence.
+    across standardize_zimbabwe_terrain, plot_zimbabwe_terrain_mentor_package, derive_zimbabwe_hydrology,
+    derive_peru_former_hydrology, derive_zimbabwe_worldcover_cfactor,
+    derive_peru_former_worldcover_cfactor, and prepare_zimbabwe_methodology_evidence.
 
     ``reference`` is optional (the gate can run on rasters alone). ``check=True``
     raises on non-zero exit (matching standardize/plot behaviour); use ``check=False``
@@ -270,7 +270,7 @@ def run_grid_gate(
     import subprocess
     import sys
 
-    grid_gate = ROOT / "bin" / "package" / "check_v1_raster_grid.py"
+    grid_gate = ROOT / "bin" / "package" / "check_zimbabwe_raster_grid.py"
     cmd = [sys.executable, str(grid_gate), "--output", str(output)]
     if reference is not None:
         cmd += ["--reference", str(reference)]

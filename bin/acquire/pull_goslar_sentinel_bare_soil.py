@@ -37,11 +37,11 @@ from rasterio.warp import reproject
 ROOT = Path(__file__).resolve().parents[2]
 BOUNDARY = ROOT / "outputs/goslar_focus_boundary/goslar_focus_boundary.gpkg"
 BOUNDARY_LAYER = "goslar_focus_boundary"
-REFERENCE = ROOT / "outputs/srtm_1arcsec_goslar/terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif"
-RAW_DIR = ROOT / "data/raw/sentinel2_l2a_goslar_bare_soil"
+REFERENCE = ROOT / "outputs/goslar_pim_chain/terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif"
+RAW_DIR = ROOT / "data/raw/sentinel2_l2a_goslar_bare_soil_rejected"
 SCENE_DIR = RAW_DIR / "scene_windows_c1_10m"
 CATALOG_PATH = RAW_DIR / "earth_search_catalog.json"
-OUT_DIR = ROOT / "outputs/goslar_sentinel_bare_soil_candidate"
+OUT_DIR = ROOT / "outputs/goslar_sentinel2_bare_soil_rejected"
 
 STAC_SEARCH = "https://earth-search.aws.element84.com/v1/search"
 COLLECTION = "sentinel-2-c1-l2a"
@@ -396,7 +396,7 @@ def main() -> int:
         write_float(OUT_DIR / filename, array, reference_profile)
 
     catalog = {
-        "dataset_id": "sentinel2_l2a_goslar_bare_soil_candidate",
+        "dataset_id": "sentinel2_l2a_goslar_bare_soil_rejected",
         "publisher": "ESA Copernicus Sentinel-2; public COG mirror/catalogue via Element 84 Earth Search",
         "catalog_url": STAC_SEARCH,
         "collection": COLLECTION,
@@ -418,7 +418,7 @@ def main() -> int:
     CATALOG_PATH.write_text(json.dumps(catalog, indent=2) + "\n", encoding="utf-8")
 
     diagnostics = {
-        "experiment_id": "goslar_sentinel_bare_soil_candidate_v0_1",
+        "experiment_id": "goslar_sentinel2_bare_soil_rejected",
         "claim_level": "diagnostic_only",
         "enters_pim_score": False,
         "method": {

@@ -14,14 +14,14 @@ from xml.etree import ElementTree
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "bin/package/build_goslar_qgis_project_package.py"
-PACKAGE = ROOT / "outputs/goslar_qgis_project_package"
+SCRIPT = ROOT / "bin/package/build_goslar_qgis_full_audit.py"
+PACKAGE = ROOT / "outputs/goslar_qgis_full_audit"
 PORTABLE = ROOT / "exports/qgis_packages/goslar/FullAudit"
 GENERATED_PACKAGE_AVAILABLE = (PACKAGE / "validation.json").exists() and PORTABLE.exists()
 
 
 def load_module():
-    spec = importlib.util.spec_from_file_location("build_goslar_qgis_project_package", SCRIPT)
+    spec = importlib.util.spec_from_file_location("build_goslar_qgis_full_audit", SCRIPT)
     if spec is None or spec.loader is None:
         raise AssertionError(f"cannot load {SCRIPT}")
     module = importlib.util.module_from_spec(spec)

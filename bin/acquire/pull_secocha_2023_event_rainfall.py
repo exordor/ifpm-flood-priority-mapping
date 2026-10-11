@@ -27,7 +27,7 @@ from shapely.geometry import mapping
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BOUNDARY = ROOT / "outputs/peru_secocha_boundary/peru_secocha_active_boundary.gpkg"
+BOUNDARY = ROOT / "outputs/secocha_boundary/secocha_boundary.gpkg"
 DATA_DIR = ROOT / "data/validation/secocha_2023_validation/rainfall/chirps_v3_daily_event_window"
 OUTPUT_DIR = ROOT / "outputs/secocha_2023_validation/rainfall"
 STACK_PATH = DATA_DIR / "chirps_v3_daily_2023-01-07_2023-02-10_native.tif"
@@ -36,7 +36,7 @@ MANIFEST_PATH = OUTPUT_DIR / "event_rainfall_manifest.json"
 SUMMARY_PATH = OUTPUT_DIR / "event_rainfall_summary.json"
 FIGURE_PATH = OUTPUT_DIR / "event_rainfall_accumulation.png"
 
-BOUNDARY_ID = "peru_secocha_a7367_reference_extent_v1"
+BOUNDARY_ID = "secocha_reference_extent"
 EVENT_DATE = date(2023, 2, 5)
 START_DATE = date(2023, 1, 7)  # 30-day antecedent window ending on event date
 END_DATE = date(2023, 2, 10)  # five post-event days for context

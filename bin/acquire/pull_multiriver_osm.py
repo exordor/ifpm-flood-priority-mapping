@@ -9,8 +9,8 @@ from pyproj import Transformer
 from shapely.geometry import LineString,Point,box,mapping
 from shapely.ops import unary_union
 ROOT=Path(__file__).resolve().parents[2]
-RAW=ROOT/'data/raw/goslar_multiriver_osm_v1'
-TMP=ROOT/'data/tmp/goslar_multiriver_osm_v1'
+RAW=ROOT/'data/raw/goslar_multiriver_osm'
+TMP=ROOT/'data/tmp/goslar_multiriver_osm'
 BOUNDS=(552411,5734748,618576,5795557)
 CLASSES={'school','hospital','fire_station','police','works','substation','station'}
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -46,7 +46,7 @@ def main():
     RAW.mkdir(parents=True,exist_ok=True);TMP.mkdir(parents=True,exist_ok=True)
     west,south,east,north=Transformer.from_crs(32632,4326,always_xy=True).transform_bounds(*BOUNDS,densify_pts=21)
     bbox=f'{south},{west},{north},{east}'
-    support=gpd.read_file(ROOT/'outputs/goslar_multiriver_full_extent_v1/frozen_scale_v1/expanded_boundary.gpkg').to_crs(32632).geometry.union_all().buffer(3050)
+    support=gpd.read_file(ROOT/'outputs/goslar_multiriver_full_extent/fixed_scale/expanded_boundary.gpkg').to_crs(32632).geometry.union_all().buffer(3050)
     support=gpd.GeoSeries([support],crs=32632).to_crs(4326).iloc[0]
     roads_query=f'[out:json][timeout:240];way["highway"]({bbox});out geom;'
     facilities_query=f'[out:json][timeout:240];('+''.join(f'nwr[{tag}]({bbox});' for tag in ['"amenity"="school"','"amenity"="hospital"','"amenity"="fire_station"','"amenity"="police"','"emergency"','"healthcare"','"man_made"="works"','"power"="substation"','"railway"="station"'])+');out center;'
@@ -81,7 +81,7 @@ def main():
             with ThreadPoolExecutor(max_workers=2) as pool:
                 for part,request in pool.map(tile,[(iy,ix) for iy in range(4) for ix in range(4)]):
                     parts.extend(part['elements']);requests.append(request)
-            payload={'elements':parts};metadata={'tile_requests':requests,'deduplication':'osm type and id','acquisition_complete':True,'required_support':'outputs/goslar_multiriver_full_extent_v1/frozen_scale_v1/expanded_boundary.gpkg buffered3050m'}
+            payload={'elements':parts};metadata={'tile_requests':requests,'deduplication':'osm type and id','acquisition_complete':True,'required_support':'outputs/goslar_multiriver_full_extent/fixed_scale/expanded_boundary.gpkg buffered3050m'}
         else:payload,metadata=fetch(kind,q)
         rows=[];seen=set()
         for el in payload['elements']:
@@ -106,7 +106,7 @@ def main():
         assert reread.geometry.is_valid.all() and not reread.geometry.is_empty.any()
         metadata.update(retained_count=len(frame),raw_count=len(payload['elements']),gpkg_sha256=sha(path),gpkg_bytes=path.stat().st_size)
         sources[kind]=metadata;print(kind,len(frame),flush=True)
-    manifest={'dataset_id':'goslar_multiriver_osm_v1','licence':'ODbL; OpenStreetMap contributors','source_bounds_epsg32632':BOUNDS,'query_bounds_epsg4326':[west,south,east,north],'source_buffer_m':3000,'coverage_policy':'Roads complete only over evaluation boundary buffered3050m, within finite query window; disjoint child windows explicitly skipped, never treated as empty source. Facilities complete over full query window. Full returned ways and representative facility centers retained.','facility_selection':'Original seven classes and amenity-or-railway-or-power-or-man_made precedence','roads_selection':'All highway ways','snapshot_note':'Live snapshot; original model used older snapshot. Temporal changes possible.','sources':sources}
+    manifest={'dataset_id':'goslar_multiriver_osm','licence':'ODbL; OpenStreetMap contributors','source_bounds_epsg32632':BOUNDS,'query_bounds_epsg4326':[west,south,east,north],'source_buffer_m':3000,'coverage_policy':'Roads complete only over evaluation boundary buffered3050m, within finite query window; disjoint child windows explicitly skipped, never treated as empty source. Facilities complete over full query window. Full returned ways and representative facility centers retained.','facility_selection':'Original seven classes and amenity-or-railway-or-power-or-man_made precedence','roads_selection':'All highway ways','snapshot_note':'Live snapshot; original model used older snapshot. Temporal changes possible.','sources':sources}
     rectangles=[]
     for parent in sources['roads']['tile_requests']:
         for record in parent.get('children',[parent]):

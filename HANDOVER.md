@@ -12,10 +12,10 @@ Current weights (Supervisor full specification): FH 0.34 / SE 0.25 / LU 0.17 / E
 
 | Study area | Status | Main outputs |
 |---|---|---|
-| Goslar, Germany (multi-river extension covering Abzucht and 8 regulatory flood zones, about 739 km²) | Most recent work (September), active | `outputs/goslar_multiriver_full_extent_v1/frozen_scale_v1/`, `outputs/goslar_abzucht_display_rectangle_v1/` |
-| Secocha, Peru (a 30 km² reference window from A7367 Map 7, not a catchment) | Active, provisional | `outputs/peru_secocha_a7367_reference_extent_v1/`, `outputs/secocha_2023_validation/` |
-| Former Peru area `peru_hybas_l7_6070641200` | Frozen baseline, read-only; do not write new results here | `outputs/srtm_1arcsec_peru_pilot/` (contains 7 weight versions) |
-| Upper Mzingwane, Zimbabwe (`boundary_v1`) | Background case, no longer being developed | `outputs/boundary_v1/` and others |
+| Goslar, Germany (multi-river extension covering Abzucht and 8 regulatory flood zones, about 739 km²) | Most recent work (September), active | `outputs/goslar_multiriver_full_extent/fixed_scale/`, `outputs/goslar_abzucht_diagnostics/` |
+| Secocha, Peru (a 30 km² reference window from A7367 Map 7, not a catchment) | Active, provisional | `outputs/secocha_pim_chain/`, `outputs/secocha_2023_validation/` |
+| Former Peru area `peru_former` | Frozen baseline, read-only; do not write new results here | `outputs/peru_former_pim_chain/` (contains 7 weight versions) |
+| Upper Mzingwane, Zimbabwe (`zimbabwe_upper_mzingwane`) | Background case, no longer being developed | `outputs/zimbabwe_pim_scenarios/` and others |
 
 The most important open problem: in the Goslar extension comparison, the flood criterion is higher inside all 8 regulatory flood zones than in their surrounding 1 km rings, but the composite priority is higher in only 3 of them. In other words, the relationship between the composite index and the flood evidence has not yet been sorted out.
 
@@ -51,8 +51,8 @@ Main commands:
 
 ```sh
 # Secocha
-.venv/bin/python bin/factors/run_peru_secocha_chain.py
-.venv/bin/python bin/validate/validate_peru_secocha_chain.py
+.venv/bin/python bin/factors/run_secocha_pim_chain.py
+.venv/bin/python bin/validate/validate_secocha_pim_chain.py
 
 # Goslar extension comparison
 .venv/bin/python bin/analysis/run_goslar_multiriver_full.py
@@ -66,7 +66,7 @@ The remaining Goslar/Abzucht commands are listed one by one under the correspond
 
 Do not use the default chain of `python bin/pipeline.py run`: it still points to the frozen former Peru area.
 
-To look at results quickly, open `outputs/peru_secocha_qgis_project_package_compact/IFPM_Peru_Secocha_ReviewMap.qgz` and `outputs/goslar_qgis_project_package_compact/IFPM_Goslar_ReviewMap.qgz` in QGIS. The explanation of the latest Goslar conclusions is in `outputs/goslar_multiriver_full_extent_v1/frozen_scale_v1/READING_NOTE.md`.
+To look at results quickly, open `outputs/secocha_qgis_review/IFPM_Peru_Secocha_ReviewMap.qgz` and `outputs/goslar_qgis_review/IFPM_Goslar_ReviewMap.qgz` in QGIS. The explanation of the latest Goslar conclusions is in `outputs/goslar_multiriver_full_extent/fixed_scale/READING_NOTE.md`.
 
 ## 5. Git status
 
@@ -78,8 +78,8 @@ To look at results quickly, open `outputs/peru_secocha_qgis_project_package_comp
 ## 6. Known issues
 
 - The default include chain in `pipeline.yaml` still uses the former Peru area scripts. Secocha and Goslar use standalone runners that are not connected to the DAG.
-- Some Zimbabwe scripts in `bin/` reference `outputs/_archive/...` files that were cleaned up in August, so they no longer run (`export_v1_working_boundary.py`, `prepare_v1_multicriteria_evidence.py`, `plot_v1_boundary_paper.py`). Zimbabwe is now a background case, so the impact is small.
-- Some older field names are broader than the actual evidence. For example, tree canopy cover loss is only a proxy for vegetation loss. The September notes on semantics are in `outputs/goslar_abzucht_display_rectangle_v1/component_semantics_v1/` and `outputs/goslar_abzucht_display_rectangle_v1/input_semantics_followup_v1/`.
+- Some Zimbabwe scripts in `bin/` reference `outputs/_archive/...` files that were cleaned up in August, so they no longer run (`export_zimbabwe_boundary.py`, `prepare_zimbabwe_multicriteria_evidence.py`, `plot_zimbabwe_boundary_paper.py`). Zimbabwe is now a background case, so the impact is small.
+- Some older field names are broader than the actual evidence. For example, tree canopy cover loss is only a proxy for vegetation loss. The September notes on semantics are in `outputs/goslar_abzucht_diagnostics/component_semantics/` and `outputs/goslar_abzucht_diagnostics/input_semantics_followup/`.
 - Some raw data are licence-restricted (see the per-dataset notes in `context/docs/data-management/registry/`). Rerunning historical results may require requesting access again.
 - The scripts that download CLMS and Sentinel pixels need an access credentials file on the local machine. The credentials are not in the repository.
 

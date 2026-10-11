@@ -10,13 +10,13 @@ Scripts here work on real local data under `data/` and `outputs/`.
 
 The active work (Secocha and Goslar) is run by standalone runners, not by the
 `pipeline.yaml` default chain. The default chain still targets the
-frozen former Peru area (`outputs/srtm_1arcsec_peru_pilot/`) and must not be
+frozen former Peru area (`outputs/peru_former_pim_chain/`) and must not be
 used for new runs.
 
 ```bash
 # Secocha five-criterion chain (Supervisor weights) and its validation report
-.venv/bin/python bin/factors/run_peru_secocha_chain.py
-.venv/bin/python bin/validate/validate_peru_secocha_chain.py
+.venv/bin/python bin/factors/run_secocha_pim_chain.py
+.venv/bin/python bin/validate/validate_secocha_pim_chain.py
 
 # Goslar expanded multi-river comparison and report
 .venv/bin/python bin/analysis/run_goslar_multiriver_full.py
@@ -48,7 +48,7 @@ stage's outputs.
 | **criteria** | `build_` | Assemble MCDA scoreable criteria (0–1 standardised) |
 | **scenarios** | `run_` | Weighted overlay + sensitivity/stability analysis |
 | **visualize** | `plot_` | Figures |
-| **package** | `prepare_` `standardize_` `export_` `diagnose_` `check_v1_raster_grid` | Boundary export, evidence packaging, grid checks |
+| **package** | `prepare_` `standardize_` `export_` `diagnose_` `check_zimbabwe_raster_grid` | Boundary export, evidence packaging, grid checks |
 | **investigate** | `explore_` `compute_` `compare_` `verify_` `summarize_` | One-off diagnostics, comparisons, and summaries |
 
 ## Shared helpers (`_lib/`)
@@ -73,10 +73,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 INPUTS = [
-    ROOT / "outputs" / "srtm_1arcsec_zimbabwe_prototype" / "terrain_preprocessing" / "v1_dem_utm35s_30m.tif",
+    ROOT / "outputs" / "zimbabwe_terrain_hydrology_factors" / "terrain_preprocessing" / "zimbabwe_dem_utm35s_30m.tif",
 ]
 OUTPUTS = [
-    ROOT / "outputs" / "srtm_1arcsec_zimbabwe_prototype" / "terrain_preprocessing" / "v1_slope_30m.tif",
+    ROOT / "outputs" / "zimbabwe_terrain_hydrology_factors" / "terrain_preprocessing" / "v1_slope_30m.tif",
 ]
 ```
 

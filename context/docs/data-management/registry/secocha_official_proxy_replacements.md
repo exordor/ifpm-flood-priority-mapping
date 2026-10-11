@@ -1,6 +1,6 @@
 # Secocha official proxy replacements
 
-- Dataset id: `secocha_official_proxy_replacements_v1`
+- Dataset id: `secocha_official_proxy_replacements`
 - Access date: 2026-08-18
 - Study area: A7367 reference frame plus 25 km facility context and 5 km mining context
 - Used by: context layers in the Secocha FullAudit QGIS package (off by default); not part of the PIM score

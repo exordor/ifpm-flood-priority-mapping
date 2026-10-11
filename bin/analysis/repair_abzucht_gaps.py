@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """TOOLING: recover published census records and diagnose remaining Abzucht gaps.
 
-Writes only OUTPUT under the existing boundary's gap_repair_v1 directory.
+Writes only OUTPUT under the existing boundary's gap_repair directory.
 Original scores, sources, weights and normalization anchors remain unchanged.
 Flat-slope TWI is a numerical sensitivity scenario, never a new observation.
 """
@@ -26,11 +26,11 @@ from rasterio.warp import transform as transform_coordinates
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / 'bin'), str(Path(__file__).parent)]
-from abzucht_frozen_normalization import apply
+from abzucht_fixed_scale_normalization import apply
 from compare_abzucht_hq100 import read_grid
 
-BASE = ROOT / 'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1'
-OUT = BASE.parent / 'gap_repair_v1'
+BASE = ROOT / 'outputs/goslar_abzucht_diagnostics/fixed_scale'
+OUT = BASE.parent / 'gap_repair'
 ARCHIVE = ROOT / 'data/tmp/zensus2022_goslar/Zensus2022_Bevoelkerungszahl.zip'
 LOCAL_CSV = ROOT / 'data/raw/zensus2022_goslar_official_basin/Zensus2022_Bevoelkerungszahl_100m-Gitter_official_basin.csv'
 
@@ -137,7 +137,7 @@ def main():
     def read(path, ref=None):
         return read_grid(remember(path), ref)
     m = json.loads(remember(BASE/'chain/priority_scenarios/run_manifest.json').read_text())
-    for path in [Path(__file__), ROOT/'bin/analysis/abzucht_frozen_normalization.py',
+    for path in [Path(__file__), ROOT/'bin/analysis/abzucht_fixed_scale_normalization.py',
                  ROOT/'bin/_lib/standardization.py', ROOT/'bin/analysis/compare_abzucht_hq100.py',
                  ROOT/'bin/acquire/pull_abzucht_ghsl_population.py']:
         remember(path)
@@ -148,8 +148,8 @@ def main():
     parts = {}
     for weights in m['component_weights'].values():
         for key in weights:
-            if key == 'water_wetland_context': path = 'environmental_sensitivity_v0_1/water_wetland_context_0_1.tif'
-            elif key == 'protected_ecological_context': path = 'environmental_sensitivity_v0_1/protected_area_context_0_1.tif'
+            if key == 'water_wetland_context': path = 'environmental_sensitivity/water_wetland_context_0_1.tif'
+            elif key == 'protected_ecological_context': path = 'environmental_sensitivity/protected_area_context_0_1.tif'
             elif key == 'settlement_population': path = 'exposure_indicators/population_exposure_0_1.tif'
             elif key == 'critical_infrastructure': path = 'exposure_indicators/built_infrastructure_exposure_0_1.tif'
             else: path = f'criteria_stack/criteria/{key}_0_1.tif'
@@ -250,7 +250,7 @@ def main():
             w = csv.DictWriter(f, fieldnames=list(items[0])); w.writeheader(); w.writerows(items)
     write(OUT/'published_population_recovered_mask.tif', np.where(mask, newly, np.nan), ref)
     write(OUT/'flat_slope_twi_mask.tif', np.where(mask, recovered_flat, np.nan), ref)
-    manifest = dict(boundary_id='goslar_abzucht_display_rectangle_v1', experiment_id='gap_repair_v1',
+    manifest = dict(boundary_id='goslar_abzucht_display_rectangle', experiment_id='gap_repair',
                     claim_level='diagnostic_only', command='.venv/bin/python bin/analysis/repair_abzucht_gaps.py',
                     main_weights=m['main_weights'], component_weights=m['component_weights'], weights_changed=False,
                     normalization='Original anchors frozen', inputs=inputs, baseline_reconstruction_error=error,

@@ -29,7 +29,7 @@ dependencies = [
 
 [project.optional-dependencies]
 # WhiteboxTools is only needed by the two hydrology-derivation scripts
-# (derive_v1_hydrology, derive_peru_pilot_hydrology). Kept optional so a
+# (derive_zimbabwe_hydrology, derive_peru_former_hydrology). Kept optional so a
 # minimal env can still run 73/75 scripts.
 hydrology = ["whitebox>=2.3"]
 

@@ -14,8 +14,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BUILDER_PATH = ROOT / "bin/package/build_goslar_qgis_project_package.py"
-QA_DIR = ROOT / "outputs/goslar_qgis_project_package/layer_qa"
+BUILDER_PATH = ROOT / "bin/package/build_goslar_qgis_full_audit.py"
+QA_DIR = ROOT / "outputs/goslar_qgis_full_audit/layer_qa"
 PREVIEW_DIR = QA_DIR / "previews"
 REPORT_CSV = QA_DIR / "layer_qa.csv"
 REPORT_JSON = QA_DIR / "layer_qa.json"
@@ -169,13 +169,13 @@ def run_qa() -> int:
     app.initQgis()
     rows: list[dict[str, object]] = []
     try:
-        with (ROOT / "outputs/goslar_qgis_project_package/manifest.csv").open(
+        with (ROOT / "outputs/goslar_qgis_full_audit/manifest.csv").open(
             newline="", encoding="utf-8"
         ) as handle:
             manifest_rows = list(csv.DictReader(handle))
         boundary_path = ROOT / "outputs/goslar_official_hydrology_and_flood_data/goslar_official_hydrologic_reference_boundary.gpkg"
         boundary_layer_name = "goslar_official_hydrologic_reference_boundary"
-        project_path = ROOT / "outputs/goslar_qgis_project_package/IFPM_Goslar_FullAudit.qgz"
+        project_path = ROOT / "outputs/goslar_qgis_full_audit/IFPM_Goslar_FullAudit.qgz"
         for row in manifest_rows:
             source = ROOT / row["source_path"]
             if row["source_type"] != "raster":

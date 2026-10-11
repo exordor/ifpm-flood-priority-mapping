@@ -26,8 +26,8 @@ def load_module(name: str, path: Path):
 
 class ZimbabweComparableFactorsTest(unittest.TestCase):
     def test_v1_soilgrids_uses_advertised_source_crs(self):
-        path = ROOT / "bin/factors/derive_v1_soilgrids_kfactor.py"
-        module = load_module("derive_v1_soilgrids_kfactor", path)
+        path = ROOT / "bin/factors/derive_zimbabwe_soilgrids_kfactor.py"
+        module = load_module("derive_zimbabwe_soilgrids_kfactor", path)
         source = path.read_text(encoding="utf-8")
         self.assertNotIn('SOILGRIDS_CRS = "ESRI:54017"', source)
         self.assertIn("source_window = window_from_bounds", source)
@@ -38,7 +38,7 @@ class ZimbabweComparableFactorsTest(unittest.TestCase):
         self.assertLess(bounds[1], bounds[3])
 
     def test_v1_k_normalization_preserves_nodata(self):
-        module = load_module("build_v1_soil_k_factor", ROOT / "bin/criteria/build_v1_soil_k_factor.py")
+        module = load_module("build_zimbabwe_soil_k_factor", ROOT / "bin/criteria/build_zimbabwe_soil_k_factor.py")
         data = np.array([[0.1, 0.2], [np.nan, 0.3]], dtype="float32")
         inside = np.ones((2, 2), dtype=bool)
         score, low, high = module.normalize_within_boundary(data, inside)
@@ -48,19 +48,19 @@ class ZimbabweComparableFactorsTest(unittest.TestCase):
         self.assertLessEqual(float(np.nanmax(score)), 1.0)
 
     def test_williams_k_matches_reference_texture(self):
-        module = load_module("derive_v1_soilgrids_kfactor_formula", ROOT / "bin/factors/derive_v1_soilgrids_kfactor.py")
+        module = load_module("derive_v1_soilgrids_kfactor_formula", ROOT / "bin/factors/derive_zimbabwe_soilgrids_kfactor.py")
         actual = float(module.williams_k(20.0, 40.0, 40.0, 2.0))
         self.assertAlmostEqual(actual, 0.2448597543, places=8)
 
     def test_distance_factor_contract_uses_osm_layers_and_km_outputs(self):
         module = load_module(
-            "build_v1_comparable_distance_factors",
-            ROOT / "bin/factors/build_v1_comparable_distance_factors.py",
+            "build_zimbabwe_comparable_distance_factors",
+            ROOT / "bin/factors/build_zimbabwe_comparable_distance_factors.py",
         )
         self.assertTrue(str(module.VSI_GPKG).startswith("/vsizip/"))
-        self.assertEqual(module.ROAD_DISTANCE.name, "v1_distance_to_roads_km_30m.tif")
-        self.assertEqual(module.WATER_DISTANCE.name, "v1_distance_to_water_features_km_30m.tif")
-        source = (ROOT / "bin/factors/build_v1_comparable_distance_factors.py").read_text(encoding="utf-8")
+        self.assertEqual(module.ROAD_DISTANCE.name, "zimbabwe_distance_to_roads_km_30m.tif")
+        self.assertEqual(module.WATER_DISTANCE.name, "zimbabwe_distance_to_water_features_km_30m.tif")
+        source = (ROOT / "bin/factors/build_zimbabwe_comparable_distance_factors.py").read_text(encoding="utf-8")
         self.assertIn("gis_osm_roads_free", source)
         self.assertIn("gis_osm_waterways_free", source)
         self.assertIn("gis_osm_water_a_free", source)
@@ -71,7 +71,7 @@ class ZimbabweComparableFactorsTest(unittest.TestCase):
     def test_distance_factor_returns_projected_euclidean_km(self):
         module = load_module(
             "build_v1_comparable_distance_factors_numeric",
-            ROOT / "bin/factors/build_v1_comparable_distance_factors.py",
+            ROOT / "bin/factors/build_zimbabwe_comparable_distance_factors.py",
         )
         transform = from_origin(0.0, 3000.0, 1000.0, 1000.0)
         frame = gpd.GeoDataFrame(geometry=[Point(1500.0, 1500.0)], crs="EPSG:32735")

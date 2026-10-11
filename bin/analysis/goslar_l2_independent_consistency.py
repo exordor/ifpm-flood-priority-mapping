@@ -22,17 +22,17 @@ from scipy.stats import spearmanr
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "outputs/goslar_l2_independent_consistency"
-PIM = ROOT / "outputs/srtm_1arcsec_goslar/priority_scenarios/scenarios/priority_goslar_direct_pim.tif"
-FLOOD_HAZARD = ROOT / "outputs/srtm_1arcsec_goslar/priority_scenarios/pim_criteria/flood_hazard_0_1.tif"
-PIM_MANIFEST = ROOT / "outputs/srtm_1arcsec_goslar/priority_scenarios/run_manifest.json"
+PIM = ROOT / "outputs/goslar_pim_chain/priority_scenarios/scenarios/priority_goslar_direct_pim.tif"
+FLOOD_HAZARD = ROOT / "outputs/goslar_pim_chain/priority_scenarios/pim_criteria/flood_hazard_0_1.tif"
+PIM_MANIFEST = ROOT / "outputs/goslar_pim_chain/priority_scenarios/run_manifest.json"
 HWRM = ROOT / "outputs/goslar_official_hydrology_and_flood_data/goslar_hwrm_flood_hazard_boundaries_12km.gpkg"
 S2_NEW_WATER = ROOT / "outputs/goslar_2017_satellite_validation/new_surface_water_candidate_10m.tif"
 S2_QA = ROOT / "outputs/goslar_2017_satellite_validation/water_change_qa.json"
 TERRAIN = {
-    "twi": ROOT / "outputs/srtm_1arcsec_goslar/hydrology_derivatives/goslar_focus_twi.tif",
-    "distance_to_drainage": ROOT / "outputs/srtm_1arcsec_goslar/hydrology_derivatives/goslar_focus_distance_to_drainage_t500.tif",
-    "elevation": ROOT / "outputs/srtm_1arcsec_goslar/terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif",
-    "slope": ROOT / "outputs/srtm_1arcsec_goslar/terrain_preprocessing/goslar_focus_slope_degrees_utm32n_30m.tif",
+    "twi": ROOT / "outputs/goslar_pim_chain/hydrology_derivatives/goslar_focus_twi.tif",
+    "distance_to_drainage": ROOT / "outputs/goslar_pim_chain/hydrology_derivatives/goslar_focus_distance_to_drainage_t500.tif",
+    "elevation": ROOT / "outputs/goslar_pim_chain/terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif",
+    "slope": ROOT / "outputs/goslar_pim_chain/terrain_preprocessing/goslar_focus_slope_degrees_utm32n_30m.tif",
 }
 
 HWRM_BANDS_M = (0, 100, 250, 500)

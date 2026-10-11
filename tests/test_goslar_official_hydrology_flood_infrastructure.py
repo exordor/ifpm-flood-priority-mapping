@@ -19,12 +19,12 @@ def load_module():
 
 class GoslarOfficialSourcesTest(unittest.TestCase):
     def test_registry_and_lineage_are_registered(self):
-        registry = ROOT / "context/docs/data-management/registry/goslar_official_hydrology_flood_infrastructure.md"
+        registry = ROOT / "context/docs/data-management/registry/goslar_official_hydrology_and_flood_data.md"
         lineage = OUT / "source_lineage.json"
         self.assertTrue(registry.exists())
         self.assertTrue(lineage.exists())
         payload = json.loads(lineage.read_text())
-        self.assertEqual(payload["dataset_id"], "goslar_official_hydrology_flood_infrastructure_v1")
+        self.assertEqual(payload["dataset_id"], "goslar_official_hydrology_and_flood_data")
         self.assertFalse(payload["enters_pim_score"])
         for key in ("basins", "river_segments", "oker_hazard", "innerste_hazard", "nlwkn_2017_report", "osm_infrastructure"):
             self.assertIn(key, payload["sources"])

@@ -30,16 +30,16 @@ import export_paper_style_single_maps as maps
 
 
 PIM = ROOT / (
-    "outputs/boundary_v1/rainfall_exposure_v0_4/scenarios/"
+    "outputs/zimbabwe_pim_scenarios/rainfall_exposure/scenarios/"
     "priority_mentor_zimbabwe_direct_pim.tif"
 )
 POPULATION = ROOT / (
-    "data/raw/worldpop_zwe_2020_v1_methodology/zwe_ppp_2020_UNadj.tif"
+    "data/raw/worldpop_2020_zimbabwe/zwe_ppp_2020_UNadj.tif"
 )
 MINING_FOOTPRINTS = ROOT / (
     "data/raw/global_mining_polygons_v2_zimbabwe/global_mining_polygons_v2.gpkg"
 )
-BOUNDARY = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
+BOUNDARY = ROOT / "outputs/zimbabwe_boundary/zimbabwe_boundary.gpkg"
 OUT_DIR = ROOT / "outputs/slide_ready_figures/zimbabwe_evidence_overlays"
 PNG = OUT_DIR / "zimbabwe_priority_mining_population_overlay_no_title_caption.png"
 PDF = PNG.with_suffix(".pdf")
@@ -54,7 +54,7 @@ SITE = maps.Site(
     claim_level="diagnostic_only",
     priority_mean=PIM,
     flood_conditioning=ROOT / (
-        "outputs/boundary_v1/rainfall_exposure_v0_4/pim_criteria/"
+        "outputs/zimbabwe_pim_scenarios/rainfall_exposure/pim_criteria/"
         "flood_hazard_0_1.tif"
     ),
     boundary_gpkg=BOUNDARY,

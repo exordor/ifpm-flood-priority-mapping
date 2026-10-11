@@ -22,9 +22,9 @@ from shapely.geometry import box
 import shapely
 
 ROOT=Path(__file__).resolve().parents[2]
-BASE=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1'
-COMPLETE=BASE.parent/'input_completion_v2'
-DEST=BASE.parent/'river_alignment_v1'
+BASE=ROOT/'outputs/goslar_abzucht_diagnostics/fixed_scale'
+COMPLETE=BASE.parent/'input_completion'
+DEST=BASE.parent/'river_alignment'
 WFD=ROOT/'data/raw/goslar_official_hydrology_and_flood_data/WFD_RWSEG_LOCAL.zip'
 LINEAGE=ROOT/'outputs/goslar_official_hydrology_and_flood_data/source_lineage.json'
 PRIORITY=BASE/'chain/priority_scenarios'
@@ -291,7 +291,7 @@ Reproduce: `{COMMAND}`. Outputs: equally spaced points along the line, sustained
     remember(Path(__file__))
     for name,digest in inputs.items():
         if sha(ROOT/name)!=digest:raise ValueError(f'Input changed during analysis: {name}')
-    manifest=dict(boundary_id='goslar_abzucht_display_rectangle_v1',experiment_id='river_alignment_v1',
+    manifest=dict(boundary_id='goslar_abzucht_display_rectangle',experiment_id='river_alignment',
         claim_level='diagnostic_only',command=COMMAND,method='WRRL line sampled every 30m by total length within HQ100; Euclidean distance to nearest DEM t500 raster cell centre; original PIM high cells compared to full geometries of selected WRRL segments',
         scenario='Original fixed 34% flood PIM; completed 34% shown only as sensitivity context',
         source_hashes=inputs,outputs={p.name:sha(p) for p in out.iterdir() if p.is_file() and p.name!='manifest.json'})

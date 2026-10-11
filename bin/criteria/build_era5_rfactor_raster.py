@@ -39,12 +39,12 @@ except ImportError as exc:
     raise SystemExit(f"missing dependency: {exc}") from exc
 
 ROOT = Path(__file__).resolve().parents[2]
-DATA_DIR = ROOT / "data/raw/era5_hourly_precip_v1_rfactor"
+DATA_DIR = ROOT / "data/raw/era5_hourly_precip_zimbabwe_rfactor"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 OUT_DIR = ROOT / "outputs/v1_usle_soil_loss/rfactor_empirical_era5"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-V1_GPKG = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
+V1_GPKG = ROOT / "outputs/zimbabwe_boundary/zimbabwe_boundary.gpkg"
 A_STRUCTURE = ROOT / "outputs/v1_usle_soil_loss/a_structure_K_LS_C_30m.tif"
 
 # Denser V1 grid: ~0.12 deg spacing, covering V1 bbox + small buffer.

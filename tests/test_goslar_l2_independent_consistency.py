@@ -78,7 +78,7 @@ class GoslarL2IndependentConsistencyTest(unittest.TestCase):
 
     def test_manifest_and_summary_are_linked_and_hashed(self):
         manifest = json.loads(
-            (ROOT / "outputs/srtm_1arcsec_goslar/priority_scenarios/run_manifest.json").read_text(encoding="utf-8")
+            (ROOT / "outputs/goslar_pim_chain/priority_scenarios/run_manifest.json").read_text(encoding="utf-8")
         )
         record = manifest["l2_independent_consistency"]
         self.assertEqual(record["claim_level"], "independent_consistency_check")
@@ -91,7 +91,7 @@ class GoslarL2IndependentConsistencyTest(unittest.TestCase):
         self.assertEqual(
             record["pim_sha256"],
             hashlib.sha256(
-                (ROOT / "outputs/srtm_1arcsec_goslar/priority_scenarios/scenarios/priority_goslar_direct_pim.tif").read_bytes()
+                (ROOT / "outputs/goslar_pim_chain/priority_scenarios/scenarios/priority_goslar_direct_pim.tif").read_bytes()
             ).hexdigest(),
         )
         with summary_path.open(newline="", encoding="utf-8") as stream:
@@ -107,7 +107,7 @@ class GoslarL2IndependentConsistencyTest(unittest.TestCase):
             self.skipTest("openpyxl is unavailable in this test environment")
         workbook_path = (
             ROOT
-            / "outputs/peru_secocha_a7367_reference_extent_v1/priority_scenarios/figures/IFPM_Model_Audit.xlsx"
+            / "outputs/secocha_pim_chain/priority_scenarios/figures/IFPM_Model_Audit.xlsx"
         )
         workbook = load_workbook(workbook_path, read_only=False, data_only=False)
         self.assertIn("L2 consistency", workbook.sheetnames)

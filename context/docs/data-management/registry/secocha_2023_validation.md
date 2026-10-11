@@ -11,7 +11,7 @@ Secocha case; not a PIM input and not used to set weights.
   the later INDECI report
 - Study area: Secocha, San Martin, Miski/Posco Misky, Pampa Blanca/Pampaylima and nearby
   localities in Mariano Nicolas Valcarcel district, Camana province, Arequipa department
-- Used by: the 2023 event comparison for `peru_secocha_a7367_reference_extent_v1`
+- Used by: the 2023 event comparison for `secocha_reference_extent`
   (see `context/docs/research-map/EXPERIMENTS.md`)
 
 ## Official Reports
@@ -38,15 +38,15 @@ Secocha case; not a PIM input and not used to set weights.
 
 ## Model-window sources (2026-08-09)
 
-- Acquisition command: `.venv/bin/python bin/acquire/pull_peru_secocha_model_sources.py`
+- Acquisition command: `.venv/bin/python bin/acquire/pull_secocha_model_sources.py`
 - Manifest with URLs, byte sizes and SHA-256:
-  `outputs/peru_secocha_a7367_reference_extent_v1/source_acquisition/source_manifest.json`
+  `outputs/secocha_pim_chain/source_acquisition/source_manifest.json`
 - New local sources: SRTMGL1 v3 tile `S16W074`; INGEMMET small-mining layer-0 subset (26 records,
   external overlay only); SERNANP national definitive protected-area layer-0 query (zero records
   within 25 km).
 - Reused sources: ESA WorldCover 2021 v200, WorldPop Peru 2020 UN-adjusted, Geofabrik Peru OSM.
 - Runtime sources: CHIRPS v3 monthly Latin America windows for December-March 2014/15-2023/24 and
-  ISRIC SoilGrids top-30-cm windows (`soilgrids_250m_peru_secocha`). Native resolutions are kept
+  ISRIC SoilGrids top-30-cm windows (`soilgrids_250m_secocha`). Native resolutions are kept
   in the output manifests; 30 m is only the common grid.
 
 ## Map 7 event digitization (2026-08-09)
@@ -74,7 +74,7 @@ Secocha case; not a PIM input and not used to set weights.
 - Local path:
   `data/raw/ingemmet_a7367_cartografia_peligros_secocha/ingemmet_a7367_cartografia_peligros_layer6_secocha.geojson`
 - Manifest:
-  `outputs/peru_secocha_a7367_reference_extent_v1/source_acquisition/ingemmet_original_gis_manifest.json`
+  `outputs/secocha_pim_chain/source_acquisition/ingemmet_original_gis_manifest.json`
 - Result: the three polygons cover 6.364 km² (4.637 km² inside the reference window) and 93.8% of
   the digitized 5 February footprint (`Flujo de detritos` alone 84.3%). They are general A7367
   hazard cartography, not a dated 2023-02-05 footprint. Comparison:
@@ -123,7 +123,7 @@ Secocha case; not a PIM input and not used to set weights.
 ## Known limitations
 
 - The Secocha reference extent is the coordinate frame of A7367 Map 7, not a catchment or event
-  footprint. It lies about 117.7 km from the former Peru study area (`peru_hybas_l7_6070641200`).
+  footprint. It lies about 117.7 km from the former Peru study area (`peru_former`).
 - A hazard-assessment map is not automatically an observed footprint; map semantics were checked
   page by page.
 - Affected localities and administrative event points do not give pixel-level extent.

@@ -31,10 +31,10 @@ Field names that say more than the data show:
 
 | Id | Meaning |
 |---|---|
-| `peru_secocha_a7367_reference_extent_v1` | Active Secocha 30 km² map-reference window (not a catchment) |
-| `goslar_abzucht_display_rectangle_v1`, `goslar_multiriver_full_extent_v1` | Active Goslar comparison extents |
-| `peru_hybas_l7_6070641200` | Former Peru area (frozen) |
-| `boundary_v1` | Zimbabwe Upper Mzingwane (background) |
+| `secocha_reference_extent` | Active Secocha 30 km² map-reference window (not a catchment) |
+| `goslar_abzucht_display_rectangle`, `goslar_multiriver_full_extent` | Active Goslar comparison extents |
+| `peru_former` | Former Peru area (frozen) |
+| `zimbabwe_upper_mzingwane` | Zimbabwe Upper Mzingwane (background) |
 
 ## Claim levels in manifests
 

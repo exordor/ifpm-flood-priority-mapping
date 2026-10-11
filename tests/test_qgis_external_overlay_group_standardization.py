@@ -27,11 +27,11 @@ class QgisExternalOverlayGroupStandardizationTest(unittest.TestCase):
     def setUpClass(cls):
         cls.secocha = load_module(
             "qgis_overlay_secocha_builder",
-            "bin/package/build_peru_secocha_qgis_project_package.py",
+            "bin/package/build_secocha_qgis_full_audit.py",
         )
         cls.goslar = load_module(
             "qgis_overlay_goslar_builder",
-            "bin/package/build_goslar_qgis_project_package.py",
+            "bin/package/build_goslar_qgis_full_audit.py",
         )
 
     def assert_overlay_group(self, layers, keys):
@@ -80,8 +80,8 @@ class QgisExternalOverlayGroupStandardizationTest(unittest.TestCase):
 
     def test_generated_manifests_and_projects_use_shared_group(self):
         packages = [
-            (ROOT / "outputs/peru_secocha_qgis_project_package", ["IFPM_Peru_Secocha_FullAudit.qgz"]),
-            (ROOT / "outputs/goslar_qgis_project_package", ["IFPM_Goslar_FullAudit.qgz"]),
+            (ROOT / "outputs/secocha_qgis_full_audit", ["IFPM_Peru_Secocha_FullAudit.qgz"]),
+            (ROOT / "outputs/goslar_qgis_full_audit", ["IFPM_Goslar_FullAudit.qgz"]),
         ]
         for package, projects in packages:
             manifest = (package / "manifest.csv").read_text(encoding="utf-8")

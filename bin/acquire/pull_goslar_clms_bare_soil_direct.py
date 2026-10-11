@@ -18,9 +18,9 @@ from rasterio.warp import Resampling, reproject
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "data/raw/clms_hrl_bare_soil_goslar_official_basin"
-OUTPUT_DIR = ROOT / "outputs/esa_worldcover_2021_goslar/c_factor"
-DIAGNOSTICS = ROOT / "outputs/esa_worldcover_2021_goslar/c_factor/clms_bare_soil_after_2024_diagnostics.json"
-REF = ROOT / "outputs/srtm_1arcsec_goslar/terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif"
+OUTPUT_DIR = ROOT / "outputs/goslar_esa_worldcover_2021/c_factor"
+DIAGNOSTICS = ROOT / "outputs/goslar_esa_worldcover_2021/c_factor/clms_bare_soil_after_2024_diagnostics.json"
+REF = ROOT / "outputs/goslar_pim_chain/terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif"
 BOUNDARY = ROOT / "outputs/goslar_official_hydrology_and_flood_data/goslar_official_hydrologic_reference_boundary.gpkg"
 CREDENTIALS = ROOT / "data/tmp/cdse_s3_credentials.json"
 

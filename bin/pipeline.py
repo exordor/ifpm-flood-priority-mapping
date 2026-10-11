@@ -63,7 +63,7 @@ STAGE_PREFIXES: list[tuple[str, tuple[str, ...]]] = [
     ("criteria", ("build_")),
     ("scenarios", ("run_",)),
     ("visualize", ("plot_",)),
-    ("package", ("prepare_", "standardize_", "export_", "diagnose_", "check_v1_raster_grid")),
+    ("package", ("prepare_", "standardize_", "export_", "diagnose_", "check_zimbabwe_raster_grid")),
     ("investigate", ("explore_", "compute_", "compare_", "verify_", "summarize_")),
 ]
 

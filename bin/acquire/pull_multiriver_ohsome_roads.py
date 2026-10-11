@@ -7,7 +7,7 @@ from pathlib import Path
 import geopandas as gpd
 from pyproj import Transformer
 from shapely.geometry import box,shape,mapping
-ROOT=Path(__file__).resolve().parents[2];RAW=ROOT/'data/raw/goslar_multiriver_osm_v1';TMP=ROOT/'data/tmp/goslar_multiriver_osm_v1'
+ROOT=Path(__file__).resolve().parents[2];RAW=ROOT/'data/raw/goslar_multiriver_osm';TMP=ROOT/'data/tmp/goslar_multiriver_osm'
 STAMP='2026-07-27T09:00:00Z';ENDPOINT='https://api.ohsome.org/v1/elements/geometry';BOUNDS=(552411,5734748,618576,5795557)
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def fetch(args):
@@ -30,7 +30,7 @@ def fetch(args):
  raise RuntimeError(errors)
 def main():
  RAW.mkdir(parents=True,exist_ok=True);TMP.mkdir(parents=True,exist_ok=True)
- boundary=gpd.read_file(ROOT/'outputs/goslar_multiriver_full_extent_v1/frozen_scale_v1/expanded_boundary.gpkg').to_crs(32632).geometry.union_all().buffer(3050)
+ boundary=gpd.read_file(ROOT/'outputs/goslar_multiriver_full_extent/fixed_scale/expanded_boundary.gpkg').to_crs(32632).geometry.union_all().buffer(3050)
  support=gpd.GeoSeries([boundary],crs=32632).to_crs(4326).iloc[0]
  west,south,east,north=Transformer.from_crs(32632,4326,always_xy=True).transform_bounds(*BOUNDS,densify_pts=21)
  jobs=[];skipped=[]
@@ -56,6 +56,6 @@ def main():
  checked=gpd.read_file(path);assert len(checked)==len(rows) and checked.crs.to_epsg()==32632 and checked.geometry.is_valid.all()
  queried=gpd.GeoSeries([box(*j[2]) for j in jobs],crs=4326).union_all();assert support.difference(queried).area<1e-12
  facilities=RAW/'facilities.gpkg';facility_meta=json.loads((RAW/'facilities.request.json').read_text());facility_meta.update(gpkg_sha256=sha(facilities),gpkg_bytes=facilities.stat().st_size,retained_count=len(gpd.read_file(facilities)))
- manifest={'dataset_id':'goslar_multiriver_osm_v1','licence':'ODbL, OpenStreetMap contributors','source_bounds_epsg32632':BOUNDS,'query_bounds_epsg4326':[west,south,east,north],'source_buffer_m':3000,'coverage_policy':'Roads cover evaluation boundary buffered3050m; facilities entire source rectangle. Skipped road tiles lie outside required support.','sources':{'facilities':facility_meta,'roads':{'acquisition_complete':True,'endpoint':ENDPOINT,'snapshot':STAMP,'snapshot_note':'Consistent historical OSM snapshot, older than original roads; do not attribute all overlap differences to expansion.','tile_requests':sources,'skipped_tiles':skipped,'successful_query_support_epsg4326':mapping(queried),'retained_count':len(frame),'gpkg_sha256':sha(path),'gpkg_bytes':path.stat().st_size}}}
+ manifest={'dataset_id':'goslar_multiriver_osm','licence':'ODbL, OpenStreetMap contributors','source_bounds_epsg32632':BOUNDS,'query_bounds_epsg4326':[west,south,east,north],'source_buffer_m':3000,'coverage_policy':'Roads cover evaluation boundary buffered3050m; facilities entire source rectangle. Skipped road tiles lie outside required support.','sources':{'facilities':facility_meta,'roads':{'acquisition_complete':True,'endpoint':ENDPOINT,'snapshot':STAMP,'snapshot_note':'Consistent historical OSM snapshot, older than original roads; do not attribute all overlap differences to expansion.','tile_requests':sources,'skipped_tiles':skipped,'successful_query_support_epsg4326':mapping(queried),'retained_count':len(frame),'gpkg_sha256':sha(path),'gpkg_bytes':path.stat().st_size}}}
  (RAW/'source_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');print('COMPLETE ROADS',len(frame),flush=True)
 if __name__=='__main__':main()

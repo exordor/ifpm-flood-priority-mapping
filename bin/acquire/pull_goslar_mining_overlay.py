@@ -27,7 +27,7 @@ from shapely.ops import polygonize, unary_union
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DATASET_ID = "goslar_mining_context_overlay_v1"
+DATASET_ID = "goslar_mining_context_overlay"
 RAW_DIR = ROOT / f"data/raw/{DATASET_ID}"
 OUTPUT_DIR = ROOT / "outputs/goslar_mining_context_overlay"
 OUTPUT_GPKG = OUTPUT_DIR / "goslar_mining_context_overlay.gpkg"

@@ -16,7 +16,7 @@ sys.path.insert(0,str(Path(__file__).parent))
 from pull_goslar_soilgrids_window import williams_k
 OUT=ROOT/'data/raw/soilgrids2017_abzucht'
 BASE='https://files.isric.org/soilgrids/former/2017-03-10/data/'
-REF=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1/chain/terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif'
+REF=ROOT/'outputs/goslar_abzucht_diagnostics/fixed_scale/chain/terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif'
 PROPS={'CLYPPT':'clay','SLTPPT':'silt','SNDPPT':'sand','ORCDRC':'soc'}
 DEPTHS=[0,5,15,30]
 

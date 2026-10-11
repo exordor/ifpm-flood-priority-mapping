@@ -34,12 +34,12 @@ OUT_DIR = ROOT / "outputs/sensitivity_figures/paper_style_single_maps"
 DST_CRS = CRS.from_epsg(4326)
 
 INPUTS = [
-    ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/priority_mean.tif",
-    ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif",
-    ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif",
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_conditioning_factors_0_1.tif",
-    ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
+    ROOT / "outputs/zimbabwe_pim_scenarios/rainfall_exposure/priority_mean.tif",
+    ROOT / "outputs/zimbabwe_pim_scenarios/criteria_stack/criteria/flood_conditioning_factors_0_1.tif",
+    ROOT / "outputs/zimbabwe_boundary/zimbabwe_boundary.gpkg",
+    ROOT / "outputs/peru_former_pim_chain/priority_scenarios/priority_mean.tif",
+    ROOT / "outputs/peru_former_pim_chain/criteria_stack/criteria/flood_conditioning_factors_0_1.tif",
+    ROOT / "outputs/peru_former_boundary/peru_former_boundary.gpkg",
 ]
 OUTPUTS = [
     ROOT / "outputs/sensitivity_figures/paper_style_single_maps/zimbabwe_mean_priority_5class_paper_style_no_title_caption.png",
@@ -84,18 +84,18 @@ SITES = [
         slug="zimbabwe",
         label="Zimbabwe Upper Mzingwane",
         claim_level="sensitivity_scenario",
-        priority_mean=ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/priority_mean.tif",
-        flood_conditioning=ROOT / "outputs/boundary_v1/criteria_stack_v0_2/criteria/flood_conditioning_factors_0_1.tif",
-        boundary_gpkg=ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg",
+        priority_mean=ROOT / "outputs/zimbabwe_pim_scenarios/rainfall_exposure/priority_mean.tif",
+        flood_conditioning=ROOT / "outputs/zimbabwe_pim_scenarios/criteria_stack/criteria/flood_conditioning_factors_0_1.tif",
+        boundary_gpkg=ROOT / "outputs/zimbabwe_boundary/zimbabwe_boundary.gpkg",
         boundary_layer="v1_working_boundary",
     ),
     Site(
         slug="peru",
         label="Peru Arequipa Region, mainly Vitor-La Joya-Santa Rita de Siguas west of Arequipa city",
         claim_level="provisional / sensitivity_scenario",
-        priority_mean=ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios/priority_mean.tif",
-        flood_conditioning=ROOT / "outputs/srtm_1arcsec_peru_pilot/criteria_stack/criteria/flood_conditioning_factors_0_1.tif",
-        boundary_gpkg=ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
+        priority_mean=ROOT / "outputs/peru_former_pim_chain/priority_scenarios/priority_mean.tif",
+        flood_conditioning=ROOT / "outputs/peru_former_pim_chain/criteria_stack/criteria/flood_conditioning_factors_0_1.tif",
+        boundary_gpkg=ROOT / "outputs/peru_former_boundary/peru_former_boundary.gpkg",
         boundary_layer="peru_pilot_boundary",
     ),
 ]

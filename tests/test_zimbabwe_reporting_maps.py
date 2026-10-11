@@ -36,8 +36,8 @@ def load_named_module(path: Path, name: str):
 class ZimbabweReportingMapsTest(unittest.TestCase):
     def test_zimbabwe_pim_uses_independent_sediment_components_and_direct_weights(self):
         scenario = load_named_module(
-            ROOT / "bin/scenarios/run_boundary_v1_rainfall_exposure.py",
-            "run_boundary_v1_rainfall_exposure_for_governance_test",
+            ROOT / "bin/scenarios/run_zimbabwe_rainfall_exposure.py",
+            "run_zimbabwe_rainfall_exposure_for_governance_test",
         )
 
         self.assertEqual(
@@ -54,8 +54,8 @@ class ZimbabweReportingMapsTest(unittest.TestCase):
 
     def test_sediment_requires_common_k_ls_c_support(self):
         scenario = load_named_module(
-            ROOT / "bin/scenarios/run_boundary_v1_rainfall_exposure.py",
-            "run_boundary_v1_rainfall_exposure_for_nodata_test",
+            ROOT / "bin/scenarios/run_zimbabwe_rainfall_exposure.py",
+            "run_zimbabwe_rainfall_exposure_for_nodata_test",
         )
         components = {
             "soil_k_factor": np.array([[0.2, np.nan, 0.2]], dtype="float32"),
@@ -74,8 +74,8 @@ class ZimbabweReportingMapsTest(unittest.TestCase):
 
     def test_current_scenario_outputs_are_declared_and_hash_bound(self):
         scenario = load_named_module(
-            ROOT / "bin/scenarios/run_boundary_v1_rainfall_exposure.py",
-            "run_boundary_v1_rainfall_exposure_for_manifest_test",
+            ROOT / "bin/scenarios/run_zimbabwe_rainfall_exposure.py",
+            "run_zimbabwe_rainfall_exposure_for_manifest_test",
         )
 
         for path in scenario.OUTPUTS:
@@ -122,7 +122,7 @@ class ZimbabweReportingMapsTest(unittest.TestCase):
     def test_cross_site_reporting_palettes_match_peru(self):
         module = load_module()
         peru_criteria = load_named_module(
-            ROOT / "bin/visualize/export_peru_pim_criteria_maps.py",
+            ROOT / "bin/visualize/export_peru_former_pim_criteria_maps.py",
             "export_peru_pim_criteria_maps_for_palette_test",
         )
 

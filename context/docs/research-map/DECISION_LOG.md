@@ -10,9 +10,9 @@ comparable. Goslar runs the Secocha chain unchanged on its own inputs.
 ## 2026-08-09 — Secocha replaces the former Peru area
 
 The official 2023 Secocha event evidence lies about 118 km outside the former area
-(`peru_hybas_l7_6070641200`), so the model could not be compared with it there. The active
-boundary became `peru_secocha_a7367_reference_extent_v1`. The former area's outputs
-(`outputs/srtm_1arcsec_peru_pilot/`) are frozen; key files are hashed in
+(`peru_former`), so the model could not be compared with it there. The active
+boundary became `secocha_reference_extent`. The former area's outputs
+(`outputs/peru_former_pim_chain/`) are frozen; key files are hashed in
 `FROZEN_BASELINE.json` and must not be overwritten.
 
 ## 2026-08-07 — Supervisor's complete weight table
@@ -28,7 +28,7 @@ Top level: Flood 0.34, Sediment 0.25, Land Use 0.17, Environmental 0.10, Socioec
 | Socioeconomic | road access 0.35, settlement/population 0.35, critical infrastructure 0.30 (proxied by building density) |
 
 The earlier test weights (0.35/0.25/0.20/0.12/0.08) gave nearly the same ranking
-(rho 0.988, top-20% Jaccard 0.85); see `outputs/srtm_1arcsec_peru_pilot/pim_versions/comparison_v02_v07/`.
+(rho 0.988, top-20% Jaccard 0.85); see `outputs/peru_former_pim_chain/pim_versions/comparison_02_no_mining_vs_07_supervisor/`.
 
 ## 2026-08-07 — Mining removed from the score
 

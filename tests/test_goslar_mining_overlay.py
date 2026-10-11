@@ -13,7 +13,7 @@ from shapely.geometry import Point, box
 ROOT = Path(__file__).resolve().parents[1]
 PYTHON = ROOT / ".venv/bin/python"
 SCRIPT = ROOT / "bin/acquire/pull_goslar_mining_overlay.py"
-CHAIN = ROOT / "bin/factors/run_goslar_peru_style_chain.py"
+CHAIN = ROOT / "bin/factors/run_goslar_pim_chain.py"
 
 
 def load_module():
@@ -92,7 +92,7 @@ class GoslarMiningOverlayTest(unittest.TestCase):
         )
         self.assertEqual(completed.returncode, 0, completed.stderr)
         catalog = json.loads(completed.stdout)
-        self.assertEqual(catalog["dataset_id"], "goslar_mining_context_overlay_v1")
+        self.assertEqual(catalog["dataset_id"], "goslar_mining_context_overlay")
         self.assertEqual(catalog["claim_level"], "context_evidence")
         self.assertFalse(catalog["enters_pim_score"])
         self.assertEqual(catalog["overlay_radius_m"], 12000)

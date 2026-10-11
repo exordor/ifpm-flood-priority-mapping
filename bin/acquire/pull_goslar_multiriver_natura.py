@@ -3,7 +3,7 @@
 import urllib.request,urllib.parse,json,hashlib
 from pathlib import Path
 import geopandas as gpd
-ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'data/raw/eea_natura2000_goslar_multiriver_v1'
+ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'data/raw/eea_natura2000_goslar_multiriver'
 SERVICE='https://bio.discomap.eea.europa.eu/arcgis/rest/services/ProtectedSites/Natura2000Sites/MapServer'
 BBOX=[545411,5727748,625576,5802557]
 def query(url,params):
@@ -26,6 +26,6 @@ def main():
   allfeatures+=features;records.append({'layer':layer,'label':label,'query':base,'object_ids':ids,'feature_count':len(features)})
  v=gpd.GeoDataFrame.from_features(allfeatures,crs=4326);v.to_file(OUT/'protected.gpkg',layer='protected',driver='GPKG')
  files=[{'path':str(p.relative_to(ROOT)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(OUT.iterdir()) if p.name!='source_manifest.json']
- (OUT/'source_manifest.json').write_text(json.dumps({'dataset_id':'eea_natura2000_goslar_multiriver_v1','source_url':SERVICE,'product_version':2024,'access_date':'2026-09-14','licence':'EEA reuse policy','geometry_clipped':False,'query_records':records,'files':files},indent=2)+'\n')
+ (OUT/'source_manifest.json').write_text(json.dumps({'dataset_id':'eea_natura2000_goslar_multiriver','source_url':SERVICE,'product_version':2024,'access_date':'2026-09-14','licence':'EEA reuse policy','geometry_clipped':False,'query_records':records,'files':files},indent=2)+'\n')
  print(json.dumps({'features':len(v),'counts':[r['feature_count'] for r in records],'columns':list(v.columns)},indent=2))
 if __name__=='__main__':main()

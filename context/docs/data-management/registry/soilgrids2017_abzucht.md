@@ -7,7 +7,7 @@
   FAQ specifies ODbL; retain source attribution and derivative provenance.
 - Documentation: https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_2017.html
   and https://isric.org/news/soilgrids-version-2017-services-communication
-- Used by: the Abzucht soil-replacement scenario (`input_completion_v2`); fills soil K where the
+- Used by: the Abzucht soil-replacement scenario (`input_completion`); fills soil K where the
   current SoilGrids version is masked (urban areas). It replaces the complete soil layer.
 - Local path: `data/raw/soilgrids2017_abzucht/`
 - Acquisition command: `.venv/bin/python bin/acquire/pull_abzucht_soilgrids2017.py`
@@ -22,7 +22,7 @@
 - Raw `source_manifest.json` SHA-256:
   `0d02114f41d5a0ed9eab3d4c2f15b1e8d00d1ecb6e55100b3bad71952cdf7286`.
   Per-file byte sizes, SHA-256, source URLs, HTTP range headers and extent recorded there.
-- Derived K is under `outputs/goslar_abzucht_display_rectangle_v1/input_completion_v2/`,
+- Derived K is under `outputs/goslar_abzucht_diagnostics/input_completion/`,
   never raw data. Soil K covers 561/561 HQ100 cells, 21,120/21,198 ring cells,
   and 29,136/29,315 display-rectangle cells. Residual gaps remain NoData.
 - Known limitations: superseded version; wider coverage does not mean the 2017 predictions are

@@ -47,7 +47,7 @@ def resolve_local_file(entry: dict[str, object]) -> tuple[Path, dict[str, object
 def validate_manifest(manifest_path: Path) -> tuple[dict[str, object], list[dict[str, object]]]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     required = {
-        "boundary_id": "peru_secocha_a7367_reference_extent_v1",
+        "boundary_id": "secocha_reference_extent",
         "event_id": "secocha_2023_historical_hazard_event",
         "event_date": "2023-02-05",
         "claim_level": "validation_candidate",

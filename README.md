@@ -7,10 +7,10 @@ The root repository is the research workspace (scripts in `bin/`, docs in `conte
 
 Active cases: Secocha (Peru) and Goslar (Germany). Zimbabwe is a background case.
 
-- **Secocha, Arequipa, Peru** (`peru_secocha_a7367_reference_extent_v1`): a provisional 30 km² reference window, not a catchment; see `context/docs/research-map/EXPERIMENTS.md` for detail.
-- **Goslar, Germany** (Abzucht and the multi-river comparison under `outputs/goslar_multiriver_full_extent_v1/`): compares the priority index with official flood zones.
+- **Secocha, Arequipa, Peru** (`secocha_reference_extent`): a provisional 30 km² reference window, not a catchment; see `context/docs/research-map/EXPERIMENTS.md` for detail.
+- **Goslar, Germany** (Abzucht and the multi-river comparison under `outputs/goslar_multiriver_full_extent/`): compares the priority index with official flood zones.
 
-The former Peru area `peru_hybas_l7_6070641200` is a frozen baseline. Its outputs are kept under `outputs/srtm_1arcsec_peru_pilot/` and must not receive new runs.
+The former Peru area `peru_former` is a frozen baseline. Its outputs are kept under `outputs/peru_former_pim_chain/` and must not receive new runs.
 
 ## Directory Structure
 

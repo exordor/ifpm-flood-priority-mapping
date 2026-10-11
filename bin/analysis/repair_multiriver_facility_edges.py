@@ -10,8 +10,8 @@ from affine import Affine
 from scipy.ndimage import distance_transform_edt
 from compare_goslar_multiriver import ROOT,BASE,sha,read_grid,raster_mask,clean_ring,write_csv,stats,make_map
 from tune_abzucht_weights import weights_at,score_at
-SOURCE=BASE.parent/'multiriver_weights_50_60_70_v1'
-OUT=BASE.parent/'facility_edge_repair_v1'
+SOURCE=BASE.parent/'multiriver_flood_weights_50_60_70'
+OUT=BASE.parent/'facility_edge_repair'
 
 def facility_score(geometries,ref,pad=68,decay=2000.):
     resolution=ref['transform'].a
@@ -69,7 +69,7 @@ def main():
         assert np.array_equal(np.isfinite(after[pct]),valid)
         assert np.min(after[pct][valid]-before[pct][valid])>-2e-7
         write(f'pim_flood_{pct}.tif',after[pct]);write(f'pim_delta_{pct}.tif',after[pct]-before[pct])
-    gpkg=pin(BASE.parent/'multiriver_comparison_v1/comparison_boundaries.gpkg');ps=gpd.read_file(gpkg,layer='products');ex=gpd.read_file(gpkg,layer='ring_exclusion').geometry.union_all();rows=[];summary=[]
+    gpkg=pin(BASE.parent/'multiriver_comparison/comparison_boundaries.gpkg');ps=gpd.read_file(gpkg,layer='products');ex=gpd.read_file(gpkg,layer='ring_exclusion').geometry.union_all();rows=[];summary=[]
     for _,p in ps.iterrows():
         for touched in [False,True]:
             a=raster_mask(p.geometry,ref,touched)&valid

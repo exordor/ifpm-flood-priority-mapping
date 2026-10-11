@@ -7,8 +7,8 @@ import geopandas as gpd
 import rasterio
 from compare_goslar_multiriver import BASE, ROOT, sha, lineage_entries, read_grid, raster_mask, clean_ring, stats, write_csv, make_map
 from tune_abzucht_weights import weights_at, score_at
-SOURCE=BASE.parent/'multiriver_comparison_v1'
-OUT=BASE.parent/'multiriver_weights_50_60_70_v1'
+SOURCE=BASE.parent/'multiriver_comparison'
+OUT=BASE.parent/'multiriver_flood_weights_50_60_70'
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
@@ -71,11 +71,11 @@ def main():
         for p in primary:
             if not (raster_mask(p['geometry'],ref)&valid).any():continue
             make_map(OUT/f"{p['river'].lower()}_{pct}",f"{p['river']} | Flood weight {pct}%",[p],p['geometry'].intersection(boundary).buffer(500).bounds,criteria['flood_hazard'],scenarios[pct],ref)
-    note='# Multi-river comparison with flood weights of 50%, 60% and 70%\n\nSuperseded by goslar_multiriver_full_extent_v1.\n\nStatus: weight sensitivity scenarios. Only the weights of the five-criterion combination are changed; the other four criteria are scaled down in their original proportions. The original population, soil, normalization, valid extent and 0.6 threshold are unchanged. The left panel shows the unchanged flood sub-indicator, and the right panel the PIM for the corresponding weight.\n\nReproduce: `.venv/bin/python bin/analysis/compare_multiriver_weights.py`.\n\n| River/source | Flood weight | Inside/outside mean | Mean difference | Inside/outside high-score share | High-score share difference (percentage points) |\n|---|---:|---|---:|---|---:|\n'
+    note='# Multi-river comparison with flood weights of 50%, 60% and 70%\n\nSuperseded by goslar_multiriver_full_extent.\n\nStatus: weight sensitivity scenarios. Only the weights of the five-criterion combination are changed; the other four criteria are scaled down in their original proportions. The original population, soil, normalization, valid extent and 0.6 threshold are unchanged. The left panel shows the unchanged flood sub-indicator, and the right panel the PIM for the corresponding weight.\n\nReproduce: `.venv/bin/python bin/analysis/compare_multiriver_weights.py`.\n\n| River/source | Flood weight | Inside/outside mean | Mean difference | Inside/outside high-score share | High-score share difference (percentage points) |\n|---|---:|---|---:|---|---:|\n'
     for r in summary:
         if r['mean_gap'] is None:continue
         note+=f"| {r['river']} / {r['family']} / {r['scenario']} | {r['flood_weight']:.0%} | {r['inside_mean']:.3f}/{r['ring_mean']:.3f} | {r['mean_gap']:+.3f} | {r['inside_high_share']:.2%}/{r['ring_high_share']:.2%} | {r['high_share_gap']*100:+.2f} |\n"
-    note+='\nThe table uses center assignment and the cleaned 1 km ring; all acquired official flood extents are excluded from the ring. All six settings are in statistics.csv. The four rivers without coverage keep empty results and cannot be assessed; the main Innerste comparison has only 12 cells. The original boundary sources, coverage denominators and missing components are carried over from multiriver_comparison_v1.\n\nRobustness: below are the minimum to maximum high-score share differences across the six settings (percentage points).\n\n'
+    note+='\nThe table uses center assignment and the cleaned 1 km ring; all acquired official flood extents are excluded from the ring. All six settings are in statistics.csv. The four rivers without coverage keep empty results and cannot be assessed; the main Innerste comparison has only 12 cells. The original boundary sources, coverage denominators and missing components are carried over from multiriver_comparison.\n\nRobustness: below are the minimum to maximum high-score share differences across the six settings (percentage points).\n\n'
     for _,p in products.iterrows():
         if not any(r['product_id']==p.product_id and r['mean_gap'] is not None for r in rows):continue
         parts=[]
@@ -87,7 +87,7 @@ def main():
     (OUT/'READING_NOTE.md').write_text(note)
     pin(Path(__file__));pin(Path(__file__).with_name('tune_abzucht_weights.py'))
     for p,d in inputs.items():assert sha(ROOT/p)==d,p
-    manifest=dict(claim_level='sensitivity_scenario',boundary_id='goslar_abzucht_display_rectangle_v1',experiment_id='multiriver_weights_50_60_70_v1',inputs=inputs,weights=weights,baseline_changed=False,original_population_soil=True,paired_valid_cells=int(valid.sum()),baseline_regression=True,source_comparison=str(SOURCE.relative_to(ROOT)),command='.venv/bin/python bin/analysis/compare_multiriver_weights.py',outputs={p.name:sha(p) for p in OUT.iterdir() if p.is_file() and p.name!='manifest.json'})
+    manifest=dict(claim_level='sensitivity_scenario',boundary_id='goslar_abzucht_display_rectangle',experiment_id='multiriver_flood_weights_50_60_70',inputs=inputs,weights=weights,baseline_changed=False,original_population_soil=True,paired_valid_cells=int(valid.sum()),baseline_regression=True,source_comparison=str(SOURCE.relative_to(ROOT)),command='.venv/bin/python bin/analysis/compare_multiriver_weights.py',outputs={p.name:sha(p) for p in OUT.iterdir() if p.is_file() and p.name!='manifest.json'})
     (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     print('Complete:',len(rows),'rows;',len(summary),'main rows; 15 PNG/SVG pairs; 3 rasters')
 if __name__=='__main__':main()

@@ -2,11 +2,11 @@
 
 Status: downloaded 2026-09-14; used for the Goslar multi-river comparison.
 
-- Dataset id: `goslar_multiriver_regulatory_v1`
+- Dataset id: `goslar_multiriver_regulatory`
 - Portal: https://www.goslar.de/wirtschafts-und-zukunftsort/klima-umwelt-gewaesserschutz/gewaesserschutz/ueberschwemmungsgebiete-innerhalb-der-stadt-goslar
 - Service: https://www.umweltkarten-niedersachsen.de/arcgis/rest/services/HWSchutz_wms/MapServer
 - Access date: 2026-09-14. Current regulatory snapshot, not observed flood events.
-- Used by: `multiriver_comparison_v1` and the full multi-river extent; supplements the Abzucht/Grane/Radau/Wedde snapshot with Ecker, Schamlahbach, Oker and Innerste for fixed-model spatial comparison.
+- Used by: `multiriver_comparison` and the full multi-river extent; supplements the Abzucht/Grane/Radau/Wedde snapshot with Ecker, Schamlahbach, Oker and Innerste for fixed-model spatial comparison.
 - Scope: discovery envelope WGS84 10.2,51.7,10.8,52.1. Retrieve complete selected features without clipping: layer39 UESG691 Ecker, UESG632 Schamlahbach; layer40 UESG793 Oker-6 Stadt Goslar, UESG792 Innerste-5 Stadt Goslar. City-specific Oker/Innerste selected instead of adjoining municipal regulations. Coverage denominator is the complete selected official feature, not whole river basin.
 - Public vector query, no account. Server copyright: © 2026, daten@nlwkn.niedersachsen.de. No explicit reuse licence found in layer metadata.
 - Reproduce: `.venv/bin/python bin/acquire/pull_goslar_multiriver_regulatory.py`.
@@ -14,7 +14,7 @@ Status: downloaded 2026-09-14; used for the Goslar multi-river comparison.
 
 ## Acquisition result
 
-Acquired four complete features successfully (2026-09-14); SHA256 and complete original attributes in `data/validation/goslar_multiriver_regulatory_v1/source_manifest.json`:
+Acquired four complete features successfully (2026-09-14); SHA256 and complete original attributes in `data/validation/goslar_multiriver_regulatory/source_manifest.json`:
 
 | River | UESG id / layer | Bytes | SHA256 |
 |---|---|---:|---|

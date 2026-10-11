@@ -20,10 +20,10 @@ from pyproj import Transformer
 import geopandas as gpd
 
 ROOT=Path(__file__).resolve().parents[2]
-DATA=ROOT/'data/validation/abzucht_atkis_dop_context_v1'
-TMP=ROOT/'data/tmp/abzucht_atkis_dop_context_v1'
-BASE=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1'
-ALIGN=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/river_alignment_v1'
+DATA=ROOT/'data/validation/goslar_abzucht_atkis_dop_context'
+TMP=ROOT/'data/tmp/goslar_abzucht_atkis_dop_context'
+BASE=ROOT/'outputs/goslar_abzucht_diagnostics/fixed_scale'
+ALIGN=ROOT/'outputs/goslar_abzucht_diagnostics/river_alignment'
 WFS='https://opendata.lgln.niedersachsen.de/doorman/noauth/atkisbdlm_wfs_sf'
 WMS='https://opendata.lgln.niedersachsen.de/doorman/noauth/dop_wms'
 MAX_BYTES=10_000_000
@@ -158,7 +158,7 @@ def acquire_snapshot(staging,gml,matched,returned,gml_http,hits_http,bbox,cases,
             sha256=sha(dest),bbox_25832=[xmin,ymin,xmax,ymax],width_px=width_px,height_px=height_px,
             ground_pixel_size_m=[width_m/width_px,height_m/height_px],http=http,
             **capture_metadata(x,y))
-    manifest=dict(dataset_id='abzucht_atkis_dop_context_v1',access_date=date.today().isoformat(),
+    manifest=dict(dataset_id='goslar_abzucht_atkis_dop_context',access_date=date.today().isoformat(),
         claim_level='validation_candidate/context',enters_pim_score=False,command=COMMAND,
         attribution='LGLN (2026), CC BY 4.0',
         wfs=dict(feature_type='adv:AX_Gewaesserachse',matched=matched,returned=returned,

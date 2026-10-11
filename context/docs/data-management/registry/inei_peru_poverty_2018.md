@@ -40,12 +40,12 @@ Status: downloaded on 2026-07-08 and Arequipa district table extracted.
   `fcc465d75abe7f7e20107d67fc3a947d606e2176d0c00fecb02ceafcca913f00`
 - Arequipa extracted records: 109 districts
 - Manifest:
-  `outputs/inei_peru_poverty_2018/inei_arequipa_poverty_manifest.json`
+  `outputs/peru_former_inei_poverty_2018/inei_arequipa_poverty_manifest.json`
 
 ## Processing And Use
 
 - Raw data path: `data/raw/inei_peru_poverty_2018/`
-- Derived output path: `outputs/inei_peru_poverty_2018/`
+- Derived output path: `outputs/peru_former_inei_poverty_2018/`
 - Use:
   - join district-level poverty interval/rank by UBIGEO to Arequipa district
     boundaries;

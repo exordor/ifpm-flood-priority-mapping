@@ -24,8 +24,8 @@ from shapely.ops import transform as shapely_transform
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BOUNDARY = ROOT / "outputs/peru_secocha_boundary/peru_secocha_active_boundary.gpkg"
-BOUNDARY_ID = "peru_secocha_a7367_reference_extent_v1"
+BOUNDARY = ROOT / "outputs/secocha_boundary/secocha_boundary.gpkg"
+BOUNDARY_ID = "secocha_reference_extent"
 DATA_DIR = ROOT / "data/validation/secocha_2023_validation/satellite_before_after"
 CATALOG_DIR = DATA_DIR / "catalog"
 QUICKLOOK_DIR = DATA_DIR / "quicklooks"

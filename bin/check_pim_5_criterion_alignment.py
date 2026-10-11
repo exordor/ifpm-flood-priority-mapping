@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 OUTPUT_DIRS = [
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/priority_scenarios",
+    ROOT / "outputs/peru_former_pim_chain/priority_scenarios",
 ]
 
 PIM_MAIN_CRITERIA = {

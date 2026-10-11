@@ -23,7 +23,7 @@ from rasterio.warp import Resampling, reproject
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "outputs/secocha_2023_validation/satellite_before_after"
 PIXEL_MANIFEST = BASE / "sentinel_pixel_download_core_s2_manifest.json"
-BOUNDARY = ROOT / "outputs/peru_secocha_boundary/peru_secocha_active_boundary.gpkg"
+BOUNDARY = ROOT / "outputs/secocha_boundary/secocha_boundary.gpkg"
 BOUNDARY_LAYER = "secocha_active_boundary"
 OUT = BASE / "processed"
 PRE_ROLE = "s2_pre_event"
@@ -192,7 +192,7 @@ def process_s2() -> dict[str, object]:
         "dataset_id": "secocha_2023_sentinel2_optical_change_candidate",
         "event_id": "secocha_2023_historical_hazard_event",
         "event_date": "2023-02-05",
-        "boundary_id": "peru_secocha_a7367_reference_extent_v1",
+        "boundary_id": "secocha_reference_extent",
         "claim_level": "validation_candidate",
         "enters_pim_score": False,
         "dates": DATES,

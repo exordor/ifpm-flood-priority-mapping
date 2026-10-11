@@ -4,8 +4,8 @@ from pathlib import Path
 import hashlib,json,urllib.request
 import rasterio
 ROOT=Path(__file__).resolve().parents[2]
-OUT=ROOT/'data/raw/copernicus_dem_30m_goslar_multiriver_v1'
-TMP=ROOT/'data/tmp/copernicus_dem_30m_goslar_multiriver_v1'
+OUT=ROOT/'data/raw/copernicus_dem_30m_goslar_multiriver'
+TMP=ROOT/'data/tmp/copernicus_dem_30m_goslar_multiriver'
 def main():
  OUT.mkdir(parents=True,exist_ok=True);TMP.mkdir(parents=True,exist_ok=True)
  records=[]
@@ -24,6 +24,6 @@ def main():
   records.append({'path':str(path.relative_to(ROOT)),'source_url':url,'bytes':path.stat().st_size,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),**meta})
  original=ROOT/'data/raw/copernicus_dem_30m_goslar/Copernicus_DSM_COG_10_N51_00_E010_00_DEM.tif'
  records.append({'path':str(original.relative_to(ROOT)),'reused':True,'sha256':hashlib.sha256(original.read_bytes()).hexdigest(),'bytes':original.stat().st_size})
- (OUT/'source_manifest.json').write_text(json.dumps({'dataset_id':'copernicus_dem_30m_goslar_multiriver_v1','access_date':'2026-09-14','licence':'Copernicus DEM licence','files':records},indent=2)+'\n')
+ (OUT/'source_manifest.json').write_text(json.dumps({'dataset_id':'copernicus_dem_30m_goslar_multiriver','access_date':'2026-09-14','licence':'Copernicus DEM licence','files':records},indent=2)+'\n')
  print(json.dumps(records,indent=2))
 if __name__=='__main__':main()

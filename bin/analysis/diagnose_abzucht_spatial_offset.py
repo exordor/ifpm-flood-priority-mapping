@@ -23,9 +23,9 @@ import shapely
 from shapely.geometry import box
 
 ROOT=Path(__file__).resolve().parents[2]
-BASE=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1'
-COMPLETE=BASE.parent/'input_completion_v2'
-DEST=BASE.parent/'spatial_offset_v1'
+BASE=ROOT/'outputs/goslar_abzucht_diagnostics/fixed_scale'
+COMPLETE=BASE.parent/'input_completion'
+DEST=BASE.parent/'spatial_offset'
 COMMAND='.venv/bin/python bin/analysis/diagnose_abzucht_spatial_offset.py'
 THRESHOLD=.6
 LABELS=['Inside HQ100','Outside, 0–30 m','Outside, 30–60 m','Outside, 60–90 m',
@@ -187,7 +187,7 @@ Reproduce: `.venv/bin/python bin/analysis/diagnose_abzucht_spatial_offset.py`. R
     remember(Path(__file__))
     for name,value in inputs.items():
         if sha(ROOT/name)!=value:raise ValueError('Input changed during analysis')
-    manifest=dict(boundary_id='goslar_abzucht_display_rectangle_v1',experiment_id='spatial_offset_v1',
+    manifest=dict(boundary_id='goslar_abzucht_display_rectangle',experiment_id='spatial_offset',
         claim_level='diagnostic_only',command=COMMAND,threshold=THRESHOLD,reference='2026 official modelled HQ100, not observed 2017 extent',
         sampling='Exact UTM cell-centre point-to-polygon Euclidean distance; square-cell intersection sensitivity',
         comparison_extent='Existing display rectangle',stream='DEM-derived 30m stream cells at flow accumulation >500; not independent river survey',

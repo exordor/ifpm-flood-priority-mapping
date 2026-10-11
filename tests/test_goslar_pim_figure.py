@@ -19,10 +19,10 @@ class GoslarPimOverviewTest(unittest.TestCase):
             check=False,
         )
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        png = ROOT / "outputs/srtm_1arcsec_goslar/priority_scenarios/goslar_pim_overview.png"
+        png = ROOT / "outputs/goslar_pim_chain/priority_scenarios/goslar_pim_overview.png"
         self.assertTrue(png.exists())
         manifest = json.loads(
-            (ROOT / "outputs/srtm_1arcsec_goslar/priority_scenarios/goslar_pim_overview_manifest.json").read_text(
+            (ROOT / "outputs/goslar_pim_chain/priority_scenarios/goslar_pim_overview_manifest.json").read_text(
                 encoding="utf-8"
             )
         )

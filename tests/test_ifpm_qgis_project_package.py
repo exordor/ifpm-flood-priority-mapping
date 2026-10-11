@@ -12,7 +12,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "bin/package/build_ifpm_qgis_project_package.py"
+SCRIPT = ROOT / "bin/package/build_peru_former_zimbabwe_qgis_projects.py"
 PACKAGE = ROOT / "outputs/qgis_project_package"
 PORTABLE = (
     ROOT
@@ -22,7 +22,7 @@ GENERATED_PACKAGE_AVAILABLE = (PACKAGE / "validation.json").exists() and PORTABL
 
 
 def load_module():
-    spec = importlib.util.spec_from_file_location("build_ifpm_qgis_project_package", SCRIPT)
+    spec = importlib.util.spec_from_file_location("build_peru_former_zimbabwe_qgis_projects", SCRIPT)
     if spec is None or spec.loader is None:
         raise AssertionError(f"cannot load {SCRIPT}")
     module = importlib.util.module_from_spec(spec)

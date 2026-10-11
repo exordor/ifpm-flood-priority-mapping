@@ -9,8 +9,8 @@ import urllib.parse
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
-DEST = ROOT / 'data/validation/goslar_multiriver_regulatory_v1'
-TMP = ROOT / 'data/tmp/goslar_multiriver_regulatory_v1'
+DEST = ROOT / 'data/validation/goslar_multiriver_regulatory'
+TMP = ROOT / 'data/tmp/goslar_multiriver_regulatory'
 SERVICE = 'https://www.umweltkarten-niedersachsen.de/arcgis/rest/services/HWSchutz_wms/MapServer'
 BBOX = '10.2,51.7,10.8,52.1'
 SOURCES = [
@@ -40,7 +40,7 @@ def main():
     DEST.mkdir(parents=True, exist_ok=True)
     TMP.mkdir(parents=True, exist_ok=True)
     manifest = {
-        'dataset_id': 'goslar_multiriver_regulatory_v1', 'claim_level': 'diagnostic_only',
+        'dataset_id': 'goslar_multiriver_regulatory', 'claim_level': 'diagnostic_only',
         'accessed_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
         'selection_envelope_wgs84': BBOX, 'geometry_clipped': False,
         'coverage_denominator': 'complete selected official features; not entire river',

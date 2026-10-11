@@ -127,7 +127,7 @@ def write_lineage() -> None:
     derived = RAW / "osm_goslar_infrastructure_candidates.gpkg"
     entries["osm_infrastructure"]["derived_geopackage"] = str(derived.relative_to(ROOT))
     payload = {
-        "dataset_id": "goslar_official_hydrology_flood_infrastructure_v1",
+        "dataset_id": "goslar_official_hydrology_and_flood_data",
         "access_date": date.today().isoformat(),
         "claim_level": "validation_candidate/context",
         "enters_pim_score": False,

@@ -25,10 +25,10 @@ from compare_abzucht_hq100 import read_grid, summarize, COLORS
 from explain_abzucht_comparison import representative
 
 ROOT=Path(__file__).resolve().parents[2]
-BASE=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1'
-OUT=BASE.parent/'multiriver_comparison_v1'
-RAW=ROOT/'data/validation/goslar_multiriver_regulatory_v1'
-LOCAL=ROOT/'data/validation/goslar_2017_event_map_candidates_v1/nlwkn_current_regulatory_flood_zones_goslar.geojson'
+BASE=ROOT/'outputs/goslar_abzucht_diagnostics/fixed_scale'
+OUT=BASE.parent/'multiriver_comparison'
+RAW=ROOT/'data/validation/goslar_multiriver_regulatory'
+LOCAL=ROOT/'data/validation/goslar_2017_regulatory_flood_context/nlwkn_current_regulatory_flood_zones_goslar.geojson'
 HWRM=ROOT/'outputs/goslar_official_hydrology_and_flood_data/goslar_hwrm_flood_hazard_boundaries_12km.gpkg'
 ANNOUNCEMENTS={'Abzucht':'2026-04-01','Grane':None,'Oker':'2017-05-02','Innerste':'2017-05-02','Radau':'2021-01-27','Ecker':'2015-05-13','Schamlah':'2014-09-03','Wedde':'2015-04-15'}
 IDS={917:'Abzucht',842:'Grane',793:'Oker',792:'Innerste',844:'Radau',691:'Ecker',632:'Schamlah',686:'Wedde'}
@@ -100,8 +100,8 @@ def main():
     components={}
     for ws in manifest['component_weights'].values():
         for k in ws:
-            if k=='water_wetland_context':p='environmental_sensitivity_v0_1/water_wetland_context_0_1.tif'
-            elif k=='protected_ecological_context':p='environmental_sensitivity_v0_1/protected_area_context_0_1.tif'
+            if k=='water_wetland_context':p='environmental_sensitivity/water_wetland_context_0_1.tif'
+            elif k=='protected_ecological_context':p='environmental_sensitivity/protected_area_context_0_1.tif'
             elif k=='settlement_population':p='exposure_indicators/population_exposure_0_1.tif'
             elif k=='critical_infrastructure':p='exposure_indicators/built_infrastructure_exposure_0_1.tif'
             else:p=f'criteria_stack/criteria/{k}_0_1.tif'
@@ -231,7 +231,7 @@ def main():
     remember(Path(__file__));remember(Path(__file__).with_name('compare_abzucht_hq100.py'));remember(Path(__file__).with_name('explain_abzucht_comparison.py'))
     for path,digest in inputs.items():
         if sha(ROOT/path)!=digest:raise ValueError('Input changed during comparison: '+path)
-    outmanifest=dict(boundary_id='goslar_abzucht_display_rectangle_v1',experiment_id='multiriver_comparison_v1',claim_level='diagnostic_only',
+    outmanifest=dict(boundary_id='goslar_abzucht_display_rectangle',experiment_id='multiriver_comparison',claim_level='diagnostic_only',
                      command='.venv/bin/python bin/analysis/compare_goslar_multiriver.py',scores_changed=False,weights_changed=False,ghsl_used=False,
                      reference_grid=dict(crs=str(ref['crs']),shape=list(pim.shape),transform=list(ref['transform'])),
                      ring_policy='500/1000/2000 m; exclude union of ALL acquired regulatory and hydraulic scenario footprints, including alternative scenarios of the same river; same raster inclusion rule; paired finite PIM/FH support',
@@ -270,7 +270,7 @@ def report(out,inventory,rows,cases,drivers):
     def get(pid,metric,zone,radius=1000,inclusion='center'):
         return next(r for r in rows if r['product_id']==pid and r['metric']==metric and r['zone']==zone and r['radius_m']==radius and r['inclusion']==inclusion)
     def number(x):return '—' if x is None else f'{x:.3f}'
-    text='# Multi-river comparison results\n\nSuperseded by goslar_multiriver_full_extent_v1.\n\nThis round compares only areas already covered by the original model. Announcement dates are not flood-event dates. In the main maps, the left panel shows the flood sub-indicator and the right panel the composite PIM; original inputs, weights, scales and thresholds are all kept unchanged. Interpretation is given outside the figures.\n\n'
+    text='# Multi-river comparison results\n\nSuperseded by goslar_multiriver_full_extent.\n\nThis round compares only areas already covered by the original model. Announcement dates are not flood-event dates. In the main maps, the left panel shows the flood sub-indicator and the right panel the composite PIM; original inputs, weights, scales and thresholds are all kept unchanged. Interpretation is given outside the figures.\n\n'
     text+='Official designated extents are labelled regulatory_extent; not every regulatory layer is automatically treated as a feature-by-feature verified HQ100. The existing Abzucht HQ100 comparison basis is retained; the supplementary HWRM data use an explicit return-period field. Two self-intersecting Oker HQ20 geometries were repaired with make_valid; the area changes are recorded in manifest.json, and the original data were not modified.\n\n## Results by river\n\n| River/source | Valid cells | Source-area coverage | Flood indicator inside/outside | PIM inside/outside | Share PIM≥0.6 (inside) |\n|---|---:|---:|---|---|---:|\n'
     summary=[]
     for inv in inventory:

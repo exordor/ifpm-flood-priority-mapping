@@ -17,9 +17,9 @@ from matplotlib.colors import ListedColormap, BoundaryNorm
 from matplotlib.patches import Patch
 
 ROOT=Path(__file__).resolve().parents[2]
-BASE=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1'
-EXPLANATION=BASE.parent/'explanation_v1'
-OUT=BASE.parent/'original_question_v1'
+BASE=ROOT/'outputs/goslar_abzucht_diagnostics/fixed_scale'
+EXPLANATION=BASE.parent/'explanation'
+OUT=BASE.parent/'original_question'
 
 def sha(p):
     with p.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
@@ -139,8 +139,8 @@ Should I evaluate PIM as flood hazard, or as a broader intervention-priority sco
     remember(Path(__file__))
     for name,digest in inputs.items():
         if sha(ROOT/name)!=digest:raise ValueError('Input changed during presentation')
-    manifest=dict(boundary_id='goslar_abzucht_display_rectangle_v1',experiment_id='original_question_v1',claim_level='diagnostic_only',
-                  command='.venv/bin/python bin/analysis/present_abzucht_original_question.py',source_experiment='frozen_scale_v1',
+    manifest=dict(boundary_id='goslar_abzucht_display_rectangle',experiment_id='original_question',claim_level='diagnostic_only',
+                  command='.venv/bin/python bin/analysis/present_abzucht_original_question.py',source_experiment='fixed_scale',
                   ghsl_used=False,scores_changed=False,weights_changed=False,threshold=.6,group_counts=counts,inputs=inputs,
                   outputs={p.name:sha(p) for p in OUT.iterdir() if p.is_file() and p.name!='manifest.json'})
     (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')

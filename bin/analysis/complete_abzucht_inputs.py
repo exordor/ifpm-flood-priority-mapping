@@ -18,13 +18,13 @@ sys.path[:0]=[str(ROOT/'bin'),str(Path(__file__).parent)]
 sys.path.insert(0,str(ROOT/'bin/acquire'))
 from compare_abzucht_hq100 import read_grid, digest, COLORS, LABELS
 from repair_abzucht_gaps import score as legacy_score, write
-from abzucht_frozen_normalization import apply
+from abzucht_fixed_scale_normalization import apply
 from tune_abzucht_weights import weights_at
 from pull_abzucht_soilgrids2017 import PROPS, DEPTHS, depth_average
 from pull_goslar_soilgrids_window import williams_k
 
-BASE=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1'
-DEST=BASE.parent/'input_completion_v2'
+BASE=ROOT/'outputs/goslar_abzucht_diagnostics/fixed_scale'
+DEST=BASE.parent/'input_completion'
 SOIL=ROOT/'data/raw/soilgrids2017_abzucht'
 WEIGHTS=[.34,.45,.55,.65,.75,.76,.77,.78,.79,.80]
 COMMAND='.venv/bin/python bin/analysis/complete_abzucht_inputs.py'
@@ -88,11 +88,11 @@ def main():
     old,ref=read_grid(pin(ROOT/m['priority_raster_lineage']['path'],m['priority_raster_lineage']['sha256']))
     domain=np.isfinite(old)
     baseline_criteria={k:read_grid(pin(ROOT/v['path'],v['sha256']),ref)[0] for k,v in m['criterion_raster_lineage'].items()}
-    explanation=json.loads(pin(BASE.parent/'explanation_v1/manifest.json').read_text())
+    explanation=json.loads(pin(BASE.parent/'explanation/manifest.json').read_text())
     for name,h in explanation['inputs'].items():pin(ROOT/name,h)
     parts={}
-    special={'water_wetland_context':'environmental_sensitivity_v0_1/water_wetland_context_0_1.tif',
-             'protected_ecological_context':'environmental_sensitivity_v0_1/protected_area_context_0_1.tif',
+    special={'water_wetland_context':'environmental_sensitivity/water_wetland_context_0_1.tif',
+             'protected_ecological_context':'environmental_sensitivity/protected_area_context_0_1.tif',
              'settlement_population':'exposure_indicators/population_exposure_0_1.tif',
              'critical_infrastructure':'exposure_indicators/built_infrastructure_exposure_0_1.tif'}
     for weights in m['component_weights'].values():
@@ -101,7 +101,7 @@ def main():
     replay,_=legacy_score(parts,m,domain)
     error=float(np.max(np.abs(replay[domain]-old[domain])))
     if error>1e-6:raise ValueError('Baseline cannot be reconstructed')
-    gap=BASE.parent/'gap_repair_v1'
+    gap=BASE.parent/'gap_repair'
     gm=json.loads(pin(gap/'manifest.json').read_text())
     for name,h in gm['inputs'].items():pin(ROOT/name,h)
     upgraded=dict(parts)
@@ -242,7 +242,7 @@ def main():
                                  high_share_gap=i['high_share']-o['high_share']))
     table('weight_ranking.csv',rankings)
     make_figures(out,summary,rankings,rasters,rect&domain,bounds,hq,ref,contributions)
-    for source in [Path(__file__),ROOT/'bin/analysis/repair_abzucht_gaps.py',ROOT/'bin/analysis/abzucht_frozen_normalization.py',
+    for source in [Path(__file__),ROOT/'bin/analysis/repair_abzucht_gaps.py',ROOT/'bin/analysis/abzucht_fixed_scale_normalization.py',
                    ROOT/'bin/analysis/compare_abzucht_hq100.py',ROOT/'bin/analysis/tune_abzucht_weights.py',ROOT/'bin/_lib/standardization.py']:pin(source)
     bests={name:max([r for r in rankings if r['scenario']==name],key=lambda r:(r['high_share_gap'],-r['flood_weight'])) for name in scenarios}
     report='''# Abzucht input completion and weight recalculation
@@ -260,7 +260,7 @@ All replacement sources are predictions or model estimates (SoilGrids2017 is an 
     report+='\nAll tried weights (the original main weights and 34–80%) were recalculated on the same common support domain.\n\n'
     report+=f"The official German BK50 soil types cover {bk_evidence['soil_type_cells']}/{bk_evidence['hq100_cells']} cells inside HQ100. The public fields contain no numeric K, so they serve only as background on soil presence and type; K was not guessed from soil names.\n\n"
     for name,r in bests.items():report+=f"- {name}: at the fixed 0.6 threshold, the highest gap among this round's candidates is at a flood weight of {r['flood_weight']:.0%}, with an inside-outside high-score share difference of {100*r['high_share_gap']:.2f} percentage points.\n"
-    report+=f'\nReproduce: `.venv/bin/python bin/acquire/pull_abzucht_soilgrids2017.py`, then `{COMMAND}`. The rationale for the original population replacement is in the existing gap_repair_v1.\n'
+    report+=f'\nReproduce: `.venv/bin/python bin/acquire/pull_abzucht_soilgrids2017.py`, then `{COMMAND}`. The rationale for the original population replacement is in the existing gap_repair.\n'
     (out/'READING_NOTE.md').write_text(report)
     # Reopen all persisted arrays; exact score/class support equality.
     for (name,f),a in rasters.items():
@@ -268,7 +268,7 @@ All replacement sources are predictions or model estimates (SoilGrids2017 is an 
         if not np.array_equal(a,b,equal_nan=True):raise ValueError('Saved score differs')
     for name,h in inputs.items():
         if digest(ROOT/name)!=h:raise ValueError('Input changed during run')
-    manifest=dict(boundary_id='goslar_abzucht_display_rectangle_v1',experiment_id='input_completion_v2',
+    manifest=dict(boundary_id='goslar_abzucht_display_rectangle',experiment_id='input_completion',
       claim_level='sensitivity_scenario',command=COMMAND,inputs=inputs,baseline_replay_error=error,ls_replay_error=ls_error,
       normalization=anchors,main_weights=m['main_weights'],component_weights=m['component_weights'],
       channel_component_weights={'soil_k_factor':.5,'c_factor':.5,'ls_factor':'not_applicable'},

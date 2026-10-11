@@ -26,8 +26,8 @@ from scipy.spatial import cKDTree
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "data/validation/goslar_2017_affected_locations_v1/source_locations.json"
-PIM = ROOT / "outputs/srtm_1arcsec_goslar/priority_scenarios/scenarios/priority_goslar_direct_pim.tif"
+SOURCE = ROOT / "data/validation/goslar_2017_affected_locations/source_locations.json"
+PIM = ROOT / "outputs/goslar_pim_chain/priority_scenarios/scenarios/priority_goslar_direct_pim.tif"
 OUT = ROOT / "outputs/goslar_2017_affected_location_evidence"
 GPKG = OUT / "goslar_2017_affected_location_evidence.gpkg"
 CSV = OUT / "affected_location_pim_samples.csv"

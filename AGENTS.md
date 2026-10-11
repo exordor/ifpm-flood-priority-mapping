@@ -22,10 +22,10 @@ Working conventions for this workspace.
 
 ## Study areas
 
-- Active: Secocha, Peru (`peru_secocha_a7367_reference_extent_v1`) and Goslar, Germany.
-- Frozen: former Peru area `peru_hybas_l7_6070641200` in
-  `outputs/srtm_1arcsec_peru_pilot/`. Read only; never write new runs there.
-- Background only: Zimbabwe `boundary_v1`.
+- Active: Secocha, Peru (`secocha_reference_extent`) and Goslar, Germany.
+- Frozen: former Peru area `peru_former` in
+  `outputs/peru_former_pim_chain/`. Read only; never write new runs there.
+- Background only: Zimbabwe `zimbabwe_upper_mzingwane`.
 
 ## Modelling rules
 

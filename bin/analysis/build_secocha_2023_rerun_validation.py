@@ -16,7 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "outputs/secocha_2023_validation"
-PIM_MANIFEST = ROOT / "outputs/peru_secocha_a7367_reference_extent_v1/priority_scenarios/run_manifest.json"
+PIM_MANIFEST = ROOT / "outputs/secocha_pim_chain/priority_scenarios/run_manifest.json"
 EVENT_COMPARISON = OUT / "observed_hazard/secocha_2023_event_pim_comparison.json"
 ORIGINAL_COMPARISON = OUT / "observed_hazard/ingemmet_original_gis_comparison.json"
 RAIN_COMPARISON = OUT / "rainfall/rainfall_sat_vs_rnl_comparison.json"
@@ -28,8 +28,8 @@ SENTINEL_PIXEL_MANIFESTS = [
 ]
 SENTINEL_S2_PROCESSING_QA = OUT / "satellite_before_after/processed/s2_optical_change_qa.json"
 MAP7_MANIFEST = OUT / "observed_hazard/digitization_manifest.json"
-PRIORITY_RASTER = ROOT / "outputs/peru_secocha_a7367_reference_extent_v1/priority_scenarios/scenarios/priority_secocha_direct_pim.tif"
-QA_MANIFEST = ROOT / "outputs/peru_secocha_a7367_reference_extent_v1/quality_assurance/chain_validation.json"
+PRIORITY_RASTER = ROOT / "outputs/secocha_pim_chain/priority_scenarios/scenarios/priority_secocha_direct_pim.tif"
+QA_MANIFEST = ROOT / "outputs/secocha_pim_chain/quality_assurance/chain_validation.json"
 ACTIVE_BOUNDARY_SHA256 = "4b6d0fe0775c706860190c5b9248deeeec539399831be1577007487151907d4b"
 OUT_JSON = OUT / "rerun_validation_summary.json"
 OUT_MD = OUT / "rerun_validation_summary.md"
@@ -83,7 +83,7 @@ def main() -> None:
     map7_manifest = load(MAP7_MANIFEST)
     qa = load(QA_MANIFEST)
     checks: list[dict[str, object]] = []
-    boundary_id = "peru_secocha_a7367_reference_extent_v1"
+    boundary_id = "secocha_reference_extent"
     require(pim.get("focus_area_id") == boundary_id, "pim_active_focus_area", checks)
     require(pim.get("boundary_id") == boundary_id, "pim_boundary_id", checks)
     require(pim.get("main_weights") == {
@@ -93,7 +93,7 @@ def main() -> None:
         "environmental": 0.10,
         "socioeconomic": 0.14,
     }, "frozen_supervisor_v07_weights", checks)
-    priority_path = ROOT / "outputs/peru_secocha_a7367_reference_extent_v1/priority_scenarios" / str(pim["priority_raster"])
+    priority_path = ROOT / "outputs/secocha_pim_chain/priority_scenarios" / str(pim["priority_raster"])
     priority_artifact = artifact(priority_path)
     qa_artifact = artifact(QA_MANIFEST)
     require(qa.get("boundary_id") == boundary_id and qa.get("status") == "pass", "pim_chain_validation_pass", checks)
@@ -153,7 +153,7 @@ def main() -> None:
     )
     for record in sentinel_s2_processing.get("outputs", {}).values():
         verify_record(record)
-    if pim.get("focus_area_id") != "peru_secocha_a7367_reference_extent_v1":
+    if pim.get("focus_area_id") != "secocha_reference_extent":
         raise RuntimeError("PIM run manifest is not the active Secocha experiment")
     if pim.get("main_weights") != {
         "flood_hazard": 0.34,

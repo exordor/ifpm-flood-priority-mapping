@@ -9,11 +9,11 @@ from rasterio.warp import reproject,Resampling,transform_bounds
 from scipy.ndimage import distance_transform_edt
 ROOT=Path(__file__).resolve().parents[2];sys.path[:0]=[str(ROOT/'bin'),str(Path(__file__).parent)]
 from run_abzucht_expanded import load
-from abzucht_frozen_normalization import apply
+from abzucht_fixed_scale_normalization import apply
 from compare_goslar_multiriver import BASE,sha,read_grid,raster_mask,clean_ring,write_csv,stats,make_map
 from repair_abzucht_gaps import census_grid
 from tune_abzucht_weights import weights_at,score_at
-OUT=ROOT/'outputs/goslar_multiriver_full_extent_v1/frozen_scale_v1'
+OUT=ROOT/'outputs/goslar_multiriver_full_extent/fixed_scale'
 
 def main():
  # Full runs deliberately recompute stages; stale checkpoints are never trusted.
@@ -22,24 +22,24 @@ def main():
  oldm=json.loads(pin(BASE/'chain/priority_scenarios/run_manifest.json').read_text())
  for e in [oldm['priority_raster_lineage'],*oldm['criterion_raster_lineage'].values()]:assert sha(pin(ROOT/e['path']))==e['sha256']
  old,oref=read_grid(ROOT/oldm['priority_raster_lineage']['path']);oldgeom=gpd.read_file(pin(BASE/'expanded_boundary.gpkg')).geometry.union_all()
- ps=gpd.read_file(pin(BASE.parent/'multiriver_comparison_v1/comparison_boundaries.gpkg'),layer='products');allflood=ps.geometry.union_all();geom=oldgeom.union(allflood.buffer(2000))
+ ps=gpd.read_file(pin(BASE.parent/'multiriver_comparison/comparison_boundaries.gpkg'),layer='products');allflood=ps.geometry.union_all();geom=oldgeom.union(allflood.buffer(2000))
  t=oref['transform'];minx,miny,maxx,maxy=geom.bounds;x=t.c+math.floor((minx-t.c)/30)*30;y=t.f+math.ceil((maxy-t.f)/30)*30
  ref=dict(oref,width=math.ceil((maxx-x)/30),height=math.ceil((y-miny)/30),transform=from_origin(x,y,30,30));shape=(ref['height'],ref['width']);mask=raster_mask(geom,ref)
  bc=334;bref=dict(ref,width=ref['width']+2*bc,height=ref['height']+2*bc,transform=ref['transform']*rasterio.Affine.translation(-bc,-bc));crop=(slice(bc,bc+shape[0]),slice(bc,bc+shape[1]))
- gpd.GeoDataFrame({'boundary_id':['goslar_multiriver_full_extent_v1']},geometry=[geom],crs=ref['crs']).to_file(OUT/'expanded_boundary.gpkg',layer='expanded_boundary',driver='GPKG')
+ gpd.GeoDataFrame({'boundary_id':['goslar_multiriver_full_extent']},geometry=[geom],crs=ref['crs']).to_file(OUT/'expanded_boundary.gpkg',layer='expanded_boundary',driver='GPKG')
  ps.to_file(OUT/'comparison_boundaries.gpkg',layer='products',driver='GPKG');ps.drop(columns='geometry').to_csv(OUT/'source_inventory.csv',index=False)
- c=load('multiriver_chain',ROOT/'bin/factors/run_goslar_peru_style_chain.py');paths={k:v for k,v in vars(c).items() if isinstance(v,Path)}
+ c=load('multiriver_chain',ROOT/'bin/factors/run_goslar_pim_chain.py');paths={k:v for k,v in vars(c).items() if isinstance(v,Path)}
  for key,p in paths.items():
   if p.is_relative_to(paths['OUT_BASE']):setattr(c,key,OUT/'chain'/p.relative_to(paths['OUT_BASE']))
   elif p.is_relative_to(paths['WC_DIR']):setattr(c,key,OUT/'landcover'/p.relative_to(paths['WC_DIR']))
- c.BOUNDARY_GPKG=OUT/'expanded_boundary.gpkg';c.BOUNDARY_LAYER='expanded_boundary';c.FOCUS_AREA_ID='goslar_multiriver_full_extent_v1';c.SOILGRIDS_K_SNAPSHOT=ROOT/'data/raw/soilgrids_250m_goslar_multiriver_v1/k_factor_0_30cm_avg_250m_us.tif'
- c.ROADS=ROOT/'data/raw/goslar_multiriver_osm_v1/roads.gpkg';c.INFRASTRUCTURE=ROOT/'data/raw/goslar_multiriver_osm_v1/facilities.gpkg';c.PROTECTED_RAW=ROOT/'data/raw/eea_natura2000_goslar_multiriver_v1/protected.gpkg';c.ZENSUS_RAW=OUT/'sources';c.CLMS_BARE_SOIL=paths['CLMS_BARE_SOIL']
+ c.BOUNDARY_GPKG=OUT/'expanded_boundary.gpkg';c.BOUNDARY_LAYER='expanded_boundary';c.FOCUS_AREA_ID='goslar_multiriver_full_extent';c.SOILGRIDS_K_SNAPSHOT=ROOT/'data/raw/soilgrids_250m_goslar_multiriver/k_factor_0_30cm_avg_250m_us.tif'
+ c.ROADS=ROOT/'data/raw/goslar_multiriver_osm/roads.gpkg';c.INFRASTRUCTURE=ROOT/'data/raw/goslar_multiriver_osm/facilities.gpkg';c.PROTECTED_RAW=ROOT/'data/raw/eea_natura2000_goslar_multiriver/protected.gpkg';c.ZENSUS_RAW=OUT/'sources';c.CLMS_BARE_SOIL=paths['CLMS_BARE_SOIL']
  # Require complete acquisition manifests before any expensive model stage.
  osm=json.loads(pin(c.ROADS.parent/'source_manifest.json').read_text())
  for name in ['roads','facilities']:
   assert sha(pin(c.ROADS.parent/f'{name}.gpkg'))==osm['sources'][name]['gpkg_sha256']
  assert osm['sources']['roads'].get('acquisition_complete') is True, 'Road acquisition must be complete for required source support'
- for meta in [c.PROTECTED_RAW.parent/'source_manifest.json',ROOT/'data/raw/copernicus_dem_30m_goslar_multiriver_v1/source_manifest.json',c.SOILGRIDS_K_SNAPSHOT.parent/'soilgrids_goslar_diagnostics.json']:pin(meta)
+ for meta in [c.PROTECTED_RAW.parent/'source_manifest.json',ROOT/'data/raw/copernicus_dem_30m_goslar_multiriver/source_manifest.json',c.SOILGRIDS_K_SNAPSHOT.parent/'soilgrids_goslar_diagnostics.json']:pin(meta)
  anchors=json.loads(pin(BASE/'frozen_normalization.json').read_text());(OUT/'frozen_normalization.json').write_text(json.dumps(anchors,indent=2)+'\n');stage='';index=0
  def norm(data,mask=None,**kwargs):
   nonlocal index
@@ -66,7 +66,7 @@ def main():
   stage=name;index=0
   print('Run',name,flush=True);fn();(checkpoint/name).write_text('complete\n')
  def terrain():
-  files=[ROOT/'data/raw/copernicus_dem_30m_goslar/Copernicus_DSM_COG_10_N51_00_E010_00_DEM.tif',*sorted((ROOT/'data/raw/copernicus_dem_30m_goslar_multiriver_v1').glob('*.tif'))]
+  files=[ROOT/'data/raw/copernicus_dem_30m_goslar/Copernicus_DSM_COG_10_N51_00_E010_00_DEM.tif',*sorted((ROOT/'data/raw/copernicus_dem_30m_goslar_multiriver').glob('*.tif'))]
   if len(files)!=4:raise ValueError('Four DEMtiles required')
   dem=np.full((bref['height'],bref['width']),np.nan,'float32')
   for p in files:
@@ -132,9 +132,9 @@ def main():
  oldlineage=c.lineage_record
  c.lineage_record=lambda p: oldlineage(p) if p.exists() else {'path':str(p.relative_to(ROOT)),'status':'not_used_by_expanded_wrapper'}
  run('priority_scenarios',c.stage_priority_scenarios)
- nmfile=c.SCENARIO_DIR/'run_manifest.json';nm=json.loads(nmfile.read_text());nm.update(boundary_id='goslar_multiriver_full_extent_v1',experiment_id='frozen_scale_v1',claim_level='diagnostic_only');nm['normalization']['method']='Original frozen anchors; no refit'
+ nmfile=c.SCENARIO_DIR/'run_manifest.json';nm=json.loads(nmfile.read_text());nm.update(boundary_id='goslar_multiriver_full_extent',experiment_id='fixed_scale',claim_level='diagnostic_only');nm['normalization']['method']='Original frozen anchors; no refit'
  nm['focus_area_name']='Original model union all retained official flood products plus 2km buffer'
- nm['boundary_contract']={'id':'goslar_multiriver_full_extent_v1','source':'old model union retained flood polygons plus 2km','area_km2':geom.area/1e6,'claim':'comparison domain, not hydrologic catchment'}
+ nm['boundary_contract']={'id':'goslar_multiriver_full_extent','source':'old model union retained flood polygons plus 2km','area_km2':geom.area/1e6,'claim':'comparison domain, not hydrologic catchment'}
  nm['hydrology_buffer_m']=10020;nm['data_sources']['dem']='Four Copernicus GLO30 tiles N51/N52 E009/E010';nm['input_lineage']['population']=oldlineage(OUT/'sources/population_native_100m.tif')
  nm['input_lineage']['wrapper']=oldlineage(Path(__file__));nm['input_lineage']['dem_tiles']=[oldlineage(ROOT/r) for r in inputs if 'Copernicus_DSM_' in r]
  nm['normalization']['frozen_parameters']=str((OUT/'frozen_normalization.json').relative_to(ROOT));nm['note']='Expanded controlled comparison; data gaps retained; new source versions and larger hydrology can change overlap'
@@ -171,9 +171,9 @@ def main():
  for pct,s in scores.items():make_map(OUT/f'overview_{pct}',f'Goslar region | Flood weight {pct}%',primary,geom.bounds,criteria['flood_hazard'],s,ref)
  for p in primary:make_map(OUT/p['river'].lower(),p['river']+' | Expanded coverage', [p],p['geometry'].buffer(500).bounds,criteria['flood_hazard'],pim,ref)
  for _,p in ps[ps.family!='regulatory'].iterrows():make_map(OUT/str(p.product_id),f'{p.river} | {p.scenario}',[dict(p)],p.geometry.buffer(500).bounds,criteria['flood_hazard'],pim,ref)
- pin(Path(__file__));pin(ROOT/'bin/factors/run_goslar_peru_style_chain.py')
- for helper in ['abzucht_frozen_normalization.py','compare_goslar_multiriver.py','repair_abzucht_gaps.py','tune_abzucht_weights.py']:pin(Path(__file__).parent/helper)
+ pin(Path(__file__));pin(ROOT/'bin/factors/run_goslar_pim_chain.py')
+ for helper in ['abzucht_fixed_scale_normalization.py','compare_goslar_multiriver.py','repair_abzucht_gaps.py','tune_abzucht_weights.py']:pin(Path(__file__).parent/helper)
  for path,h in inputs.items():assert sha(ROOT/path)==h,path
- report=dict(boundary_id='goslar_multiriver_full_extent_v1',experiment_id='frozen_scale_v1',claim_level='diagnostic_only',area_km2=geom.area/1e6,grid_shape=list(shape),target_cells=int(mask.sum()),scored_cells=int(valid.sum()),hydrology_buffer_m=10020,flow_boundary_limitation='Buffered comparison domain, not a complete upstream catchment; hydrology may change on overlap',normalization='frozen original anchors',weights=nm['main_weights'],old_area_comparison=comparison,source_vintage_note=osm.get('snapshot_note','See pinned OSM source manifest for timestamps'),preprocessing_note='Overlap change includes differing vector snapshots, larger terrain domain and grid reprojection effects; native SoilGrids overlap was verified identical',inputs=inputs,command='.venv/bin/python bin/analysis/run_goslar_multiriver_full.py',coverage=coverage)
+ report=dict(boundary_id='goslar_multiriver_full_extent',experiment_id='fixed_scale',claim_level='diagnostic_only',area_km2=geom.area/1e6,grid_shape=list(shape),target_cells=int(mask.sum()),scored_cells=int(valid.sum()),hydrology_buffer_m=10020,flow_boundary_limitation='Buffered comparison domain, not a complete upstream catchment; hydrology may change on overlap',normalization='frozen original anchors',weights=nm['main_weights'],old_area_comparison=comparison,source_vintage_note=osm.get('snapshot_note','See pinned OSM source manifest for timestamps'),preprocessing_note='Overlap change includes differing vector snapshots, larger terrain domain and grid reprojection effects; native SoilGrids overlap was verified identical',inputs=inputs,command='.venv/bin/python bin/analysis/run_goslar_multiriver_full.py',coverage=coverage)
  (OUT/'expansion_manifest.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
 if __name__=='__main__':main()

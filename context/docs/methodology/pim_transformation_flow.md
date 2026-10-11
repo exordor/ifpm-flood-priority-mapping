@@ -1,6 +1,6 @@
 # PIM transformation flow: from raw data to the priority map
 
-How the Secocha and Goslar chains compute the Priority Intervention Map (PIM) from raw data. The exact values are the ones recorded in `run_manifest.json` in each output folder. The code entry point is `bin/factors/run_peru_secocha_chain.py` (Goslar uses the same code, with the entry point `run_goslar_peru_style_chain.py`).
+How the Secocha and Goslar chains compute the Priority Intervention Map (PIM) from raw data. The exact values are the ones recorded in `run_manifest.json` in each output folder. The code entry point is `bin/factors/run_secocha_pim_chain.py` (Goslar uses the same code, with the entry point `run_goslar_pim_chain.py`).
 
 ## 1. Three-layer structure
 

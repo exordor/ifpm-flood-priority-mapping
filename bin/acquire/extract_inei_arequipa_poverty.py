@@ -12,14 +12,14 @@ from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parents[2]
 RAW_DIR = ROOT / "data/raw/inei_peru_poverty_2018"
-OUT_DIR = ROOT / "outputs/inei_peru_poverty_2018"
+OUT_DIR = ROOT / "outputs/peru_former_inei_poverty_2018"
 WORKBOOK = RAW_DIR / "anexo_estadistico_mapa_pobreza_2018.xlsx"
 AREQUIPA_CSV = RAW_DIR / "arequipa_district_poverty_2018.csv"
 
 INPUTS = [ROOT / "data/raw/inei_peru_poverty_2018/anexo_estadistico_mapa_pobreza_2018.xlsx"]
 OUTPUTS = [
     ROOT / "data/raw/inei_peru_poverty_2018/arequipa_district_poverty_2018.csv",
-    ROOT / "outputs/inei_peru_poverty_2018/inei_arequipa_poverty_manifest.json",
+    ROOT / "outputs/peru_former_inei_poverty_2018/inei_arequipa_poverty_manifest.json",
 ]
 
 

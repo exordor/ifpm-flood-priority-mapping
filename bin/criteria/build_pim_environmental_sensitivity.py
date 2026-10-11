@@ -22,29 +22,29 @@ from scipy.ndimage import distance_transform_edt
 
 ROOT = Path(__file__).resolve().parents[2]
 PERU_SERNANP = (
-    ROOT / "data/raw/sernanp_peru_protected_areas/peru_hybas_l7_6070641200_sernanp_protected_areas.gpkg"
+    ROOT / "data/raw/sernanp_protected_areas_peru_former/peru_former_sernanp_protected_areas.gpkg"
 )
 INPUTS = [
-    ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif",
-    ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
-    ROOT / "data/raw/esa_worldcover_2021_peru_pilot/ESA_WorldCover_10m_2021_v200_S18W072_Map.tif",
-    ROOT / "data/raw/esa_worldcover_2021_peru_pilot/ESA_WorldCover_10m_2021_v200_S18W075_Map.tif",
-    ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_water_a_free_1.shp",
-    ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_waterways_free_1.shp",
-    ROOT / "data/raw/sernanp_peru_protected_areas/peru_hybas_l7_6070641200_sernanp_protected_areas.gpkg",
+    ROOT / "outputs/peru_former_pim_chain/terrain_preprocessing/peru_former_dem_utm18s_30m.tif",
+    ROOT / "outputs/peru_former_boundary/peru_former_boundary.gpkg",
+    ROOT / "data/raw/esa_worldcover_2021_peru_former/ESA_WorldCover_10m_2021_v200_S18W072_Map.tif",
+    ROOT / "data/raw/esa_worldcover_2021_peru_former/ESA_WorldCover_10m_2021_v200_S18W075_Map.tif",
+    ROOT / "data/raw/geofabrik_osm_peru_former/extracted/gis_osm_water_a_free_1.shp",
+    ROOT / "data/raw/geofabrik_osm_peru_former/extracted/gis_osm_waterways_free_1.shp",
+    ROOT / "data/raw/sernanp_protected_areas_peru_former/peru_former_sernanp_protected_areas.gpkg",
 ]
 OUTPUTS = [
     ROOT
-    / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_0_1.tif",
+    / "outputs/peru_former_pim_chain/environmental_sensitivity/environmental_sensitivity_0_1.tif",
     ROOT
-    / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/water_wetland_context_0_1.tif",
+    / "outputs/peru_former_pim_chain/environmental_sensitivity/water_wetland_context_0_1.tif",
     ROOT
-    / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/protected_area_context_0_1.tif",
+    / "outputs/peru_former_pim_chain/environmental_sensitivity/protected_area_context_0_1.tif",
     ROOT
-    / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_manifest.csv",
+    / "outputs/peru_former_pim_chain/environmental_sensitivity/environmental_sensitivity_manifest.csv",
     ROOT
-    / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1/environmental_sensitivity_components.csv",
-    ROOT / "outputs/pim_environmental_sensitivity/environmental_sensitivity_v0_1_summary.csv",
+    / "outputs/peru_former_pim_chain/environmental_sensitivity/environmental_sensitivity_components.csv",
+    ROOT / "outputs/peru_former_environmental_sensitivity/environmental_sensitivity_summary.csv",
 ]
 WORLDCOVER_SENSITIVE_CLASSES = {80, 90, 95}
 ENVIRONMENTAL_CONTEXT_WEIGHTS = {
@@ -76,11 +76,11 @@ class SiteConfig:
 SITES = [
     SiteConfig(
         site="Zimbabwe",
-        boundary_id="boundary_v1",
-        ref=ROOT / "outputs/srtm_1arcsec_zimbabwe_prototype/terrain_preprocessing/v1_dem_utm35s_30m.tif",
-        boundary_gpkg=ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg",
+        boundary_id="zimbabwe_upper_mzingwane",
+        ref=ROOT / "outputs/zimbabwe_terrain_hydrology_factors/terrain_preprocessing/zimbabwe_dem_utm35s_30m.tif",
+        boundary_gpkg=ROOT / "outputs/zimbabwe_boundary/zimbabwe_boundary.gpkg",
         boundary_layer="v1_working_boundary",
-        output_dir=ROOT / "outputs/boundary_v1/environmental_sensitivity_v0_1",
+        output_dir=ROOT / "outputs/zimbabwe_pim_scenarios/environmental_sensitivity",
         worldcover_paths=(
             ROOT / "outputs/v1_full_methodology_evidence_sweep/rasters/v1_worldcover_2021_native_10m.tif",
         ),
@@ -100,23 +100,23 @@ SITES = [
     ),
     SiteConfig(
         site="Peru",
-        boundary_id="peru_hybas_l7_6070641200",
-        ref=ROOT / "outputs/srtm_1arcsec_peru_pilot/terrain_preprocessing/peru_hybas_l7_6070641200_dem_utm18s_30m.tif",
-        boundary_gpkg=ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg",
+        boundary_id="peru_former",
+        ref=ROOT / "outputs/peru_former_pim_chain/terrain_preprocessing/peru_former_dem_utm18s_30m.tif",
+        boundary_gpkg=ROOT / "outputs/peru_former_boundary/peru_former_boundary.gpkg",
         boundary_layer="peru_pilot_boundary",
-        output_dir=ROOT / "outputs/srtm_1arcsec_peru_pilot/environmental_sensitivity_v0_1",
+        output_dir=ROOT / "outputs/peru_former_pim_chain/environmental_sensitivity",
         worldcover_paths=(
-            ROOT / "data/raw/esa_worldcover_2021_peru_pilot/ESA_WorldCover_10m_2021_v200_S18W072_Map.tif",
-            ROOT / "data/raw/esa_worldcover_2021_peru_pilot/ESA_WorldCover_10m_2021_v200_S18W075_Map.tif",
+            ROOT / "data/raw/esa_worldcover_2021_peru_former/ESA_WorldCover_10m_2021_v200_S18W072_Map.tif",
+            ROOT / "data/raw/esa_worldcover_2021_peru_former/ESA_WorldCover_10m_2021_v200_S18W075_Map.tif",
         ),
         jrc_occurrence_path=None,
         water_vectors=(
             (
-                ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_water_a_free_1.shp",
+                ROOT / "data/raw/geofabrik_osm_peru_former/extracted/gis_osm_water_a_free_1.shp",
                 None,
             ),
             (
-                ROOT / "data/raw/geofabrik_osm_peru_pilot/extracted/gis_osm_waterways_free_1.shp",
+                ROOT / "data/raw/geofabrik_osm_peru_former/extracted/gis_osm_waterways_free_1.shp",
                 None,
             ),
         ),
@@ -430,7 +430,7 @@ def active_site_configs(site: str = "Peru") -> list[SiteConfig]:
 def main() -> None:
     rows = [build_site(config) for config in active_site_configs()]
     write_csv(
-        ROOT / "outputs/pim_environmental_sensitivity/environmental_sensitivity_v0_1_summary.csv",
+        ROOT / "outputs/peru_former_environmental_sensitivity/environmental_sensitivity_summary.csv",
         rows,
     )
     for row in rows:

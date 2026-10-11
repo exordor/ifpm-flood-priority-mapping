@@ -44,7 +44,7 @@ def main():
         partial.replace(archive)
     if archive.stat().st_size != EXPECTED_BYTES: raise ValueError('Cached archive size differs')
     if digest(archive) != PINNED_SHA256: raise ValueError('Archive differs from pinned 2026-09-14 download')
-    reference = ROOT/'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1/chain/terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif'
+    reference = ROOT/'outputs/goslar_abzucht_diagnostics/fixed_scale/chain/terrain_preprocessing/goslar_focus_dem_utm32n_30m.tif'
     if manifest_path.exists():
         if existing['reference_grid_sha256'] != digest(reference): raise ValueError('Reference changed; use a new dataset version')
         print('Verified existing GHSL archive and native subset; no source rewritten')

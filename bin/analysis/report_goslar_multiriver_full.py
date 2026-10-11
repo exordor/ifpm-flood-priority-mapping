@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parents[2];sys.path.insert(0,str(Path(__file__).pa
 from compare_goslar_multiriver import sha,read_grid,raster_mask,clean_ring,BASE
 import compare_goslar_multiriver as maps
 from matplotlib.ticker import MaxNLocator
-OUT=ROOT/'outputs/goslar_multiriver_full_extent_v1/frozen_scale_v1'
+OUT=ROOT/'outputs/goslar_multiriver_full_extent/fixed_scale'
 def main():
  m=json.loads((OUT/'expansion_manifest.json').read_text());n=json.loads((OUT/'chain/priority_scenarios/run_manifest.json').read_text());old=json.loads((BASE/'chain/priority_scenarios/run_manifest.json').read_text())
  for p,h in m['inputs'].items():assert sha(ROOT/p)==h,p

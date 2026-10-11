@@ -22,10 +22,10 @@ import shapely
 from shapely.geometry import box
 
 ROOT=Path(__file__).resolve().parents[2]
-SOURCE=ROOT/'data/validation/abzucht_atkis_dop_context_v1'
-PREV=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/river_alignment_v1'
-BASE=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1'
-DEST=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/atkis_dop_check_v1'
+SOURCE=ROOT/'data/validation/goslar_abzucht_atkis_dop_context'
+PREV=ROOT/'outputs/goslar_abzucht_diagnostics/river_alignment'
+BASE=ROOT/'outputs/goslar_abzucht_diagnostics/fixed_scale'
+DEST=ROOT/'outputs/goslar_abzucht_diagnostics/atkis_dop_check'
 COMMAND='.venv/bin/python bin/analysis/check_abzucht_atkis_dop.py'
 
 
@@ -154,7 +154,7 @@ This round keeps the scores, weights and HQ100 unchanged; neither ATKIS nor DOP 
     remember(Path(__file__))
     for name,digest in inputs.items():
         if sha(ROOT/name)!=digest:raise ValueError(f'Input changed during analysis: {name}')
-    output_manifest=dict(boundary_id='goslar_abzucht_display_rectangle_v1',experiment_id='atkis_dop_check_v1',
+    output_manifest=dict(boundary_id='goslar_abzucht_display_rectangle',experiment_id='atkis_dop_check',
         claim_level='diagnostic_only',command=COMMAND,enters_pim_score=False,
         method='Point-to-nearest-ATKIS-axis Euclidean distance in EPSG32632; DOP center-point capture metadata and visual overlays only',
         source_hashes=inputs,outputs={p.name:sha(p) for p in out.iterdir() if p.is_file() and p.name!='manifest.json'})

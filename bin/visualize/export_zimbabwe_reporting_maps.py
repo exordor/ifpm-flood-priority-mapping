@@ -32,11 +32,11 @@ sys.path.insert(0, str(ROOT / "bin/visualize"))
 import export_paper_style_single_maps as maps
 
 
-BASE = ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4"
+BASE = ROOT / "outputs/zimbabwe_pim_scenarios/rainfall_exposure"
 CRITERIA_DIR = BASE / "pim_criteria"
 PIM = BASE / "scenarios/priority_mentor_zimbabwe_direct_pim.tif"
-BOUNDARY = ROOT / "outputs/v1_working_boundary/v1_working_boundary.gpkg"
-RIVERS = ROOT / "data/raw/zimbabwe_geoportal_candidate_outlet_layers/extracted/rivers/ZWE_water_lines_dcw.shp"
+BOUNDARY = ROOT / "outputs/zimbabwe_boundary/zimbabwe_boundary.gpkg"
+RIVERS = ROOT / "data/raw/zimbabwe_geoportal_rivers_flood_zones/extracted/rivers/ZWE_water_lines_dcw.shp"
 OUT_DIR = ROOT / "outputs/slide_ready_figures/zimbabwe_reporting_maps"
 INDEX = OUT_DIR / "index.csv"
 DATA_STRENGTH = OUT_DIR / "criterion_data_strength.csv"

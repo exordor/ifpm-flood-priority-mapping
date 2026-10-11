@@ -16,9 +16,9 @@ import geopandas as gpd
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BOUNDARY = ROOT / "outputs/peru_secocha_boundary/peru_secocha_active_boundary.gpkg"
+BOUNDARY = ROOT / "outputs/secocha_boundary/secocha_boundary.gpkg"
 BOUNDARY_LAYER = "secocha_active_boundary"
-OUT_DIR = ROOT / "data/raw/soilgrids_250m_peru_secocha"
+OUT_DIR = ROOT / "data/raw/soilgrids_250m_secocha"
 
 
 def load_shared_downloader():
@@ -38,9 +38,9 @@ def main() -> int:
     shared = load_shared_downloader()
     shared.OUT_DIR = OUT_DIR
     shared.RAW_DIR = OUT_DIR / "raw"
-    shared.DIAGNOSTICS = OUT_DIR / "soilgrids_peru_secocha_diagnostics.json"
+    shared.DIAGNOSTICS = OUT_DIR / "soilgrids_secocha_diagnostics.json"
     shared.K_SNAPSHOT = OUT_DIR / "k_factor_0_30cm_avg_250m_us.tif"
-    shared.DATASET_ID = "soilgrids_250m_peru_secocha"
+    shared.DATASET_ID = "soilgrids_250m_secocha"
     (
         shared.FOCUS_LON_MIN,
         shared.FOCUS_LAT_MIN,

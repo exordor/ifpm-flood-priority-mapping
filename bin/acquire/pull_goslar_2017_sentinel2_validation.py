@@ -127,7 +127,7 @@ def qa_water_change() -> dict:
     result = {
         "claim_level": "validation_candidate",
         "dates": {role: SCENES[role]["date"] for role in SCENES},
-        "method": "NDWI=(B03-B08)/(B03+B08), water candidate NDWI > 0.15; SCL 4-7 valid; masks clipped to goslar_wrrl_water_bodies_reference_v1",
+        "method": "NDWI=(B03-B08)/(B03+B08), water candidate NDWI > 0.15; SCL 4-7 valid; masks clipped to goslar_wrrl_basin",
         "official_basin_pixels_10m": int(basin.sum()),
         "before_water_px": int((water_masks["before"] & basin).sum()),
         "after_water_px": int((water_masks["after"] & basin).sum()),

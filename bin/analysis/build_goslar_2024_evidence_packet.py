@@ -17,7 +17,7 @@ from shapely.geometry import box
 ROOT = Path(__file__).resolve().parents[2]
 REPORT_DIR = ROOT / "data/validation/goslar_harz_2024_focus_area/source_materials"
 DEFAULT_OUTPUT = ROOT / "outputs/goslar_harz_2024_focus_area"
-PERU_BOUNDARY = ROOT / "outputs/peru_pilot_boundary/peru_pilot_boundary.gpkg"
+PERU_BOUNDARY = ROOT / "outputs/peru_former_boundary/peru_former_boundary.gpkg"
 
 COMMON = {
     "focus_area_id": "goslar_harz_2024_focus_extent",
@@ -159,7 +159,7 @@ def main() -> None:
         "focus_center_wgs84": focus_center_wgs84,
         "inside_current_peru_boundary": inside,
         "distance_to_peru_boundary_km": distance_km,
-        "current_peru_boundary_id": "peru_hybas_l7_6070641200",
+        "current_peru_boundary_id": "peru_former",
         "claim_level": "diagnostic_only",
         "implication": "Goslar is a separate international focus area; it cannot validate the Peru PIM and is not a PIM input.",
     }

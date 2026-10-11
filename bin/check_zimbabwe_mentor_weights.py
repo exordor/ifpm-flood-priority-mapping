@@ -10,11 +10,11 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCENARIO_SCRIPT = ROOT / "bin/scenarios/run_boundary_v1_rainfall_exposure.py"
+SCENARIO_SCRIPT = ROOT / "bin/scenarios/run_zimbabwe_rainfall_exposure.py"
 ES_SCRIPT = ROOT / "bin/criteria/build_pim_environmental_sensitivity.py"
-SCENARIO_WEIGHTS_CSV = ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/scenario_weights.csv"
-SUBCRITERIA_CSV = ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/pim_subcriteria_weights.csv"
-SCENARIO_DIR = ROOT / "outputs/boundary_v1/rainfall_exposure_v0_4/scenarios"
+SCENARIO_WEIGHTS_CSV = ROOT / "outputs/zimbabwe_pim_scenarios/rainfall_exposure/scenario_weights.csv"
+SUBCRITERIA_CSV = ROOT / "outputs/zimbabwe_pim_scenarios/rainfall_exposure/pim_subcriteria_weights.csv"
+SCENARIO_DIR = ROOT / "outputs/zimbabwe_pim_scenarios/rainfall_exposure/scenarios"
 
 EXPECTED_MAIN_WEIGHTS = {
     "flood_hazard": 0.32,
@@ -78,7 +78,7 @@ def assert_weights(actual: dict[str, float], expected: dict[str, float], label: 
 
 
 def check_script_constants() -> None:
-    scenarios = load_module(SCENARIO_SCRIPT, "run_boundary_v1_rainfall_exposure")
+    scenarios = load_module(SCENARIO_SCRIPT, "run_zimbabwe_rainfall_exposure")
     es = load_module(ES_SCRIPT, "build_pim_environmental_sensitivity")
 
     assert_weights(

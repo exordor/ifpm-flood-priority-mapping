@@ -1,13 +1,13 @@
 # Dataset Registry: INDECI SINPAD Peru event-point context
 
-Status: queried 2026-07-10 for Arequipa flood/rainfall/aluvion-style emergency records; used for the former Peru study area (frozen, `peru_hybas_l7_6070641200`).
+Status: queried 2026-07-10 for Arequipa flood/rainfall/aluvion-style emergency records; used for the former Peru study area (frozen, `peru_former`).
 
 ## Dataset Identity
 
 - Dataset id: `indeci_sinpad_peru_flood_events`
 - Short name: INDECI SINPAD flood-relevant emergency records, Arequipa
 - Project role: event-point co-location context for Peru PIM priority classes
-- Study area: Arequipa department, then the former Peru study area (frozen, `peru_hybas_l7_6070641200`) and a 20 km
+- Study area: Arequipa department, then the former Peru study area (frozen, `peru_former`) and a 20 km
   context buffer
 - Spatial unit or mask: point records with department/province/district
   attributes
@@ -29,7 +29,7 @@ Status: queried 2026-07-10 for Arequipa flood/rainfall/aluvion-style emergency r
   `DEPARTAMENTO='AREQUIPA'` and flood-relevant `FENOMENO` names containing
   `INUND`, `LLUVI`, `ALUVI`, `HUAY`, or `DESBORDE`
 - Script:
-  `.venv/bin/python bin/acquire/query_peru_sinpad_flood_events.py`
+  `.venv/bin/python bin/acquire/query_peru_former_sinpad_flood_events.py`
 
 ## Files
 
@@ -40,13 +40,13 @@ Status: queried 2026-07-10 for Arequipa flood/rainfall/aluvion-style emergency r
 - Records inside the former Peru study area: 25
 - Records inside the former Peru study area plus 20 km context buffer: 452
 - Manifest:
-  `outputs/indeci_sinpad_peru_flood_events/sinpad_download_manifest.json`
-- CRS: EPSG:4326 points; boundary filtering uses `peru_hybas_l7_6070641200`
+  `outputs/peru_former_sinpad_flood_events/sinpad_download_manifest.json`
+- CRS: EPSG:4326 points; boundary filtering uses `peru_former`
 
 ## Processing And Use
 
 - Raw data path: `data/validation/indeci_sinpad_peru_flood_events/`
-- Derived output path: `outputs/indeci_sinpad_peru_flood_events/`
+- Derived output path: `outputs/peru_former_sinpad_flood_events/`
 - Use:
   - overlay flood/rainfall/aluvion emergency records with PIM priority classes;
   - compare all records, unique coordinates, explicitly flood-labelled records,

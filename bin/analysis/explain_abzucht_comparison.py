@@ -15,8 +15,8 @@ from matplotlib.lines import Line2D
 
 from compare_abzucht_hq100 import read_grid, summarize, COLORS, LABELS
 ROOT=Path(__file__).resolve().parents[2]
-BASE=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1'
-OUT=ROOT/'outputs/goslar_abzucht_display_rectangle_v1/explanation_v1'
+BASE=ROOT/'outputs/goslar_abzucht_diagnostics/fixed_scale'
+OUT=ROOT/'outputs/goslar_abzucht_diagnostics/explanation'
 
 def component_support(arrays):
     return np.isfinite(np.stack(arrays)).sum(axis=0).astype('uint8')
@@ -43,8 +43,8 @@ def main():
     paths={}
     for group,components in m['component_weights'].items():
         for key in components:
-            if key=='water_wetland_context':p=BASE/'chain/environmental_sensitivity_v0_1/water_wetland_context_0_1.tif'
-            elif key=='protected_ecological_context':p=BASE/'chain/environmental_sensitivity_v0_1/protected_area_context_0_1.tif'
+            if key=='water_wetland_context':p=BASE/'chain/environmental_sensitivity/water_wetland_context_0_1.tif'
+            elif key=='protected_ecological_context':p=BASE/'chain/environmental_sensitivity/protected_area_context_0_1.tif'
             elif key=='settlement_population':p=BASE/'chain/exposure_indicators/population_exposure_0_1.tif'
             elif key=='critical_infrastructure':p=BASE/'chain/exposure_indicators/built_infrastructure_exposure_0_1.tif'
             else:p=BASE/f'chain/criteria_stack/criteria/{key}_0_1.tif'

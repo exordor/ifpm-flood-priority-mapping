@@ -4,7 +4,7 @@
 - Status: downloaded 2026-08-17/18. TCD decline 2018-2024 is the land-change (vegetation-loss)
   component of the LU criterion in the Goslar chain; Bare Soil After 2017-2024 is kept as a
   diagnostic series. Replaced the rejected Sentinel-2 MBI candidate
-  (`sentinel2_l2a_goslar_bare_soil_candidate`).
+  (`sentinel2_l2a_goslar_bare_soil_rejected`).
 - Access date: 2026-08-17 (2024 Bare Soil After), 2026-08-18 (2017-2023 Bare Soil After, TCD 2018 and 2024)
 - Licence: Copernicus Programme data terms; attribution `Contains modified Copernicus Sentinel/CLMS data`.
 
@@ -59,7 +59,7 @@ Source tiles (SHA-256 computed 2026-10-10 from the local files):
 | `2024/CLMS_HRLVLCC_TCD_S2024_R10m_E43N32_03035_V01_R00.tif` | 27,996,387 | `a41c0d55112530db16a50f5aa50c98bc78d2809d5fdbf1c080abc8cb2c93c53e` |
 
 Derived 30 m layers (official-basin grid) and their hashes and diagnostics are in
-`outputs/esa_worldcover_2021_goslar/c_factor/`:
+`outputs/goslar_esa_worldcover_2021/c_factor/`:
 
 - `clms_tcd_vegetation_loss_2018_2024_goslar_official_basin_30m.tif`: positive percent-point TCD
   decline 2018-2024; 170,882 valid cells, 94,552 non-zero (`clms_tcd_vegetation_loss_diagnostics.json`).

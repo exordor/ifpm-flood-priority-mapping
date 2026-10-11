@@ -16,7 +16,7 @@ API = 'https://nibis.lbeg.de/cardomap3/ajaxpro/IDU.App.ExportCardoMap.CardoMap.C
 
 def main():
     RAW.mkdir(parents=True, exist_ok=True)
-    source = ROOT / 'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1/expansion_manifest.json'
+    source = ROOT / 'outputs/goslar_abzucht_diagnostics/fixed_scale/expansion_manifest.json'
     bounds = json.loads(source.read_text())['display_rectangle']['bounds_utm32n']
     left, bottom, right, top = bounds
     assert 0 < (right-left)*(top-bottom) < 100e6
@@ -39,8 +39,8 @@ def main():
         path.write_bytes(z.read(gpkg_names[0]))
     frame = gpd.read_file(path)
     assert frame.crs.to_epsg() == 25832 and len(frame) > 0
-    grid = ROOT / 'outputs/goslar_abzucht_display_rectangle_v1/frozen_scale_v1/chain/priority_scenarios/scenarios/priority_goslar_direct_pim.tif'
-    zone_file = ROOT / 'data/validation/goslar_2017_event_map_candidates_v1/nlwkn_current_regulatory_flood_zones_goslar.geojson'
+    grid = ROOT / 'outputs/goslar_abzucht_diagnostics/fixed_scale/chain/priority_scenarios/scenarios/priority_goslar_direct_pim.tif'
+    zone_file = ROOT / 'data/validation/goslar_2017_regulatory_flood_context/nlwkn_current_regulatory_flood_zones_goslar.geojson'
     with rasterio.open(grid) as ds:
         zones = gpd.read_file(zone_file)
         zone = zones[zones.uesg_id == 917].to_crs(ds.crs).geometry.union_all()

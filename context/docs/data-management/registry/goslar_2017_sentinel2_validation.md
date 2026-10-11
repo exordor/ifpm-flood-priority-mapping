@@ -21,7 +21,7 @@
 
 The derived candidate uses NDWI `(B03-B08)/(B03+B08)`, a threshold `NDWI > 0.15`,
 and valid SCL classes 4-7. Outputs are clipped to
-`goslar_wrrl_water_bodies_reference_v1`.
+`goslar_wrrl_basin`.
 
 Current QA:
 
