@@ -11,7 +11,7 @@ sys.path.insert(0, str(ROOT))
 
 from ifpm.config import Config, areas  # noqa: E402
 
-# Stage names each extent method understands (see ifpm/chain.py and ifpm/expanded.py).
+# Stage names each extent method understands (see ifpm/chain.py, expanded.py and rescore.py).
 BASIN = {"dem", "slope", "hydrology", "ls_factor", "worldcover_cfactor", "soilgrids_kfactor", "osm_roads",
          "rainfall", "protected_areas", "criteria_stack", "exposure_indicators",
          "environmental_sensitivity", "priority_scenarios", "validate"}
@@ -23,6 +23,7 @@ METHOD_STAGES = {
     "multiriver": {"prepare", "terrain", "landcover", "hydrology", "ls_factor", "soilgrids_kfactor",
                    "osm_roads", "rainfall", "protected_areas", "criteria_stack", "exposure_indicators",
                    "environmental_sensitivity", "priority_scenarios", "comparison", "report"},
+    "rescore": {"score"},
 }
 
 
@@ -40,7 +41,7 @@ def dataset_ids(node):
 
 class ConfigTest(unittest.TestCase):
     def test_areas(self):
-        self.assertEqual(areas(), ["goslar", "secocha"])
+        self.assertEqual(areas(), ["goslar", "peru_former", "secocha", "zimbabwe"])
 
     def test_weights_sum_to_one(self):
         for area in areas():
@@ -63,7 +64,8 @@ class ConfigTest(unittest.TestCase):
         for area in areas():
             cfg = Config(area)
             referenced = {s for s in dataset_ids(cfg.data) if s in cfg.datasets}
-            self.assertTrue(referenced, area)
+            rescore_only = all(cfg.extent(n)["method"] == "rescore" for n in cfg.extents)
+            self.assertTrue(referenced or rescore_only, area)  # rescore reads earlier outputs only
             for dataset_id in referenced:
                 entry = cfg.entry(dataset_id)
                 self.assertTrue("path" in entry or "url" in entry, dataset_id)

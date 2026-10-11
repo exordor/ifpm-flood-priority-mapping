@@ -1,0 +1,49 @@
+# Upper Mzingwane, Zimbabwe (zimbabwe_upper_mzingwane): background case.
+# Re-scores the PIM from the existing criterion rasters (python -m ifpm run zimbabwe).
+# Values are copied from bin/scenarios/run_zimbabwe_rainfall_exposure.py. The upstream
+# criteria-stack builder was removed in 4fbd10c (git show 4fbd10c^:bin/criteria/build_boundary_v1_criteria_stack.py)
+# and its environmental input folder no longer exists, so only the scoring step is rerun.
+
+boundary_id: zimbabwe_upper_mzingwane
+experiment_id: rainfall_exposure
+scenario_id: mentor_zimbabwe_direct_pim
+weight_source: Zimbabwe direct recommended weights, July 2026; no pairwise matrix supplied
+
+weights:
+  main: {flood_hazard: 0.32, sediment: 0.23, landuse_asm: 0.18, environmental: 0.12, socioeconomic: 0.15}
+  components:
+    flood_hazard: {rainfall_climatology: 0.35, twi_wetness: 0.30, drainage_proximity: 0.35}
+    sediment: {soil_k_factor: 0.35, ls_factor: 0.35, c_factor: 0.30}
+    landuse_asm: {land_cover_pressure: 0.40, mining_pressure: 0.60}
+    environmental: {environmental_sensitivity: 1.0}
+    socioeconomic: {exposure_indicators: 1.0}
+
+extents:
+  upper_mzingwane:
+    method: rescore
+    stages: [score]
+    reference: outputs/zimbabwe_terrain_hydrology_factors/terrain_preprocessing/zimbabwe_dem_utm35s_30m.tif
+    boundary: outputs/zimbabwe_boundary/zimbabwe_boundary.gpkg
+    boundary_layer: v1_working_boundary
+    out_dir: outputs/zimbabwe_pim_scenarios/rainfall_exposure
+    # prepare: unit = keep 0-1 / max-scale; percentile = 2-98 percentile min-max inside the boundary
+    components:
+      rainfall_climatology: {path: outputs/zimbabwe_pim_scenarios/rainfall_sensitivity/criteria/rainfall_climatology_0_1_PROVISIONAL_30m.tif, prepare: unit}
+      twi_wetness: {path: outputs/zimbabwe_terrain_hydrology_factors/hydrology_standardization/zimbabwe_twi_high_wetness_0_1.tif, prepare: unit}
+      drainage_proximity: {path: outputs/zimbabwe_terrain_hydrology_factors/hydrology_standardization/zimbabwe_drainage_proximity_0_1.tif, prepare: unit}
+      soil_k_factor: {path: outputs/zimbabwe_terrain_hydrology_factors/soil_k_factor/soil_k_factor_0_1.tif, prepare: unit}
+      ls_factor: {path: outputs/zimbabwe_terrain_hydrology_factors/ls_factor/zimbabwe_ls_factor_capped50_hillslope_30m.tif, prepare: percentile}
+      c_factor: {path: outputs/zimbabwe_esa_worldcover_2021/c_factor/c_factor_zimbabwe_30m.tif, prepare: percentile}
+      land_cover_pressure: {path: outputs/zimbabwe_pim_scenarios/criteria_stack/criteria/land_cover_pressure_0_1.tif, prepare: unit}
+      mining_pressure: {path: outputs/zimbabwe_pim_scenarios/criteria_stack/criteria/mining_pressure_0_1.tif, prepare: unit}
+      exposure_indicators: {path: outputs/zimbabwe_pim_scenarios/criteria_stack/criteria/exposure_indicators_0_1.tif, prepare: unit}
+      environmental_sensitivity: {path: outputs/zimbabwe_pim_scenarios/environmental_sensitivity/environmental_sensitivity_0_1.tif, prepare: unit}
+    rules:
+      divide_by_total: true      # criterion = weighted sum / sum of component weights
+      clip_score: false
+      write_components: [soil_k_factor, ls_factor, c_factor]
+    verify:
+      - outputs/zimbabwe_pim_scenarios/rainfall_exposure/**/*.tif
+      - outputs/zimbabwe_pim_scenarios/rainfall_exposure/scenario_weights.csv
+      - outputs/zimbabwe_pim_scenarios/rainfall_exposure/scenario_priority_summary.csv
+      - outputs/zimbabwe_pim_scenarios/rainfall_exposure/*_grid_check.csv

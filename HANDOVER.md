@@ -56,6 +56,8 @@ New way (config-driven package `ifpm/`, settings in `configs/goslar.yaml`, `conf
 .venv/bin/python -m ifpm run goslar                   # extents basin, abzucht_hq100, abzucht, multiriver in order
 .venv/bin/python -m ifpm run goslar --extent multiriver --step comparison,report
 .venv/bin/python -m ifpm verify goslar                # pass/fail table against the current outputs
+.venv/bin/python -m ifpm run zimbabwe                 # re-score from the existing criteria (background case)
+.venv/bin/python -m ifpm run peru_former              # frozen: re-score into _rerun and check the FROZEN_BASELINE pins
 ```
 
 `run` writes under `--out` (default `outputs/_rerun/<area>/`, same relative paths as `outputs/`) and never over the current outputs; `verify` compares that folder with the current outputs (identical, or within 1e-6 for rasters; differences accepted in the config show as KNOWN). The QGIS review projects are not yet part of `ifpm`.

@@ -21,6 +21,7 @@ Set up the environment with `uv sync --extra hydrology` (see [HANDOVER.md](HANDO
 .venv/bin/python -m ifpm run secocha                           # writes to outputs/_rerun/secocha/
 .venv/bin/python -m ifpm run goslar --extent basin --step rainfall
 .venv/bin/python -m ifpm verify secocha                        # compare a rerun with the current outputs
+.venv/bin/python -m ifpm run peru_former                       # frozen area: re-score and check the pins
 ```
 
 `run` never writes over the current outputs: it writes under `--out` (default `outputs/_rerun/<area>/`) with the same relative paths. Secocha and Goslar no longer have per-script runners in `bin/`.

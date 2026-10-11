@@ -29,6 +29,8 @@ def _out_dir(area: str, out: str | None) -> Path:
     path = Path(out).resolve() if out else ROOT / "outputs" / "_rerun" / area
     if path == ROOT.resolve():
         raise SystemExit("--out must not be the workspace root; the current outputs are never overwritten")
+    if (ROOT / "outputs" / "peru_former_pim_chain").resolve() in [path, *path.parents]:
+        raise SystemExit("--out must not be inside the frozen outputs/peru_former_pim_chain/")
     return path
 
 
@@ -42,7 +44,7 @@ def cmd_list(_args) -> int:
 
 
 def cmd_run(args) -> int:
-    from . import chain, expanded
+    from . import chain, expanded, rescore
     cfg = Config(args.area)
     out = _out_dir(args.area, args.out)
     steps = args.step.split(",") if args.step else None
@@ -53,7 +55,7 @@ def cmd_run(args) -> int:
         if unknown:
             raise SystemExit(f"unknown step(s) {unknown}; stages of {names}: {sorted(known)}")
     runners = {"basin": chain.run_basin, "abzucht": expanded.run_abzucht,
-               "multiriver": expanded.run_multiriver}
+               "multiriver": expanded.run_multiriver, "rescore": rescore.run_rescore}
     for name in names:
         ext = cfg.extent(name)
         if steps and not set(steps) & set(ext["stages"]):
