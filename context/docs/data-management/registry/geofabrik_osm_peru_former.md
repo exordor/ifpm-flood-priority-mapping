@@ -26,7 +26,7 @@ Status: downloaded 2026-06-30 and processed for proximity criteria in the former
 - Raw destination: `data/raw/geofabrik_osm_peru_former/peru-latest-free.shp.zip`
 - File size: 597,543,300 bytes (full Peru country extract)
 - SHA-256: `e34517e410d30f0abde0c06210ec77663c6d6218f35672f0b51d91ef2242e209`
-- Extraction: complete to `data/raw/geofabrik_osm_peru_former/extracted/` (20 shapefile layers)
+- Extraction: only the roads, water_a and waterways layers are kept unpacked in `data/raw/geofabrik_osm_peru_former/extracted/` (read by the Secocha roads step and two figure scripts); the other layers are read from the zip when needed (2026-10-12)
 
 ## Used Layers (former Peru study area)
 

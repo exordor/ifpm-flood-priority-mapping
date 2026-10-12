@@ -44,7 +44,7 @@ Status: downloaded for boundary discovery; boundary not accepted. Zimbabwe is ba
 - Actual files or manifest: local manifest retained under
   `data/raw/hydrosheds_zimbabwe/hybas_af_lev01-12_v1c_manifest.txt`
 - File size: 549,296,874 bytes
-- File-count evidence: 85 extracted files
+- File-count evidence: 85 extracted files. The unpacked copy under `extracted/` was removed on 2026-10-12 (byte-identical to the zip, which is kept).
 - CRS or georeferencing checked: yes, inspected shapefiles reported EPSG:4326
 - Geometry/raster integrity checked: candidate geometries inspected as valid
 

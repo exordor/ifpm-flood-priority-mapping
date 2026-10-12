@@ -32,7 +32,7 @@ boundary `peru_former` (frozen).
 
 - Attempt date: 2026-06-30
 - Archive state: downloaded and verified
-- Extraction state: complete (all levels 1-12 extracted under `extracted/`)
+- Extraction state: complete (all levels 1-12 extracted under `extracted/`). The unpacked copy under `extracted/` was removed on 2026-10-12 (byte-identical to the zip, which is kept).
 
 ## Files
 

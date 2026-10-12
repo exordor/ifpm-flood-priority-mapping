@@ -38,7 +38,7 @@ Status: downloaded, verified, and used for V1 comparable road/water distance fac
   `dcae916f091f6178ae6b182f4c2ff941777154a28f1aa740cb31765850fcacf2`
 - Actual files or manifest: `data/raw/geofabrik_osm_zimbabwe/extraction_manifest.txt`
 - File size: 528,811,477 bytes
-- File-count evidence: 2 extracted files listed in manifest
+- File-count evidence: 2 extracted files listed in manifest. The unpacked copy under `extracted/` was removed on 2026-10-12 (byte-identical to the zip, which is kept).
 - CRS or georeferencing checked: yes, OGC:CRS84 / WGS84 source layers loaded and clipped
 - Geometry/raster integrity checked: yes, 8657 OSM features intersect the review envelope after
   clipping

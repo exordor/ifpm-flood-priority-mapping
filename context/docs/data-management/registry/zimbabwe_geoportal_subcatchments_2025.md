@@ -32,7 +32,7 @@ Status: downloaded and verified for boundary comparison (Zimbabwe background onl
 
 - Attempt date: 2026-06-10
 - Archive state: downloaded
-- Extraction state: extracted under `data/raw/zimbabwe_geoportal_subcatchments_2025/extracted/`
+- Extraction state: kept as the zip only; the unpacked copy was removed on 2026-10-12 (byte-identical to the zip)
 
 ## Files
 
