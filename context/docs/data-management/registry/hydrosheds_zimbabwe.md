@@ -1,6 +1,7 @@
 # Dataset Registry: HydroBASINS And HydroRIVERS Zimbabwe Prototype
 
 Status: downloaded for boundary discovery; boundary not accepted. Zimbabwe is background only.
+Removed from `data/raw/` on 2026-10-12 (no remaining code reads it); re-download from the URLs below to reuse.
 
 ## Dataset Identity
 
