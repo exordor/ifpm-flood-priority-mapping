@@ -126,9 +126,10 @@ extents:
     stages: [prepare, slope, hydrology, ls_factor, soilgrids_kfactor, osm_roads, rainfall,
              protected_areas, criteria_stack, exposure_indicators, environmental_sensitivity,
              priority_scenarios, report, overlay]
+    # Only the tables and manifests of this variant are kept in outputs/ (rasters rebuild on demand).
     verify:
-      - outputs/goslar_abzucht_hq100_expanded_extent/fixed_scale/chain/priority_scenarios/**/*.tif
       - outputs/goslar_abzucht_hq100_expanded_extent/fixed_scale/frozen_normalization.json
+      - outputs/goslar_abzucht_hq100_expanded_extent/fixed_scale/**/*.csv
 
   # Same plus the full HQ100 display rectangle (polygon bounds + 500 m). The multi-river
   # extent takes its anchors and starting boundary from this one.
