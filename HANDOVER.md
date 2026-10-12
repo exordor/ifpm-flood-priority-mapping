@@ -75,10 +75,9 @@ To look at results quickly, open `outputs/secocha_qgis_review/IFPM_Peru_Secocha_
 
 ## 5. Git status
 
-- The branch `codex/goslar-validation-2024` is the reference. On 2026-10-08 all uncommitted work from September was committed to this branch (locally, not pushed).
-- `main` is behind the current branch and has one commit that duplicates a commit on the current branch ("Centralize numeric standardization"). Do not keep working on `main`; when needed, merge or reset the current branch onto it.
-- The `weights/supervisor-full-spec` branch has been merged into the current branch and deleted.
-- The repository has no configured push remote. Whether and where to push is up to the person taking over.
+- `main` is the reference branch. On 2026-10-12 the work branch `codex/goslar-validation-2024` (all September work plus the October refactor) was merged into `main` (merge commit 1d5460d); the one commit that only `main` had ("Centralize numeric standardization", 9c780c5) was already contained in the branch (43fc9dc). The branch is kept and points at the same commit.
+- The `weights/supervisor-full-spec` branch has been merged earlier and deleted.
+- Everything is committed locally; the repository has no configured push remote. Whether and where to push is up to the person taking over.
 
 ## 6. Known issues
 
