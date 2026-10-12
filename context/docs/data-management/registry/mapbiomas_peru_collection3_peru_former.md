@@ -31,7 +31,7 @@ Status: downloaded 2026-08-05 for the former Peru study area (frozen, `peru_form
   - `peru_collection3_integration_v1-classification_2023.tif`
   - `peru_collection3_integration_v1-classification_2024.tif`
 - Download command or manual steps: `bin/data/download_peru_former_mapbiomas_change.sh`
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/data/download_peru_former_mapbiomas_change.sh`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/data/download_peru_former_mapbiomas_change.sh`.)
 
 ## Download Record
 
@@ -57,7 +57,7 @@ Status: downloaded 2026-08-05 for the former Peru study area (frozen, `peru_form
 - Raw data path: `data/raw/mapbiomas_peru_collection3_peru_former/`
 - Derived output path: `outputs/peru_former_mapbiomas_collection3_change/`
 - Scripts or commands used: download script above and `bin/factors/derive_peru_former_mapbiomas_change.py`
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/factors/derive_peru_former_mapbiomas_change.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/factors/derive_peru_former_mapbiomas_change.py`.)
 - Standardization/preprocessing notes: categorical classes are aligned to the 30 m reference grid with nearest-neighbour resampling; 2014-2016 and 2022-2024 are each reduced by pixel majority before change detection
 - Known limitations: 30 m thematic classifications are recommended by MapBiomas for use up to approximately 1:100,000; class changes can include classification uncertainty and require a transition-stability rule
 - Use: temporal evidence for BV and the built-up/agricultural parts of BE

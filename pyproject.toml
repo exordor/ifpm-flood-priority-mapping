@@ -29,7 +29,7 @@ dependencies = [
 hydrology = ["whitebox>=2.3"]
 
 # Playwright: only used by the portal check removed on 2026-10-11
-# (`git show 6e2ed8b:bin/acquire/check_data_portals.py`); drop this extra with `uv lock`.
+# (`git show cc4f247:bin/acquire/check_data_portals.py`); drop this extra with `uv lock`.
 portals = ["playwright>=1.40"]
 
 [tool.ruff]

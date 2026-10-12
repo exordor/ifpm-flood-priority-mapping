@@ -1,7 +1,7 @@
 # Upper Mzingwane, Zimbabwe (zimbabwe_upper_mzingwane): background case.
 # Re-scores the PIM from the existing criterion rasters (python -m ifpm run zimbabwe).
 # Values are copied from bin/scenarios/run_zimbabwe_rainfall_exposure.py. The upstream
-# criteria-stack builder was removed in 4fbd10c (git show 4fbd10c^:bin/criteria/build_boundary_v1_criteria_stack.py)
+# criteria-stack builder was removed in 5ee2ab0 (git show 5ee2ab0^:bin/criteria/build_boundary_v1_criteria_stack.py)
 # and its environmental input folder no longer exists, so only the scoring step is rerun.
 
 boundary_id: zimbabwe_upper_mzingwane

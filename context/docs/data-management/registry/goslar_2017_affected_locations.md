@@ -42,7 +42,7 @@ The catalog keeps the OSM object id or coordinate method for every location.
 
 ```sh
 .venv/bin/python bin/analysis/build_goslar_2017_affected_location_evidence.py
-(Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/analysis/build_goslar_2017_affected_location_evidence.py`.)
+(Script removed 2026-10-11; recover with `git show cc4f247:bin/analysis/build_goslar_2017_affected_location_evidence.py`.)
 ```
 
 - Inputs: the catalog above;

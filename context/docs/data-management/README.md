@@ -4,7 +4,7 @@
 licence, download command and file size or checksum. Add one for every new download.
 
 The download scripts named in older notes (`bin/acquire/...`, `bin/factors/...`) were removed
-on 2026-10-12; recover one with `git show 206214e:<path>`.
+on 2026-10-12; recover one with `git show 41dc64a:<path>`.
 
 Data rule: raw and derived data stay out of Git; registry notes record where they came from.
 Store downloaded data under ignored workspace paths such as `data/`, processed outputs under

@@ -29,7 +29,7 @@ storm-resolved, and GPM IMERG (half-hourly) needs a NASA Earthdata account.
   68,364,740 bytes in total
 - Checksum: not recorded
 - Derived raster: `bin/criteria/build_era5_rfactor_raster.py`
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/criteria/build_era5_rfactor_raster.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/criteria/build_era5_rfactor_raster.py`.)
 
 ## Known limitations
 ERA5 reanalysis precipitation can under-estimate convective storm intensity in semi-arid tropical

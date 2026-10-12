@@ -67,7 +67,7 @@ Secocha case; not a PIM input and not used to set weights.
 ## Original INGEMMET GIS (2026-08-11)
 
 - Command: `.venv/bin/python bin/acquire/pull_ingemmet_secocha_original_gis.py`
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/pull_ingemmet_secocha_original_gis.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/acquire/pull_ingemmet_secocha_original_gis.py`.)
 - Service: `SERV_PELIGROS_GEOLOGICOS`, MapServer layer 6, `Cartografia de Peligros`. Result:
   3 polygons with `CODIGO=A7367`, `FECHA_EVAL=febrero 2023` (`Avalancha de detritos`,
   `Flujo de detritos`, `Caída de rocas`). Layer 7 (`Cartografia Peligros Fotointerpretado`)
@@ -85,8 +85,8 @@ Secocha case; not a PIM input and not used to set weights.
 
 - Commands: `.venv/bin/python bin/acquire/pull_secocha_2023_event_rainfall.py` and
   `.venv/bin/python bin/acquire/pull_secocha_2023_event_rainfall_rnl.py`
-  (Scripts removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/pull_secocha_2023_event_rainfall.py`
-  and `git show 6e2ed8b:bin/acquire/pull_secocha_2023_event_rainfall_rnl.py`.)
+  (Scripts removed 2026-10-11; recover with `git show cc4f247:bin/acquire/pull_secocha_2023_event_rainfall.py`
+  and `git show cc4f247:bin/acquire/pull_secocha_2023_event_rainfall_rnl.py`.)
 - Product: CHC UCSB CHIRPS v3.0 daily final, `sat` and `rnl` GeoTIFFs, native 0.05 degree
   (`https://data.chc.ucsb.edu/products/CHIRPS/v3.0/daily/`). Per-file HTTP size/ETag/Last-Modified
   in `outputs/secocha_2023_validation/rainfall/event_rainfall_manifest.json` and
@@ -104,14 +104,14 @@ Secocha case; not a PIM input and not used to set weights.
 ## Sentinel-1/2 before/after (2026-08-12 to 2026-08-18)
 
 - Catalogue command: `.venv/bin/python bin/acquire/pull_secocha_sentinel_catalog.py`
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/pull_secocha_sentinel_catalog.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/acquire/pull_secocha_sentinel_catalog.py`.)
   (`POST https://stac.dataspace.copernicus.eu/v1/search`, reference-window bbox,
   2023-01-20/2023-02-20). Request, response, footprints and SHA-256 in
   `outputs/secocha_2023_validation/satellite_before_after/sentinel_catalog_manifest.json`.
 - Pixel commands (CDSE S3 account required):
   `.venv/bin/python bin/acquire/pull_secocha_sentinel_pixels.py --batch core_s2 --manifest outputs/secocha_2023_validation/satellite_before_after/sentinel_pixel_download_core_s2_manifest.json`
   and the same with `--batch s1_pair` and `sentinel_pixel_download_s1_pair_manifest.json`.
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/pull_secocha_sentinel_pixels.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/acquire/pull_secocha_sentinel_pixels.py`.)
 - Files: S2 L2A 2023-02-03 and 2023-02-08 (B02/B03/B04/B08, SCL, metadata; 14 files, about
   122.4 MiB); S1 GRD COG 2023-01-29 and 2023-02-10 (VV/VH, calibration/noise XML; 14 files, about
   2.41 GiB); quicklooks and footprint GeoJSON. All sizes match the STAC assets; per-file bytes and
@@ -119,7 +119,7 @@ Secocha case; not a PIM input and not used to set weights.
 - Local path: `data/validation/secocha_2023_validation/satellite_before_after/` (pixels under `pixels/`)
 - Licence: Copernicus Data Space terms (`https://dataspace.copernicus.eu/data-access`).
 - S2 processing: `.venv/bin/python bin/analysis/process_secocha_sentinel_validation.py`;
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/analysis/process_secocha_sentinel_validation.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/analysis/process_secocha_sentinel_validation.py`.)
   NDWI=(B03-B08)/(B03+B08), water if NDWI > 0.15, SCL 4-7 valid. Outputs under
   `outputs/secocha_2023_validation/satellite_before_after/processed/` with
   `s2_optical_change_qa.json`. Result: 161,416 common valid 10 m pixels; no pixel meets the water

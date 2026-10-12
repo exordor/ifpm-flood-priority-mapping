@@ -48,7 +48,7 @@ Status: downloaded, verified, and used for V1 comparable road/water distance fac
 - Raw data path: `data/raw/geofabrik_osm_zimbabwe/`
 - Derived output path: `outputs/zimbabwe_terrain_hydrology_factors/comparable_distance_factors/`
 - Script: `bin/factors/build_zimbabwe_comparable_distance_factors.py`; it reads the GeoPackage
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/factors/build_zimbabwe_comparable_distance_factors.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/factors/build_zimbabwe_comparable_distance_factors.py`.)
   directly through GDAL `/vsizip/` without duplicating the 1.1 GB uncompressed file
 - Standardization/preprocessing notes: read OSM roads and water features over a 25 km padded
   EPSG:32735 reference-grid envelope, rasterize on that padded 30 m grid, calculate Euclidean

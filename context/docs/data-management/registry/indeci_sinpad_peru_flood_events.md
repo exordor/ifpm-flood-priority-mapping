@@ -30,7 +30,7 @@ Status: queried 2026-07-10 for Arequipa flood/rainfall/aluvion-style emergency r
   `INUND`, `LLUVI`, `ALUVI`, `HUAY`, or `DESBORDE`
 - Script:
   `.venv/bin/python bin/acquire/query_peru_former_sinpad_flood_events.py`
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/query_peru_former_sinpad_flood_events.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/acquire/query_peru_former_sinpad_flood_events.py`.)
 
 ## Files
 

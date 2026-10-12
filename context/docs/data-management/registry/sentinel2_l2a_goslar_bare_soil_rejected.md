@@ -14,7 +14,7 @@
 - Temporal scope: March-November 2021, 2023, 2024 and 2025; 24 scene windows (2022 missing from
   Collection 1)
 - Command: `.venv/bin/python bin/acquire/pull_goslar_sentinel_bare_soil.py`
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/pull_goslar_sentinel_bare_soil.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/acquire/pull_goslar_sentinel_bare_soil.py`.)
 - Local path: `data/raw/sentinel2_l2a_goslar_bare_soil_rejected/` (`scene_windows_c1_10m/`, about 80.4 MB;
   `scene_windows_10m/` is an earlier legacy-collection read with mixed radiometric revisions,
   about 100.6 MB, not used); source asset URLs frozen in `earth_search_catalog.json`

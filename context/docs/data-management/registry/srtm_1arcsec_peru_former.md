@@ -31,7 +31,7 @@ Status: downloaded 2026-06-30 and processed for terrain in the former Peru study
 - Source artifact names: `S17W072.SRTMGL1.hgt.zip`, `S17W073.SRTMGL1.hgt.zip`
 - Download command or manual steps:
   `.venv/bin/python bin/acquire/plan_peru_former_srtm_tiles.py` then
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/plan_peru_former_srtm_tiles.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/acquire/plan_peru_former_srtm_tiles.py`.)
   `.venv/bin/python bin/factors/preprocess_peru_former_srtm_dem.py`
 
 ## Download Record
@@ -59,7 +59,7 @@ Status: downloaded 2026-06-30 and processed for terrain in the former Peru study
 - Derived output path: `outputs/peru_former_pim_chain/`
 - Scripts or commands used:
   `bin/acquire/plan_peru_former_srtm_tiles.py`,
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/plan_peru_former_srtm_tiles.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/acquire/plan_peru_former_srtm_tiles.py`.)
   `bin/factors/preprocess_peru_former_srtm_dem.py`,
   `bin/factors/derive_peru_former_slope.py`,
   `bin/factors/derive_peru_former_hydrology.py`,

@@ -47,5 +47,5 @@ boundary `peru_former` (frozen).
 - Raw data path: `data/raw/hydrosheds_peru_former/`
 - Derived output path: `outputs/peru_former_boundary_discovery/`
 - Scripts or commands used: `bin/acquire/discover_peru_former_candidate_basins.py`
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/discover_peru_former_candidate_basins.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/acquire/discover_peru_former_candidate_basins.py`.)
 - Known limitations: the three-department envelope mixes Pacific-slope and highland drainage

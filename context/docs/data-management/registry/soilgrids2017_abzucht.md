@@ -11,10 +11,10 @@
   current SoilGrids version is masked (urban areas). It replaces the complete soil layer.
 - Local path: `data/raw/soilgrids2017_abzucht/`
 - Acquisition command: `.venv/bin/python bin/acquire/pull_abzucht_soilgrids2017.py`
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/acquire/pull_abzucht_soilgrids2017.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/acquire/pull_abzucht_soilgrids2017.py`.)
   (HTTP range window reads; no whole global TIFF is fetched).
 - Analysis command: `.venv/bin/python bin/analysis/complete_abzucht_inputs.py` (Williams K,
-  (Script removed 2026-10-11; recover with `git show 6e2ed8b:bin/analysis/complete_abzucht_inputs.py`.)
+  (Script removed 2026-10-11; recover with `git show cc4f247:bin/analysis/complete_abzucht_inputs.py`.)
   trapezoidal integration at 0/5/15/30 cm).
 
 ## Files

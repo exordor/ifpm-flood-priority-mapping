@@ -16,4 +16,4 @@ Run from the workspace root, e.g. `.venv/bin/python bin/visualize/plot_secocha_p
 Most of them write into `outputs/` (often `outputs/slide_ready_figures/`).
 
 The processing, acquisition and packaging scripts that used to live here were replaced by
-`ifpm` on 2026-10-12; recover one with `git show 206214e:bin/<folder>/<script>.py`.
+`ifpm` on 2026-10-12; recover one with `git show 41dc64a:bin/<folder>/<script>.py`.
