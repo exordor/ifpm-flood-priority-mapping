@@ -1,6 +1,6 @@
 # IFPM handover note
 
-Date: 2026-10-08.
+Date: 2026-10-08; layout updated 2026-10-12 after the move to the config-driven `ifpm` package.
 
 ## 1. What the project is
 
@@ -26,14 +26,14 @@ The most important open problem: in the Goslar extension comparison, the flood c
 | `README.md`, `AGENTS.md` | General workspace description; `AGENTS.md` is a one-page set of working conventions (folders, data registration, modelling rules) | Yes |
 | `ifpm/`, `configs/` | The config-driven chain for all four areas and the QGIS packages (`python -m ifpm`); settings per area in `configs/<area>.yaml`, dataset paths in `configs/datasets.yaml` | Yes |
 | `bin/visualize/` | 11 report-figure scripts (location maps, overviews, Peru/Zimbabwe report maps); see `bin/README.md` | Yes |
-| `tests/` | 14 test files; tests that would regenerate files under `outputs/` run only with `IFPM_WRITE_OUTPUTS=1` | Yes |
+| `tests/` | 14 test files (54 tests, about 10 s); tests that would regenerate files under `outputs/` run only with `IFPM_WRITE_OUTPUTS=1` | Yes |
 | `tools/` | `digitize_secocha_a7367_map7_event.py`: the one-time Map 7 event digitization | Yes |
 | `context/docs/research-map/` | Main project record: `EXPERIMENTS.md` (commands, outputs and conclusions of current experiments) and `DECISION_LOG.md` (decisions that are still in force, including the weights) | Yes |
 | `context/docs/data-management/registry/` | Source, licence and download record for each dataset | Yes |
 | `context/docs/glossary.md`, `context/docs/methodology/` | Glossary; PIM method note | Yes |
-| `data/raw/`, `data/validation/` | Raw data, about 17 GB | No |
-| `outputs/` | All results; the index is in `outputs/README.md` | No |
-| `exports/` | Portable QGIS packages | No |
+| `data/raw/`, `data/validation/` | Raw data, about 12 GB | No |
+| `outputs/` | All results, about 1.3 GB plus `outputs/_rerun/` (reruns for `verify`, can be rebuilt); the index is in `outputs/README.md` | No |
+| `exports/` | Portable QGIS packages (`exports/qgis_packages/`, folder plus zip per package) | No |
 
 Note: `data/`, `outputs/` and `exports/` are all ignored by `.gitignore`. Cloning the repository alone does not give you the data or the results; you need to copy the whole folder.
 
@@ -86,7 +86,8 @@ To look at results quickly, open `outputs/secocha_qgis_review/IFPM_Peru_Secocha_
 - The Goslar full-extent run reads Zensus 2022 population from `data/raw/zensus2022_goslar_multiriver/` (the 100 m clip derived from the national archive, which is no longer present); see the registry note `zensus2022_goslar_multiriver`.
 - Some older field names are broader than the actual evidence. For example, tree canopy cover loss is only a proxy for vegetation loss. The September notes on semantics are in `outputs/goslar_abzucht_diagnostics/component_semantics/` and `outputs/goslar_abzucht_diagnostics/input_semantics_followup/`.
 - Some raw data are licence-restricted (see the per-dataset notes in `context/docs/data-management/registry/`). Rerunning historical results may require requesting access again.
-- The scripts that download CLMS and Sentinel pixels need an access credentials file on the local machine. The credentials are not in the repository.
+- Downloading CLMS and Sentinel pixels again needs an access credentials file on the local machine (not in the repository); the download scripts are in Git history (`git show 206214e:bin/acquire/<script>.py`).
+- The Secocha road-access rerun differs from the stored outputs by 3 edge cells (floating-point clipping at x=696500); `ifpm verify secocha` reports the 5 affected files as KNOWN.
 
 ## 7. Suggested next steps
 
@@ -97,4 +98,4 @@ To look at results quickly, open `outputs/secocha_qgis_review/IFPM_Peru_Secocha_
 
 ## 8. Removed material
 
-Obsolete scripts, documents and duplicate exports were removed in October 2026; they can be recovered from Git history. The bin/ processing scripts replaced by `ifpm` (Peru, Zimbabwe, Goslar, Secocha chains, data acquisition, QGIS packaging) are in commit 206214e: `git show 206214e:<path>`. The separate delivery repository `ifpm-flood-pipeline` (own `.git`, tests on synthetic data only) now lives outside this workspace at `~/code/ifpm-flood-pipeline`.
+Obsolete scripts, documents and duplicate exports were removed in October 2026; they can be recovered from Git history. Files under `data/` and `outputs/` are not in Git: the removed SVG twins, scratch rasters, diagnostic rasters, duplicate figure copies, unpacked copies of zips and four unused public datasets are gone for good (each registry note says where to download a dataset again; `identical_files.csv` in `outputs/peru_former_pim_chain/pim_versions/<version>/` says where a removed byte-identical copy still lives). The bin/ processing scripts replaced by `ifpm` (Peru, Zimbabwe, Goslar, Secocha chains, data acquisition, QGIS packaging) are in commit 206214e: `git show 206214e:<path>`. The separate delivery repository `ifpm-flood-pipeline` (own `.git`, tests on synthetic data only) now lives outside this workspace at `~/code/ifpm-flood-pipeline`.
