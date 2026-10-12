@@ -77,7 +77,7 @@ To look at results quickly, open `outputs/secocha_qgis_review/IFPM_Peru_Secocha_
 
 - `main` is the reference branch. On 2026-10-12 the work branch `codex/goslar-validation-2024` (all September work plus the October refactor) was merged into `main` (merge commit 1d5460d); the one commit that only `main` had ("Centralize numeric standardization", 9c780c5) was already contained in the branch (43fc9dc). The branch is kept and points at the same commit.
 - The `weights/supervisor-full-spec` branch has been merged earlier and deleted.
-- Everything is committed locally; the repository has no configured push remote. Whether and where to push is up to the person taking over.
+- Remote: `origin` = https://github.com/exordor/ifpm-flood-priority-mapping (public; pushed 2026-10-12). Only code and docs are in Git; `data/`, `outputs/` and `exports/` are not uploaded and have to be copied separately.
 
 ## 6. Known issues
 
